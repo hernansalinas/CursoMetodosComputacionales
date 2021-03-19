@@ -1,4 +1,6 @@
 #+TITLE:Assignments for Computational Methods
 #+AUTHOR: Juan David Salcedo Hernández
 
-This repository contains assignments tying in with what has been required in the course "Computational Methods for Physicists and Astronomers," namely, implementations of several mathematical algorithms in ~Python~ and its packages
+This repository contains assignments tying in with what has been required in the course "Computational Methods for Physicists and Astronomers," namely, implementations of several mathematical algorithms in ~Python~ and its packages.
+
+To view the assignments, refer to https://jdavid-salcedo.github.io/Metodos_Computacionales_taller/
