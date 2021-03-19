@@ -1,11 +1,10 @@
-#+TITLE: Assignment 0.0 Computational Methods
+#+TITLE: Assignment 0.0. Computational Methods
 #+AUTHOR: Juan David Salcedo Hernández
-  :PROPERTIES:
-  :header-args:    :results output
-  :END:
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+#+HTML_HEAD: <style>pre.src{background:#343131;color:white;} </style>
 * Implementation of the factorial algorithm
 
-In order to compute the factorial of an arbitrary positive integer `n`, we need not resort to an explicit algebraic expression for such a function, but rather establish a recursive routine by using a list of numbers.
+In order to compute the factorial of an arbitrary positive integer n, we need not resort to an explicit algebraic expression for such a function, but rather establish a recursive routine by using a list of numbers.
 
 The function receives a value $n$ and builds up a list beginning with the number 1 (that is, $a_1$), with the recursion:
 \[
@@ -28,7 +27,7 @@ def factorial(n) :
 #+end_src
 
 We may now evaluate the factorial function for some values:
-#+begin_src python :noweb yes
+#+begin_src python :noweb yes :results output :exports results
 <<python-factorial>>
 factorial(11)
 factorial(20)
@@ -187,8 +186,8 @@ def kind_of_number(a,b) :
 
 Execution example:
 
-Input
-#+begin_src python :noweb yes
+Output
+#+begin_src python :noweb yes :results output :exports results
 <<divisors>>
 
 <<semiperfect>>
@@ -226,8 +225,8 @@ def palindrome(number) :
 
 Execution example:
 
-Input
-#+begin_src python :noweb yes
+Output
+#+begin_src python :noweb yes :results output :exports results
 <<palindrome>>
 palindrome(3333333), palindrome(2323), palindrome(1111349111111)
 #+end_src
@@ -270,8 +269,8 @@ def string(string) :
 
 Execution example:
 
-Input
-#+begin_src python :noweb yes
+Output
+#+begin_src python :noweb yes :results output :exports results
 <<string>>
 string('perro'), string('murcielago')
 #+end_src
@@ -299,8 +298,8 @@ def fib(n) :
 
 Execution example:
 
-Input
-#+begin_src python :noweb yes
+Output
+#+begin_src python :noweb yes :results output :exports results
 <<fibonacci>>
 fib(50), fib(63)
 #+end_src
@@ -315,7 +314,7 @@ Quicksort is an efficient divide-and-conquer algorithm for ordering a list of nu
 
 To begin with, notice that the key element in our algorithm must be the "partitioning" routine, which comprises the basis for the rest of the iterative process. As to make the aforementioned process feasible, we define two pointers, each associated with a different condition; obviously, these conditions ought to be the order relations: "greater than" (>) and "less than" (<), which are going to be evaluated taking the pivot as a reference. We initialise the "less than" pointer at the leftmost point on the list, whereas the "greater than pointer" must begin at the point just to the left of the pivot.
 
-How do these pointers actually work? The behaviour of these objects may well be clarified through an example: Suppose we have an array of numbers $(x_1,x_2,\ldots,x_{n-1},x_n)$; in the beginning, the (<) pointer is at the position of $x_1$, and its function is to evaluate whether the condition $x_1<x_n$ is indeed satisfied. Similarly, the (>) pointer is initially at the position of $x_{n-1}$, and it checks for the validity of the statement $x_{n-1}>x_n$.
+How do these pointers actually work? The behaviour of these objects may well be clarified through an example: Suppose we have an array of numbers $(x_1,x_2,\ldots,x_{n-1},x_n)$; in the beginning, the (<) pointer is at the position of $x_1$, and its function is to evaluate whether the condition $x_1 < x_n$ is indeed satisfied. Similarly, the (>) pointer is initially at the position of $x_{n-1}$, and it checks for the validity of the statement $x_{n-1}>x_n$.
 
 Three straightforward rules must be followed by these pointers, namely:
  - As long as the value associated to (<) is less than that corresponding to (>), apply the following rules.
@@ -323,7 +322,7 @@ Three straightforward rules must be followed by these pointers, namely:
  - Whenever the condition they bear is satisfied, move to the "next position", this amounts to "move right" for the (<) pointer, and "move left" for the (>) pointer.
 
 The algorithm will repeatedly apply this process, firstly on the original array, and subsequently on the partitions of the list; each partition is defined by an index, which in turn fixes the ending point of one list and the beginning of another.
-#+begin_src python
+#+begin_src python :results output :exports both
 def partition(array, lowest_index, greatest_index) :
     pivot = array[greatest_index]
     less_pointer = lowest_index
