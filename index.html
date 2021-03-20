@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-03-19 Fri 10:48 -->
+<!-- 2021-03-19 Fri 19:08 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Assignment 0.0. Computational Methods</title>
@@ -252,26 +252,26 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orga858a15">1. Implementation of the factorial algorithm</a></li>
-<li><a href="#org06f24ee">2. Algorithms on the divisors of a number</a></li>
-<li><a href="#org4e48e27">3. Palindrome number</a></li>
-<li><a href="#orga6e51c4">4. Evaluating a string</a></li>
-<li><a href="#org7b0f201">5. The Fibonacci sequence</a></li>
-<li><a href="#orgd4a5088">6. Quicksort</a></li>
+<li><a href="#org301f9fd">1. Implementation of the factorial algorithm</a></li>
+<li><a href="#orgdc58c8c">2. Algorithms on the divisors of a number</a></li>
+<li><a href="#org210ae9f">3. Palindrome number</a></li>
+<li><a href="#orgad9d4e2">4. Evaluating a string</a></li>
+<li><a href="#orgd96450f">5. The Fibonacci sequence</a></li>
+<li><a href="#org2743aa0">6. Quicksort</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orga858a15" class="outline-2">
-<h2 id="orga858a15"><span class="section-number-2">1</span> Implementation of the factorial algorithm</h2>
+<div id="outline-container-org301f9fd" class="outline-2">
+<h2 id="org301f9fd"><span class="section-number-2">1</span> Implementation of the factorial algorithm</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 In order to compute the factorial of an arbitrary positive integer n, we need not resort to an explicit algebraic expression for such a function, but rather establish a recursive routine by using a list of numbers.
 </p>
 
 <p>
-The function receives a value \(n\) and builds up a list beginning with the number 1 (that is, \(a_1\)), with the recursion:
+The function receives a value \(n\) and builds up a list beginning with the number 1 (that is, \(a_1\)) with the recursion:
 \[
-a_n =n\cdot a_{n-1}
+a_n =n\cdot a_{n-1},
 \]
 this means that the first few iterations yield
 </p>
@@ -281,10 +281,10 @@ a_3 = 3 \cdot a_2 = 3 \cdot 2 \cdot 1, \\
 a_4 = 4 \cdot a_3 = 4 \cdot 3 \cdot 2 \cdot 1,
 \end{gather*}
 <p>
-and so on and so forth, until \(a_n\). The function just returns the last item on the list.
+and so on and so forth, until arriving at the value \(a_n\). The function just returns the last item on the list.
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="org3e0ab07"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">factorial</span>(n) :
+<pre class="src src-python" id="org9290979"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">factorial</span>(n) :
     factorial_list = [<span style="color: #bd93f9; font-weight: bold;">1</span>]
     <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n+<span style="color: #bd93f9; font-weight: bold;">1</span>) : <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Python interprets this as an interval [1 .. n]</span>
         factorial_list.append(i*factorial_list[i-<span style="color: #bd93f9; font-weight: bold;">1</span>])
@@ -302,11 +302,11 @@ We may now evaluate the factorial function for some values:
 </div>
 </div>
 
-<div id="outline-container-org06f24ee" class="outline-2">
-<h2 id="org06f24ee"><span class="section-number-2">2</span> Algorithms on the divisors of a number</h2>
+<div id="outline-container-orgdc58c8c" class="outline-2">
+<h2 id="orgdc58c8c"><span class="section-number-2">2</span> Algorithms on the divisors of a number</h2>
 <div class="outline-text-2" id="text-2">
 <p>
-This algorithm resorts to the following definitions:
+This algorithm addresses to the following definitions:
 </p>
 <ul class="org-ul">
 <li><b>Defective numbers</b> A number \(n\) is called defective (or deficient) if the sum of its proper divisors is less than \(n\).</li>
@@ -322,14 +322,14 @@ Firstly, we must obtain a list of the divisors of the given numbers. As a justif
 </p>
 
 <p>
-Note that if \(d\) divides \(n\), then \(n\) might as well be written as a product of two integers in the following manner: \(n=(n/d) \cdot d\). Hence \(n/d\) would also divide \(n\). Now, if \(n\) is a perfect square so that \(d=\sqrt{n}\) divides \(n\), then \(n/d = \sqrt{n} = d\) so both numbers would be exactly the same divisor; otherwise, \(d\) and \(n/d\) will be different divisors of \(n\). With this in mind we may proceed by considering that if we have a divisor \(d < \sqrt{n}\), then \(d \sqrt{n} < n\), which is to say \(n/d > \sqrt{n}\); whereas if \(d > \sqrt{n}\), then \(n/d < \sqrt{n}\). Hence we have an equivalence:
+Note that if \(d\) divides \(n\), then \(n\) might as well be written as a product of two integers in the following manner: \(n=(n/d) \cdot d\). Hence \(n/d\) would also divide \(n\). Now, if \(n\) is a perfect square, so that \(d=\sqrt{n}\) divides \(n\), then \(n/d = \sqrt{n} = d\) so both numbers would be exactly the same divisor; otherwise \(d\) and \(n/d\) will be different divisors of \(n\). With this in mind we may proceed by considering that if we have a divisor \(d < \sqrt{n}\), then \(d \sqrt{n} < n\), which is to say \(n/d > \sqrt{n}\); whereas if \(d > \sqrt{n}\), then \(n/d < \sqrt{n}\). Hence we have an equivalence:
 \[
 d < \sqrt{n} \Leftrightarrow n/d > \sqrt{n},
 \]
 which establishes the desired relation and allows us to find all divisors of an integer by iterating up to \(\sqrt{n}\).
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="org6427f47"><span style="color: #ff79c6;">import</span> math
+<pre class="src src-python" id="orgb352cdd"><span style="color: #ff79c6;">import</span> math
 
 <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">div_list</span>(n) :
     div_list = [<span style="color: #bd93f9; font-weight: bold;">1</span>]
@@ -347,11 +347,11 @@ which establishes the desired relation and allows us to find all divisors of an 
 </div>
 
 <p>
-In order to decide whether a given positive integer abides by the definition of semi-perfect, we must resort to what is known as the subset sum problem, viz., we must tell if, given an arbitrary set of positive integers, we can extract some subset of it such that the sum of its elements yield a fixed value. In our particular case, we must evaluate subsets of the set of divisors of a number.
+In order to decide whether a given positive integer abides by the definition of semi-perfect, we must regard what is known as the subset sum problem, viz., we must tell if, given an arbitrary set of positive integers, we can extract some subset of it such that the sum of its elements yields a fixed value. In our particular case, we must evaluate subsets of the set of divisors of a number.
 </p>
 
 <p>
-To compute this in an effective way, we resort to dynamic programming. Suppose we have the number \(n\) and a list of its proper divisors, the idea is to construct a boolean matrix that relates subsets up to a certain value of the list of divisors with the possibility of them summing up to a quantity between 0 and \(n\). To be fair it is not so simple to put in words, but an image may clear things up:
+To compute this in an effective way, we turn to dynamic programming. Suppose we have the number \(n\) and a list of its proper divisors; the idea is to construct a boolean matrix that relates subsets up to a certain value of the list of divisors with the possibility of them summing up to a quantity between 0 and \(n\). To be fair it is not so simple to put into words, but an image may clear things up:
 </p>
 
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
@@ -447,23 +447,23 @@ To compute this in an effective way, we resort to dynamic programming. Suppose w
 </table>
 
 <p>
-Each row is associated to an element on the ordered list of divisors \((0,d_1,d_2,\dots,d_m)\), which can be truncated up to the k-th element as \((0,a_1,\dots,a_k)\). Each column is associated to an integer between 0 and \(n\).
+Each row is associated to an element on the ordered list of divisors \((0,d_1,d_2,\dots,d_m)\), which can be truncated up to the k-th element as \((0,a_1,\dots,a_k)\). (Note that we have appended the number 0 at the beginning of this list.) Each column is associated to an integer between 0 and \(n\).
 </p>
 
 <p>
-An element in the \((i,j)\) position in this array is True (\(T\)) if there is a subset of the truncated list up to the i-th element (viz., a subset of \((0,a_1,\dots,a_i)\)) which adds up to \(j\).
+An element in the \((i,j)\) position of this array is True (\(T\)) if there is a subset of the truncated list up to the i-th element (viz., a subset of \((0,a_1,\dots,a_i)\)) which adds up to \(j\).
 </p>
 
 <p>
-Here the first column tells us that for a list truncated up to any element of the divisor list, there is a subset that can add up to 0, this is taken as a tautology for we defined the 0-th element to be 0. On the other hand, 0 cannot add up to a number greater than itself, that is why the elements on the first row must be False (\(F\)).
+Here the first column tells us that, for a list truncated up to any element of the divisor list, there is a subset that can add up to 0; this is taken as a tautology, for we defined the 0-th element to be 0. On the other hand, 0 cannot add up to a number greater than itself, that is why the elements of the first row must be False (\(F\)).
 </p>
 
 <p>
 The empty matrix shown above will be filled according to two simple rules, which are indeed plausible. Suppose we require the value of an element in the \((i,j)\) position:
 </p>
 <ul class="org-ul">
-<li>If \(j < d_i\) and the element \((i-1,j)\) is False, then there is no way we can add up to \(j\) with a number that is greater than \(j\), hence \((i,j)\) would be False too. On the other hand, if the element \((i-1,j)\) is True, then it follows that any truncated list past \(d_{i-1}\) will contain at least one subset that adds up to \(j\), hence \((i,j)\) would be true.</li>
-<li>If \(j \geq d_i\) and the value of \((i-1,j)\) is True, we already know that \((i,j)\) will be also True; but even if \((i,j)\) is False there is the possibility that some subset of \((0,d_1,\dots,d_{i-1})\) give the value \(j - d_i\), if such a subset happens to exist, then the value of \((i,j)\) must be True. Hence \((i,j)\) will be False if both the above conditions are False.</li>
+<li>If \(j < d_i\) and the element \((i-1,j)\) is False, then there is no way we can add up to \(j\) with a number that is greater than \(j\); hence \((i,j)\) would be False too. On the other hand, if the element \((i-1,j)\) is True, then it follows that any truncated list past \(d_{i-1}\) will contain at least one subset that adds up to \(j\); thus \((i,j)\) would be true.</li>
+<li>If \(j \geq d_i\) and the value of \((i-1,j)\) is True, we already know that \((i,j)\) will be also True; but even if \((i,j)\) is False there is the possibility that some subset of \((0,d_1,\dots,d_{i-1})\) gives the value \(j - d_i\). If such a subset happens to exist, then the value of \((i,j)\) must be True. Hence \((i,j)\) will be False only if both the above conditions are False.</li>
 </ul>
 
 <p>
@@ -475,7 +475,7 @@ Simply put:
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python" id="org95b0933"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">is_semiperfect</span>(m) :
+<pre class="src src-python" id="org295bb6b"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">is_semiperfect</span>(m) :
         divisors_list = []
         divisors_list = div_list(m)
         divisors_list.sort()
@@ -510,7 +510,7 @@ Simply put:
 The following are just trivial definitions.
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="orgfa558d2"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">are_amicable</span>(n, m, div_sum_n, div_sum_m) :
+<pre class="src src-python" id="org51bb68e"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">are_amicable</span>(n, m, div_sum_n, div_sum_m) :
         <span style="color: #ff79c6;">if</span> n == div_sum_m <span style="color: #ff79c6;">and</span> m == div_sum_n :
                 <span style="color: #ff79c6;">print</span>(f<span style="color: #f1fa8c;">'{n} and {m} are amicable'</span>)
 
@@ -533,10 +533,10 @@ The following are just trivial definitions.
 </div>
 
 <p>
-Finally, all comes together:
+Finally, it all comes together:
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="orgc0f9a25"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">kind_of_number</span>(a,b) :
+<pre class="src src-python" id="org24042d2"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">kind_of_number</span>(a,b) :
         <span style="color: #6272a4;"># </span><span style="color: #6272a4;">we gather together the variables we require</span>
         div_a = div_list(a)
         div_b = div_list(b)
@@ -583,14 +583,14 @@ Output
 </div>
 </div>
 
-<div id="outline-container-org4e48e27" class="outline-2">
-<h2 id="org4e48e27"><span class="section-number-2">3</span> Palindrome number</h2>
+<div id="outline-container-org210ae9f" class="outline-2">
+<h2 id="org210ae9f"><span class="section-number-2">3</span> Palindrome number</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 This is an easy one, we need only evaluate a given number as if it is a string of characters, thus as if it is a list. We just decide whether the reversed list is exactly the same as the original one.
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="org9feb749"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">palindrome</span>(number) :
+<pre class="src src-python" id="orgb669790"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">palindrome</span>(number) :
         string = <span style="color: #ffb86c;">str</span>(number)
         <span style="color: #ff79c6;">if</span> string[<span style="color: #bd93f9; font-weight: bold;">0</span>:] == string[::-<span style="color: #bd93f9; font-weight: bold;">1</span>] :
                 <span style="color: #ff79c6;">print</span>(<span style="color: #8be9fd;">True</span>)
@@ -614,14 +614,14 @@ False
 </div>
 </div>
 
-<div id="outline-container-orga6e51c4" class="outline-2">
-<h2 id="orga6e51c4"><span class="section-number-2">4</span> Evaluating a string</h2>
+<div id="outline-container-orgad9d4e2" class="outline-2">
+<h2 id="orgad9d4e2"><span class="section-number-2">4</span> Evaluating a string</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 This equally comes down to manipulating a list of characters.
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="org95839ec"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">string</span>(string) :
+<pre class="src src-python" id="org084022d"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">string</span>(string) :
         chars = []
         vocals = <span style="color: #f1fa8c;">'aeiou'</span>
 
@@ -662,8 +662,8 @@ Output
 </div>
 </div>
 
-<div id="outline-container-org7b0f201" class="outline-2">
-<h2 id="org7b0f201"><span class="section-number-2">5</span> The Fibonacci sequence</h2>
+<div id="outline-container-orgd96450f" class="outline-2">
+<h2 id="orgd96450f"><span class="section-number-2">5</span> The Fibonacci sequence</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 Much like the first exercise, this is a recursion, which in this case is given by the formula
@@ -674,7 +674,7 @@ F_2 = 1, \\
 F_n = F_{n-1} + F_{n-2}
 \end{gather*}
 <div class="org-src-container">
-<pre class="src src-python" id="org353be20"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">fib</span>(n) :
+<pre class="src src-python" id="orgb05084d"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">fib</span>(n) :
         fib_list = [<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>]
         <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">2</span>, n+<span style="color: #bd93f9; font-weight: bold;">1</span>) :
                 fib_list.append(fib_list[i-<span style="color: #bd93f9; font-weight: bold;">1</span>] + fib_list[i-<span style="color: #bd93f9; font-weight: bold;">2</span>])
@@ -696,15 +696,15 @@ Output
 </div>
 </div>
 
-<div id="outline-container-orgd4a5088" class="outline-2">
-<h2 id="orgd4a5088"><span class="section-number-2">6</span> Quicksort</h2>
+<div id="outline-container-org2743aa0" class="outline-2">
+<h2 id="org2743aa0"><span class="section-number-2">6</span> Quicksort</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 Quicksort is an efficient divide-and-conquer algorithm for ordering a list of numbers. It works by selecting a pivot form a given array and deciding whether or not the rest of the elements in it are less than or greater than the pivot. The basic methodology we shall follow is based on &ldquo;partitions&rdquo;, or subarrays taken from the orignal one; we arbitrarily set the rightmost element on the list to be the pivot and then establish a well-defined process to extract two non-overlapping arrays, one containing elements which are greater than the pivot, and the other one containing elements which are less than it.
 </p>
 
 <p>
-To begin with, notice that the key element in our algorithm must be the &ldquo;partitioning&rdquo; routine, which comprises the basis for the rest of the iterative process. As to make the aforementioned process feasible, we define two pointers, each associated with a different condition; obviously, these conditions ought to be the order relations: &ldquo;greater than&rdquo; (&gt;) and &ldquo;less than&rdquo; (&lt;), which are going to be evaluated taking the pivot as a reference. We initialise the &ldquo;less than&rdquo; pointer at the leftmost point on the list, whereas the &ldquo;greater than pointer&rdquo; must begin at the point just to the left of the pivot.
+To begin with, notice that the key element in our algorithm must be the &ldquo;partitioning&rdquo; routine, which comprises the basis for the rest of the iterative process. As to make the aforementioned process feasible, we define two pointers, each associated with a different condition; obviously, these conditions ought to be the order relations: &ldquo;greater than&rdquo; (&gt;) and &ldquo;less than&rdquo; (&lt;), which are going to be evaluated by taking the pivot as a reference. We initialise the &ldquo;less than&rdquo; pointer at the leftmost point on the list, whereas the &ldquo;greater than pointer&rdquo; must begin at the point just to the left of the pivot.
 </p>
 
 <p>
@@ -717,7 +717,7 @@ Three straightforward rules must be followed by these pointers, namely:
 <ul class="org-ul">
 <li>As long as the value associated to (&lt;) is less than that corresponding to (&gt;), apply the following rules.</li>
 <li>If the first condition is unmet, exchange the position of the pivot with that of the (&lt;) pointer, stop the whole process, and return the the index (or position) of the (&lt;) pointer, this value will become the &ldquo;partition point&rdquo; for the list, viz., the index that separates &ldquo;greater than values&rdquo; from &ldquo;less than values&rdquo;.</li>
-<li>Whenever the condition they bear is satisfied, move to the &ldquo;next position&rdquo;, this amounts to &ldquo;move right&rdquo; for the (&lt;) pointer, and &ldquo;move left&rdquo; for the (&gt;) pointer.</li>
+<li>Whenever the condition they bear is satisfied, move to the &ldquo;next position&rdquo;; this amounts to &ldquo;move right&rdquo; for the (&lt;) pointer, and &ldquo;move left&rdquo; for the (&gt;) pointer.</li>
 </ul>
 
 <p>
@@ -770,7 +770,7 @@ quicksort(alist)
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-03-19 Fri 10:48</p>
+<p class="date">Created: 2021-03-19 Fri 19:08</p>
 </div>
 </body>
 </html>
