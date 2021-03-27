@@ -355,10 +355,62 @@ def quick_sort_wrapper(array, lowest_index, greatest_index) :
 def quicksort(array) :
     quick_sort_wrapper(array,0,len(array)-1)
 
-alist = [22, 32, 42, 12, 22, 31, 41, 11, 12, 232, 44, 12, 22]
+alist = [23, 32, 42, 12, 22, 31, 41, 11, 12, 232, 44, 12, 22]
 quicksort(alist)
 print(alist)
 #+end_src
 
 #+RESULTS:
-: [11, 12, 12, 12, 22, 22, 22, 31, 32, 41, 42, 44, 232]
+: [11, 12, 12, 12, 22, 22, 23, 31, 32, 41, 42, 44, 232]
+
+* Pandas: datafraes and series.
+We have the following. Every row of tis array coresponds to a aSeries, whcih is a special type of dictionary. Note that the even and odd tags (or rather, keys) automatically turn into attributes.
+#+begin_src python :results output :exports both
+import pandas as pd
+
+numbers = {'even': {0: 0, 1: 2, 2: 4, 3: 6}, 'odd': {0: 0, 1: 2, 2: 4, 3: 5}}
+
+data_frame = pd.DataFrame(numbers)
+print(data_frame.shape)
+print(type(data_frame['even']))
+print(data_frame.even[3])
+#+end_src
+
+#+RESULTS:
+: (4, 2)
+: <class 'pandas.core.series.Series'>
+: 6
+We can filter dataframes with the characters [[]], for indtance, by saying data_frame[[[['odd']]]] to filter columns and data_frame.loc[[[[2]]]] to filter rows.
+
+#+begin_src python :results output :exports both
+def graph(data, num_bins) :
+    data_size = data.size
+    n, bins, patches = plt.hist(data, num_bins, facecolor='green')
+
+    # add a 'best fit' line
+    mu = np.mean(data)
+    sigma = np.std(data)
+    y = norm.pdf( bins, mu, sigma)
+    l = plt.plot(bins, y*data_size*abs(bins[0]-bins[1]), 'r--', linewidth=1)
+
+    plt.xlabel('''Amplitud en unidades arbitrarias
+    Figura 2. Histograma del ruido estático.''')
+    plt.ylabel('Frecuencia')
+    plt.title(r'$ \bar x=%.f,\ s=%.f$'%(mu,sigma))
+    plt.grid(True)
+
+    plt.show()
+#+end_src
+
+#+begin_src python
+# we begin by getting the array of data supposedly obtained from a random experiment
+def random_experiment_info(data, data_size) :
+    np.random.seed(0)
+    data_set = np.random.choice(data, data_size)
+
+    mu = np.mean(data_set)
+    st_dev = np.std(data_set)
+    st_error = st_dev / np.sqrt(data_size)
+
+    return mu, st_dev, st_error
+#+end_src
