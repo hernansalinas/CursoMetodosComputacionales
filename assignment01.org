@@ -1,0 +1,74 @@
+#+TITLE: Assignment01
+
+In order to run this code, the following packages will be necessesary:
+#+begin_src ipython :session asession :exports code :results raw drawer
+import numpy as np
+import matplotlib.pylab as plt
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[1]:
+:end:
+
+* Plotting an electrostatic field
+
+The electrostatic field due to a point source charge $q$ is given by Coulomb's law,
+#+begin_src ipython :session asession :exports code :results raw drawer
+def electrostatic_field(_x, _y) :
+    source_x_positions_list = [1,-1]
+    source_y_positions_list = [0,0]
+    charges = [1,1]
+
+    n, m = np.shape(_y)
+    E_x, E_y = np.zeros((n,n)), np.zeros((n,n))
+
+    i = 0
+    while i <= 1 :
+        delta_pos_x = _x - source_x_positions_list[i]
+        delta_pos_y = _y - source_y_positions_list[i]
+        R = np.sqrt(delta_pos_x**2 + delta_pos_y**2)
+
+        E_x += charges[i]*delta_pos_x/R**3
+        E_y += charges[i]*delta_pos_y/R**3
+        i += 1
+
+    return E_x, E_y
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[4]:
+:end:
+
+Position in y, as is defined, must be the converse (transpose) of position in x.
+#+begin_src ipython :session asession :exports code :results raw drawer
+%config InlineBackend.figure_format = 'svg'
+
+def graph(boxlength, num_partitions) : # boxlength represents half the length of the side
+    x = [[i*2*boxlength/(num_partitions-1) - boxlength for i in range(num_partitions)] for k in range(num_partitions)]
+    y = x[:]
+    x, y = np.array(x), np.array(y).T
+    E_x, E_y = electrostatic_field(x, y)
+
+    plt.streamplot(x, y, E_x, E_y, color='k', arrowstyle ='->')
+    plt.xlabel('$x$')
+    plt.ylabel('$y$')
+    plt.show()
+
+# execute the code
+graph(2,20)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[5]:
+[[file:./obipy-resources/hZCKYA.svg]]
+:end:
+
+* Projectile motion
+#+begin_src ipython :session asession :exports code :results raw drawer
+def point_check(y_0, v_0, angle) :
+    t = basket_x_pos / (v_0*np.cos(angle))
+    return bool(basket_y_pos == 0.5*g*t**2 + v_0*np.sin(angle)*t + y_0)
+#+end_src
