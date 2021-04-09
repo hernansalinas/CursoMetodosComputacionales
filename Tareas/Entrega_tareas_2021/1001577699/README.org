@@ -3,4 +3,4 @@
 
 This repository contains assignments tying in with what has been required in the course "Computational Methods for Physicists and Astronomers," namely, implementations of several mathematical algorithms in ~Python~ and its packages.
 
-To view the assignments, refer to https://jdavid-salcedo.github.io/Metodos_Computacionales_taller/
+To view the assignments, refer to https://jdavid-salcedo.github.io/Metodos_Computacionales_taller/public
