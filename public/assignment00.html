@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-03-19 Fri 19:08 -->
+<!-- 2021-04-09 Fri 07:10 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Assignment 0.0. Computational Methods</title>
+<title>Assignment00</title>
 <meta name="author" content="Juan David Salcedo Hernández" />
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
@@ -247,22 +247,23 @@
 </head>
 <body>
 <div id="content">
-<h1 class="title">Assignment 0.0. Computational Methods</h1>
+<h1 class="title">Assignment00</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org301f9fd">1. Implementation of the factorial algorithm</a></li>
-<li><a href="#orgdc58c8c">2. Algorithms on the divisors of a number</a></li>
-<li><a href="#org210ae9f">3. Palindrome number</a></li>
-<li><a href="#orgad9d4e2">4. Evaluating a string</a></li>
-<li><a href="#orgd96450f">5. The Fibonacci sequence</a></li>
-<li><a href="#org2743aa0">6. Quicksort</a></li>
+<li><a href="#org5b5a81e">1. Implementation of the factorial algorithm</a></li>
+<li><a href="#orgc46c361">2. Algorithms on the divisors of a number</a></li>
+<li><a href="#org0254948">3. Palindrome number</a></li>
+<li><a href="#org99bd89e">4. Evaluating a string</a></li>
+<li><a href="#org2f693ea">5. The Fibonacci sequence</a></li>
+<li><a href="#org042191c">6. Quicksort</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org301f9fd" class="outline-2">
-<h2 id="org301f9fd"><span class="section-number-2">1</span> Implementation of the factorial algorithm</h2>
+
+<div id="outline-container-org5b5a81e" class="outline-2">
+<h2 id="org5b5a81e"><span class="section-number-2">1</span> Implementation of the factorial algorithm</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 In order to compute the factorial of an arbitrary positive integer n, we need not resort to an explicit algebraic expression for such a function, but rather establish a recursive routine by using a list of numbers.
@@ -284,7 +285,7 @@ a_4 = 4 \cdot a_3 = 4 \cdot 3 \cdot 2 \cdot 1,
 and so on and so forth, until arriving at the value \(a_n\). The function just returns the last item on the list.
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="org9290979"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">factorial</span>(n) :
+<pre class="src src-ipython" id="orgd5bbf4e"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">factorial</span>(n) :
     factorial_list = [<span style="color: #bd93f9; font-weight: bold;">1</span>]
     <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n+<span style="color: #bd93f9; font-weight: bold;">1</span>) : <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Python interprets this as an interval [1 .. n]</span>
         factorial_list.append(i*factorial_list[i-<span style="color: #bd93f9; font-weight: bold;">1</span>])
@@ -295,6 +296,12 @@ and so on and so forth, until arriving at the value \(a_n\). The function just r
 <p>
 We may now evaluate the factorial function for some values:
 </p>
+<div class="org-src-container">
+<pre class="src src-ipython">factorial(<span style="color: #bd93f9; font-weight: bold;">11</span>)
+factorial(<span style="color: #bd93f9; font-weight: bold;">20</span>)
+</pre>
+</div>
+
 <pre class="example">
 39916800
 2432902008176640000
@@ -302,8 +309,8 @@ We may now evaluate the factorial function for some values:
 </div>
 </div>
 
-<div id="outline-container-orgdc58c8c" class="outline-2">
-<h2 id="orgdc58c8c"><span class="section-number-2">2</span> Algorithms on the divisors of a number</h2>
+<div id="outline-container-orgc46c361" class="outline-2">
+<h2 id="orgc46c361"><span class="section-number-2">2</span> Algorithms on the divisors of a number</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 This algorithm addresses to the following definitions:
@@ -322,14 +329,14 @@ Firstly, we must obtain a list of the divisors of the given numbers. As a justif
 </p>
 
 <p>
-Note that if \(d\) divides \(n\), then \(n\) might as well be written as a product of two integers in the following manner: \(n=(n/d) \cdot d\). Hence \(n/d\) would also divide \(n\). Now, if \(n\) is a perfect square, so that \(d=\sqrt{n}\) divides \(n\), then \(n/d = \sqrt{n} = d\) so both numbers would be exactly the same divisor; otherwise \(d\) and \(n/d\) will be different divisors of \(n\). With this in mind we may proceed by considering that if we have a divisor \(d < \sqrt{n}\), then \(d \sqrt{n} < n\), which is to say \(n/d > \sqrt{n}\); whereas if \(d > \sqrt{n}\), then \(n/d < \sqrt{n}\). Hence we have an equivalence:
+Note that if \(d\) divides \(n\), then \(n\) might as well be written as a product of two integers in the following manner: \(n=(n/d) \cdot d\). Hence \(n/d\) would also divide \(n\). Now, if \(n\) is a perfect square (so that \(d=\sqrt{n}\) divides \(n\)), then \(n/d = \sqrt{n} = d\), so both numbers would be exactly the same divisor; otherwise \(d\) and \(n/d\) will be different divisors of \(n\). With this in mind, we may proceed by considering that if we have a divisor \(d < \sqrt{n}\), then \(d \sqrt{n} < n\), which is to say \(n/d > \sqrt{n}\); whereas if \(d > \sqrt{n}\), then \(n/d < \sqrt{n}\). Hence we have an equivalence:
 \[
 d < \sqrt{n} \Leftrightarrow n/d > \sqrt{n},
 \]
 which establishes the desired relation and allows us to find all divisors of an integer by iterating up to \(\sqrt{n}\).
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="orgb352cdd"><span style="color: #ff79c6;">import</span> math
+<pre class="src src-ipython" id="orgfffb902"><span style="color: #ff79c6;">import</span> math
 
 <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">div_list</span>(n) :
     div_list = [<span style="color: #bd93f9; font-weight: bold;">1</span>]
@@ -347,7 +354,7 @@ which establishes the desired relation and allows us to find all divisors of an 
 </div>
 
 <p>
-In order to decide whether a given positive integer abides by the definition of semi-perfect, we must regard what is known as the subset sum problem, viz., we must tell if, given an arbitrary set of positive integers, we can extract some subset of it such that the sum of its elements yields a fixed value. In our particular case, we must evaluate subsets of the set of divisors of a number.
+In order to decide whether a given positive integer abides by the definition of semi-perfect, we must regard what is known as the subset sum problem, viz., we must tell if given an arbitrary set of positive integers, we can extract some subset of it such that the sum of its elements yields a fixed value. In our particular case, we must evaluate subsets of the set of divisors of a number.
 </p>
 
 <p>
@@ -475,7 +482,7 @@ Simply put:
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python" id="org295bb6b"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">is_semiperfect</span>(m) :
+<pre class="src src-ipython" id="orgb9b8269"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">is_semiperfect</span>(m) :
         divisors_list = []
         divisors_list = div_list(m)
         divisors_list.sort()
@@ -510,7 +517,7 @@ Simply put:
 The following are just trivial definitions.
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="org51bb68e"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">are_amicable</span>(n, m, div_sum_n, div_sum_m) :
+<pre class="src src-ipython" id="orgca5d4b4"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">are_amicable</span>(n, m, div_sum_n, div_sum_m) :
         <span style="color: #ff79c6;">if</span> n == div_sum_m <span style="color: #ff79c6;">and</span> m == div_sum_n :
                 <span style="color: #ff79c6;">print</span>(f<span style="color: #f1fa8c;">'{n} and {m} are amicable'</span>)
 
@@ -536,7 +543,7 @@ The following are just trivial definitions.
 Finally, it all comes together:
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="org24042d2"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">kind_of_number</span>(a,b) :
+<pre class="src src-ipython" id="org547acf5"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">kind_of_number</span>(a,b) :
         <span style="color: #6272a4;"># </span><span style="color: #6272a4;">we gather together the variables we require</span>
         div_a = div_list(a)
         div_b = div_list(b)
@@ -570,7 +577,13 @@ Execution example:
 <p>
 Output
 </p>
-<pre class="example">
+<div class="org-src-container">
+<pre class="src src-ipython">kind_of_number(<span style="color: #bd93f9; font-weight: bold;">40</span>,<span style="color: #bd93f9; font-weight: bold;">12</span>)
+kind_of_number(<span style="color: #bd93f9; font-weight: bold;">220</span>,<span style="color: #bd93f9; font-weight: bold;">284</span>)
+</pre>
+</div>
+
+<p>
 40 is abundant
 12 is abundant
 40 is semi-perfect
@@ -579,18 +592,26 @@ Output
 284 is defective
 220 is abundant
 220 is semi-perfect
-</pre>
+40 is abundant
+12 is abundant
+40 is semi-perfect
+12 is semi-perfect
+220 and 284 are amicable
+284 is defective
+220 is abundant
+220 is semi-perfect
+</p>
 </div>
 </div>
 
-<div id="outline-container-org210ae9f" class="outline-2">
-<h2 id="org210ae9f"><span class="section-number-2">3</span> Palindrome number</h2>
+<div id="outline-container-org0254948" class="outline-2">
+<h2 id="org0254948"><span class="section-number-2">3</span> Palindrome number</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 This is an easy one, we need only evaluate a given number as if it is a string of characters, thus as if it is a list. We just decide whether the reversed list is exactly the same as the original one.
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="orgb669790"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">palindrome</span>(number) :
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">palindrome</span>(number) :
         string = <span style="color: #ffb86c;">str</span>(number)
         <span style="color: #ff79c6;">if</span> string[<span style="color: #bd93f9; font-weight: bold;">0</span>:] == string[::-<span style="color: #bd93f9; font-weight: bold;">1</span>] :
                 <span style="color: #ff79c6;">print</span>(<span style="color: #8be9fd;">True</span>)
@@ -606,22 +627,30 @@ Execution example:
 <p>
 Output
 </p>
-<pre class="example">
+<div class="org-src-container">
+<pre class="src src-ipython">palindrome(<span style="color: #bd93f9; font-weight: bold;">3333333</span>), palindrome(<span style="color: #bd93f9; font-weight: bold;">2323</span>), palindrome(<span style="color: #bd93f9; font-weight: bold;">1111349111111</span>)
+</pre>
+</div>
+
+<p>
 True
 False
 False
-</pre>
+True
+False
+False
+</p>
 </div>
 </div>
 
-<div id="outline-container-orgad9d4e2" class="outline-2">
-<h2 id="orgad9d4e2"><span class="section-number-2">4</span> Evaluating a string</h2>
+<div id="outline-container-org99bd89e" class="outline-2">
+<h2 id="org99bd89e"><span class="section-number-2">4</span> Evaluating a string</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 This equally comes down to manipulating a list of characters.
 </p>
 <div class="org-src-container">
-<pre class="src src-python" id="org084022d"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">string</span>(string) :
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">string</span>(string) :
         chars = []
         vocals = <span style="color: #f1fa8c;">'aeiou'</span>
 
@@ -655,15 +684,22 @@ Execution example:
 <p>
 Output
 </p>
-<pre class="example">
-[False, 2, 3, 'orrep']
-[False, 5, 5, 'ogaleicrum']
+<div class="org-src-container">
+<pre class="src src-ipython">string(<span style="color: #f1fa8c;">'perro'</span>), string(<span style="color: #f1fa8c;">'murcielago'</span>)
 </pre>
+</div>
+
+<p>
+[False, 2, 3, &rsquo;orrep&rsquo;]
+[False, 5, 5, &rsquo;ogaleicrum&rsquo;]
+[False, 2, 3, &rsquo;orrep&rsquo;]
+[False, 5, 5, &rsquo;ogaleicrum&rsquo;]
+</p>
 </div>
 </div>
 
-<div id="outline-container-orgd96450f" class="outline-2">
-<h2 id="orgd96450f"><span class="section-number-2">5</span> The Fibonacci sequence</h2>
+<div id="outline-container-org2f693ea" class="outline-2">
+<h2 id="org2f693ea"><span class="section-number-2">5</span> The Fibonacci sequence</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 Much like the first exercise, this is a recursion, which in this case is given by the formula
@@ -674,7 +710,7 @@ F_2 = 1, \\
 F_n = F_{n-1} + F_{n-2}
 \end{gather*}
 <div class="org-src-container">
-<pre class="src src-python" id="orgb05084d"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">fib</span>(n) :
+<pre class="src src-ipython" id="orga80ac1e"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">fib</span>(n) :
         fib_list = [<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>]
         <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">2</span>, n+<span style="color: #bd93f9; font-weight: bold;">1</span>) :
                 fib_list.append(fib_list[i-<span style="color: #bd93f9; font-weight: bold;">1</span>] + fib_list[i-<span style="color: #bd93f9; font-weight: bold;">2</span>])
@@ -689,15 +725,22 @@ Execution example:
 <p>
 Output
 </p>
-<pre class="example">
+<div class="org-src-container">
+<pre class="src src-ipython">fib(<span style="color: #bd93f9; font-weight: bold;">50</span>), fib(<span style="color: #bd93f9; font-weight: bold;">63</span>)
+</pre>
+</div>
+
+<p>
 12586269025
 6557470319842
-</pre>
+12586269025
+6557470319842
+</p>
 </div>
 </div>
 
-<div id="outline-container-org2743aa0" class="outline-2">
-<h2 id="org2743aa0"><span class="section-number-2">6</span> Quicksort</h2>
+<div id="outline-container-org042191c" class="outline-2">
+<h2 id="org042191c"><span class="section-number-2">6</span> Quicksort</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 Quicksort is an efficient divide-and-conquer algorithm for ordering a list of numbers. It works by selecting a pivot form a given array and deciding whether or not the rest of the elements in it are less than or greater than the pivot. The basic methodology we shall follow is based on &ldquo;partitions&rdquo;, or subarrays taken from the orignal one; we arbitrarily set the rightmost element on the list to be the pivot and then establish a well-defined process to extract two non-overlapping arrays, one containing elements which are greater than the pivot, and the other one containing elements which are less than it.
@@ -724,7 +767,7 @@ Three straightforward rules must be followed by these pointers, namely:
 The algorithm will repeatedly apply this process, firstly on the original array, and subsequently on the partitions of the list; each partition is defined by an index, which in turn fixes the ending point of one list and the beginning of another.
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">partition</span>(array, lowest_index, greatest_index) :
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">partition</span>(array, lowest_index, greatest_index) :
     pivot = array[greatest_index]
     less_pointer = lowest_index
     greater_pointer = greatest_index - <span style="color: #bd93f9; font-weight: bold;">1</span>
@@ -756,21 +799,23 @@ The algorithm will repeatedly apply this process, firstly on the original array,
 <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">quicksort</span>(array) :
     quick_sort_wrapper(array,<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #ffb86c;">len</span>(array)-<span style="color: #bd93f9; font-weight: bold;">1</span>)
 
-alist = [<span style="color: #bd93f9; font-weight: bold;">22</span>, <span style="color: #bd93f9; font-weight: bold;">32</span>, <span style="color: #bd93f9; font-weight: bold;">42</span>, <span style="color: #bd93f9; font-weight: bold;">12</span>, <span style="color: #bd93f9; font-weight: bold;">22</span>, <span style="color: #bd93f9; font-weight: bold;">31</span>, <span style="color: #bd93f9; font-weight: bold;">41</span>, <span style="color: #bd93f9; font-weight: bold;">11</span>, <span style="color: #bd93f9; font-weight: bold;">12</span>, <span style="color: #bd93f9; font-weight: bold;">232</span>, <span style="color: #bd93f9; font-weight: bold;">44</span>, <span style="color: #bd93f9; font-weight: bold;">12</span>, <span style="color: #bd93f9; font-weight: bold;">22</span>]
+alist = [<span style="color: #bd93f9; font-weight: bold;">23</span>, <span style="color: #bd93f9; font-weight: bold;">32</span>, <span style="color: #bd93f9; font-weight: bold;">42</span>, <span style="color: #bd93f9; font-weight: bold;">12</span>, <span style="color: #bd93f9; font-weight: bold;">22</span>, <span style="color: #bd93f9; font-weight: bold;">31</span>, <span style="color: #bd93f9; font-weight: bold;">41</span>, <span style="color: #bd93f9; font-weight: bold;">11</span>, <span style="color: #bd93f9; font-weight: bold;">12</span>, <span style="color: #bd93f9; font-weight: bold;">232</span>, <span style="color: #bd93f9; font-weight: bold;">44</span>, <span style="color: #bd93f9; font-weight: bold;">12</span>, <span style="color: #bd93f9; font-weight: bold;">22</span>]
 quicksort(alist)
 <span style="color: #ff79c6;">print</span>(alist)
 </pre>
 </div>
 
-<pre class="example">
-[11, 12, 12, 12, 22, 22, 22, 31, 32, 41, 42, 44, 232]
-</pre>
+<p>
+[11, 12, 12, 12, 22, 22, 23, 31, 32, 41, 42, 44, 232]
+[11, 12, 12, 12, 22, 22, 23, 31, 32, 41, 42, 44, 232]
+</p>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-03-19 Fri 19:08</p>
+<p class="date">Created: 2021-04-09 Fri 07:10</p>
+<p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>
 </html>

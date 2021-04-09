@@ -1,7 +1,7 @@
-#+TITLE: Assignment 0.0. Computational Methods
-#+AUTHOR: Juan David Salcedo Hernández
+#+TITLE: Assignment00
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 #+HTML_HEAD: <style>pre.src{background:#343131;color:white;} </style>
+
 * Implementation of the factorial algorithm
 
 In order to compute the factorial of an arbitrary positive integer n, we need not resort to an explicit algebraic expression for such a function, but rather establish a recursive routine by using a list of numbers.
@@ -18,7 +18,7 @@ a_4 = 4 \cdot a_3 = 4 \cdot 3 \cdot 2 \cdot 1,
 \end{gather*}
 and so on and so forth, until arriving at the value $a_n$. The function just returns the last item on the list.
 #+name: python-factorial
-#+begin_src python
+#+begin_src ipython :session asession :exports code :results raw drawer
 def factorial(n) :
     factorial_list = [1]
     for i in range(1, n+1) : # Python interprets this as an interval [1 .. n]
@@ -26,9 +26,13 @@ def factorial(n) :
     print(factorial_list[-1])
 #+end_src
 
+#+RESULTS: python-factorial
+:results:
+# Out[1]:
+:end:
+
 We may now evaluate the factorial function for some values:
-#+begin_src python :noweb yes :results output :exports results
-<<python-factorial>>
+#+begin_src ipython :session asession :exports both :results output
 factorial(11)
 factorial(20)
 #+end_src
@@ -55,7 +59,7 @@ d < \sqrt{n} \Leftrightarrow n/d > \sqrt{n},
 $$
 which establishes the desired relation and allows us to find all divisors of an integer by iterating up to $\sqrt{n}$.
 #+name: divisors
-#+begin_src python
+#+begin_src ipython :session asession :exports code :results raw drawer
 import math
 
 def div_list(n) :
@@ -71,6 +75,11 @@ def div_list(n) :
         i += 1
     return div_list
 #+end_src
+
+#+RESULTS: divisors
+:results:
+# Out[5]:
+:end:
 
 In order to decide whether a given positive integer abides by the definition of semi-perfect, we must regard what is known as the subset sum problem, viz., we must tell if given an arbitrary set of positive integers, we can extract some subset of it such that the sum of its elements yields a fixed value. In our particular case, we must evaluate subsets of the set of divisors of a number.
 
@@ -100,7 +109,7 @@ Simply put:
 - If $j \geq d_i$, then $(i,j) = (i-1,j) \text{ or } (i-1,j-d_i)$.
 
 #+name: semiperfect
-#+begin_src python
+#+begin_src ipython :session asession :exports code :results raw drawer
 def is_semiperfect(m) :
         divisors_list = []
         divisors_list = div_list(m)
@@ -131,9 +140,14 @@ def is_semiperfect(m) :
                 print(f'{m} is semi-perfect')
 #+end_src
 
+#+RESULTS: semiperfect
+:results:
+# Out[6]:
+:end:
+
 The following are just trivial definitions.
 #+name: easy-statements
-#+begin_src python
+#+begin_src ipython :session asession :exports code :results raw drawer
 def are_amicable(n, m, div_sum_n, div_sum_m) :
         if n == div_sum_m and m == div_sum_n :
                 print(f'{n} and {m} are amicable')
@@ -155,9 +169,14 @@ def is_perfect(n, div_sum) :
                 print(f'{n} is perfect')
 #+end_src
 
+#+RESULTS: easy-statements
+:results:
+# Out[7]:
+:end:
+
 Finally, it all comes together:
 #+name: kind
-#+begin_src python :noweb yes
+#+begin_src ipython :session asession :exports code :results raw drawer
 def kind_of_number(a,b) :
         # we gather together the variables we require
         div_a = div_list(a)
@@ -184,37 +203,33 @@ def kind_of_number(a,b) :
         is_semiperfect(b)
 #+end_src
 
+#+RESULTS: kind
+:results:
+# Out[8]:
+:end:
+
 Execution example:
 
 Output
-#+begin_src python :noweb yes :results output :exports results
-<<divisors>>
-
-<<semiperfect>>
-
-<<easy-statements>>
-
-<<kind>>
-
+#+begin_src ipython :session asession :exports both :results raw output
 kind_of_number(40,12)
 kind_of_number(220,284)
 #+end_src
 
 #+RESULTS:
-: 40 is abundant
-: 12 is abundant
-: 40 is semi-perfect
-: 12 is semi-perfect
-: 220 and 284 are amicable
-: 284 is defective
-: 220 is abundant
-: 220 is semi-perfect
+40 is abundant
+12 is abundant
+40 is semi-perfect
+12 is semi-perfect
+220 and 284 are amicable
+284 is defective
+220 is abundant
+220 is semi-perfect
 
 * Palindrome number
 
 This is an easy one, we need only evaluate a given number as if it is a string of characters, thus as if it is a list. We just decide whether the reversed list is exactly the same as the original one.
-#+name: palindrome
-#+begin_src python
+#+begin_src ipython :session asession :exports both :results raw output
 def palindrome(number) :
         string = str(number)
         if string[0:] == string[::-1] :
@@ -223,24 +238,24 @@ def palindrome(number) :
                 print(False)
 #+end_src
 
+#+RESULTS:
+
 Execution example:
 
 Output
-#+begin_src python :noweb yes :results output :exports results
-<<palindrome>>
+#+begin_src ipython :session asession :exports both :results raw output
 palindrome(3333333), palindrome(2323), palindrome(1111349111111)
 #+end_src
 
 #+RESULTS:
-: True
-: False
-: False
+True
+False
+False
 
 * Evaluating a string
 
 This equally comes down to manipulating a list of characters.
-#+name: string
-#+begin_src python
+#+begin_src ipython :session asession :exports both :results raw output
 def string(string) :
         chars = []
         vocals = 'aeiou'
@@ -267,17 +282,18 @@ def string(string) :
         print(chars)
 #+end_src
 
+#+RESULTS:
+
 Execution example:
 
 Output
-#+begin_src python :noweb yes :results output :exports results
-<<string>>
+#+begin_src ipython :session asession :exports both :results raw output
 string('perro'), string('murcielago')
 #+end_src
 
 #+RESULTS:
-: [False, 2, 3, 'orrep']
-: [False, 5, 5, 'ogaleicrum']
+[False, 2, 3, 'orrep']
+[False, 5, 5, 'ogaleicrum']
 
 * The Fibonacci sequence
 
@@ -288,7 +304,7 @@ F_2 = 1, \\
 F_n = F_{n-1} + F_{n-2}
 \end{gather*}
 #+name: fibonacci
-#+begin_src python
+#+begin_src ipython :session asession :exports both :results raw output
 def fib(n) :
         fib_list = [1,1]
         for i in range(2, n+1) :
@@ -296,17 +312,18 @@ def fib(n) :
         print(fib_list[-2])
 #+end_src
 
+#+RESULTS: fibonacci
+
 Execution example:
 
 Output
-#+begin_src python :noweb yes :results output :exports results
-<<fibonacci>>
+#+begin_src ipython :session asession :exports both :results raw output
 fib(50), fib(63)
 #+end_src
 
 #+RESULTS:
-: 12586269025
-: 6557470319842
+12586269025
+6557470319842
 
 * Quicksort
 
@@ -322,7 +339,7 @@ Three straightforward rules must be followed by these pointers, namely:
  - Whenever the condition they bear is satisfied, move to the "next position"; this amounts to "move right" for the (<) pointer, and "move left" for the (>) pointer.
 
 The algorithm will repeatedly apply this process, firstly on the original array, and subsequently on the partitions of the list; each partition is defined by an index, which in turn fixes the ending point of one list and the beginning of another.
-#+begin_src python :results output :exports both
+#+begin_src ipython :session asession :exports both :results raw output
 def partition(array, lowest_index, greatest_index) :
     pivot = array[greatest_index]
     less_pointer = lowest_index
@@ -361,56 +378,4 @@ print(alist)
 #+end_src
 
 #+RESULTS:
-: [11, 12, 12, 12, 22, 22, 23, 31, 32, 41, 42, 44, 232]
-
-* Pandas: datafraes and series.
-We have the following. Every row of tis array coresponds to a aSeries, whcih is a special type of dictionary. Note that the even and odd tags (or rather, keys) automatically turn into attributes.
-#+begin_src python :results output :exports both
-import pandas as pd
-
-numbers = {'even': {0: 0, 1: 2, 2: 4, 3: 6}, 'odd': {0: 0, 1: 2, 2: 4, 3: 5}}
-
-data_frame = pd.DataFrame(numbers)
-print(data_frame.shape)
-print(type(data_frame['even']))
-print(data_frame.even[3])
-#+end_src
-
-#+RESULTS:
-: (4, 2)
-: <class 'pandas.core.series.Series'>
-: 6
-We can filter dataframes with the characters [[]], for indtance, by saying data_frame[[[['odd']]]] to filter columns and data_frame.loc[[[[2]]]] to filter rows.
-
-#+begin_src python :results output :exports both
-def graph(data, num_bins) :
-    data_size = data.size
-    n, bins, patches = plt.hist(data, num_bins, facecolor='green')
-
-    # add a 'best fit' line
-    mu = np.mean(data)
-    sigma = np.std(data)
-    y = norm.pdf( bins, mu, sigma)
-    l = plt.plot(bins, y*data_size*abs(bins[0]-bins[1]), 'r--', linewidth=1)
-
-    plt.xlabel('''Amplitud en unidades arbitrarias
-    Figura 2. Histograma del ruido estático.''')
-    plt.ylabel('Frecuencia')
-    plt.title(r'$ \bar x=%.f,\ s=%.f$'%(mu,sigma))
-    plt.grid(True)
-
-    plt.show()
-#+end_src
-
-#+begin_src python
-# we begin by getting the array of data supposedly obtained from a random experiment
-def random_experiment_info(data, data_size) :
-    np.random.seed(0)
-    data_set = np.random.choice(data, data_size)
-
-    mu = np.mean(data_set)
-    st_dev = np.std(data_set)
-    st_error = st_dev / np.sqrt(data_size)
-
-    return mu, st_dev, st_error
-#+end_src
+[11, 12, 12, 12, 22, 22, 23, 31, 32, 41, 42, 44, 232]

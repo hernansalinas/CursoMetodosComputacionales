@@ -1,0 +1,200 @@
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org6f85f6f">1. Plotting an electrostatic field</a></li>
+<li><a href="#orgb796962">2. Projectile motion</a></li>
+</ul>
+</div>
+</div>
+<p>
+In order to run this code, the following packages will be necessesary:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">import numpy as np
+import matplotlib.pylab as plt
+</pre>
+</div>
+
+<div id="outline-container-org6f85f6f" class="outline-2">
+<h2 id="org6f85f6f"><span class="section-number-2">1</span> Plotting an electrostatic field</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+The electrostatic field due to some point source charge \(q\) is given by Coulomb's law,
+\[
+\mathbf{E} = \frac{1}{4\pi \epsilon_0} \frac{q}{r^2} \hat{\mathbf{r}}
+\]
+where \(r\) denotes the distance from the point charge to the field point, vectorially, if the field point is located at \(\mathbf{l}\), and the source at \(\mathbf{l}'\), then \(\mathbf{r} = \mathbf{l} - \mathbf{l}'\). Notice that the above equation for the field yields a two-component equation in a two dimensional space. In such a case we have
+\[
+E_x = \frac{1}{4\pi \epsilon_0} \frac{q}{r^2} \frac{r_x}{r} = \frac{1}{4\pi \epsilon_0} \frac{q r_x}{r^3}
+\]
+and a similar expression is true for the \(y\) component of the electric field. The electric field abides by the supperposition principle, that is, the field produced by \(n\) different source point charges at a single point \(P\) is exactly the vector sum of the individual electic fields due to the soure charges. Taking all these facts into account, we can compute the electic field at arbitrarily many points embedded in a two-dimensional space.
+</p>
+
+<p>
+Now that the concept has been clarified, we may proceed with the implementation of the algorithm to compute the electric field at some points on a plane. For simplicity we suppose \(1 / 4\pi \epsilon_0 = 1\).
+</p>
+
+<p>
+The <code>electrostatic_field</code> routine takes two square numpy arrays, <code>_x</code> and <code>_y</code>, as an input; these arrays encode a grid of position vectors, viz., the \(x\) and \(y\) components of some number of evenly spaced points on a square region of the plane (the amount of points is defined by the user). Its output will be two numpy arrays, <code>E_x</code> and <code>E_y</code>, with the values of electrostatic field at each initailly given point.
+</p>
+
+<p>
+We only require one more input, which is the charge and the position of the sources; we may encode this information in a dictionary with charges as keys and tuples representing the positions of each spurce charge as items. We can read this information by defining a list <code>l</code>, whose elements are tuples containing every key on the original dictionary, assosiated with its respective item, i.e., tuples of the form <code>(key, item)</code>; recall that, in this case, each item is itself a tuple. To create this list we turn to the method <code>dict.items()</code>, and turn the resulting object into a list by applying the method <code>list()</code> on it. The rest of the process comes down to defining lists of the same length as <code>l</code>, which are then assigned its respective value in a while loop. We thus obtain three lists with the same length: <code>charges</code>, <code>source_x_positions_list</code>, and <code>source_y_positions_list</code>.
+</p>
+
+<p>
+Now the computation of the electric field at every point encoded in the two initial arrays, <code>_x</code> and <code>_y</code>, can be easily carried out by abstraction using numpy arrays. We define two square arrays of the same order as <code>_x</code> and <code>_y</code>, namely <code>E_x</code> and <code>E_y</code>; these arrays have initialy zero values, for we are then going to sum over all the electrostatic fields produced by the different charges, tying in with the supperposition principle. We use a while loop to iterate through all the values in the list of charges, x positions, and y positions, which correspond to the sources and then proceed to compute the distance components as <code>delta_pos_x</code> and <code>delta_pos_y</code>, the magnitude of the ditance as <code>R</code>, and the components of the electrostatic field as the sum of its current value with the value given by Coulomb's law for each charge in the list of charges.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">sources = {1: (-1,0), 1.1: (1,0), -1: (0,1), -1.1: (0,-1)}
+
+def electrostatic_field(_x, _y) :
+    l = list(sources.items())
+    charges, source_x_positions_list, source_y_positions_list = [0]*len(l), [0]*len(l), [0]*len(l)
+
+    i = 0
+    while i &lt; len(l) :
+	charges[i], (source_x_positions_list[i], source_y_positions_list[i]) = l[i]
+	i += 1
+
+    n, m = np.shape(_y) # n and m are the same number, for _y is a square matrix, as is _x
+    E_x, E_y = np.zeros((n,n)), np.zeros((n,n))
+
+    i = 0
+    while i &lt; len(charges) :
+	delta_pos_x = _x - source_x_positions_list[i]
+	delta_pos_y = _y - source_y_positions_list[i]
+	R = np.sqrt(delta_pos_x**2 + delta_pos_y**2)
+
+	E_x += charges[i]*delta_pos_x/R**3
+	E_y += charges[i]*delta_pos_y/R**3
+	i += 1
+
+    return E_x, E_y
+</pre>
+</div>
+
+<p>
+The bulk of the <code>graph</code> routine is to create a two dimensional partition of the plane area defined by the user with the parameter <code>boxlength</code>. Actually, <code>boxlength</code> denotes half the length of the side of the figure, which is always going to be centred at (0,0); hence we must evenly partition an interval [-boxlength, boxlength]. Such a partition is given by <code>i*2*boxlength/(num_partitions-1) - boxlength</code> for i from 0 to the desired number of partitions. We must use the resulting set of numbers in a square matrix with <i>repeating rows</i>, which represents the x component of the position of a square, evenly spaced grid of points. The transpose of the aforementioned matrix is the y component of the same grid of points. These matrices are then used to compute the electrostatic field.
+</p>
+
+<p>
+Now we only need to use the utilities of <code>matplotlib</code> to graph the electrostatic field of a configuration of source point charges.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">%config InlineBackend.figure_format = 'svg'
+
+def graph(boxlength, num_partitions) : # boxlength represents half the length of the side
+    x = [[i*2*boxlength/(num_partitions-1) - boxlength for i in range(num_partitions)] for k in range(num_partitions)]
+    y = x[:]
+    x, y = np.array(x), np.array(y).T
+    E_x, E_y = electrostatic_field(x, y)
+
+    plt.gca().set_aspect('equal', adjustable='box')
+    plt.streamplot(x, y, E_x, E_y, color='k', arrowstyle ='-&gt;')
+    plt.xlabel('$x$')
+    plt.ylabel('$y$')
+    plt.show()
+
+# execute the code
+graph(boxlength = 2,
+      num_partitions = 20)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/X8QvVE.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb796962" class="outline-2">
+<h2 id="orgb796962"><span class="section-number-2">2</span> Projectile motion</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Our problem comes down to deciding whether the trajectory of a projectile intesects a line segment. Of course, we use the point particle simplification for the projectile.
+</p>
+
+<p>
+In actuallity, the only routines we need for our basic purposes are <code>get_horiz_position</code> and <code>score_check</code>, which are listed bellow. To begin with, <code>get_horiz_position</code> resorts to the kinematic equation
+\[
+y = y_0 + {v_y}_0 t - \frac12 gt^2
+\]
+which can be solved for \(t\) as
+ \[
+t = \frac{{v_y}_0 \pm \sqrt{{{v_y}_0}^2 - 2g(y - y_0)}}{g}
+\]
+We discard the negative branch of the square root, for it yields points on the ascending part of the trajectory. Basically, the above equation gives us the parameter \(t\) at which the the projectile would reach the height of the basket, and then evaluates its horizontal position at such time. Note that there is a problem with the first part of the statement, for the trajectory does not necessarily reaches all heights; such a situation will yield a complex value for \(t\), and it shall also be interpreted as a failure in the condition. If the value of time is real, then we may proceed to evaluate whether or not the distance between the horizontal position and the centre of the line segment is between the radius of the latter.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">g = 9.8
+
+def get_horiz_position(y_0, v_0, angle, y_ref) :
+    try :
+	with np.errstate(invalid='raise') :
+	    t = (v_0*np.sin(angle) + np.sqrt((v_0*np.sin(angle))**2 - 2*g*(y_ref - y_0))) / g
+	    _x = v_0*np.cos(angle)*t
+	    return _x
+    except :
+	_x = 'nan'
+	return False
+
+def score_check(y_0, v_0, angle, x_basket, y_basket, radius) :
+    _x = get_horiz_position(y_0, v_0, angle, y_basket)
+    if isinstance(_x, float) == True :
+	return bool(np.abs(_x - x_basket) &lt; radius)
+    else :
+	return False
+</pre>
+</div>
+
+<p>
+Now for visualisation purposes, we define the routine <code>get_vert_position</code> to calculate the vertical position of a set of points between 0 and the moment in which the horizontal position reaches the floor again. This allows us to graph the trajectory. This allows us to graph the trajectory.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">%config InlineBackend.figure_format = 'svg'
+def get_vert_position(y_0, v_0, angle, x_ref) :
+    t = x_ref / (v_0*np.cos(angle))
+    _y = y_0 + v_0*np.sin(angle)*t - 0.5*g*t**2
+    return _y
+
+def plot(y_0, v_0, angle, x_basket, y_basket, radius) :
+    _x = np.linspace(0, get_horiz_position(y_0, v_0, angle, 0), 40)
+    _y = get_vert_position(y_0, v_0, angle, _x)
+
+    if score_check(y_0, v_0, angle, x_basket, y_basket, radius) == True :
+	plt.suptitle('It\'s a point!')
+    else :
+	plt.suptitle('Bad luck!')
+
+    plt.gca().set_aspect('equal', adjustable='box')
+    plt.xlabel('$x$')
+    plt.ylabel('$y$')
+    plt.title('Trajectory')
+    plt.grid(True)
+    plt.plot(_x,_y)
+    plt.plot((x_basket - radius, x_basket + radius),(y_basket, y_basket))
+    plt.show()
+
+# Execute the code
+plot(y_0 = 2,
+     v_0 = 8,
+     angle = np.pi/3,
+     x_basket = 4,
+     y_basket = 4,
+     radius = 0.23)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/7fvF0L.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>

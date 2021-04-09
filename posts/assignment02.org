@@ -1,0 +1,95 @@
+#+TITLE: Assignment02
+
+We first import the necessary packages
+#+begin_src ipython :session mysession :exports both :results raw drawer
+import pandas as pd
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[1]:
+:end:
+
+* First activity
+We then import the dataset and read it with Pandas
+#+RESULTS:
+:results:
+# Out[1]:
+:end:
+#+begin_src ipython :session mysession :exports both :results raw drawer
+PATH = '~/Downloads/PS4_1.csv'
+data_frame = pd.read_csv(PATH)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[58]:
+#+BEGIN_EXAMPLE
+  Date Unnamed: 1  Berri1  Maisonneuve_1  Maisonneuve_2  Brebeuf
+  0  01/01/2009       0:00      29             20             35      NaN
+  1  02/01/2009       0:00      19              3             22      NaN
+  2  03/01/2009       0:00      24             12             22      NaN
+  3  04/01/2009       0:00      24              8             15      NaN
+  4  05/01/2009       0:00     120            111            141      NaN
+#+END_EXAMPLE
+:end:
+
+We eliminate both 'Date' and 'Unnamed: 1' series.
+#+begin_src ipython :session mysession :exports both :results raw drawer
+data_frame = data_frame.drop(columns=['Unnamed: 1', 'Date'])
+data_frame
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[15]:
+#+BEGIN_EXAMPLE
+  Berri1  Maisonneuve_1  Maisonneuve_2  Brebeuf
+  0        29             20             35      NaN
+  1        19              3             22      NaN
+  2        24             12             22      NaN
+  3        24              8             15      NaN
+  4       120            111            141      NaN
+  ..      ...            ...            ...      ...
+  360      66             29             52      0.0
+  361      61             41             99      0.0
+  362      89             52            115      0.0
+  363      76             43            115      0.0
+  364      53             46            112      0.0
+
+  [365 rows x 4 columns]
+#+END_EXAMPLE
+:end:
+
+Now we wish to return, on a dictionary, the following items: ...
+
+#+begin_src ipython :session mysession :exports both :results raw drawer
+# things to be recurrently used
+info = data_frame.describe()
+columns = data_frame.columns
+memory = data_frame.memory_usage()
+
+num_colums = len(columns)
+names = data_frame.keys()
+nonempty_registers = [info.loc['count', name]
+                      for name in columns]
+# memory_usage = [[name, memory.loc[i, ]]]
+stats = [[name, info.loc['mean', name], info.loc['std', name], info.loc['max', name]]
+         for name in columns]
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[36]:
+:end:
+
+* Second activity
+#+begin_src ipython :session mysession :exports both :results raw drawer
+PATH2 = '~/Downloads/Crimes_-_2019.csv'
+df = pd.read_csv(PATH2)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[52]:
+:end:
