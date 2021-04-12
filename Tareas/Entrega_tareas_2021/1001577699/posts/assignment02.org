@@ -3,11 +3,13 @@
 We first import the necessary packages
 #+begin_src ipython :session mysession :exports both :results raw drawer
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 #+end_src
 
 #+RESULTS:
 :results:
-# Out[1]:
+# Out[46]:
 :end:
 
 * First activity
@@ -64,7 +66,7 @@ data_frame
 Now we wish to return, on a dictionary, the following items: ...
 
 #+begin_src ipython :session mysession :exports both :results raw drawer
-# things to be recurrently used
+# Variables and other dataframes to be recurrently used
 info = data_frame.describe()
 columns = data_frame.columns
 memory = data_frame.memory_usage()
@@ -76,6 +78,9 @@ nonempty_registers = [info.loc['count', name]
 # memory_usage = [[name, memory.loc[i, ]]]
 stats = [[name, info.loc['mean', name], info.loc['std', name], info.loc['max', name]]
          for name in columns]
+
+# we finally define a disctionary with the corresponding values
+dictionary = {'cols': num_columns, 'names': names, 'nonempty_regs': nonempty_registers, 'stats': stats}
 #+end_src
 
 #+RESULTS:
@@ -85,11 +90,28 @@ stats = [[name, info.loc['mean', name], info.loc['std', name], info.loc['max', n
 
 * Second activity
 #+begin_src ipython :session mysession :exports both :results raw drawer
+%config InlineBackend.figure_format = 'svg'
+# read the .csv file
 PATH2 = '~/Downloads/Crimes_-_2019.csv'
 df = pd.read_csv(PATH2)
+
+# eliminate the columns in which we are not interested
+df = df.loc[:, df.columns.intersection(['Date', 'Primary Type'])]
+df['Date'] = pd.to_datetime(df['Date'], format='%m/%d/%Y %I:%M:%S %p')
+
+crimes_info = df.groupby(by='Primary Type', as_index=False)['Date'].count().sort_values(by='Date',ascending=True)
+crimes_info = pd.DataFrame(crimes_info)
+crimes_info = crimes_info.rename(columns={'Primary Type':'Crime', 'Date':'Count'})
+plt.figure(figsize=(15,6))
+chart = sns.barplot(x ='Count', y='Crime', data=crimes_info,
+                 palette="Blues_d")
+chart.set_yticklabels(chart.get_yticklabels(), fontsize=8)
+plt.show()
+# crimes_info['Count']
 #+end_src
 
 #+RESULTS:
 :results:
-# Out[52]:
+# Out[47]:
+[[file:./obipy-resources/MaJJx2.svg]]
 :end:
