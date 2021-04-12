@@ -9,7 +9,7 @@ import seaborn as sns
 
 #+RESULTS:
 :results:
-# Out[46]:
+# Out[3]:
 :end:
 
 * First activity
@@ -91,6 +91,7 @@ dictionary = {'cols': num_columns, 'names': names, 'nonempty_regs': nonempty_reg
 * Second activity
 #+begin_src ipython :session mysession :exports both :results raw drawer
 %config InlineBackend.figure_format = 'svg'
+
 # read the .csv file
 PATH2 = '~/Downloads/Crimes_-_2019.csv'
 df = pd.read_csv(PATH2)
@@ -114,4 +115,43 @@ plt.show()
 :results:
 # Out[47]:
 [[file:./obipy-resources/MaJJx2.svg]]
+:end:
+
+* Third activity
+
+Here we wish to analise some data about te Covid-19 pandemic.
+#+begin_src ipython :session mysession :exports both :results raw drawer
+%config InlineBackend.figure_format = 'svg'
+
+PATH3 = '~/Downloads/country_vaccinations.csv'
+df_2 = pd.read_csv(PATH3)
+
+# filter by contents of the 'country' column
+df_2 = df_2[
+    (df_2['country'] == 'Colombia')
+    | (df_2['country'] == 'Brazil')
+    | (df_2['country'] == 'Chile')
+    | (df_2['country'] == 'Argentina')
+    | (df_2['country'] == 'Peru')
+    | (df_2['country'] == 'Mexico')
+    | (df_2['country'] == 'Venezuela')
+       ]
+
+df_2 = df_2[['country', 'date', 'total_vaccinations']]
+df_2['date'] = pd.to_datetime(df_2['date'], format='%Y-%m-%d')
+df_info = pd.DataFrame(df_2.groupby(by='country', as_index=False)['total_vaccinations'].max())
+print(df_info)
+
+# plt.figure(figsize=(6,10))
+plt.figure()
+chart = sns.barplot(x='country', y='total_vaccinations', data=df_info,
+                    palette="Blues_d")
+plt.show()
+# df_info
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[49]:
+[[file:./obipy-resources/eaAarC.svg]]
 :end:
