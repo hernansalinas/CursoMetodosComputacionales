@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-04-12 Mon 19:27 -->
+<!-- 2021-04-12 Mon 19:06 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Contents</title>
+<title>Assignment03</title>
 <meta name="author" content="Juan David Salcedo Hernández" />
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
@@ -218,17 +218,39 @@
 </head>
 <body>
 <div id="content">
-<h1 class="title">Contents</h1>
-<ul class="org-ul">
-<li><a href="assignment00.html">Assignment00</a></li>
-<li><a href="assignment01.html">Assignment01</a></li>
-<li><a href="assignment02.html">Assignment02</a></li>
-<li><a href="assignment03.html">Assignment03</a></li>
-</ul>
+<h1 class="title">Assignment03</h1>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">import</span> math
+
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">exp</span>(x, pol_terms=<span style="color: #bd93f9; font-weight: bold;">21</span>) :
+    exponent = np.arange(<span style="color: #bd93f9; font-weight: bold;">0</span>, pol_terms)
+    factorial_list = [<span style="color: #bd93f9; font-weight: bold;">1</span>]
+
+    <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, pol_terms) :
+        factorial_list.append(factorial_list[i-<span style="color: #bd93f9; font-weight: bold;">1</span>]*i)
+
+    denominator = np.array(factorial_list)
+    terms = (x**exponent) / denominator
+    <span style="color: #ff79c6;">return</span> np.<span style="color: #ffb86c;">sum</span>(terms)
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">myexp</span>(x):
+    e=<span style="color: #bd93f9; font-weight: bold;">0</span>
+    pres=<span style="color: #bd93f9; font-weight: bold;">0.0001</span>
+    s=<span style="color: #bd93f9; font-weight: bold;">1</span>
+    i=<span style="color: #bd93f9; font-weight: bold;">1</span>
+    <span style="color: #ff79c6;">while</span> s&gt;pres:
+        e=e+s
+        s=(x**i)/math.factorial(i)
+        i=i+<span style="color: #bd93f9; font-weight: bold;">1</span>
+    <span style="color: #ff79c6;">return</span> e
+<span style="color: #bd93f9; font-weight: bold;">1</span>/myexp(<span style="color: #bd93f9; font-weight: bold;">10</span>), np.exp(-<span style="color: #bd93f9; font-weight: bold;">10</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">1/exp(10), np.exp(-10)</span>
+</pre>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-04-12 Mon 19:27</p>
+<p class="date">Created: 2021-04-12 Mon 19:06</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>
