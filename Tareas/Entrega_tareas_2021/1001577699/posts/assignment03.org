@@ -1,0 +1,35 @@
+#+TITLE: Assignment03
+
+#+begin_src ipython :session asession :results raw drawer
+import numpy as np
+import math
+
+def exp(x, pol_terms=21) :
+    exponent = np.arange(0, pol_terms)
+    factorial_list = [1]
+
+    for i in range(1, pol_terms) :
+        factorial_list.append(factorial_list[i-1]*i)
+
+    denominator = np.array(factorial_list)
+    terms = (x**exponent) / denominator
+    return np.sum(terms)
+def myexp(x):
+    e=0
+    pres=0.0001
+    s=1
+    i=1
+    while s>pres:
+        e=e+s
+        s=(x**i)/math.factorial(i)
+        i=i+1
+    return e
+1/myexp(10), np.exp(-10)
+# 1/exp(10), np.exp(-10)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[12]:
+: (4.53999298598132e-05, 4.5399929762484854e-05)
+:end:

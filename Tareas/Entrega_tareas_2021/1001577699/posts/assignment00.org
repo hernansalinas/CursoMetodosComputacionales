@@ -327,7 +327,7 @@ fib(50), fib(63)
 
 * Quicksort
 
-Quicksort is an efficient divide-and-conquer algorithm for ordering a list of numbers. It works by selecting a pivot form a given array and deciding whether or not the rest of the elements in it are less than or greater than the pivot. The basic methodology we shall follow is based on "partitions", or subarrays taken from the orignal one; we arbitrarily set the rightmost element on the list to be the pivot and then establish a well-defined process to extract two non-overlapping arrays, one containing elements which are greater than the pivot, and the other one containing elements which are less than it.
+Quicksort is an efficient divide-and-conquer algorithm for ordering a list of numbers. It works by selecting a pivot form a given array and deciding whether or not the rest of the elements in it are less than or greater than the pivot. The basic methodology we shall follow is based on "partitions", or subarrays taken from the original one; we arbitrarily set the rightmost element on the list to be the pivot and then establish a well-defined process to extract two non-overlapping arrays, one containing elements which are greater than the pivot, and the other one containing elements which are less than it.
 
 To begin with, notice that the key element in our algorithm must be the "partitioning" routine, which comprises the basis for the rest of the iterative process. As to make the aforementioned process feasible, we define two pointers, each associated with a different condition; obviously, these conditions ought to be the order relations: "greater than" (>) and "less than" (<), which are going to be evaluated by taking the pivot as a reference. We initialise the "less than" pointer at the leftmost point on the list, whereas the "greater than pointer" must begin at the point just to the left of the pivot.
 
@@ -335,7 +335,7 @@ How do these pointers actually work? The behaviour of these objects may well be 
 
 Three straightforward rules must be followed by these pointers, namely:
  - As long as the value associated to (<) is less than that corresponding to (>), apply the following rules.
- - If the first condition is unmet, exchange the position of the pivot with that of the (<) pointer, stop the whole process, and return the the index (or position) of the (<) pointer, this value will become the "partition point" for the list, viz., the index that separates "greater than values" from "less than values".
+ - If the first condition is unmet, exchange the position of the pivot with that of the (<) pointer, stop the whole process, and return the index (or position) of the (<) pointer, this value will become the "partition point" for the list, viz., the index that separates "greater than values" from "less than values".
  - Whenever the condition they bear is satisfied, move to the "next position"; this amounts to "move right" for the (<) pointer, and "move left" for the (>) pointer.
 
 The algorithm will repeatedly apply this process, firstly on the original array, and subsequently on the partitions of the list; each partition is defined by an index, which in turn fixes the ending point of one list and the beginning of another.
