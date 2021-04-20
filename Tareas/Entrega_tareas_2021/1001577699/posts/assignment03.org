@@ -1,35 +1,345 @@
 #+TITLE: Assignment03
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+#+HTML_HEAD: <style>pre.src{background:#343131;color:white;} </style>
 
 #+begin_src ipython :session asession :results raw drawer
+%config InlineBackend.figure_format = 'svg'
+
 import numpy as np
-import math
-
-def exp(x, pol_terms=21) :
-    exponent = np.arange(0, pol_terms)
-    factorial_list = [1]
-
-    for i in range(1, pol_terms) :
-        factorial_list.append(factorial_list[i-1]*i)
-
-    denominator = np.array(factorial_list)
-    terms = (x**exponent) / denominator
-    return np.sum(terms)
-def myexp(x):
-    e=0
-    pres=0.0001
-    s=1
-    i=1
-    while s>pres:
-        e=e+s
-        s=(x**i)/math.factorial(i)
-        i=i+1
-    return e
-1/myexp(10), np.exp(-10)
-# 1/exp(10), np.exp(-10)
+import math as mt
+import matplotlib.pylab as plt
 #+end_src
 
 #+RESULTS:
 :results:
-# Out[12]:
-: (4.53999298598132e-05, 4.5399929762484854e-05)
+# Out[1]:
 :end:
+
+* Alternating exponential function
+On the account of the convergence of the power series for the exponential function, it is possible to approximate its values via algebraic operations that can be carried out with a certain    amount of precision by the computer. Recall that the power series for such a function is given on all $\mathbb{R}$ by
+\[
+\sum_{n=1}^{\infty} \frac{x^{n}}{n!}
+\]
+
+A simple implementation of this formula is presented below; notice that the terms of the sequence which we are summing up have been truncated up to the 80-th one, and a tolerance has been added as to provide a criterion under which te sequence is considered to have numerically converged. We may compare the obtained value for something like $\exp(-0.5)$ with the one provided by the built-in function ~numpy.exp()~.
+#+begin_src ipython :session asession :results raw drawer
+def exp(x, terms=80, tolerance=1E-7) :
+    exponent = 0
+    sequence_sum = 0
+    while ( exponent < terms ) :
+        sequence_sum += (x**exponent) / mt.factorial(exponent)
+        exponent = exponent + 1
+
+        # Convergence criterion
+        nth_plus = (x**(exponent + 1)) / mt.factorial(exponent + 1)
+        if ( abs(nth_plus) <= tolerance*abs(sequence_sum) ) :
+            break
+
+    return sequence_sum
+
+exp(-0.5, tolerance=1E-16), 1/exp(0.5, tolerance=1E-16), np.exp(-0.5)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[7]:
+: (0.6065306597126326, 0.6065306597126339, 0.6065306597126334)
+:end:
+
+As to visualize the subtractive cancellations that occur during the application of this algorithm, we can use matplotlib:
+#+begin_src ipython :session asession :results raw drawer :exports both
+def view_cancellations(x_tuple) :
+    x = list(x_tuple)
+    N = np.arange(1, 80)
+
+    exp_list_1 = np.zeros(len(N))
+    exp_list_2 = np.zeros(len(N))
+
+    fig, ax = plt.subplots(len(x), figsize=(15,12), sharex=True)
+
+    for n in range(len(x)):
+        for i in range(len(N)):
+            exp_list_1[i] = exp(x[n], terms=i, tolerance=1E-16)
+            exp_list_2[i] = 1/exp(-x[n], terms=i+1, tolerance=1E-16)
+
+        ax[n].grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.3)
+        ax[n].plot(N,exp_list_1, label="Partial sum values for method with differences")
+        ax[n].plot(N,exp_list_2, label='Second method')
+        ax[n].legend()
+
+view_cancellations((-0.5,-1,-10,-20, -50, -80))
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[16]:
+[[file:./obipy-resources/kA57eq.svg]]
+:end:
+
+Note that the first method exhibits a remarkable oscillatory behaviour that eventually converges to a single value, provided that the number of iterations is enough to cancel out the large numbers yielded by certain partial sums. However, notice that convergence fails for numbers whose absolute value is near the number of iterations.
+
+Now we define a new routine to view the errors
+#+begin_src ipython :session asession :results raw drawer :exports both
+def error_vs_n(x_tuple) :
+    x = list(x_tuple)
+    N = np.arange(1, 80)
+
+    exp_error = np.zeros(len(N))
+
+    fig, ax = plt.subplots(len(x), figsize=(15,12), sharex=True)
+
+    for n in range(len(x)):
+        for i in range(len(N)):
+            exp_error[i] = abs( exp(x[n], terms=i, tolerance=1E-16) - np.exp(x[n]) )
+
+        ax[n].grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.3)
+        ax[n].plot(N,exp_error, 'k-', label="Absolute error for partial sums")
+        ax[n].legend()
+
+error_vs_n((-0.5, -1, -10, -20, -50, -80))
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[14]:
+[[file:./obipy-resources/YuPFHF.svg]]
+:end:
+
+Tying in with what has been noted thus far, we see that the absolute error (with respect to the value that arises from the ~numpy~ library) rises for partial sums around a number that is close to the absolute of the argument.
+
+* Subtractive cancellation
+We are now interested in the finite series
+\[
+\mathrm{S}_N^{(1)} = \sum_{n = 1}^{2N} (-1)^n \frac{n}{n+1},
+\]
+which can be otherwise written as two different sums, one with even numbers, and the other one with odd numbers
+\[
+\mathrm{S}_N^{(2)} = -\sum_{n = 1}^{N}\frac{2n-1}{2n} + \sum_{n=1}^{N} \frac{2n}{2n+1}.
+\]
+Analitically, this can be then written as
+\[
+\mathrm{S}_N^{(3)} = \sum_{n = 1}^{N}\frac{1}{2n(2n+1)}
+\]
+
+To begin with, we implement the algorithms to calculate each form of this summation.
+#+begin_src ipython :session asession :results raw drawer
+def s_1(N) :
+    n = 1
+    sequence_sum = 0
+
+    while ( n <= 2*N ) :
+        sequence_sum += (-1)**n * n/(n + 1)
+        n += 1
+
+    return sequence_sum
+
+def s_2(N) :
+    n = 1
+    sequence_sum_1 = 0
+    sequence_sum_2 = 0
+
+    while ( n <= N ) :
+        sequence_sum_1 += 2*n/(2*n + 1)
+        sequence_sum_2 += (2*n - 1)/(2*n)
+        n += 1
+
+    return sequence_sum_1 - sequence_sum_2
+
+def s_3(N) :
+    n = 1
+    sequence_sum = 0
+
+    while ( n <= N ) :
+        sequence_sum += 1/(2*n*(2*n + 1))
+        n += 1
+
+    return sequence_sum
+
+print( abs(1 - s_1(1583)/s_3(1583)), abs(1 - s_2(1583)/s_3(1583)) )
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[52]:
+:end:
+
+Then we may analise what happens to these results as we increase the number of iterations. The ~visualize_convergence~ routine establishes a sway of viewing some partial sums for this series as we increase the values of $N$, that is, the number of terms.
+#+begin_src ipython :session asession :results raw drawer :exports both
+def visualize_convergence() :
+    num_terms = np.arange(1, 1600)
+    s_list = [np.zeros(len(num_terms)), np.zeros(len(num_terms)), np.zeros(len(num_terms))]
+
+    i = 1
+    while (i < len(num_terms)) :
+        s_list[0][i] = s_1(i)
+        s_list[1][i] = s_2(i)
+        s_list[2][i] = s_3(i)
+        i += 1
+
+    fig, ax = plt.subplots(1, figsize=(15,6))
+
+    plt.rcParams.update({
+        "text.usetex" : True,
+        "font.family" : 'serif',
+        "font.serif" :  ["Times"],
+        "font.size" : 12
+    })
+
+    option = [['b-',r'$S_N^{(1)}$'],
+              ['g-',r'$S_N^{(2)}$'],
+              ['k-',r'$S_N^{(3)}$']]
+
+    for n in range(3) :
+        ax.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.3)
+        ax.set(xlabel='Number of terms in the sum', ylabel='Value of the sum')
+        ax.plot(num_terms,s_list[n], option[n][0], markersize=1, label=option[n][1])
+        plt.legend()
+
+    plt.show()
+
+visualize_convergence()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[94]:
+[[file:./obipy-resources/tDZyI7.svg]]
+:end:
+
+Notice that our three methods guarantee the convergence of the sum to a value which is slightly greater than 0.30.
+
+Now we must write a routine to visualise the evolution of the relative error of ~s_1~ and ~s_2~ with respect to ~s_3~. The error regarded herein is the relative one, which amounts to
+\[
+\left| 1 - \frac{s_\text{approximate}}{s_\text{exact}} \right|;
+\]
+moreover, we suppose that the exact value is given by the sum $\mathrm{S}_N^{(3)}$.
+#+begin_src ipython :session asession :results raw drawer :exports both
+def visualize_error() :
+    num_terms = np.arange(1, 1600)
+    error_list = [np.zeros(len(num_terms)), np.zeros(len(num_terms))]
+
+    i = 1
+    while (i < len(num_terms)) :
+        error_list[0][i] = abs( 1 - s_1(i)/s_3(i) )
+        error_list[1][i] = abs( 1 - s_2(i)/s_3(i) )
+        i += 1
+
+    fig, ax = plt.subplots(1, figsize=(15,6))
+    plt.rcParams.update({
+        "text.usetex" : True,
+        "font.family" : 'serif',
+        "font.serif" :  ["Times"],
+        "font.size" : 12
+    })
+
+    option = [['b-', r'Error in $S_N^{(1)}$'],
+              ['g-', r'Error in $S_N^{(2)}$']]
+
+    for n in range(2) :
+        ax.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.3)
+        ax.set(xlabel='Number of terms in the sum', ylabel=r'Relative error with respect to $S_N^{(3)}$')
+        ax.loglog(num_terms, error_list[n], option[n][0], label=option[n][1])
+        ax.legend()
+
+    plt.show()
+
+visualize_error()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[95]:
+[[file:./obipy-resources/bZu5nb.svg]]
+:end:
+
+As expected, the error rises as more and more terms are added to these sequences; although they do so quite erratically. This is of course, due to the fact that the operations whereby the summation is computed implicitly involve an error that build up as the values get larger.
+
+* Roundoff errors in a logistic mapping
+We define a logistic mapping recursively as a function of the form
+\[
+x_{n+1} = r x_n (1 - x_n)
+\]
+where $x \in (0,1)$ and $r \in (0,4)$. We may as well write this equation three different ways, whereby we can have a look at how do they differ numerically, even when they are mathematically the same recursion. Notice that:
+\begin{align*}
+x_n &= r x_{n-1} (1 - x_{n-1}) \\
+    &= r (x_{n-1} - x_{n-1}^2) \\
+    &= r {x_{n-1}}^2 \left(\frac{1}{x_{n-1}} - 1\right).
+\end{align*}
+
+We then establish a Class in python to describe the initial conditions of our sytem, alongside the form of the recursion we are going to use for a particular implementation of the logistic mapping.
+
+#+begin_src ipython :session asession :results raw drawer
+class InitialConditions :
+    def __init__(self, x_init, r_value, iterations, mapping_func):
+        self.x_init = x_init
+        self.r_value = r_value
+        self.iterations = iterations
+        functions_list = [lambda x,r : r*x*(1 - x), lambda x,r : r*(x - x**2), lambda x,r : r*(x**2)*(1/x - 1)]
+        try :
+            self.mapping_func = functions_list[mapping_func]
+        except :
+            ValueError('Not a function')
+
+    def logistic_mapping(self) :
+        values_list = [self.x_init]
+        n = 0
+
+        for i in range(1, self.iterations+1) : # Python interprets this as an interval [1 .. x]
+            n = self.mapping_func(values_list[i-1], self.r_value)
+            values_list.append(n)
+
+        return values_list
+
+conditions = [0]*3
+
+i = 0
+while ( i <= 2 ) :
+    conditions[i] = InitialConditions(x_init=0.8,
+                                      r_value=3.9,
+                                      iterations=100,
+                                      mapping_func=i)
+    i += 1
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[2]:
+:end:
+
+Finally, we can put it all together in a plot, which is going to show the differences that arise in these implementations.
+
+#+begin_src ipython :session asession :results raw drawer :exports both
+def plot() :
+    N = np.arange(101)
+
+    fig, ax = plt.subplots(1, figsize=(15,6))
+
+    plt.rcParams.update({
+        "text.usetex" : True,
+        "font.family" : 'serif',
+        "font.serif" :  ["Times"],
+        "font.size" : 15
+    })
+
+    option = [['b-', r'$r x (1 - x)$'],
+              ['g-', r'$r (x - x^2)$'],
+              ['k-', r'$r x^2 \left(\frac{1}{x} - 1\right)$']]
+    i = 0
+    while ( i <= 2 ) :
+        ax.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.3)
+        ax.plot(N, conditions[i].logistic_mapping(), option[i][0], label=option[i][1])
+        plt.legend()
+        i += 1
+
+    plt.show()
+
+plot()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[93]:
+[[file:./obipy-resources/szqboK.svg]]
+:end:
+
+Notice how the graphs for them differ for values of N greater than 50, this is once again given by the fact that different opperations carried out by the machine are bound to different errors. The behaviour pointed out by this graph is just a consequence thereof.
