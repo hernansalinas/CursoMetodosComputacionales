@@ -1,0 +1,248 @@
+#+TITLE: Assignment04
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+#+HTML_HEAD: <style>pre.src{background:#343131;color:white;} </style>
+
+#+begin_src ipython :session asession :results raw drawer :exports code
+%config InlineBackend.figure_format = 'svg'
+
+import numpy as np
+from scipy import optimize
+import matplotlib.pylab as plt
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[1]:
+:end:
+
+* Finding solutions to an equation
+To begin with, we regard an equation which can be easily solved numerically:
+\[
+e^x - 2 = \cos(e^x - 2)
+\]
+We may define a new function herein, so that its zero is the solution to the above equation; take, for instance
+\[
+f(x) = e^x - 2 - \cos(e^x - 2)
+\]
+
+In order to have a sense for the interval in which the root of such a function is, we may look at the graph, which is provided below.
+#+begin_src ipython :session asession :results raw drawer :exports both
+f = lambda x : np.exp(x) - np.cos(np.exp(x) - 2) - 2
+x = np.linspace(-4, 2.5, 1000)
+
+plt.plot(x, f(x), label=f(x))
+plt.grid()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[37]:
+[[file:./obipy-resources/UZaamr.svg]]
+:end:
+
+Suppose that we wish to find an estimation of the value to within $10^{-10}$, then we may use some bound on the error associated to the bisection method, which is the following:
+\[
+\frac{b - a}{2^n},
+\]
+where $a$ and $b$ stand for the limits of the interval we are taking into consideration. We require that
+\[
+\frac{b - a}{2^n} < 10^{-10} \implies 10^{10}(b - a) < 2^n \implies n > \log_2 \left( 10^{10}(b - a) \right).
+\]
+
+We could take the interval $[-0.8,1.2]$, for which we then require a number of iterations $n > \log_2 \left( 10^{10}(0.4) \right)$. Now, the logarithm at issue gives:
+#+begin_src ipython :session asession :results raw drawer :exports both
+np.log( 1E10*0.4 )/np.log(2) # this is log_2
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[14]:
+: 31.897352853986263
+:end:
+
+This means that a number of 32 iterations will suffice. We can then use the method provided by the ~optimize~ module.
+
+#+begin_src ipython :session asession :results raw drawer :exports both
+root = optimize.bisect(f, 0.8, 1.2, maxiter=32, xtol=1E-10)
+root
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[20]:
+: 1.0076239717192947
+:end:
+Obviously, we are only certain about the accuracy of this result up to the 10th decimal place.
+
+* An inclined plane
+We are provided an equation that describes the motion of certain particle on an inclined plane:
+\[
+x(t) = -\frac{g}{2\omega^2} \left( \frac{e^{\omega t} - e^{-\omega t}}{2} - \sin\omega t \right)
+\]
+Assuming that the particle moved 0.5 metres in one second, we can write this expression as just in terms of $\omega$, which yields the equation
+\[
+0.5 = -\frac{g}{2\omega^2} \left( \frac{e^{\omega} - e^{-\omega}}{2} - \sin\omega \right),
+\]
+whose solutions are the roots of the function
+\[
+f(x) = 0.5 + \frac{g}{2\omega^2} \left( \frac{e^{\omega} - e^{-\omega}}{2} - \sin\omega \right) = 0.5 + \frac{g}{2\omega^2} \left( \sinh\omega - \sin\omega \right)
+\]
+
+Once again, we may graph the equation as to estimate on an intuitive basis the interval in which the root may be:
+#+begin_src ipython :session asession :results raw drawer :exports both
+g = 9.75
+h = lambda omega : 0.5 + g/(2*omega**2)*( np.sinh(omega) - np.sin(omega) )
+x = np.linspace(-5, 5, 1000)
+
+plt.plot(x, h(x), label='f(x)')
+plt.legend()
+plt.grid()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[8]:
+[[file:./obipy-resources/S5auwu.svg]]
+:end:
+
+Once again, to find the value to within $10^{-5}$, we need $n > \log_2 \left( 10^{5}(b - a) \right)$. We can choose an interval $[-0.8, 0.5]$, for which the number of iterations required to bound the error is $n > \log_2 \left( 10^{5}(1.3) \right)$
+#+begin_src ipython :session asession :results raw drawer :exports both
+np.log( 1E5*1.3 )/np.log(2) # this is log_2
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[24]:
+: 16.98815209769054
+:end:
+
+We can then take 17 iterations:
+#+begin_src ipython :session asession :results raw drawer :exports both
+root = optimize.bisect(h, -0.8, 0.5, maxiter=17, xtol=1E-5)
+root
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[27]:
+: -0.3076896667480469
+:end:
+
+This result actually makes sense on the account that we were told that the rate of change of the inclination angle was negative.
+
+* Depth of water in a trough
+We have the following expression for a volume of water in a trough:
+\[
+V = L \left( \frac{1}{2}\pi r^2 -r^2 \arcsin{\frac{h}{r}}-h(r^2-h^2) ^{1/2} \right)
+\]
+Supposing we have a trough whose radius is $r = 1 \, \text{ft}$ and whose length $L = 10 \, \text{ft}$, and assuming the volume of water has been measured to be $V = 12.4 \, \text{ft}^3$, we can easily find the depth of water contained in it by considering the following formula:
+\[
+12.4 = 10 \left( \frac{1}{2}\pi - \arcsin h - h(1 - h^2)^{1/2} \right),
+\]
+which w wish to solve for $h$. Hence we can define the function
+\[
+f(x) = 12.4 - 10 \left( \frac{1}{2}\pi - \arcsin h - h(1 - h^2)^{1/2} \right)
+\]
+to then find its root via the bisection method; this will yield a value for the level height of the water. In this case we wish to find the root value to an accuracy within $10^{-2}$.
+
+To begin with, we graph the equation, whereby we can have an initial guess for the interval in which our root is going to be.
+#+begin_src ipython :session asession :results raw drawer :exports both
+t = lambda h : 12.4 - 10*( 0.5*np.pi - np.arcsin(h) - h*np.sqrt(1 - h**2) )
+x = np.linspace(-1, 1, 1000)
+
+plt.plot(x, t(x), label='f(x)')
+plt.legend()
+plt.grid()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[9]:
+[[file:./obipy-resources/G5rowf.svg]]
+:end:
+
+Hence the root is in $[0, 0.25]$. To bound the error we would then have a number of iterations $n > \log_2 \left( 10^{2}(b - a) \right) = \log_2 \left( 10^{2}(0.25) \right)$:
+#+begin_src ipython :session asession :results raw drawer :exports both
+np.log( 1E2*0.25 )/np.log(2) # this is log_2
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[10]:
+: 4.643856189774724
+:end:
+
+so we only need 5 iterations:
+#+begin_src ipython :session asession :results raw drawer :exports both
+root = optimize.bisect(t, 0, 0.25, maxiter=5, xtol=1E-2)
+root
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[11]:
+: 0.1640625
+:end:
+
+This result is accurate up to the second decimal place. Therefore the depth of water in the trough is $1 - 0.16 = 0.84 \, \text{ft}$.
+
+* Nose-in failure
+The maximum angle which a vehicle can negotiate satisfies the equation
+\[
+A \sin(\alpha) \cos(\alpha)+B \sin^2(\alpha) - C \cos(\alpha) -  E  \sin(\alpha)=0,
+\]
+where
+\[
+A = l \sin(\beta), ~~ B = l \cos(\beta), ~~ C = (h + 0.5 D )\sin(\beta) - 0.5 D \tan(\beta), ~~ E = (h + 0.5 D ) \cos(\beta) - 0.5 D
+\]
+
+It is stated that when $l = 89 \, \text{in}$, $h = 49 \, \text{in}$, $D = 55 \, \text{in}$, and $\beta = 11.5^{\circ}$, the angle $\alpha$ is approximately $33^{\circ}$. We shall verify this result using Newton's method, or rather, the secant method.
+
+In order to verify this result, we can use the following definition:
+\[
+f(\alpha) = A \sin(\alpha) \cos(\alpha)+B \sin^2(\alpha) - C \cos(\alpha) -  E  \sin(\alpha),
+\]
+whose root is the value of the maximum angle, according to the definition given above.
+
+#+begin_src ipython :session asession :results raw drawer :exports both
+# Defining given values
+L = 89
+h = 49
+D = 55
+beta = np.deg2rad(11.5)
+
+# Pugging in these values
+A = L*np.sin(beta)
+B = L*np.cos(beta)
+C = (h + 0.5*D)*np.sin(beta) - 0.5*D*np.tan(beta)
+E = (h + 0.5*D)*np.cos(beta) - 0.5*D
+
+# Defining the function
+v = lambda alpha : A*np.sin(alpha)*np.cos(alpha) + B*(np.sin(alpha))**2 - C*np.cos(alpha) - E*np.sin(alpha)
+
+x = np.linspace(-np.pi,np.pi,1000)
+
+plt.plot(x, v(x))
+plt.grid()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[37]:
+[[file:./obipy-resources/VeDKjD.svg]]
+:end:
+
+We can use Newton's secant method to find a root that is within the interval $[0, \pi /2]$, that is the only interval that makes sense for the angle to be in from a physical stand point.
+#+begin_src ipython :session asession :results raw drawer :exports both
+root = optimize.newton(v, 1)
+np.rad2deg(root)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[38]:
+: 32.9721748224196
+:end:
+
+Notice, then, that our root is nearly $33^{\circ}$, as stated.

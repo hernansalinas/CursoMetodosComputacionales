@@ -4,3 +4,4 @@
 - [[file:assignment01.org][Assignment01]]
 - [[file:assignment02.org][Assignment02]]
 - [[file:assignment03.org][Assignment03]]
+- [[file:assignment04.org][Assignment04]]
