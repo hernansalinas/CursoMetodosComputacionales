@@ -1,0 +1,129 @@
+#+TITLE: Assignment05
+
+John Conway's game of life.
+
+Imports:
+#+begin_src ipython :session asession :exports code :results raw drawer
+%config InlineBackend.figure_format = 'svg'
+
+import numpy as np
+import matplotlib.pyplot as plt
+from IPython import display
+from matplotlib import animation, rc
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[1]:
+:end:
+
+#+begin_src ipython :session asession :exports code :results raw drawer
+# Returns a random initial state for the array
+def init_state(n) :
+    # We use n + 2 grids so as to add padding
+    state = np.zeros((n + 2, n + 2))
+    # since we do not want to modify the first and last columns and rows,
+    # we constrain the double loop below
+    for i in range(1 ,n + 1) :
+        for j in range(1, n + 1) :
+            random = np.random.randint(0,2)
+            state[i,j] = random
+    return state
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[6]:
+:end:
+
+Now we must determine the number of neighbouring cells to pin down what must happen in the next time step.
+#+begin_src ipython :session asession :exports code :results raw drawer
+# Returns the number of alive neighbours each cell has
+def alive_neigh(state, n) :
+    # initialise neigh_state as an array of zeros
+    neigh_state = np.zeros((n + 2, n + 2))
+    for i in range(1, n+1) :
+        for j in range(1, n+1) :
+            # TODO turn this into another loop
+            num_alive_neigh = state[i-1,j-1] + state[i-1,j] + state[i-1,j+1] + state[i,j-1] + state[i,j+1] + state[i+1,j-1] + state[i+1,j] + state[i+1,j+1]
+            neigh_state[i, j] = num_alive_neigh
+    return neigh_state
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[4]:
+:end:
+
+#+begin_src ipython :session asession :exports code :results raw drawer
+def evolution(state, n) :
+    # evaluate conditions to be alive
+    neighbours = alive_neigh(state, n)
+    # if there are 2 or 3 alive neighbours, the cell is alive provided it was alive before
+    neigh_2_3 = np.logical_or( neighbours == 3, neighbours == 2)
+    if_alive = np.logical_and( state == 1, neigh_2_3 )
+    # if there are exactly 3 alive neighbours, a previously dead cell is born
+    if_dead = np.logical_and( state == 0, neighbours == 3 )
+    # merge conditions
+    evolution = np.logical_or( if_alive, if_dead )
+    # convert float into int
+    evolution = evolution.astype(int)
+    return evolution
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[5]:
+:end:
+
+Game of life routine
+#+begin_src ipython :session asession :exports code :results raw drawer
+def gameOfLife(tmax, N, init=None) :
+    # initial state of the array
+    states = list()
+    if init is None :
+        # whenever init is not given, create a random one
+        state = init_state(N)
+        states.append(state)
+    else :
+        # use the init state if given
+        states.append(init)
+    # populate the list with remaining states
+    for t in range(tmax) :
+        nth_state = evolution(states[-1], N)
+        states.append(nth_state)
+    return states
+
+time_steps = gameOfLife(10, 10)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[10]:
+:end:
+#+begin_src ipython :session asession :exports code :results raw drawer
+def update(i) :
+      ax.clear()
+      ax.imshow(time_steps[i], cmap="gray")
+      ax.axis("off")
+      return ax
+
+# plots
+fig = plt.figure(figsize = (5,5))
+ax = plt.subplot(1,1,1)
+anim = animation.FuncAnimation(fig, update, frames = len(time_steps), interval = 400)
+plt.close()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[8]:
+:end:
+#+begin_src ipython :session asession :exports code :results raw drawer
+anim.save('/home/juan/Desktop/anim2.gif', writer='imagemagick', fps=1)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[9]:
+:end:

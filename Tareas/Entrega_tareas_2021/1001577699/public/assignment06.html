@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-08-25 Wed 22:13 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Assignment06</title>
+<meta name="author" content="Juan David Salcedo Hernández" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Assignment06</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orga775544">1. First problem: Finding the area of a circular section</a></li>
+<li><a href="#orgdf5ffa7">2. Projectile motion with drag</a></li>
+</ul>
+</div>
+</div>
+<p>
+Usual display configurations and global imports.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
+
+<span class="org-keyword">from</span> scipy <span class="org-keyword">import</span> optimize, interpolate
+<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
+<span class="org-keyword">import</span> pandas <span class="org-keyword">as</span> pd
+<span class="org-keyword">import</span> matplotlib.pyplot <span class="org-keyword">as</span> plt
+</pre>
+</div>
+<div id="outline-container-orga775544" class="outline-2">
+<h2 id="orga775544"><span class="section-number-2">1</span> First problem: Finding the area of a circular section</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Regard a circle of radius \(a\), and suppose that we want use numerical methods to
+find a circular segment whose area is a quarter of it.
+</p>
+
+<p>
+So as to start solving this problem, we must find an expression for the area of
+a circular segment as a function of the subtended angle. Taking into
+consideration that a circular region subtending an angle of \(\theta\) radians has
+area
+\[
+A_1 = \frac{\theta a^2}{2},
+\]
+and that the triangle therein has an area
+\[
+A_2 = \frac{a^2\sin\theta}{2},
+\]
+it is relatively straightforward to show that the desired expression is given by
+\(A = A_1 - A_2\), or simply
+\[
+A = \frac{a^2}{2} \left(\theta - \sin\theta \right).
+\]
+By means thereof we define the condition that the area be a quarter of the total
+circle:
+\[
+\frac{a^2}{2}(\theta - \sin\theta) = \frac{\pi a^2}{4},
+\]
+which yields a function for which we can find a root corresponding to the
+desired \(\theta\) value:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-variable-name">f</span> = <span class="org-keyword">lambda</span> x : <span class="org-highlight-numbers-number">0.5</span>*(x - np.sin(x)) - <span class="org-highlight-numbers-number">0.25</span>*np.pi
+
+<span class="org-variable-name">df</span> = pd.DataFrame( {<span class="org-string">'thetas'</span> : np.linspace(-<span class="org-highlight-numbers-number">2</span>*np.pi, <span class="org-highlight-numbers-number">2</span>*np.pi, <span class="org-highlight-numbers-number">1000</span>)} )
+<span class="org-variable-name">df</span>[<span class="org-string">'fs'</span>] = df.<span class="org-builtin">apply</span>(f, axis = <span class="org-string">'columns'</span>)
+
+df.head()
+</pre>
+</div>
+
+<p>
+Since we are going to find the root of <code>f</code>, a simple plot comes in handy:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">plt.plot(df.thetas, df.fs)
+plt.grid()
+plt.show()
+</pre>
+</div>
+
+<p>
+We see that the root is in some subinterval of \([0,4]\), let us use the
+Newton-Raphson method first:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-variable-name">root</span> = optimize.newton( f, <span class="org-highlight-numbers-number">4</span> )
+root
+</pre>
+</div>
+<p>
+Therefore, whenever the angle is approximately 2.31 radians, the area of the
+circular segment is that of a quarter of the entire circle.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdf5ffa7" class="outline-2">
+<h2 id="orgdf5ffa7"><span class="section-number-2">2</span> Projectile motion with drag</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Consider the motion of a projectile upon which a drag force is being exerted y
+the wind. According to a particular mathematical model, the path followed by the
+particle hinges on the wind&rsquo;s velocity and a friction force parameter \(b\).
+</p>
+
+<p>
+Let us define the following boundary conditions:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-variable-name">v0</span> = <span class="org-highlight-numbers-number">60</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s; initial projectile speed</span>
+<span class="org-variable-name">u</span> = v0/<span class="org-highlight-numbers-number">2</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s; wind speed</span>
+
+<span class="org-variable-name">alpha</span> = np.pi <span class="org-comment-delimiter"># </span><span class="org-comment">wind angle</span>
+<span class="org-variable-name">theta</span> = np.deg2rad(<span class="org-highlight-numbers-number">45</span>) <span class="org-comment-delimiter"># </span><span class="org-comment">launch angle</span>
+
+<span class="org-variable-name">b</span> = <span class="org-highlight-numbers-number">0.05</span> <span class="org-comment-delimiter"># </span><span class="org-comment">friction force parameter</span>
+<span class="org-variable-name">g</span> = <span class="org-highlight-numbers-number">9.8</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s^2; gravitational acceleration</span>
+
+<span class="org-variable-name">params</span> = (v0, u, alpha, theta, b, g)
+</pre>
+</div>
+<p>
+Now we write the expressions for the standard position coordinates in 2D space.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">x</span>(t, v0, u, alpha, theta, b, g) :
+    <span class="org-keyword">return</span> u*t*np.cos(alpha) + b**(-<span class="org-highlight-numbers-number">1</span>)*(v0*np.cos(theta) - u*np.cos(alpha))*(<span class="org-highlight-numbers-number">1</span> - np.exp(-b*t))
+
+<span class="org-keyword">def</span> <span class="org-function-name">y</span>(t, v0, u, alpha, theta, b, g) :
+    <span class="org-keyword">return</span> b**(-<span class="org-highlight-numbers-number">1</span>)*(g/b + v0*np.sin(theta) - u*np.sin(alpha))*(<span class="org-highlight-numbers-number">1</span> - np.exp(-b*t)) - (g/b - u*np.sin(alpha))*t
+</pre>
+</div>
+<p>
+We can explicitly compute each position coordinate from an arbitrary set of
+positive time parameters \(t\).
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-variable-name">time</span> = { <span class="org-string">'t'</span>: np.linspace(<span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">10</span>, <span class="org-highlight-numbers-number">1000</span>) }
+<span class="org-variable-name">df</span> = pd.DataFrame(time)
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">add X and Y coordinates</span>
+<span class="org-variable-name">df</span>[<span class="org-string">'X'</span>] = df.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> row:
+                   x( row.get(<span class="org-string">'t'</span>), *params ),
+                   axis = <span class="org-string">'columns'</span>)
+<span class="org-variable-name">df</span>[<span class="org-string">'Y'</span>] = df.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> row:
+                   y( row.get(<span class="org-string">'t'</span>), *params ),
+                   axis = <span class="org-string">'columns'</span>)
+df.head()
+</pre>
+</div>
+
+<p>
+Let us directly plot the trajectory:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-variable-name">fig</span> = plt.figure(figsize=(<span class="org-highlight-numbers-number">12</span>,<span class="org-highlight-numbers-number">12</span>))
+fig.subplots_adjust(left=<span class="org-highlight-numbers-number">0.2</span>, wspace=<span class="org-highlight-numbers-number">0.6</span>)
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">first set of axes, the X function</span>
+<span class="org-variable-name">ax1</span> = plt.subplot2grid((<span class="org-highlight-numbers-number">3</span>,<span class="org-highlight-numbers-number">2</span>), (<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">0</span>))
+ax1.plot(df.t, df.X, label=<span class="org-string">'X'</span>)
+ax1.set_ylabel(<span class="org-string">'t'</span>); ax1.set_xlabel(<span class="org-string">'x(t)'</span>)
+ax1.legend()
+ax1.grid()
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">second set of axes, the Y function</span>
+<span class="org-variable-name">ax2</span> = plt.subplot2grid((<span class="org-highlight-numbers-number">3</span>,<span class="org-highlight-numbers-number">2</span>), (<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">1</span>))
+ax2.plot(df.t, df.Y, label=<span class="org-string">'Y'</span>)
+ax2.set_ylabel(<span class="org-string">'t'</span>); ax2.set_xlabel(<span class="org-string">'y(t)'</span>)
+ax2.legend()
+ax2.grid()
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">third set of axes, the actual path</span>
+<span class="org-variable-name">ax3</span> = plt.subplot2grid((<span class="org-highlight-numbers-number">3</span>,<span class="org-highlight-numbers-number">2</span>), (<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">0</span>), colspan=<span class="org-highlight-numbers-number">2</span>)
+ax3.plot(df.X, df.Y, label=<span class="org-string">'Path'</span>)
+ax3.plot(np.linspace(<span class="org-highlight-numbers-number">300</span>, <span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">10</span>), <span class="org-highlight-numbers-number">10</span>*[<span class="org-highlight-numbers-number">0</span>], label=<span class="org-string">'Floor'</span>)
+ax3.set_ylabel(<span class="org-string">'y'</span>); ax2.set_xlabel(<span class="org-string">'x'</span>)
+ax3.legend()
+ax3.grid()
+
+plt.show()
+</pre>
+</div>
+
+<p>
+In order to find the maximum range, we must take \(y(\bar t) = 0\), solve for \(\bar t\), and evaluate \(x(\bar t)\).
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-variable-name">max_t</span> = optimize.newton(<span class="org-keyword">lambda</span> t : y(t, *params), <span class="org-highlight-numbers-number">40</span>)
+
+<span class="org-variable-name">max_range</span> = x(max_t, *params)
+max_range
+</pre>
+</div>
+<p>
+We can plot this point to see that it properly approximates the projectile&rsquo;s range.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">plt.plot(df.X, df.Y)
+plt.plot(max_range, y(max_t, *params), <span class="org-string">'ro'</span>)
+plt.grid()
+plt.show()
+</pre>
+</div>
+<p>
+Now that we have gained some insight into this problem, we may get the maximum
+range as a function of the launch angle, so that we can see how the system
+behaves under different conditions.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-doc">''' Wind projectile class</span>
+<span class="org-doc">'''</span>
+<span class="org-keyword">def</span> <span class="org-function-name">x</span>(t, theta, v0=<span class="org-highlight-numbers-number">1</span>, u=<span class="org-highlight-numbers-number">1</span>, alpha=<span class="org-highlight-numbers-number">0.05</span>, b=<span class="org-highlight-numbers-number">0.05</span>, g=<span class="org-highlight-numbers-number">9.8</span>) :
+    <span class="org-keyword">return</span> u*t*np.cos(alpha) + b**(-<span class="org-highlight-numbers-number">1</span>)*(v0*np.cos(theta) - u*np.cos(alpha))*(<span class="org-highlight-numbers-number">1</span> - np.exp(-b*t))
+
+<span class="org-keyword">def</span> <span class="org-function-name">y</span>(t, theta, v0=<span class="org-highlight-numbers-number">1</span>, u=<span class="org-highlight-numbers-number">1</span>, alpha=<span class="org-highlight-numbers-number">0.05</span>, b=<span class="org-highlight-numbers-number">0.05</span>, g=<span class="org-highlight-numbers-number">9.8</span>) :
+    <span class="org-keyword">return</span> b**(-<span class="org-highlight-numbers-number">1</span>)*(g/b + v0*np.sin(theta) - u*np.sin(alpha))*(<span class="org-highlight-numbers-number">1</span> - np.exp(-b*t)) - (g/b - u*np.sin(alpha))*t
+
+<span class="org-variable-name">thetas</span> = np.deg2rad( np.arange(<span class="org-highlight-numbers-number">10</span>, <span class="org-highlight-numbers-number">91</span>, <span class="org-highlight-numbers-number">5</span>) )
+
+<span class="org-keyword">class</span> <span class="org-type">windProjectile</span> :
+    <span class="org-keyword">def</span> <span class="org-function-name">__init__</span>(<span class="org-keyword">self</span>, thetas=thetas , **kwargs) :
+        <span class="org-doc">''' Attributes of windProjectile object</span>
+<span class="org-doc">        '''</span>
+        <span class="org-keyword">self</span>.x = <span class="org-keyword">lambda</span> t : x(t, thetas, **kwargs)
+        <span class="org-keyword">self</span>.y = np.array([ <span class="org-keyword">lambda</span> t : y(t, theta, **kwargs) <span class="org-keyword">for</span> theta <span class="org-keyword">in</span> thetas ])
+
+    <span class="org-keyword">def</span> <span class="org-function-name">max_range</span>(<span class="org-keyword">self</span>, plot=<span class="org-constant">True</span>, fit=<span class="org-constant">True</span>) :
+        <span class="org-doc">''' Method to get the maximum range of the projectile</span>
+<span class="org-doc">        '''</span>
+        <span class="org-variable-name">opt</span>       = np.vectorize(optimize.newton)
+        <span class="org-variable-name">max_time</span>  = opt(<span class="org-keyword">self</span>.y, <span class="org-highlight-numbers-number">40</span>)
+        <span class="org-variable-name">max_range</span> = <span class="org-keyword">self</span>.x(max_time)
+
+        <span class="org-keyword">if</span> plot :
+            plt.plot(thetas, max_range, <span class="org-string">'k.'</span>)
+            <span class="org-keyword">if</span> fit :
+                <span class="org-variable-name">trend_poly</span> = interpolate.lagrange(thetas, max_range)
+                <span class="org-variable-name">X</span> = np.linspace(thetas[<span class="org-highlight-numbers-number">0</span>], thetas[-<span class="org-highlight-numbers-number">1</span>], <span class="org-highlight-numbers-number">100</span>)
+                plt.plot(X, trend_poly(X), <span class="org-string">'b-'</span>)
+            plt.grid()
+            plt.show()
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-variable-name">v0</span> = <span class="org-highlight-numbers-number">60</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s; initial projectile speed</span>
+<span class="org-variable-name">u</span> = v0/<span class="org-highlight-numbers-number">2</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s; wind speed</span>
+
+<span class="org-variable-name">alpha</span> = np.pi <span class="org-comment-delimiter"># </span><span class="org-comment">wind angle</span>
+<span class="org-variable-name">theta</span> = np.deg2rad(<span class="org-highlight-numbers-number">45</span>) <span class="org-comment-delimiter"># </span><span class="org-comment">launch angle</span>
+
+<span class="org-variable-name">b</span> = <span class="org-highlight-numbers-number">0.05</span> <span class="org-comment-delimiter"># </span><span class="org-comment">friction force parameter</span>
+<span class="org-variable-name">g</span> = <span class="org-highlight-numbers-number">9.8</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s^2; gravitational acceleration</span>
+
+<span class="org-variable-name">params</span> = {<span class="org-string">'v0'</span>: v0, <span class="org-string">'u'</span>: u, <span class="org-string">'alpha'</span>: alpha, <span class="org-string">'b'</span>: b, <span class="org-string">'g'</span>: g}
+
+<span class="org-variable-name">ls</span> = windProjectile(**params)
+ls.max_range()
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Juan David Salcedo Hernández</p>
+<p class="date">Created: 2021-08-25 Wed 22:13</p>
+<p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
+</div>
+</body>
+</html>

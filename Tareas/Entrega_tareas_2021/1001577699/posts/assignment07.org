@@ -1,0 +1,192 @@
+#+TITLE: Assignment07
+
+Global module imports.
+#+begin_src ipython :session asession :results raw drawer
+%config InlineBackend.figure_format = 'svg'
+
+import numpy as np
+import sympy as sp
+import scipy as sc
+# from scipy import init_printing
+import pandas as pd
+import matplotlib.pyplot as plt
+from tabulate import tabulate
+# init_printing()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[82]:
+:end:
+
+* Analytic derivative with Sympy
+We first define a symbolic variable, which we call x; then we can construct a function with sympy's specific tools.
+#+begin_src ipython :session asession :results raw drawer
+x = sp.symbols('x')
+f = lambda x : sp.sin(x**2) + sp.log(x)
+f(x)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[83]:
+: log(x) + sin(x**2)
+:end:
+Therewith we can perform different symbolic operations, for instace, we can differentiate the function f:
+#+begin_src ipython :session asession :results raw drawer
+# first derrivative with respect to the variable x
+Df = sp.diff( f(x), x, 1 )
+Df
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[84]:
+: 2*x*cos(x**2) + 1/x
+:end:
+We cannot directly evaluate sympy-generated functions; we should lambdify them instead:
+#+begin_src ipython :session asession :results raw drawer
+Df_ = sp.lambdify(x, Df, 'numpy')
+
+# plot the graph of the function
+x_ = np.linspace(0.1, 5, 100)
+plt.plot(x_, Df_(x_), 'k-')
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[85]:
+[[file:./obipy-resources/Kbz7t9.svg]]
+:end:
+
+* Activity
+Handy sed command to manage pandas dataframes in emacs.
+#+NAME: test_org_post_clean
+#+begin_src sh :results verbatim :var data="" :results output
+echo "$data" | sed s/\^:\ \//g | grep -v "^$" | sed s/\'//g
+#+end_src
+
+#+RESULTS: test_org_post_clean
+
+#+begin_src ipython :session asession :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+path = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8btHZ-A6ChzV5Rx_CQmCzbhO10J7R6LvQAyHx9qOCoCDAL9RJgaGUATf2z5lTMo-SjByvrnaX02Cz/pub?output=csv"
+df = pd.read_csv(path, ';')
+tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[86]:
+|    |   Tiempo (ms) | Ángulo 1,        |
+|----+---------------+------------------|
+|  0 |             9 | 59,289611816406  |
+|  1 |            42 | 59,9823265075684 |
+|  2 |            75 | 61,2374534606934 |
+|  3 |           108 | 63,49247741699   |
+|  4 |           142 | 65,3887710571289 |
+:end:
+#+begin_src ipython :session asession :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+df = df.rename( columns = {'Tiempo (ms)': 'Tiempo[ms]', 'Ángulo 1,': 'AnguloDeg'} )
+
+# convert strings to float values
+df['AnguloDeg'] = df['AnguloDeg'].replace('[,]', '.', regex=True).astype(float)
+
+# add radians
+df['AnguloRad'] = df['AnguloDeg'].apply( lambda x : np.deg2rad(x) - 0.5*np.pi)
+
+tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[87]:
+|    |   Tiempo[ms] |   AnguloDeg |   AnguloRad |
+|----+--------------+-------------+-------------|
+|  0 |            9 |     59.2896 |   -0.535997 |
+|  1 |           42 |     59.9823 |   -0.523907 |
+|  2 |           75 |     61.2375 |   -0.502001 |
+|  3 |          108 |     63.4925 |   -0.462644 |
+|  4 |          142 |     65.3888 |   -0.429547 |
+:end:
+
+Damped harmonic aproxillator.
+#+begin_src ipython :session asession :results raw drawer
+plt.plot(df['Tiempo[ms]'], df.AnguloRad, 'b.')
+plt.xlim(0, 20000)
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[79]:
+[[file:./obipy-resources/8qJze9.svg]]
+:end:
+We would like to obtain the frequency at which the pendulum moves. We will use a bit of Fourier analysis to achieve this.
+#+begin_src ipython :session asession :results raw drawer
+from scipy.fft import fft, fftfreq
+
+tf = fft(df['AnguloRad'].values)
+t_step = 33e-3
+n = len(df['Tiempo[ms]'])
+xf = fftfreq(n, t_step)[:n//2]
+
+plt.plot(xf[1:n//2], np.abs(tf[1:n//2]), 'bo')
+plt.ylabel("TF")
+plt.xlabel("Frecuencia")
+plt.xlim(0.6, 0.75)
+plt.grid()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[88]:
+[[file:./obipy-resources/BLgRUj.svg]]
+:end:
+
+We may then interpolate these datapoints with cubic splines as follows:
+#+begin_src ipython :session asession :results raw drawer
+from scipy.interpolate import CubicSpline
+
+#  pin down the domain and range of the obtained data
+dom, ran = xf[1:n//2], np.abs(tf[1:n//2])
+
+# apply the cubic splies method
+cubic_sp = CubicSpline(dom, ran)
+Dcubic = cubic_sp.derivative()
+xs = np.linspace(0.6, 0.75, 1000)
+
+# visualise interpolation
+plt.plot(dom, ran, 'bo')
+plt.plot(xs, cubic_sp(xs), 'k-')
+# plt.plot(xs, Dcubic(xs), 'k-')
+plt.ylabel("TF")
+plt.xlabel("Frecuencia")
+plt.xlim(0.6, 0.75)
+plt.grid()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[106]:
+[[file:./obipy-resources/f2AIyU.svg]]
+:end:
+
+Now we may find the derivative of the cubic spline polynomial
+#+begin_src ipython :session asession :results output
+from scipy import optimize
+
+# find the value in which the drivative is 0
+root = optimize.bisect(Dcubic, 0.66, 0.68)
+
+tol = 1e-5
+if abs( Dcubic(root) ) < tol :
+    print(root)
+else :
+    print('failed')
+#+end_src
+
+#+RESULTS:
+: 0.6715600030391943

@@ -5,3 +5,8 @@
 - [[file:assignment02.org][Assignment02]]
 - [[file:assignment03.org][Assignment03]]
 - [[file:assignment04.org][Assignment04]]
+- [[file:assignment05.org][Assignment05]]
+- [[file:assignment06.org][Assignment06]]
+- [[file:assignment07.org][Assignment07]]
+- [[file:review.org][Review]]
+- [[file:student_alcohol.org][Student Alcohol Consumption]]

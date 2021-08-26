@@ -1,0 +1,230 @@
+#+TITLE: Student Alcohol Consumption
+
+* Overview
+We first import the necessary libraries. Moreover, we add a ~sed~ command to properly format our dataframes in emacs.
+#+begin_src ipython :session asession :exports code :results raw drawer
+import pandas as pd
+import numpy as np
+from tabulate import tabulate
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[1]:
+:end:
+
+#+NAME: test_org_post_clean
+#+begin_src sh :results verbatim :var data="" :results output
+echo "$data" | sed s/\^:\ \//g | grep -v "^$" | sed s/\'//g
+#+end_src
+
+#+RESULTS: test_org_post_clean
+
+* Interesting puzzle
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+array = np.array([1,2,3])
+array[np.array([1,1,1])]
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[7]:
+array([2, 2, 2])
+:end:
+
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+df = pd.DataFrame({'X': [0, 7, 2, 0, 3, 4, 2, 5, 6, 0, 3, 4, 0]})
+
+# get the indices of all zeros, add padding to the first entry
+zero_indices = [-1] + list( df.apply(lambda row : int(row.name) if row.get('X') == 0 else None,
+                                     axis='columns').dropna() )
+
+zero_indices = np.array(zero_indices)
+
+# function to be applied
+# distance to the previous zero or the start of the list
+indices = df.index
+df['Y'] = indices - zero_indices[np.searchsorted(zero_indices - 1, indices) - 1]
+
+# print(zero_indices[np.searchsorted(zero_indices - 1, indices) - 1])
+tabulate(df, headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[4]:
+|    |   X |   Y |
+|----+-----+-----|
+|  0 |   0 |   0 |
+|  1 |   7 |   1 |
+|  2 |   2 |   2 |
+|  3 |   0 |   0 |
+|  4 |   3 |   1 |
+|  5 |   4 |   2 |
+|  6 |   2 |   3 |
+|  7 |   5 |   4 |
+|  8 |   6 |   5 |
+|  9 |   0 |   0 |
+| 10 |   3 |   1 |
+| 11 |   4 |   2 |
+| 12 |   0 |   0 |
+:end:
+
+* Alcohol
+Now we import the dataset from a spceific web address and assign it to a dataframe.
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+path = 'https://raw.githubusercontent.com/guipsamora/pandas_exercises/master/04_Apply/Students_Alcohol_Consumption/student-mat.csv'
+df = pd.read_csv(path)
+
+tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[104]:
+|    | school   | sex   |   age | address   | famsize   | Pstatus   |   Medu |   Fedu | Mjob    | Fjob     | reason   | guardian   |   traveltime |   studytime |   failures | schoolsup   | famsup   | paid   | activities   | nursery   | higher   | internet   | romantic   |   famrel |   freetime |   goout |   Dalc |   Walc |   health |   absences |   G1 |   G2 |   G3 |
+|----+----------+-------+-------+-----------+-----------+-----------+--------+--------+---------+----------+----------+------------+--------------+-------------+------------+-------------+----------+--------+--------------+-----------+----------+------------+------------+----------+------------+---------+--------+--------+----------+------------+------+------+------|
+|  0 | GP       | F     |    18 | U         | GT3       | A         |      4 |      4 | at_home | teacher  | course   | mother     |            2 |           2 |          0 | yes         | no       | no     | no           | yes       | yes      | no         | no         |        4 |          3 |       4 |      1 |      1 |        3 |          6 |    5 |    6 |    6 |
+|  1 | GP       | F     |    17 | U         | GT3       | T         |      1 |      1 | at_home | other    | course   | father     |            1 |           2 |          0 | no          | yes      | no     | no           | no        | yes      | yes        | no         |        5 |          3 |       3 |      1 |      1 |        3 |          4 |    5 |    5 |    6 |
+|  2 | GP       | F     |    15 | U         | LE3       | T         |      1 |      1 | at_home | other    | other    | mother     |            1 |           2 |          3 | yes         | no       | yes    | no           | yes       | yes      | yes        | no         |        4 |          3 |       2 |      2 |      3 |        3 |         10 |    7 |    8 |   10 |
+|  3 | GP       | F     |    15 | U         | GT3       | T         |      4 |      2 | health  | services | home     | mother     |            1 |           3 |          0 | no          | yes      | yes    | yes          | yes       | yes      | yes        | yes        |        3 |          2 |       2 |      1 |      1 |        5 |          2 |   15 |   14 |   15 |
+|  4 | GP       | F     |    16 | U         | GT3       | T         |      3 |      3 | other   | other    | home     | father     |            1 |           2 |          0 | no          | yes      | yes    | no           | yes       | yes      | no         | no         |        4 |          3 |       2 |      1 |      2 |        5 |          4 |    6 |   10 |   10 |
+:end:
+
+We wish to clean the dataframe by slicing it from the school until the guardian column.
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+df = df.loc[:, 'school':'guardian']
+tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[105]:
+|    | school   | sex   |   age | address   | famsize   | Pstatus   |   Medu |   Fedu | Mjob    | Fjob     | reason   | guardian   |
+|----+----------+-------+-------+-----------+-----------+-----------+--------+--------+---------+----------+----------+------------|
+|  0 | GP       | F     |    18 | U         | GT3       | A         |      4 |      4 | at_home | teacher  | course   | mother     |
+|  1 | GP       | F     |    17 | U         | GT3       | T         |      1 |      1 | at_home | other    | course   | father     |
+|  2 | GP       | F     |    15 | U         | LE3       | T         |      1 |      1 | at_home | other    | other    | mother     |
+|  3 | GP       | F     |    15 | U         | GT3       | T         |      4 |      2 | health  | services | home     | mother     |
+|  4 | GP       | F     |    16 | U         | GT3       | T         |      3 |      3 | other   | other    | home     | father     |
+:end:
+
+Capitalise strings from the Mjob and Fjob columns
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+capitaliser = lambda x : str(x).capitalize()
+df['Mjob'] = df['Mjob'].apply(capitaliser)
+df['Fjob'] = df['Fjob'].apply(capitaliser)
+
+tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[116]:
+|    | school   | sex   |   age | address   | famsize   | Pstatus   |   Medu |   Fedu | Mjob    | Fjob     | reason   | guardian   | legal_drinker   |
+|----+----------+-------+-------+-----------+-----------+-----------+--------+--------+---------+----------+----------+------------+-----------------|
+|  0 | GP       | F     |   180 | U         | GT3       | A         |     40 |     40 | At_home | Teacher  | course   | mother     | True            |
+|  1 | GP       | F     |   170 | U         | GT3       | T         |     10 |     10 | At_home | Other    | course   | father     | False           |
+|  2 | GP       | F     |   150 | U         | LE3       | T         |     10 |     10 | At_home | Other    | other    | mother     | False           |
+|  3 | GP       | F     |   150 | U         | GT3       | T         |     40 |     20 | Health  | Services | home     | mother     | False           |
+|  4 | GP       | F     |   160 | U         | GT3       | T         |     30 |     30 | Other   | Other    | home     | father     | False           |
+:end:
+
+Printing the last elements of the dataset
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+last_ones = df.iloc[[-1]]
+
+tabulate(last_ones, headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[107]:
+|     | school   | sex   |   age | address   | famsize   | Pstatus   |   Medu |   Fedu | Mjob   | Fjob    | reason   | guardian   |
+|-----+----------+-------+-------+-----------+-----------+-----------+--------+--------+--------+---------+----------+------------|
+| 394 | MS       | M     |    19 | U         | LE3       | T         |      1 |      1 | Other  | At_home | course   | father     |
+:end:
+
+Adding new column conforming to some boolean value and multipying each numerical value by 10
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+# one possiblity
+df['legal_drinker'] = df.apply(lambda row :
+                               bool(row.get('age') > 17),
+                               axis = 'columns')
+
+tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[108]:
+|    | school   | sex   |   age | address   | famsize   | Pstatus   |   Medu |   Fedu | Mjob    | Fjob     | reason   | guardian   | legal_drinker   |
+|----+----------+-------+-------+-----------+-----------+-----------+--------+--------+---------+----------+----------+------------+-----------------|
+|  0 | GP       | F     |    18 | U         | GT3       | A         |      4 |      4 | At_home | Teacher  | course   | mother     | True            |
+|  1 | GP       | F     |    17 | U         | GT3       | T         |      1 |      1 | At_home | Other    | course   | father     | False           |
+|  2 | GP       | F     |    15 | U         | LE3       | T         |      1 |      1 | At_home | Other    | other    | mother     | False           |
+|  3 | GP       | F     |    15 | U         | GT3       | T         |      4 |      2 | Health  | Services | home     | mother     | False           |
+|  4 | GP       | F     |    16 | U         | GT3       | T         |      3 |      3 | Other   | Other    | home     | father     | False           |
+:end:
+
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+df = df.applymap(lambda instance :
+                 instance*10 if type(instance) == int else instance)
+tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[129]:
+|    | school   | sex   |   age | address   | famsize   | Pstatus   |   Medu |   Fedu | Mjob    | Fjob     | reason   | guardian   | legal_drinker   |
+|----+----------+-------+-------+-----------+-----------+-----------+--------+--------+---------+----------+----------+------------+-----------------|
+|  0 | GP       | F     |  1800 | U         | GT3       | A         |    400 |    400 | At_home | Teacher  | course   | mother     | True            |
+|  1 | GP       | F     |  1700 | U         | GT3       | T         |    100 |    100 | At_home | Other    | course   | father     | False           |
+|  2 | GP       | F     |  1500 | U         | LE3       | T         |    100 |    100 | At_home | Other    | other    | mother     | False           |
+|  3 | GP       | F     |  1500 | U         | GT3       | T         |    400 |    200 | Health  | Services | home     | mother     | False           |
+|  4 | GP       | F     |  1600 | U         | GT3       | T         |    300 |    300 | Other   | Other    | home     | father     | False           |
+:end:
+
+* The Alessandro Strumia problem
+We read some random dataframe from a JSON file
+#+begin_src ipython :session mysession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+path = 'https://api.crossref.org/journals/1029-8479/works?rows=100'
+
+df = pd.read_json(path).loc['items','message']
+df = pd.DataFrame(df)
+
+df['author'][2]
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[38]:
+#+BEGIN_EXAMPLE
+  [{given: Tatsuo,
+  family: Kobayashi,
+  sequence: first,
+  affiliation: []},
+  {given: Koichi,
+  family: Yoshioka,
+  sequence: additional,
+  affiliation: []}]
+#+END_EXAMPLE
+:end:
+
+In just one apply, we need to extract the Dois of Davide Gaiotto's articles:
+#+begin_src ipython :session mysession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+df = df.apply(lambda row :
+         row.get('DOI') if any(
+             [ row.get('author')[i]['family'] == 'Gaiotto' and row.get('author')[i]['given'] == 'Davide' for i in range( len(row.get('author')) ) ] )
+         else None, axis = 'columns').dropna()
+df
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[37]:
+#+BEGIN_EXAMPLE
+  35    10.1088/1126-6708/2005/11/017
+  dtype: object
+#+END_EXAMPLE
+:end:

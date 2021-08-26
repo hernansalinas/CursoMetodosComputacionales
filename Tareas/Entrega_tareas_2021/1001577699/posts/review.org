@@ -1,0 +1,212 @@
+#+TITLE: Review
+
+* A short review of concepts
+Handy sed command
+#+NAME: test_org_post_clean
+#+begin_src sh :results verbatim :var data="" :results output
+echo "$data" | sed s/\^:\ \//g | grep -v "^$" | sed s/\'//g
+#+end_src
+
+#+RESULTS: test_org_post_clean
+We then import all the desired libraries.
+#+begin_src ipython :session asession :exports code :results raw drawer
+%config InlineBackend.figure_format = 'svg'
+from tabulate import tabulate
+
+import pandas as pd
+import numpy as np
+from scipy import optimize
+import matplotlib.pyplot as plt
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[2]:
+:end:
+Read some random dataframe with rocket launcher data.
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+path = 'https://raw.githubusercontent.com/restrepo/ComputationalMethods/master/data/rocket.json'
+df = pd.DataFrame(pd.read_json(path))
+tabulate(df, headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[14]:
+|    |      M0 |   g |   mdot |    u |
+|----+---------+-----+--------+------|
+|  0 | 2.8e+06 | 9.8 |  10000 | 2510 |
+|  1 | 2.8e+06 | 9.8 |  11000 | 2510 |
+|  2 | 2.8e+06 | 9.8 |  12000 | 2510 |
+|  3 | 2.8e+06 | 9.8 |  13000 | 2510 |
+|  4 | 2.8e+06 | 9.8 |  14000 | 2510 |
+|  5 | 2.8e+06 | 9.8 |  15000 | 2510 |
+:end:
+Proof that ~mdot~ is the only column that changes in value:
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+list(
+df.apply(lambda column :
+         column.name if (column.to_numpy()[0] != column.to_numpy()).any() else None).dropna())
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[15]:
+[mdot]
+:end:
+Testing convergence of the Newton-Raphson method for finding roots in this specific case
+#+begin_src ipython :session asession :exports code :results raw drawer
+f = lambda t : df.u[0]*np.log( df.M0[0]/(df.M0[0] - df.mdot[0]*t) ) - df.g[0]*t - 335
+t = np.linspace(0, 500, 1000)
+
+plt.plot(t, f(t), 'k-')
+plt.grid()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[18]:
+[[file:./obipy-resources/GI7vMU.svg]]
+:end:
+Notice that the root value is less than 150, setting such a value as our initial guess will thus suffice:
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+df['t'] = df.apply(lambda row : optimize.newton(lambda t : row.u*np.log( row.M0/(row.M0 - row.mdot*t) ) - row.g*t - 335, x0 = 150),
+                                                   axis = 'columns')
+tabulate(df, headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[19]:
+|    |      M0 |   g |   mdot |    u |        t |
+|----+---------+-----+--------+------+----------|
+|  0 | 2.8e+06 | 9.8 |  10000 | 2510 | 135.831  |
+|  1 | 2.8e+06 | 9.8 |  11000 | 2510 | 109.018  |
+|  2 | 2.8e+06 | 9.8 |  12000 | 2510 |  89.2026 |
+|  3 | 2.8e+06 | 9.8 |  13000 | 2510 |  74.4557 |
+|  4 | 2.8e+06 | 9.8 |  14000 | 2510 |  63.3249 |
+|  5 | 2.8e+06 | 9.8 |  15000 | 2510 |  54.7709 |
+:end:
+Graph of the function.
+#+begin_src ipython :session asession :exports code :results raw drawer
+x = df['t']
+y = df['mdot']
+
+plt.plot(x, y, 'ro')
+plt.xlabel('$\dot{m}$ / kg/s')
+plt.ylabel('$t$ / s')
+plt.grid()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[20]:
+[[file:./obipy-resources/u4altL.svg]]
+:end:
+* Something
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+path = 'https://raw.githubusercontent.com/justmarkham/DAT8/master/data/chipotle.tsv'
+chipo = pd.read_csv(path, sep='\t')
+
+tabulate(chipo.head(), headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[4]:
+|    |   order_id |   quantity | item_name                             | choice_description                                                         | item_price   |
+|----+------------+------------+---------------------------------------+----------------------------------------------------------------------------+--------------|
+|  0 |          1 |          1 | Chips and Fresh Tomato Salsa          | nan                                                                        | $2.39        |
+|  1 |          1 |          1 | Izze                                  | [Clementine]                                                               | $3.39        |
+|  2 |          1 |          1 | Nantucket Nectar                      | [Apple]                                                                    | $3.39        |
+|  3 |          1 |          1 | Chips and Tomatillo-Green Chili Salsa | nan                                                                        | $2.39        |
+|  4 |          2 |          2 | Chicken Bowl                          | [Tomatillo-Red Chili Salsa (Hot), [Black Beans, Rice, Cheese, Sour Cream]] | $16.98       |
+:end:
+
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+chipo['item_price'] = chipo['item_price'].replace('\$', '', regex=True).astype(float)
+tabulate(chipo.head(), headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[59]:
+|    |   order_id |   quantity | item_name                             | choice_description                                                         |   item_price |
+|----+------------+------------+---------------------------------------+----------------------------------------------------------------------------+--------------|
+|  0 |          1 |          1 | Chips and Fresh Tomato Salsa          | nan                                                                        |         2.39 |
+|  1 |          1 |          1 | Izze                                  | [Clementine]                                                               |         3.39 |
+|  2 |          1 |          1 | Nantucket Nectar                      | [Apple]                                                                    |         3.39 |
+|  3 |          1 |          1 | Chips and Tomatillo-Green Chili Salsa | nan                                                                        |         2.39 |
+|  4 |          2 |          2 | Chicken Bowl                          | [Tomatillo-Red Chili Salsa (Hot), [Black Beans, Rice, Cheese, Sour Cream]] |        16.98 |
+:end:
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+greater_than_10 = chipo[ chipo.item_price > 10 ]
+len( greater_than_10.index )
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[60]:
+1130
+:end:
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+chipo['item_name'].sort_values()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[61]:
+#+BEGIN_EXAMPLE
+  3389    6 Pack Soft Drink
+  341     6 Pack Soft Drink
+  1849    6 Pack Soft Drink
+  1860    6 Pack Soft Drink
+  2713    6 Pack Soft Drink
+  ...
+  2384    Veggie Soft Tacos
+  781     Veggie Soft Tacos
+  2851    Veggie Soft Tacos
+  1699    Veggie Soft Tacos
+  1395    Veggie Soft Tacos
+  Name: item_name, Length: 4622, dtype: object
+#+END_EXAMPLE
+:end:
+
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+tabulate(chipo[['item_name','item_price']].head(), headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[13]:
+|    | item_name                             |   item_price |
+|----+---------------------------------------+--------------|
+|  0 | Chips and Fresh Tomato Salsa          |         2.39 |
+|  1 | Izze                                  |         3.39 |
+|  2 | Nantucket Nectar                      |         3.39 |
+|  3 | Chips and Tomatillo-Green Chili Salsa |         2.39 |
+|  4 | Chicken Bowl                          |        16.98 |
+:end:
+
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+max_price = chipo[ chipo['item_price'] == chipo['item_price'].max() ]
+max_price['quantity'].sum()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[23]:
+15
+:end:
+#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+veggie = chipo[ chipo['item_name'] == 'Veggie Salad Bowl' ]
+veggie['quantity'].sum()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[26]:
+18
+:end:

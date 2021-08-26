@@ -21,7 +21,7 @@ import seaborn as sns
 
 #+RESULTS:
 :results:
-# Out[238]:
+# Out[1]:
 :end:
 
 * First activity
@@ -38,7 +38,7 @@ tabulate(dataFrame_1.head(), headers='keys', tablefmt='orgtbl', showindex='alway
 
 #+RESULTS:
 :results:
-# Out[281]:
+# Out[2]:
 |    | Date       | Unnamed: 1   |   Berri1 |   Maisonneuve_1 |   Maisonneuve_2 |   Brebeuf |
 |----+------------+--------------+----------+-----------------+-----------------+-----------|
 |  0 | 01/01/2009 | 0:00         |       29 |              20 |              35 |       nan |
