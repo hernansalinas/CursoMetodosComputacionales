@@ -1,6 +1,7 @@
 #+TITLE: Assignment06
+#+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
 
-Usual display configurations and global imports.
+Usual display configurations and global imports:
 #+begin_src ipython :session asession :exports code :results raw drawer
 %config InlineBackend.figure_format = 'svg'
 
@@ -15,7 +16,7 @@ import matplotlib.pyplot as plt
 # Out[14]:
 :end:
 * First problem: Finding the area of a circular section
-Regard a circle of radius $a$, and suppose that we want use numerical methods to
+Regard a circle of radius $a$, and suppose that we want to use numerical methods to
 find a circular segment whose area is a quarter of it.
 
 So as to start solving this problem, we must find an expression for the area of
@@ -41,7 +42,7 @@ circle:
 \]
 which yields a function for which we can find a root corresponding to the
 desired $\theta$ value:
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :exports both :results raw drawer
 f = lambda x : 0.5*(x - np.sin(x)) - 0.25*np.pi
 
 df = pd.DataFrame( {'thetas' : np.linspace(-2*np.pi, 2*np.pi, 1000)} )
@@ -64,7 +65,7 @@ df.head()
 :end:
 
 Since we are going to find the root of ~f~, a simple plot comes in handy:
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :exports both :results raw drawer
 plt.plot(df.thetas, df.fs)
 plt.grid()
 plt.show()
@@ -78,7 +79,7 @@ plt.show()
 
 We see that the root is in some subinterval of $[0,4]$, let us use the
 Newton-Raphson method first:
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :results raw drawer
 root = optimize.newton( f, 4 )
 root
 #+end_src
@@ -97,7 +98,7 @@ the wind. According to a particular mathematical model, the path followed by the
 particle hinges on the wind's velocity and a friction force parameter $b$.
 
 Let us define the following boundary conditions:
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :results raw drawer
 v0 = 60 # m/s; initial projectile speed
 u = v0/2 # m/s; wind speed
 
@@ -115,7 +116,7 @@ params = (v0, u, alpha, theta, b, g)
 # Out[7]:
 :end:
 Now we write the expressions for the standard position coordinates in 2D space.
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :results raw drawer
 def x(t, v0, u, alpha, theta, b, g) :
     return u*t*np.cos(alpha) + b**(-1)*(v0*np.cos(theta) - u*np.cos(alpha))*(1 - np.exp(-b*t))
 
@@ -129,7 +130,7 @@ def y(t, v0, u, alpha, theta, b, g) :
 :end:
 We can explicitly compute each position coordinate from an arbitrary set of
 positive time parameters $t$.
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :exports both :results raw drawer
 time = { 't': np.linspace(0, 10, 1000) }
 df = pd.DataFrame(time)
 
@@ -157,7 +158,7 @@ df.head()
 :end:
 
 Let us directly plot the trajectory:
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :exports both :results raw drawer
 fig = plt.figure(figsize=(12,12))
 fig.subplots_adjust(left=0.2, wspace=0.6)
 
@@ -193,7 +194,7 @@ plt.show()
 :end:
 
 In order to find the maximum range, we must take $y(\bar t) = 0$, solve for $\bar t$, and evaluate $x(\bar t)$.
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :results raw drawer
 max_t = optimize.newton(lambda t : y(t, *params), 40)
 
 max_range = x(max_t, *params)
@@ -206,7 +207,7 @@ max_range
 : 239.60614945520726
 :end:
 We can plot this point to see that it properly approximates the projectile's range.
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :exports both :results raw drawer
 plt.plot(df.X, df.Y)
 plt.plot(max_range, y(max_t, *params), 'ro')
 plt.grid()
@@ -221,7 +222,7 @@ plt.show()
 Now that we have gained some insight into this problem, we may get the maximum
 range as a function of the launch angle, so that we can see how the system
 behaves under different conditions.
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :results raw drawer
 ''' Wind projectile class
 '''
 def x(t, theta, v0=1, u=1, alpha=0.05, b=0.05, g=9.8) :
@@ -260,7 +261,7 @@ class windProjectile :
 :results:
 # Out[17]:
 :end:
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :exports both :results raw drawer
 v0 = 60 # m/s; initial projectile speed
 u = v0/2 # m/s; wind speed
 

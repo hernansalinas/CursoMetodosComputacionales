@@ -1,4 +1,5 @@
 #+TITLE: Assignment07
+#+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
 
 Global module imports.
 #+begin_src ipython :session asession :results raw drawer
@@ -45,7 +46,7 @@ Df
 : 2*x*cos(x**2) + 1/x
 :end:
 We cannot directly evaluate sympy-generated functions; we should lambdify them instead:
-#+begin_src ipython :session asession :results raw drawer
+#+begin_src ipython :session asession :results raw drawer :exports both
 Df_ = sp.lambdify(x, Df, 'numpy')
 
 # plot the graph of the function
@@ -69,7 +70,7 @@ echo "$data" | sed s/\^:\ \//g | grep -v "^$" | sed s/\'//g
 
 #+RESULTS: test_org_post_clean
 
-#+begin_src ipython :session asession :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 path = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8btHZ-A6ChzV5Rx_CQmCzbhO10J7R6LvQAyHx9qOCoCDAL9RJgaGUATf2z5lTMo-SjByvrnaX02Cz/pub?output=csv"
 df = pd.read_csv(path, ';')
 tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
@@ -86,7 +87,7 @@ tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
 |  3 |           108 | 63,49247741699   |
 |  4 |           142 | 65,3887710571289 |
 :end:
-#+begin_src ipython :session asession :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 df = df.rename( columns = {'Tiempo (ms)': 'Tiempo[ms]', 'Ángulo 1,': 'AnguloDeg'} )
 
 # convert strings to float values
@@ -111,7 +112,7 @@ tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
 :end:
 
 Damped harmonic aproxillator.
-#+begin_src ipython :session asession :results raw drawer
+#+begin_src ipython :exports both :session asession :results raw drawer
 plt.plot(df['Tiempo[ms]'], df.AnguloRad, 'b.')
 plt.xlim(0, 20000)
 plt.show()
@@ -123,7 +124,7 @@ plt.show()
 [[file:./obipy-resources/8qJze9.svg]]
 :end:
 We would like to obtain the frequency at which the pendulum moves. We will use a bit of Fourier analysis to achieve this.
-#+begin_src ipython :session asession :results raw drawer
+#+begin_src ipython :session asession :exports both :results raw drawer
 from scipy.fft import fft, fftfreq
 
 tf = fft(df['AnguloRad'].values)
@@ -146,7 +147,7 @@ plt.show()
 :end:
 
 We may then interpolate these datapoints with cubic splines as follows:
-#+begin_src ipython :session asession :results raw drawer
+#+begin_src ipython :session asession :exports both :results raw drawer
 from scipy.interpolate import CubicSpline
 
 #  pin down the domain and range of the obtained data
@@ -175,7 +176,7 @@ plt.show()
 :end:
 
 Now we may find the derivative of the cubic spline polynomial
-#+begin_src ipython :session asession :results output
+#+begin_src ipython :session asession :exports both :results output
 from scipy import optimize
 
 # find the value in which the drivative is 0

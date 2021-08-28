@@ -1,6 +1,5 @@
 #+TITLE: Assignment02
-#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
-#+HTML_HEAD: <style>pre.src{background:#343131;color:white;} </style>
+#+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
 
 #+NAME: test_org_post_clean
 #+BEGIN_SRC sh :results verbatim :var data="" :results output

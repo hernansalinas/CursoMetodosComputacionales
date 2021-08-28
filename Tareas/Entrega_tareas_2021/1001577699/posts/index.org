@@ -1,12 +1,2 @@
-#+TITLE: Contents
-
-- [[file:assignment00.org][Assignment00]]
-- [[file:assignment01.org][Assignment01]]
-- [[file:assignment02.org][Assignment02]]
-- [[file:assignment03.org][Assignment03]]
-- [[file:assignment04.org][Assignment04]]
-- [[file:assignment05.org][Assignment05]]
-- [[file:assignment06.org][Assignment06]]
-- [[file:assignment07.org][Assignment07]]
-- [[file:review.org][Review]]
-- [[file:student_alcohol.org][Student Alcohol Consumption]]
+#+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
+#+INCLUDE: ./sitemap.org

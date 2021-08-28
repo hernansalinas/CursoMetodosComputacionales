@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-08-25 Wed 22:13 -->
+<!-- 2021-08-27 Fri 22:37 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Assignment06</title>
@@ -193,6 +193,12 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/readtheorg.css"/>
+<script type="text/javascript" src="src/lib/js/jquery.min.js"></script>
+<script type="text/javascript" src="src/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="src/readtheorg_theme/js/readtheorg.js"></script>
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
@@ -251,7 +257,7 @@
 </div>
 </div>
 <p>
-Usual display configurations and global imports.
+Usual display configurations and global imports:
 </p>
 <div class="org-src-container">
 <pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
@@ -266,7 +272,7 @@ Usual display configurations and global imports.
 <h2 id="orga775544"><span class="section-number-2">1</span> First problem: Finding the area of a circular section</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-Regard a circle of radius \(a\), and suppose that we want use numerical methods to
+Regard a circle of radius \(a\), and suppose that we want to use numerical methods to
 find a circular segment whose area is a quarter of it.
 </p>
 
@@ -305,6 +311,15 @@ df.head()
 </pre>
 </div>
 
+<pre class="example" id="org8b67404">
+  thetas        fs
+  0 -6.283185 -3.926991
+  1 -6.270606 -3.926991
+  2 -6.258027 -3.926989
+  3 -6.245448 -3.926986
+  4 -6.232870 -3.926980
+</pre>
+
 <p>
 Since we are going to find the root of <code>f</code>, a simple plot comes in handy:
 </p>
@@ -313,6 +328,13 @@ Since we are going to find the root of <code>f</code>, a simple plot comes in ha
 plt.grid()
 plt.show()
 </pre>
+</div>
+
+
+<div id="org4cb27e6" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/kyoHgq.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
 </div>
 
 <p>
@@ -386,6 +408,15 @@ df.head()
 </pre>
 </div>
 
+<pre class="example" id="org0eba5c4">
+  t         X         Y
+  0  0.00000  0.000000  0.000000
+  1  0.01001  0.424507  0.424092
+  2  0.02002  0.848652  0.846989
+  3  0.03003  1.272434  1.268694
+  4  0.04004  1.695854  1.689205
+</pre>
+
 <p>
 Let us directly plot the trajectory:
 </p>
@@ -419,6 +450,13 @@ plt.show()
 </pre>
 </div>
 
+
+<div id="orgc43d248" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/4eAmJ7.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+
 <p>
 In order to find the maximum range, we must take \(y(\bar t) = 0\), solve for \(\bar t\), and evaluate \(x(\bar t)\).
 </p>
@@ -438,6 +476,13 @@ plt.plot(max_range, y(max_t, *params), <span class="org-string">'ro'</span>)
 plt.grid()
 plt.show()
 </pre>
+</div>
+
+
+<div id="org838b596" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/pHrlpW.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
 </div>
 <p>
 Now that we have gained some insight into this problem, we may get the maximum
@@ -495,12 +540,19 @@ behaves under different conditions.
 ls.max_range()
 </pre>
 </div>
+
+
+<div id="org014145c" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/N96Pc9.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-08-25 Wed 22:13</p>
+<p class="date">Created: 2021-08-27 Fri 22:37</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

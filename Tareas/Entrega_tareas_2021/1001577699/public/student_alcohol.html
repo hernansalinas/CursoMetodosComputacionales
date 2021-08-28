@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-08-25 Wed 22:21 -->
+<!-- 2021-08-28 Sat 12:37 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Student Alcohol Consumption</title>
@@ -193,6 +193,12 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/readtheorg.css"/>
+<script type="text/javascript" src="src/lib/js/jquery.min.js"></script>
+<script type="text/javascript" src="src/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="src/readtheorg_theme/js/readtheorg.js"></script>
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
@@ -238,14 +244,14 @@
 We first import the necessary libraries. Moreover, we add a <code>sed</code> command to properly format our dataframes in emacs.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">import</span> pandas <span class="org-keyword">as</span> pd
-<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
-<span class="org-keyword">from</span> tabulate <span class="org-keyword">import</span> tabulate
+<pre class="src src-ipython"><span style="color: #ff79c6;">import</span> pandas <span style="color: #ff79c6;">as</span> pd
+<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">from</span> tabulate <span style="color: #ff79c6;">import</span> tabulate
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-sh" id="org670754e"><span class="org-type">echo</span> <span class="org-string">"</span><span class="org-string"><span class="org-constant">$</span></span><span class="org-string"><span class="org-variable-name">data</span></span><span class="org-string">"</span> | sed s/<span class="org-string">\^</span>:<span class="org-string">\ \/</span>/g | <span class="org-type">grep</span> -v <span class="org-string">"^$"</span> | sed s/<span class="org-string">\'</span>//g
+<pre class="src src-sh" id="org670754e"><span style="color: #bd93f9;">echo</span> <span style="color: #f1fa8c;">"</span><span style="color: #8be9fd;">$</span><span style="color: #f1fa8c;">data</span><span style="color: #f1fa8c;">"</span> | sed s/<span style="color: #f1fa8c;">\^</span>:<span style="color: #f1fa8c;">\ \/</span>/g | <span style="color: #bd93f9;">grep</span> -v <span style="color: #f1fa8c;">"^$"</span> | sed s/<span style="color: #f1fa8c;">\'</span>//g
 </pre>
 </div>
 </div>
@@ -255,29 +261,131 @@ We first import the necessary libraries. Moreover, we add a <code>sed</code> com
 <h2 id="orge379fc2"><span class="section-number-2">2</span> Interesting puzzle</h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">array</span> = np.array([<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">3</span>])
-array[np.array([<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>])]
+<pre class="src src-ipython">array = np.array([<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>])
+array[np.array([<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>])]
 </pre>
 </div>
+
+<p>
+array([2, 2, 2])
+</p>
 
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">df</span> = pd.DataFrame({<span class="org-string">'X'</span>: [<span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">7</span>, <span class="org-highlight-numbers-number">2</span>, <span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">3</span>, <span class="org-highlight-numbers-number">4</span>, <span class="org-highlight-numbers-number">2</span>, <span class="org-highlight-numbers-number">5</span>, <span class="org-highlight-numbers-number">6</span>, <span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">3</span>, <span class="org-highlight-numbers-number">4</span>, <span class="org-highlight-numbers-number">0</span>]})
+<pre class="src src-ipython">df = pd.DataFrame({<span style="color: #f1fa8c;">'X'</span>: [<span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">7</span>, <span style="color: #bd93f9; font-weight: bold;">2</span>, <span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">3</span>, <span style="color: #bd93f9; font-weight: bold;">4</span>, <span style="color: #bd93f9; font-weight: bold;">2</span>, <span style="color: #bd93f9; font-weight: bold;">5</span>, <span style="color: #bd93f9; font-weight: bold;">6</span>, <span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">3</span>, <span style="color: #bd93f9; font-weight: bold;">4</span>, <span style="color: #bd93f9; font-weight: bold;">0</span>]})
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">get the indices of all zeros, add padding to the first entry</span>
-<span class="org-variable-name">zero_indices</span> = [-<span class="org-highlight-numbers-number">1</span>] + <span class="org-builtin">list</span>( df.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> row : <span class="org-builtin">int</span>(row.name) <span class="org-keyword">if</span> row.get(<span class="org-string">'X'</span>) == <span class="org-highlight-numbers-number">0</span> <span class="org-keyword">else</span> <span class="org-constant">None</span>,
-                                     axis=<span class="org-string">'columns'</span>).dropna() )
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">get the indices of all zeros, add padding to the first entry</span>
+zero_indices = [-<span style="color: #bd93f9; font-weight: bold;">1</span>] + <span style="color: #ffb86c;">list</span>( df.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> row : <span style="color: #ffb86c;">int</span>(row.name) <span style="color: #ff79c6;">if</span> row.get(<span style="color: #f1fa8c;">'X'</span>) == <span style="color: #bd93f9; font-weight: bold;">0</span> <span style="color: #ff79c6;">else</span> <span style="color: #8be9fd;">None</span>,
+                                     axis=<span style="color: #f1fa8c;">'columns'</span>).dropna() )
 
-<span class="org-variable-name">zero_indices</span> = np.array(zero_indices)
+zero_indices = np.array(zero_indices)
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">function to be applied</span>
-<span class="org-comment-delimiter"># </span><span class="org-comment">distance to the previous zero or the start of the list</span>
-<span class="org-variable-name">indices</span> = df.index
-<span class="org-variable-name">df</span>[<span class="org-string">'Y'</span>] = indices - zero_indices[np.searchsorted(zero_indices - <span class="org-highlight-numbers-number">1</span>, indices) - <span class="org-highlight-numbers-number">1</span>]
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">function to be applied</span>
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">distance to the previous zero or the start of the list</span>
+indices = df.index
+df[<span style="color: #f1fa8c;">'Y'</span>] = indices - zero_indices[np.searchsorted(zero_indices - <span style="color: #bd93f9; font-weight: bold;">1</span>, indices) - <span style="color: #bd93f9; font-weight: bold;">1</span>]
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">print(zero_indices[np.searchsorted(zero_indices - 1, indices) - 1])</span>
-tabulate(df, headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">print(zero_indices[np.searchsorted(zero_indices - 1, indices) - 1])</span>
+tabulate(df, headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
 </div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-right">X</th>
+<th scope="col" class="org-right">Y</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">7</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">2</td>
+<td class="org-right">2</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-right">3</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">5</td>
+<td class="org-right">4</td>
+<td class="org-right">2</td>
+</tr>
+
+<tr>
+<td class="org-right">6</td>
+<td class="org-right">2</td>
+<td class="org-right">3</td>
+</tr>
+
+<tr>
+<td class="org-right">7</td>
+<td class="org-right">5</td>
+<td class="org-right">4</td>
+</tr>
+
+<tr>
+<td class="org-right">8</td>
+<td class="org-right">6</td>
+<td class="org-right">5</td>
+</tr>
+
+<tr>
+<td class="org-right">9</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">10</td>
+<td class="org-right">3</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">11</td>
+<td class="org-right">4</td>
+<td class="org-right">2</td>
+</tr>
+
+<tr>
+<td class="org-right">12</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
@@ -288,63 +396,963 @@ tabulate(df, headers=<span class="org-string">'keys'</span>, tablefmt=<span clas
 Now we import the dataset from a spceific web address and assign it to a dataframe.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">path</span> = <span class="org-string">'https://raw.githubusercontent.com/guipsamora/pandas_exercises/master/04_Apply/Students_Alcohol_Consumption/student-mat.csv'</span>
-<span class="org-variable-name">df</span> = pd.read_csv(path)
+<pre class="src src-ipython">path = <span style="color: #f1fa8c;">'https://raw.githubusercontent.com/guipsamora/pandas_exercises/master/04_Apply/Students_Alcohol_Consumption/student-mat.csv'</span>
+df = pd.read_csv(path)
 
-tabulate(df.head(), headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
+tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
 </div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-left">school</th>
+<th scope="col" class="org-left">sex</th>
+<th scope="col" class="org-right">age</th>
+<th scope="col" class="org-left">address</th>
+<th scope="col" class="org-left">famsize</th>
+<th scope="col" class="org-left">Pstatus</th>
+<th scope="col" class="org-right">Medu</th>
+<th scope="col" class="org-right">Fedu</th>
+<th scope="col" class="org-left">Mjob</th>
+<th scope="col" class="org-left">Fjob</th>
+<th scope="col" class="org-left">reason</th>
+<th scope="col" class="org-left">guardian</th>
+<th scope="col" class="org-right">traveltime</th>
+<th scope="col" class="org-right">studytime</th>
+<th scope="col" class="org-right">failures</th>
+<th scope="col" class="org-left">schoolsup</th>
+<th scope="col" class="org-left">famsup</th>
+<th scope="col" class="org-left">paid</th>
+<th scope="col" class="org-left">activities</th>
+<th scope="col" class="org-left">nursery</th>
+<th scope="col" class="org-left">higher</th>
+<th scope="col" class="org-left">internet</th>
+<th scope="col" class="org-left">romantic</th>
+<th scope="col" class="org-right">famrel</th>
+<th scope="col" class="org-right">freetime</th>
+<th scope="col" class="org-right">goout</th>
+<th scope="col" class="org-right">Dalc</th>
+<th scope="col" class="org-right">Walc</th>
+<th scope="col" class="org-right">health</th>
+<th scope="col" class="org-right">absences</th>
+<th scope="col" class="org-right">G1</th>
+<th scope="col" class="org-right">G2</th>
+<th scope="col" class="org-right">G3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">18</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">A</td>
+<td class="org-right">4</td>
+<td class="org-right">4</td>
+<td class="org-left">at<sub>home</sub></td>
+<td class="org-left">teacher</td>
+<td class="org-left">course</td>
+<td class="org-left">mother</td>
+<td class="org-right">2</td>
+<td class="org-right">2</td>
+<td class="org-right">0</td>
+<td class="org-left">yes</td>
+<td class="org-left">no</td>
+<td class="org-left">no</td>
+<td class="org-left">no</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-left">no</td>
+<td class="org-left">no</td>
+<td class="org-right">4</td>
+<td class="org-right">3</td>
+<td class="org-right">4</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">3</td>
+<td class="org-right">6</td>
+<td class="org-right">5</td>
+<td class="org-right">6</td>
+<td class="org-right">6</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">17</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">T</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">at<sub>home</sub></td>
+<td class="org-left">other</td>
+<td class="org-left">course</td>
+<td class="org-left">father</td>
+<td class="org-right">1</td>
+<td class="org-right">2</td>
+<td class="org-right">0</td>
+<td class="org-left">no</td>
+<td class="org-left">yes</td>
+<td class="org-left">no</td>
+<td class="org-left">no</td>
+<td class="org-left">no</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-left">no</td>
+<td class="org-right">5</td>
+<td class="org-right">3</td>
+<td class="org-right">3</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">3</td>
+<td class="org-right">4</td>
+<td class="org-right">5</td>
+<td class="org-right">5</td>
+<td class="org-right">6</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">15</td>
+<td class="org-left">U</td>
+<td class="org-left">LE3</td>
+<td class="org-left">T</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">at<sub>home</sub></td>
+<td class="org-left">other</td>
+<td class="org-left">other</td>
+<td class="org-left">mother</td>
+<td class="org-right">1</td>
+<td class="org-right">2</td>
+<td class="org-right">3</td>
+<td class="org-left">yes</td>
+<td class="org-left">no</td>
+<td class="org-left">yes</td>
+<td class="org-left">no</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-left">no</td>
+<td class="org-right">4</td>
+<td class="org-right">3</td>
+<td class="org-right">2</td>
+<td class="org-right">2</td>
+<td class="org-right">3</td>
+<td class="org-right">3</td>
+<td class="org-right">10</td>
+<td class="org-right">7</td>
+<td class="org-right">8</td>
+<td class="org-right">10</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">15</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">T</td>
+<td class="org-right">4</td>
+<td class="org-right">2</td>
+<td class="org-left">health</td>
+<td class="org-left">services</td>
+<td class="org-left">home</td>
+<td class="org-left">mother</td>
+<td class="org-right">1</td>
+<td class="org-right">3</td>
+<td class="org-right">0</td>
+<td class="org-left">no</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-right">3</td>
+<td class="org-right">2</td>
+<td class="org-right">2</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">5</td>
+<td class="org-right">2</td>
+<td class="org-right">15</td>
+<td class="org-right">14</td>
+<td class="org-right">15</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">16</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">T</td>
+<td class="org-right">3</td>
+<td class="org-right">3</td>
+<td class="org-left">other</td>
+<td class="org-left">other</td>
+<td class="org-left">home</td>
+<td class="org-left">father</td>
+<td class="org-right">1</td>
+<td class="org-right">2</td>
+<td class="org-right">0</td>
+<td class="org-left">no</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-left">no</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-left">no</td>
+<td class="org-left">no</td>
+<td class="org-right">4</td>
+<td class="org-right">3</td>
+<td class="org-right">2</td>
+<td class="org-right">1</td>
+<td class="org-right">2</td>
+<td class="org-right">5</td>
+<td class="org-right">4</td>
+<td class="org-right">6</td>
+<td class="org-right">10</td>
+<td class="org-right">10</td>
+</tr>
+</tbody>
+</table>
 
 <p>
 We wish to clean the dataframe by slicing it from the school until the guardian column.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">df</span> = df.loc[:, <span class="org-string">'school'</span>:<span class="org-string">'guardian'</span>]
-tabulate(df.head(), headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
+<pre class="src src-ipython">df = df.loc[:, <span style="color: #f1fa8c;">'school'</span>:<span style="color: #f1fa8c;">'guardian'</span>]
+tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
 </div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-left">school</th>
+<th scope="col" class="org-left">sex</th>
+<th scope="col" class="org-right">age</th>
+<th scope="col" class="org-left">address</th>
+<th scope="col" class="org-left">famsize</th>
+<th scope="col" class="org-left">Pstatus</th>
+<th scope="col" class="org-right">Medu</th>
+<th scope="col" class="org-right">Fedu</th>
+<th scope="col" class="org-left">Mjob</th>
+<th scope="col" class="org-left">Fjob</th>
+<th scope="col" class="org-left">reason</th>
+<th scope="col" class="org-left">guardian</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">18</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">A</td>
+<td class="org-right">4</td>
+<td class="org-right">4</td>
+<td class="org-left">at<sub>home</sub></td>
+<td class="org-left">teacher</td>
+<td class="org-left">course</td>
+<td class="org-left">mother</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">17</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">T</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">at<sub>home</sub></td>
+<td class="org-left">other</td>
+<td class="org-left">course</td>
+<td class="org-left">father</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">15</td>
+<td class="org-left">U</td>
+<td class="org-left">LE3</td>
+<td class="org-left">T</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">at<sub>home</sub></td>
+<td class="org-left">other</td>
+<td class="org-left">other</td>
+<td class="org-left">mother</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">15</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">T</td>
+<td class="org-right">4</td>
+<td class="org-right">2</td>
+<td class="org-left">health</td>
+<td class="org-left">services</td>
+<td class="org-left">home</td>
+<td class="org-left">mother</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">16</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">T</td>
+<td class="org-right">3</td>
+<td class="org-right">3</td>
+<td class="org-left">other</td>
+<td class="org-left">other</td>
+<td class="org-left">home</td>
+<td class="org-left">father</td>
+</tr>
+</tbody>
+</table>
 
 <p>
 Capitalise strings from the Mjob and Fjob columns
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">capitaliser</span> = <span class="org-keyword">lambda</span> x : <span class="org-builtin">str</span>(x).capitalize()
-<span class="org-variable-name">df</span>[<span class="org-string">'Mjob'</span>] = df[<span class="org-string">'Mjob'</span>].<span class="org-builtin">apply</span>(capitaliser)
-<span class="org-variable-name">df</span>[<span class="org-string">'Fjob'</span>] = df[<span class="org-string">'Fjob'</span>].<span class="org-builtin">apply</span>(capitaliser)
+<pre class="src src-ipython">capitaliser = <span style="color: #ff79c6;">lambda</span> x : <span style="color: #ffb86c;">str</span>(x).capitalize()
+df[<span style="color: #f1fa8c;">'Mjob'</span>] = df[<span style="color: #f1fa8c;">'Mjob'</span>].<span style="color: #ffb86c;">apply</span>(capitaliser)
+df[<span style="color: #f1fa8c;">'Fjob'</span>] = df[<span style="color: #f1fa8c;">'Fjob'</span>].<span style="color: #ffb86c;">apply</span>(capitaliser)
 
-tabulate(df.head(), headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
+tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
 </div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-left">school</th>
+<th scope="col" class="org-left">sex</th>
+<th scope="col" class="org-right">age</th>
+<th scope="col" class="org-left">address</th>
+<th scope="col" class="org-left">famsize</th>
+<th scope="col" class="org-left">Pstatus</th>
+<th scope="col" class="org-right">Medu</th>
+<th scope="col" class="org-right">Fedu</th>
+<th scope="col" class="org-left">Mjob</th>
+<th scope="col" class="org-left">Fjob</th>
+<th scope="col" class="org-left">reason</th>
+<th scope="col" class="org-left">guardian</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">18</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">A</td>
+<td class="org-right">4</td>
+<td class="org-right">4</td>
+<td class="org-left">At<sub>home</sub></td>
+<td class="org-left">Teacher</td>
+<td class="org-left">course</td>
+<td class="org-left">mother</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">17</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">T</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">At<sub>home</sub></td>
+<td class="org-left">Other</td>
+<td class="org-left">course</td>
+<td class="org-left">father</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">15</td>
+<td class="org-left">U</td>
+<td class="org-left">LE3</td>
+<td class="org-left">T</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">At<sub>home</sub></td>
+<td class="org-left">Other</td>
+<td class="org-left">other</td>
+<td class="org-left">mother</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">15</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">T</td>
+<td class="org-right">4</td>
+<td class="org-right">2</td>
+<td class="org-left">Health</td>
+<td class="org-left">Services</td>
+<td class="org-left">home</td>
+<td class="org-left">mother</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">16</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">T</td>
+<td class="org-right">3</td>
+<td class="org-right">3</td>
+<td class="org-left">Other</td>
+<td class="org-left">Other</td>
+<td class="org-left">home</td>
+<td class="org-left">father</td>
+</tr>
+</tbody>
+</table>
 
 <p>
 Printing the last elements of the dataset
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">last_ones</span> = df.iloc[[-<span class="org-highlight-numbers-number">1</span>]]
+<pre class="src src-ipython">last_ones = df.iloc[[-<span style="color: #bd93f9; font-weight: bold;">1</span>]]
 
-tabulate(last_ones, headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
+tabulate(last_ones, headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
 </div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-left">school</th>
+<th scope="col" class="org-left">sex</th>
+<th scope="col" class="org-right">age</th>
+<th scope="col" class="org-left">address</th>
+<th scope="col" class="org-left">famsize</th>
+<th scope="col" class="org-left">Pstatus</th>
+<th scope="col" class="org-right">Medu</th>
+<th scope="col" class="org-right">Fedu</th>
+<th scope="col" class="org-left">Mjob</th>
+<th scope="col" class="org-left">Fjob</th>
+<th scope="col" class="org-left">reason</th>
+<th scope="col" class="org-left">guardian</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">394</td>
+<td class="org-left">MS</td>
+<td class="org-left">M</td>
+<td class="org-right">19</td>
+<td class="org-left">U</td>
+<td class="org-left">LE3</td>
+<td class="org-left">T</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">Other</td>
+<td class="org-left">At<sub>home</sub></td>
+<td class="org-left">course</td>
+<td class="org-left">father</td>
+</tr>
+</tbody>
+</table>
 
 <p>
 Adding new column conforming to some boolean value and multipying each numerical value by 10
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-comment-delimiter"># </span><span class="org-comment">one possiblity</span>
-<span class="org-variable-name">df</span>[<span class="org-string">'legal_drinker'</span>] = df.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> row :
-                               <span class="org-builtin">bool</span>(row.get(<span class="org-string">'age'</span>) &gt; <span class="org-highlight-numbers-number">17</span>),
-                               axis = <span class="org-string">'columns'</span>)
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">one possiblity</span>
+df[<span style="color: #f1fa8c;">'legal_drinker'</span>] = df.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> row :
+                               <span style="color: #ffb86c;">bool</span>(row.get(<span style="color: #f1fa8c;">'age'</span>) &gt; <span style="color: #bd93f9; font-weight: bold;">17</span>),
+                               axis = <span style="color: #f1fa8c;">'columns'</span>)
 
-tabulate(df.head(), headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
+tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
 </div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-left">school</th>
+<th scope="col" class="org-left">sex</th>
+<th scope="col" class="org-right">age</th>
+<th scope="col" class="org-left">address</th>
+<th scope="col" class="org-left">famsize</th>
+<th scope="col" class="org-left">Pstatus</th>
+<th scope="col" class="org-right">Medu</th>
+<th scope="col" class="org-right">Fedu</th>
+<th scope="col" class="org-left">Mjob</th>
+<th scope="col" class="org-left">Fjob</th>
+<th scope="col" class="org-left">reason</th>
+<th scope="col" class="org-left">guardian</th>
+<th scope="col" class="org-left">legal<sub>drinker</sub></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">18</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">A</td>
+<td class="org-right">4</td>
+<td class="org-right">4</td>
+<td class="org-left">At<sub>home</sub></td>
+<td class="org-left">Teacher</td>
+<td class="org-left">course</td>
+<td class="org-left">mother</td>
+<td class="org-left">True</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">17</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">T</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">At<sub>home</sub></td>
+<td class="org-left">Other</td>
+<td class="org-left">course</td>
+<td class="org-left">father</td>
+<td class="org-left">False</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">15</td>
+<td class="org-left">U</td>
+<td class="org-left">LE3</td>
+<td class="org-left">T</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">At<sub>home</sub></td>
+<td class="org-left">Other</td>
+<td class="org-left">other</td>
+<td class="org-left">mother</td>
+<td class="org-left">False</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">15</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">T</td>
+<td class="org-right">4</td>
+<td class="org-right">2</td>
+<td class="org-left">Health</td>
+<td class="org-left">Services</td>
+<td class="org-left">home</td>
+<td class="org-left">mother</td>
+<td class="org-left">False</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">16</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">T</td>
+<td class="org-right">3</td>
+<td class="org-right">3</td>
+<td class="org-left">Other</td>
+<td class="org-left">Other</td>
+<td class="org-left">home</td>
+<td class="org-left">father</td>
+<td class="org-left">False</td>
+</tr>
+</tbody>
+</table>
 
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">df</span> = df.applymap(<span class="org-keyword">lambda</span> instance :
-                 instance*<span class="org-highlight-numbers-number">10</span> <span class="org-keyword">if</span> <span class="org-builtin">type</span>(instance) == <span class="org-builtin">int</span> <span class="org-keyword">else</span> instance)
-tabulate(df.head(), headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
+<pre class="src src-ipython">df = df.applymap(<span style="color: #ff79c6;">lambda</span> instance :
+                 instance*<span style="color: #bd93f9; font-weight: bold;">10</span> <span style="color: #ff79c6;">if</span> <span style="color: #ffb86c;">type</span>(instance) == <span style="color: #ffb86c;">int</span> <span style="color: #ff79c6;">else</span> instance)
+tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
 </div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-left">school</th>
+<th scope="col" class="org-left">sex</th>
+<th scope="col" class="org-right">age</th>
+<th scope="col" class="org-left">address</th>
+<th scope="col" class="org-left">famsize</th>
+<th scope="col" class="org-left">Pstatus</th>
+<th scope="col" class="org-right">Medu</th>
+<th scope="col" class="org-right">Fedu</th>
+<th scope="col" class="org-left">Mjob</th>
+<th scope="col" class="org-left">Fjob</th>
+<th scope="col" class="org-left">reason</th>
+<th scope="col" class="org-left">guardian</th>
+<th scope="col" class="org-left">legal<sub>drinker</sub></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">180</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">A</td>
+<td class="org-right">40</td>
+<td class="org-right">40</td>
+<td class="org-left">At<sub>home</sub></td>
+<td class="org-left">Teacher</td>
+<td class="org-left">course</td>
+<td class="org-left">mother</td>
+<td class="org-left">True</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">170</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">T</td>
+<td class="org-right">10</td>
+<td class="org-right">10</td>
+<td class="org-left">At<sub>home</sub></td>
+<td class="org-left">Other</td>
+<td class="org-left">course</td>
+<td class="org-left">father</td>
+<td class="org-left">False</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">150</td>
+<td class="org-left">U</td>
+<td class="org-left">LE3</td>
+<td class="org-left">T</td>
+<td class="org-right">10</td>
+<td class="org-right">10</td>
+<td class="org-left">At<sub>home</sub></td>
+<td class="org-left">Other</td>
+<td class="org-left">other</td>
+<td class="org-left">mother</td>
+<td class="org-left">False</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">150</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">T</td>
+<td class="org-right">40</td>
+<td class="org-right">20</td>
+<td class="org-left">Health</td>
+<td class="org-left">Services</td>
+<td class="org-left">home</td>
+<td class="org-left">mother</td>
+<td class="org-left">False</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-left">GP</td>
+<td class="org-left">F</td>
+<td class="org-right">160</td>
+<td class="org-left">U</td>
+<td class="org-left">GT3</td>
+<td class="org-left">T</td>
+<td class="org-right">30</td>
+<td class="org-right">30</td>
+<td class="org-left">Other</td>
+<td class="org-left">Other</td>
+<td class="org-left">home</td>
+<td class="org-left">father</td>
+<td class="org-left">False</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
@@ -355,32 +1363,48 @@ tabulate(df.head(), headers=<span class="org-string">'keys'</span>, tablefmt=<sp
 We read some random dataframe from a JSON file
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">path</span> = <span class="org-string">'https://api.crossref.org/journals/1029-8479/works?rows=100'</span>
+<pre class="src src-ipython">path = <span style="color: #f1fa8c;">'https://api.crossref.org/journals/1029-8479/works?rows=100'</span>
 
-<span class="org-variable-name">df</span> = pd.read_json(path).loc[<span class="org-string">'items'</span>,<span class="org-string">'message'</span>]
-<span class="org-variable-name">df</span> = pd.DataFrame(df)
+df = pd.read_json(path).loc[<span style="color: #f1fa8c;">'items'</span>,<span style="color: #f1fa8c;">'message'</span>]
+df = pd.DataFrame(df)
 
-df[<span class="org-string">'author'</span>][<span class="org-highlight-numbers-number">2</span>]
+df[<span style="color: #f1fa8c;">'author'</span>][<span style="color: #bd93f9; font-weight: bold;">2</span>]
 </pre>
 </div>
+
+<pre class="example" id="org0910c30">
+  [{given: Tatsuo,
+  family: Kobayashi,
+  sequence: first,
+  affiliation: []},
+  {given: Koichi,
+  family: Yoshioka,
+  sequence: additional,
+  affiliation: []}]
+</pre>
 
 <p>
 In just one apply, we need to extract the Dois of Davide Gaiotto&rsquo;s articles:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">df</span> = df.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> row :
-         row.get(<span class="org-string">'DOI'</span>) <span class="org-keyword">if</span> <span class="org-builtin">any</span>(
-             [ row.get(<span class="org-string">'author'</span>)[i][<span class="org-string">'family'</span>] == <span class="org-string">'Gaiotto'</span> <span class="org-keyword">and</span> row.get(<span class="org-string">'author'</span>)[i][<span class="org-string">'given'</span>] == <span class="org-string">'Davide'</span> <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>( <span class="org-builtin">len</span>(row.get(<span class="org-string">'author'</span>)) ) ] )
-         <span class="org-keyword">else</span> <span class="org-constant">None</span>, axis = <span class="org-string">'columns'</span>).dropna()
+<pre class="src src-ipython">df = df.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> row :
+         row.get(<span style="color: #f1fa8c;">'DOI'</span>) <span style="color: #ff79c6;">if</span> <span style="color: #ffb86c;">any</span>(
+             [ row.get(<span style="color: #f1fa8c;">'author'</span>)[i][<span style="color: #f1fa8c;">'family'</span>] == <span style="color: #f1fa8c;">'Gaiotto'</span> <span style="color: #ff79c6;">and</span> row.get(<span style="color: #f1fa8c;">'author'</span>)[i][<span style="color: #f1fa8c;">'given'</span>] == <span style="color: #f1fa8c;">'Davide'</span> <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>( <span style="color: #ffb86c;">len</span>(row.get(<span style="color: #f1fa8c;">'author'</span>)) ) ] )
+         <span style="color: #ff79c6;">else</span> <span style="color: #8be9fd;">None</span>, axis = <span style="color: #f1fa8c;">'columns'</span>).dropna()
 df
 </pre>
 </div>
+
+<pre class="example" id="org81ba673">
+  35    10.1088/1126-6708/2005/11/017
+  dtype: object
+</pre>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-08-25 Wed 22:21</p>
+<p class="date">Created: 2021-08-28 Sat 12:37</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

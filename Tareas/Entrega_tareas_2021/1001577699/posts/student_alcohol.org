@@ -1,4 +1,5 @@
 #+TITLE: Student Alcohol Consumption
+#+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
 
 * Overview
 We first import the necessary libraries. Moreover, we add a ~sed~ command to properly format our dataframes in emacs.
@@ -10,7 +11,7 @@ from tabulate import tabulate
 
 #+RESULTS:
 :results:
-# Out[1]:
+# Out[32]:
 :end:
 
 #+NAME: test_org_post_clean
@@ -21,18 +22,18 @@ echo "$data" | sed s/\^:\ \//g | grep -v "^$" | sed s/\'//g
 #+RESULTS: test_org_post_clean
 
 * Interesting puzzle
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 array = np.array([1,2,3])
 array[np.array([1,1,1])]
 #+end_src
 
 #+RESULTS:
 :results:
-# Out[7]:
+# Out[33]:
 array([2, 2, 2])
 :end:
 
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 df = pd.DataFrame({'X': [0, 7, 2, 0, 3, 4, 2, 5, 6, 0, 3, 4, 0]})
 
 # get the indices of all zeros, add padding to the first entry
@@ -52,7 +53,7 @@ tabulate(df, headers='keys', tablefmt='orgtbl', showindex='always')
 
 #+RESULTS:
 :results:
-# Out[4]:
+# Out[34]:
 |    |   X |   Y |
 |----+-----+-----|
 |  0 |   0 |   0 |
@@ -72,7 +73,7 @@ tabulate(df, headers='keys', tablefmt='orgtbl', showindex='always')
 
 * Alcohol
 Now we import the dataset from a spceific web address and assign it to a dataframe.
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 path = 'https://raw.githubusercontent.com/guipsamora/pandas_exercises/master/04_Apply/Students_Alcohol_Consumption/student-mat.csv'
 df = pd.read_csv(path)
 
@@ -81,7 +82,7 @@ tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
 
 #+RESULTS:
 :results:
-# Out[104]:
+# Out[35]:
 |    | school   | sex   |   age | address   | famsize   | Pstatus   |   Medu |   Fedu | Mjob    | Fjob     | reason   | guardian   |   traveltime |   studytime |   failures | schoolsup   | famsup   | paid   | activities   | nursery   | higher   | internet   | romantic   |   famrel |   freetime |   goout |   Dalc |   Walc |   health |   absences |   G1 |   G2 |   G3 |
 |----+----------+-------+-------+-----------+-----------+-----------+--------+--------+---------+----------+----------+------------+--------------+-------------+------------+-------------+----------+--------+--------------+-----------+----------+------------+------------+----------+------------+---------+--------+--------+----------+------------+------+------+------|
 |  0 | GP       | F     |    18 | U         | GT3       | A         |      4 |      4 | at_home | teacher  | course   | mother     |            2 |           2 |          0 | yes         | no       | no     | no           | yes       | yes      | no         | no         |        4 |          3 |       4 |      1 |      1 |        3 |          6 |    5 |    6 |    6 |
@@ -92,14 +93,14 @@ tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
 :end:
 
 We wish to clean the dataframe by slicing it from the school until the guardian column.
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 df = df.loc[:, 'school':'guardian']
 tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
 #+end_src
 
 #+RESULTS:
 :results:
-# Out[105]:
+# Out[36]:
 |    | school   | sex   |   age | address   | famsize   | Pstatus   |   Medu |   Fedu | Mjob    | Fjob     | reason   | guardian   |
 |----+----------+-------+-------+-----------+-----------+-----------+--------+--------+---------+----------+----------+------------|
 |  0 | GP       | F     |    18 | U         | GT3       | A         |      4 |      4 | at_home | teacher  | course   | mother     |
@@ -110,7 +111,7 @@ tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
 :end:
 
 Capitalise strings from the Mjob and Fjob columns
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 capitaliser = lambda x : str(x).capitalize()
 df['Mjob'] = df['Mjob'].apply(capitaliser)
 df['Fjob'] = df['Fjob'].apply(capitaliser)
@@ -120,18 +121,18 @@ tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
 
 #+RESULTS:
 :results:
-# Out[116]:
-|    | school   | sex   |   age | address   | famsize   | Pstatus   |   Medu |   Fedu | Mjob    | Fjob     | reason   | guardian   | legal_drinker   |
-|----+----------+-------+-------+-----------+-----------+-----------+--------+--------+---------+----------+----------+------------+-----------------|
-|  0 | GP       | F     |   180 | U         | GT3       | A         |     40 |     40 | At_home | Teacher  | course   | mother     | True            |
-|  1 | GP       | F     |   170 | U         | GT3       | T         |     10 |     10 | At_home | Other    | course   | father     | False           |
-|  2 | GP       | F     |   150 | U         | LE3       | T         |     10 |     10 | At_home | Other    | other    | mother     | False           |
-|  3 | GP       | F     |   150 | U         | GT3       | T         |     40 |     20 | Health  | Services | home     | mother     | False           |
-|  4 | GP       | F     |   160 | U         | GT3       | T         |     30 |     30 | Other   | Other    | home     | father     | False           |
+# Out[37]:
+|    | school   | sex   |   age | address   | famsize   | Pstatus   |   Medu |   Fedu | Mjob    | Fjob     | reason   | guardian   |
+|----+----------+-------+-------+-----------+-----------+-----------+--------+--------+---------+----------+----------+------------|
+|  0 | GP       | F     |    18 | U         | GT3       | A         |      4 |      4 | At_home | Teacher  | course   | mother     |
+|  1 | GP       | F     |    17 | U         | GT3       | T         |      1 |      1 | At_home | Other    | course   | father     |
+|  2 | GP       | F     |    15 | U         | LE3       | T         |      1 |      1 | At_home | Other    | other    | mother     |
+|  3 | GP       | F     |    15 | U         | GT3       | T         |      4 |      2 | Health  | Services | home     | mother     |
+|  4 | GP       | F     |    16 | U         | GT3       | T         |      3 |      3 | Other   | Other    | home     | father     |
 :end:
 
 Printing the last elements of the dataset
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 last_ones = df.iloc[[-1]]
 
 tabulate(last_ones, headers='keys', tablefmt='orgtbl', showindex='always')
@@ -139,14 +140,14 @@ tabulate(last_ones, headers='keys', tablefmt='orgtbl', showindex='always')
 
 #+RESULTS:
 :results:
-# Out[107]:
+# Out[38]:
 |     | school   | sex   |   age | address   | famsize   | Pstatus   |   Medu |   Fedu | Mjob   | Fjob    | reason   | guardian   |
 |-----+----------+-------+-------+-----------+-----------+-----------+--------+--------+--------+---------+----------+------------|
 | 394 | MS       | M     |    19 | U         | LE3       | T         |      1 |      1 | Other  | At_home | course   | father     |
 :end:
 
 Adding new column conforming to some boolean value and multipying each numerical value by 10
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 # one possiblity
 df['legal_drinker'] = df.apply(lambda row :
                                bool(row.get('age') > 17),
@@ -157,7 +158,7 @@ tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
 
 #+RESULTS:
 :results:
-# Out[108]:
+# Out[39]:
 |    | school   | sex   |   age | address   | famsize   | Pstatus   |   Medu |   Fedu | Mjob    | Fjob     | reason   | guardian   | legal_drinker   |
 |----+----------+-------+-------+-----------+-----------+-----------+--------+--------+---------+----------+----------+------------+-----------------|
 |  0 | GP       | F     |    18 | U         | GT3       | A         |      4 |      4 | At_home | Teacher  | course   | mother     | True            |
@@ -167,7 +168,7 @@ tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
 |  4 | GP       | F     |    16 | U         | GT3       | T         |      3 |      3 | Other   | Other    | home     | father     | False           |
 :end:
 
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 df = df.applymap(lambda instance :
                  instance*10 if type(instance) == int else instance)
 tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
@@ -175,19 +176,19 @@ tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
 
 #+RESULTS:
 :results:
-# Out[129]:
+# Out[40]:
 |    | school   | sex   |   age | address   | famsize   | Pstatus   |   Medu |   Fedu | Mjob    | Fjob     | reason   | guardian   | legal_drinker   |
 |----+----------+-------+-------+-----------+-----------+-----------+--------+--------+---------+----------+----------+------------+-----------------|
-|  0 | GP       | F     |  1800 | U         | GT3       | A         |    400 |    400 | At_home | Teacher  | course   | mother     | True            |
-|  1 | GP       | F     |  1700 | U         | GT3       | T         |    100 |    100 | At_home | Other    | course   | father     | False           |
-|  2 | GP       | F     |  1500 | U         | LE3       | T         |    100 |    100 | At_home | Other    | other    | mother     | False           |
-|  3 | GP       | F     |  1500 | U         | GT3       | T         |    400 |    200 | Health  | Services | home     | mother     | False           |
-|  4 | GP       | F     |  1600 | U         | GT3       | T         |    300 |    300 | Other   | Other    | home     | father     | False           |
+|  0 | GP       | F     |   180 | U         | GT3       | A         |     40 |     40 | At_home | Teacher  | course   | mother     | True            |
+|  1 | GP       | F     |   170 | U         | GT3       | T         |     10 |     10 | At_home | Other    | course   | father     | False           |
+|  2 | GP       | F     |   150 | U         | LE3       | T         |     10 |     10 | At_home | Other    | other    | mother     | False           |
+|  3 | GP       | F     |   150 | U         | GT3       | T         |     40 |     20 | Health  | Services | home     | mother     | False           |
+|  4 | GP       | F     |   160 | U         | GT3       | T         |     30 |     30 | Other   | Other    | home     | father     | False           |
 :end:
 
 * The Alessandro Strumia problem
 We read some random dataframe from a JSON file
-#+begin_src ipython :session mysession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 path = 'https://api.crossref.org/journals/1029-8479/works?rows=100'
 
 df = pd.read_json(path).loc['items','message']
@@ -198,7 +199,7 @@ df['author'][2]
 
 #+RESULTS:
 :results:
-# Out[38]:
+# Out[41]:
 #+BEGIN_EXAMPLE
   [{given: Tatsuo,
   family: Kobayashi,
@@ -212,7 +213,7 @@ df['author'][2]
 :end:
 
 In just one apply, we need to extract the Dois of Davide Gaiotto's articles:
-#+begin_src ipython :session mysession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 df = df.apply(lambda row :
          row.get('DOI') if any(
              [ row.get('author')[i]['family'] == 'Gaiotto' and row.get('author')[i]['given'] == 'Davide' for i in range( len(row.get('author')) ) ] )
@@ -222,7 +223,7 @@ df
 
 #+RESULTS:
 :results:
-# Out[37]:
+# Out[42]:
 #+BEGIN_EXAMPLE
   35    10.1088/1126-6708/2005/11/017
   dtype: object

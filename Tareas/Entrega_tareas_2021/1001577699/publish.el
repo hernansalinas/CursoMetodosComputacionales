@@ -1,4 +1,3 @@
-
 ;;; publish.el --- Generate Static HTML -*- lexical-binding: t -*-
 ;;
 ;; Author: Juan David Saledo <jdavid.salcedo@udea.edu.co>
@@ -26,6 +25,11 @@
 
 (require 'ox-html)
 
+(setq m/org-publish-org-sitemap (title list)
+  "Sitemap generation function."
+  (concat "#+TITLE: Contents\n\n#+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup"
+          (org-list-to-subtree list)))
+
 ;; Output HTML with syntax highlightng using css classes instead of
 ;; directly formatting the output.
 (setq org-html-htmlize-output-type 'css)
@@ -39,8 +43,9 @@
          :publishing-function org-html-publish-to-html
          :auto-sitemap t
          :sitemap-title "Contents"
-         :sitemap-filename "index.org"
+         :sitemap-filename "sitemap.org"
          :sitemap-style list
+         :link-home "./index.html"
          :author "Juan David Salcedo Hernández"
          :email "jdavid.salcedo@udea.edu.co"
          :with-creator t)
