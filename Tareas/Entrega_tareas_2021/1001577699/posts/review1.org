@@ -1,4 +1,4 @@
-#+TITLE: Review of concepts 1
+#+TITLE: Review 1
 #+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
 
 Usual display configurations and global imports:
@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 #+RESULTS:
 :results:
-# Out[14]:
+# Out[131]:
 :end:
 * Finding the area of a circular section
 Suppose we have a circle of radius $a$; we wish to use numerical methods to
@@ -52,7 +52,7 @@ df.head()
 
 #+RESULTS:
 :results:
-# Out[2]:
+# Out[132]:
 #+BEGIN_EXAMPLE
   thetas        fs
   0 -6.283185 -3.926991
@@ -72,8 +72,8 @@ plt.show()
 
 #+RESULTS:
 :results:
-# Out[3]:
-[[file:./obipy-resources/DNRNCJ.svg]]
+# Out[133]:
+[[file:./obipy-resources/DwsTIt.svg]]
 :end:
 
 We thus see that the root is in some subinterval of $[0,4]$, let us use the
@@ -85,7 +85,7 @@ root
 
 #+RESULTS:
 :results:
-# Out[24]:
+# Out[134]:
 : 2.3098814600100823
 :end:
 Therefore, whenever the angle is approximately 2.31 radians, the area of the

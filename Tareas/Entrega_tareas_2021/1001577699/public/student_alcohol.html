@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-08-28 Sat 12:37 -->
+<!-- 2021-09-03 Fri 22:06 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Student Alcohol Consumption</title>
@@ -1372,7 +1372,7 @@ df[<span style="color: #f1fa8c;">'author'</span>][<span style="color: #bd93f9; f
 </pre>
 </div>
 
-<pre class="example" id="org0910c30">
+<pre class="example" id="org87ead5c">
   [{given: Tatsuo,
   family: Kobayashi,
   sequence: first,
@@ -1387,16 +1387,29 @@ df[<span style="color: #f1fa8c;">'author'</span>][<span style="color: #bd93f9; f
 In just one apply, we need to extract the Dois of Davide Gaiotto&rsquo;s articles:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">df = df.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> row :
-         row.get(<span style="color: #f1fa8c;">'DOI'</span>) <span style="color: #ff79c6;">if</span> <span style="color: #ffb86c;">any</span>(
-             [ row.get(<span style="color: #f1fa8c;">'author'</span>)[i][<span style="color: #f1fa8c;">'family'</span>] == <span style="color: #f1fa8c;">'Gaiotto'</span> <span style="color: #ff79c6;">and</span> row.get(<span style="color: #f1fa8c;">'author'</span>)[i][<span style="color: #f1fa8c;">'given'</span>] == <span style="color: #f1fa8c;">'Davide'</span> <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>( <span style="color: #ffb86c;">len</span>(row.get(<span style="color: #f1fa8c;">'author'</span>)) ) ] )
-         <span style="color: #ff79c6;">else</span> <span style="color: #8be9fd;">None</span>, axis = <span style="color: #f1fa8c;">'columns'</span>).dropna()
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">get_author</span>(row):
+    <span style="color: #ff79c6;">try</span>:
+        <span style="color: #ff79c6;">if</span> <span style="color: #ffb86c;">any</span>([ row.get(<span style="color: #f1fa8c;">'author'</span>)[i][<span style="color: #f1fa8c;">'given'</span>] == <span style="color: #f1fa8c;">'Tatsuo'</span> <span style="color: #ff79c6;">and</span>
+                  row.get(<span style="color: #f1fa8c;">'author'</span>)[i][<span style="color: #f1fa8c;">'family'</span>] == <span style="color: #f1fa8c;">'Kobayashi'</span>
+                  <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #ffb86c;">len</span>(row.get(<span style="color: #f1fa8c;">'author'</span>))) ]):
+             <span style="color: #ff79c6;">return</span> row.get(<span style="color: #f1fa8c;">'DOI'</span>)
+        <span style="color: #ff79c6;">else</span>:
+             <span style="color: #ff79c6;">return</span> <span style="color: #8be9fd;">None</span>
+    <span style="color: #ff79c6;">except</span> <span style="color: #bd93f9;">KeyError</span>:
+        <span style="color: #ff79c6;">return</span> <span style="color: #8be9fd;">None</span>
+
+<span style="color: #6272a4;">#</span><span style="color: #6272a4;">df = df.apply(lambda row :</span>
+<span style="color: #6272a4;">#         </span><span style="color: #6272a4;">row.get('DOI') if any(</span>
+<span style="color: #6272a4;">#             </span><span style="color: #6272a4;">[ row.get('author')[i]['given'] == 'Davide' and row.get('author')[i]['family'] == 'Gaiotto' for i in range( len(row.get('author')) ) ] )</span>
+<span style="color: #6272a4;">#         </span><span style="color: #6272a4;">else None, axis = 'columns').dropna()</span>
+df = df.<span style="color: #ffb86c;">apply</span>(get_author, axis=<span style="color: #f1fa8c;">'columns'</span>).dropna()
 df
 </pre>
 </div>
 
-<pre class="example" id="org81ba673">
-  35    10.1088/1126-6708/2005/11/017
+<pre class="example" id="org70b1832">
+  2     10.1088/1126-6708/2004/11/024
+  79    10.1088/1126-6708/2006/01/044
   dtype: object
 </pre>
 </div>
@@ -1404,7 +1417,7 @@ df
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-08-28 Sat 12:37</p>
+<p class="date">Created: 2021-09-03 Fri 22:06</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

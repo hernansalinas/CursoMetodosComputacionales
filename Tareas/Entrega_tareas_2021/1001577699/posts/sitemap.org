@@ -8,7 +8,7 @@
 - [[file:assignment05.org][Assignment05]]
 - [[file:assignment06.org][Assignment06]]
 - [[file:index.org][Contents]]
-- [[file:game_of_ife.org][John Conway's game of life.]]
+- [[file:game_of_life.org][John Conway's game of life.]]
 - [[file:review2.org][Review]]
 - [[file:review1.org][Review of concepts 1]]
 - [[file:student_alcohol.org][Student Alcohol Consumption]]

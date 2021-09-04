@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-08-28 Sat 12:38 -->
+<!-- 2021-09-03 Fri 22:09 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Assignment05</title>
@@ -221,121 +221,409 @@
     /*]]>*///-->
 // @license-end
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="content">
 <h1 class="title">Assignment05</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org24f3bd0">1. Analytic derivative with Sympy</a></li>
+<li><a href="#orga77b614">2. Activity</a></li>
+</ul>
+</div>
+</div>
 <p>
-John Conway&rsquo;s game of life.
-</p>
-
-<p>
-Imports:
+Usual display configurations and global imports:
 </p>
 <div class="org-src-container">
 <pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
 
 <span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">import</span> sympy <span style="color: #ff79c6;">as</span> sp
+<span style="color: #ff79c6;">import</span> scipy <span style="color: #ff79c6;">as</span> sc
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">from scipy import init_printing</span>
+<span style="color: #ff79c6;">import</span> pandas <span style="color: #ff79c6;">as</span> pd
 <span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
-<span style="color: #ff79c6;">from</span> IPython <span style="color: #ff79c6;">import</span> display
-<span style="color: #ff79c6;">from</span> matplotlib <span style="color: #ff79c6;">import</span> animation, rc
+<span style="color: #ff79c6;">from</span> tabulate <span style="color: #ff79c6;">import</span> tabulate
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">init_printing()</span>
 </pre>
 </div>
 
+<div id="outline-container-org24f3bd0" class="outline-2">
+<h2 id="org24f3bd0"><span class="section-number-2">1</span> Analytic derivative with Sympy</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+We first define a symbolic variable, which we call x; then we can construct a function with sympy&rsquo;s specific tools.
+</p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">Returns a random initial state for the array</span>
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">init_state</span>(n) :
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">We use n + 2 grids so as to add padding</span>
-    state = np.zeros((n + <span style="color: #bd93f9; font-weight: bold;">2</span>, n + <span style="color: #bd93f9; font-weight: bold;">2</span>))
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">since we do not want to modify the first and last columns and rows,</span>
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">we constrain the double loop below</span>
-    <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span> ,n + <span style="color: #bd93f9; font-weight: bold;">1</span>) :
-        <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n + <span style="color: #bd93f9; font-weight: bold;">1</span>) :
-            random = np.random.randint(<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>)
-            state[i,j] = random
-    <span style="color: #ff79c6;">return</span> state
+<pre class="src src-ipython">x = sp.symbols(<span style="color: #f1fa8c;">'x'</span>)
+f = <span style="color: #ff79c6;">lambda</span> x : sp.sin(x**<span style="color: #bd93f9; font-weight: bold;">2</span>) + sp.log(x)
+f(x)
+</pre>
+</div>
+
+<pre class="example">
+log(x) + sin(x**2)
+</pre>
+<p>
+Therewith we can perform different symbolic operations, for instace, we can differentiate the function <code>f</code>:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">first derrivative with respect to the variable x</span>
+Df = sp.diff( f(x), x, <span style="color: #bd93f9; font-weight: bold;">1</span> )
+Df
+</pre>
+</div>
+
+<pre class="example">
+2*x*cos(x**2) + 1/x
+</pre>
+<p>
+We cannot directly evaluate sympy-generated functions; we should lambdify them instead:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">Df_ = sp.lambdify(x, Df, <span style="color: #f1fa8c;">'numpy'</span>)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">plot the graph of the function</span>
+x_ = np.linspace(<span style="color: #bd93f9; font-weight: bold;">0.1</span>, <span style="color: #bd93f9; font-weight: bold;">5</span>, <span style="color: #bd93f9; font-weight: bold;">100</span>)
+plt.plot(x_, Df_(x_), <span style="color: #f1fa8c;">'k-'</span>)
+plt.show()
+</pre>
+</div>
+
+
+<div id="orgb602f37" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/XmXOa7.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga77b614" class="outline-2">
+<h2 id="orga77b614"><span class="section-number-2">2</span> Activity</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Handy sed command to manage pandas dataframes in emacs:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh" id="orgad408c7"><span style="color: #bd93f9;">echo</span> <span style="color: #f1fa8c;">"</span><span style="color: #8be9fd;">$</span><span style="color: #f1fa8c;">data</span><span style="color: #f1fa8c;">"</span> | sed s/<span style="color: #f1fa8c;">\^</span>:<span style="color: #f1fa8c;">\ \/</span>/g | <span style="color: #bd93f9;">grep</span> -v <span style="color: #f1fa8c;">"^$"</span> | sed s/<span style="color: #f1fa8c;">\'</span>//g
 </pre>
 </div>
 
 <p>
-Now we must determine the number of neighbouring cells to pin down what must happen in the next time step.
+The following dataset comes from an experimental setup in which the period of a simple pendulum was measured for different deflection angles:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">Returns the number of alive neighbours each cell has</span>
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">alive_neigh</span>(state, n) :
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">initialise neigh_state as an array of zeros</span>
-    neigh_state = np.zeros((n + <span style="color: #bd93f9; font-weight: bold;">2</span>, n + <span style="color: #bd93f9; font-weight: bold;">2</span>))
-    <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n+<span style="color: #bd93f9; font-weight: bold;">1</span>) :
-        <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n+<span style="color: #bd93f9; font-weight: bold;">1</span>) :
-            <span style="color: #6272a4;"># </span><span style="color: #f1fa8c; font-weight: bold;">TODO</span><span style="color: #6272a4;"> turn this into another loop</span>
-            num_alive_neigh = state[i-<span style="color: #bd93f9; font-weight: bold;">1</span>,j-<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i-<span style="color: #bd93f9; font-weight: bold;">1</span>,j] + state[i-<span style="color: #bd93f9; font-weight: bold;">1</span>,j+<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i,j-<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i,j+<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i+<span style="color: #bd93f9; font-weight: bold;">1</span>,j-<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i+<span style="color: #bd93f9; font-weight: bold;">1</span>,j] + state[i+<span style="color: #bd93f9; font-weight: bold;">1</span>,j+<span style="color: #bd93f9; font-weight: bold;">1</span>]
-            neigh_state[i, j] = num_alive_neigh
-    <span style="color: #ff79c6;">return</span> neigh_state
+<pre class="src src-ipython">path = <span style="color: #f1fa8c;">"https://docs.google.com/spreadsheets/d/e/2PACX-1vT8btHZ-A6ChzV5Rx_CQmCzbhO10J7R6LvQAyHx9qOCoCDAL9RJgaGUATf2z5lTMo-SjByvrnaX02Cz/pub?output=csv"</span>
+df = pd.read_csv(path, <span style="color: #f1fa8c;">';'</span>)
+tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
 </div>
 
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-right">Tiempo (ms)</th>
+<th scope="col" class="org-left">Ángulo 1,</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">9</td>
+<td class="org-left">59,289611816406</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">42</td>
+<td class="org-left">59,9823265075684</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">75</td>
+<td class="org-left">61,2374534606934</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-right">108</td>
+<td class="org-left">63,49247741699</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-right">142</td>
+<td class="org-left">65,3887710571289</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+To begin with, we ought to transform these datapoints into reasonable units (radians). On
+the grounds that the angle series encompasses string values rather than
+numerical ones, we must perform a type conversion and then a unit conversion to
+obtain the desired result:
+</p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">evolution</span>(state, n) :
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">evaluate conditions to be alive</span>
-    neighbours = alive_neigh(state, n)
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">if there are 2 or 3 alive neighbours, the cell is alive provided it was alive before</span>
-    neigh_2_3 = np.logical_or( neighbours == <span style="color: #bd93f9; font-weight: bold;">3</span>, neighbours == <span style="color: #bd93f9; font-weight: bold;">2</span>)
-    if_alive = np.logical_and( state == <span style="color: #bd93f9; font-weight: bold;">1</span>, neigh_2_3 )
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">if there are exactly 3 alive neighbours, a previously dead cell is born</span>
-    if_dead = np.logical_and( state == <span style="color: #bd93f9; font-weight: bold;">0</span>, neighbours == <span style="color: #bd93f9; font-weight: bold;">3</span> )
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">merge conditions</span>
-    evolution = np.logical_or( if_alive, if_dead )
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">convert float into int</span>
-    evolution = evolution.astype(<span style="color: #ffb86c;">int</span>)
-    <span style="color: #ff79c6;">return</span> evolution
+<pre class="src src-ipython">df = df.rename( columns = {<span style="color: #f1fa8c;">'Tiempo (ms)'</span>: <span style="color: #f1fa8c;">'Tiempo[ms]'</span>, <span style="color: #f1fa8c;">'&#193;ngulo 1,'</span>: <span style="color: #f1fa8c;">'AnguloDeg'</span>} )
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">convert strings to float values</span>
+df[<span style="color: #f1fa8c;">'AnguloDeg'</span>] = df[<span style="color: #f1fa8c;">'AnguloDeg'</span>].replace(<span style="color: #f1fa8c;">'[,]'</span>, <span style="color: #f1fa8c;">'.'</span>, regex=<span style="color: #8be9fd;">True</span>).astype(<span style="color: #ffb86c;">float</span>)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">add radians</span>
+df[<span style="color: #f1fa8c;">'AnguloRad'</span>] = df[<span style="color: #f1fa8c;">'AnguloDeg'</span>].<span style="color: #ffb86c;">apply</span>( <span style="color: #ff79c6;">lambda</span> x : np.deg2rad(x) - <span style="color: #bd93f9; font-weight: bold;">0.5</span>*np.pi)
+
+tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-right">Tiempo[ms]</th>
+<th scope="col" class="org-right">AnguloDeg</th>
+<th scope="col" class="org-right">AnguloRad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">9</td>
+<td class="org-right">59.2896</td>
+<td class="org-right">-0.535997</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">42</td>
+<td class="org-right">59.9823</td>
+<td class="org-right">-0.523907</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">75</td>
+<td class="org-right">61.2375</td>
+<td class="org-right">-0.502001</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-right">108</td>
+<td class="org-right">63.4925</td>
+<td class="org-right">-0.462644</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-right">142</td>
+<td class="org-right">65.3888</td>
+<td class="org-right">-0.429547</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Aiming for an insightful visualisation of this phenomenon, we can easily plot these datapoints. We see that the pendulum&rsquo;s motion is, approximately, a damped harmonic oscillator:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">plt.plot(df[<span style="color: #f1fa8c;">'Tiempo[ms]'</span>], df.AnguloRad, <span style="color: #f1fa8c;">'b.'</span>)
+plt.xlim(<span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">20000</span>)
+plt.show()
+</pre>
+</div>
+
+
+<div id="orga994dfa" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/eaHUrG.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
 </div>
 
 <p>
-Game of life routine
+Now we would like to obtain the frequency at which the pendulum moves. We can
+use the machinery of Fourier transforms to achieve this. The basic idea of a
+Fourier transform is that we can decompose a function \(f\) describing the
+amplitude of a wave over time into the (potentially many) harmonic functions of
+<span class="underline">different frequencies</span> that comprise such a wave. To do this we define a
+complex function \(\hat f\) over a (real) <span class="underline">frequency</span> domain such that its norm on
+the complex plane has local maximum values (intuitively, peak values) whenever
+the input frequency corresponds to the frequency of one of the harmonic
+functions that make up the original function \(f\).
+</p>
+
+<p>
+It turns out that this special complex-valued function \(\hat f : \mathbb{R} \to
+\mathbb{C}\) is described by
+\[ \hat f(k) = \int_{-\infty}^{\infty} f(t) \exp(-2\pi i k t )\,dt; \]
+this integration is performed with respect to a time domain \(t\), and \(k\)
+represents the input frequency of \(\hat f\). This \(\hat f\) function is the
+Fourier transform of \(f\).
+</p>
+
+<p>
+For discrete values, though, we cannot hope to compute an integral, let alone an
+improper integral; instead we take the summation approach: If \(\{a_n\}_{n=0}^m\) are thej
+observed amplitude values at the <span class="underline">evenly spaced times</span>, then we have
+\[ \hat f(k) = \sum_{n=0}^m a_n \exp\left( -2\pi ik \frac{n}{m} \right). \]
+</p>
+
+<p>
+This definition is precisely the one that is implemented in scipy:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">gameOfLife</span>(tmax, N, init=<span style="color: #8be9fd;">None</span>) :
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">initial state of the array</span>
-    states = <span style="color: #ffb86c;">list</span>()
-    <span style="color: #ff79c6;">if</span> init <span style="color: #ff79c6;">is</span> <span style="color: #8be9fd;">None</span> :
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">whenever init is not given, create a random one</span>
-        state = init_state(N)
-        states.append(state)
-    <span style="color: #ff79c6;">else</span> :
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">use the init state if given</span>
-        states.append(init)
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">populate the list with remaining states</span>
-    <span style="color: #ff79c6;">for</span> t <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(tmax) :
-        nth_state = evolution(states[-<span style="color: #bd93f9; font-weight: bold;">1</span>], N)
-        states.append(nth_state)
-    <span style="color: #ff79c6;">return</span> states
+<pre class="src src-ipython"><span style="color: #ff79c6;">from</span> scipy.fft <span style="color: #ff79c6;">import</span> fft, fftfreq
+<span style="color: #8995ba;">''' Fourier transform module '''</span>
 
-time_steps = gameOfLife(<span style="color: #bd93f9; font-weight: bold;">10</span>, <span style="color: #bd93f9; font-weight: bold;">10</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">time step</span>
+t_step = 33E-<span style="color: #bd93f9; font-weight: bold;">3</span>
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">highest summation index</span>
+m = <span style="color: #ffb86c;">len</span>( df[<span style="color: #f1fa8c;">'Tiempo[ms]'</span>] )
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Fourier transform for angle values, defined as an array,</span>
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">f hat computed at approptiate frequencies</span>
+ft = fft(df[<span style="color: #f1fa8c;">'AnguloRad'</span>].values)[:m//<span style="color: #bd93f9; font-weight: bold;">2</span>]
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">frequencies corresponding to the Fourier transform</span>
+frequencies = fftfreq(m, t_step)[:m//<span style="color: #bd93f9; font-weight: bold;">2</span>]
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Graph of the Fourier transform</span>
+plt.plot(frequencies, np.<span style="color: #ffb86c;">abs</span>(ft), <span style="color: #f1fa8c;">'bo'</span>)
+plt.ylabel(<span style="color: #f1fa8c;">"Fourier tranform value"</span>)
+plt.xlabel(<span style="color: #f1fa8c;">"Frequency"</span>)
+plt.xlim(<span style="color: #bd93f9; font-weight: bold;">0.6</span>, <span style="color: #bd93f9; font-weight: bold;">0.75</span>)
+plt.grid()
+plt.show()
 </pre>
 </div>
-<div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">update</span>(i) :
-      ax.clear()
-      ax.imshow(time_steps[i], cmap=<span style="color: #f1fa8c;">"gray"</span>)
-      ax.axis(<span style="color: #f1fa8c;">"off"</span>)
-      <span style="color: #ff79c6;">return</span> ax
 
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">plots</span>
-fig = plt.figure(figsize = (<span style="color: #bd93f9; font-weight: bold;">5</span>,<span style="color: #bd93f9; font-weight: bold;">5</span>))
-ax = plt.subplot(<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>)
-anim = animation.FuncAnimation(fig, update, frames = <span style="color: #ffb86c;">len</span>(time_steps), interval = <span style="color: #bd93f9; font-weight: bold;">400</span>)
-plt.close()
+
+<div id="org1e0ab37" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/iVmLLn.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+
+<p>
+We may then interpolate these datapoints with cubic splines as follows:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">from</span> scipy.interpolate <span style="color: #ff79c6;">import</span> CubicSpline
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">domain and range of Fourier transform</span>
+dom, ran = frequencies, np.<span style="color: #ffb86c;">abs</span>(ft)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">apply the cubic splines method</span>
+cubic_sp = CubicSpline(dom, ran)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">derivative of the interpolating spline</span>
+Dcubic = cubic_sp.derivative()
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">visualise interpolation</span>
+xs = np.linspace(<span style="color: #bd93f9; font-weight: bold;">0.6</span>, <span style="color: #bd93f9; font-weight: bold;">0.75</span>, <span style="color: #bd93f9; font-weight: bold;">1000</span>)
+
+plt.plot(dom, ran, <span style="color: #f1fa8c;">'bo'</span>)
+plt.plot(xs, cubic_sp(xs), <span style="color: #f1fa8c;">'k-'</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">plt.plot(xs, Dcubic(xs), 'k-')</span>
+plt.ylabel(<span style="color: #f1fa8c;">"TF"</span>)
+plt.xlabel(<span style="color: #f1fa8c;">"Frecuencia"</span>)
+plt.xlim(<span style="color: #bd93f9; font-weight: bold;">0.6</span>, <span style="color: #bd93f9; font-weight: bold;">0.75</span>)
+plt.grid()
+plt.show()
 </pre>
 </div>
+
+
+<div id="org38cb3e7" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/f6TVtz.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+
+<p>
+Now we find a root for the derivative of the interpolation, which gives us the
+critical value that we want (the maximum).
+</p>
 <div class="org-src-container">
-<pre class="src src-ipython">anim.save(<span style="color: #f1fa8c;">'/home/juan/Desktop/anim2.gif'</span>, writer=<span style="color: #f1fa8c;">'imagemagick'</span>, fps=<span style="color: #bd93f9; font-weight: bold;">1</span>)
+<pre class="src src-ipython"><span style="color: #ff79c6;">from</span> scipy <span style="color: #ff79c6;">import</span> optimize
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">find the value in which the drivative is 0</span>
+root = optimize.bisect(Dcubic, <span style="color: #bd93f9; font-weight: bold;">0.66</span>, <span style="color: #bd93f9; font-weight: bold;">0.68</span>)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">print the maximum point if the derivative evaluated at it</span>
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">is sufficiently close to 0</span>
+tol = 1e-<span style="color: #bd93f9; font-weight: bold;">5</span>
+<span style="color: #ff79c6;">if</span> <span style="color: #ffb86c;">abs</span>( Dcubic(root) ) &lt; tol :
+    <span style="color: #ff79c6;">print</span>(root)
+<span style="color: #ff79c6;">else</span> :
+    <span style="color: #ff79c6;">print</span>(<span style="color: #f1fa8c;">'failed'</span>)
 </pre>
+</div>
+
+<pre class="example">
+0.6715600030391943
+</pre>
+
+
+<p>
+Thus we can conclude that the frequency at which our pendulum oscillates is approximately \(0.6715\,kHz\).
+</p>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-08-28 Sat 12:38</p>
+<p class="date">Created: 2021-09-03 Fri 22:09</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

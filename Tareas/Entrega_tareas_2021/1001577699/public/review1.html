@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-09-03 Fri 22:06 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Review 1</title>
+<meta name="author" content="Juan David Salcedo Hernández" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/readtheorg.css"/>
+<script type="text/javascript" src="src/lib/js/jquery.min.js"></script>
+<script type="text/javascript" src="src/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="src/readtheorg_theme/js/readtheorg.js"></script>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Review 1</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org118be1d">1. Finding the area of a circular section</a></li>
+<li><a href="#orgea5fcb3">2. Projectile motion with drag</a></li>
+</ul>
+</div>
+</div>
+<p>
+Usual display configurations and global imports:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
+
+<span style="color: #ff79c6;">from</span> scipy <span style="color: #ff79c6;">import</span> optimize, interpolate
+<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">import</span> pandas <span style="color: #ff79c6;">as</span> pd
+<span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
+</pre>
+</div>
+<div id="outline-container-org118be1d" class="outline-2">
+<h2 id="org118be1d"><span class="section-number-2">1</span> Finding the area of a circular section</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Suppose we have a circle of radius \(a\); we wish to use numerical methods to
+find a circular segment whose area is a quarter of such a circle.
+</p>
+
+<p>
+So as to start solving this problem, we must find an expression for the area of
+a circular segment, which may as well be a function of the subtended angle. Taking into
+consideration that the area of a circular region subtending \(\theta\) radians satisfies
+\[ A_1 = \frac{\theta a^2}{2}, \]
+and that the triangle therein inscribed has an area of
+\[ A_2 = \frac{a^2\sin\theta}{2}, \]
+it is relatively straightforward to show that the desired expression is given by
+\(A = A_1 - A_2\), or simply
+\[ A = \frac{a^2}{2} \left(\theta - \sin\theta \right). \]
+By means thereof we define the condition that the area be a quarter of the total
+circle:
+\[ \frac{a^2}{2}(\theta - \sin\theta) = \frac{\pi a^2}{4}, \]
+which yields a function for which we can find a root corresponding to the
+desired \(\theta\) value.
+</p>
+
+<p>
+Let \(f : \mathbb{R} \to \mathbb{R}\) be a real function defined by
+\[ f(\theta) = \frac{1}{2}\left( \theta - \sin x \right) - \frac{\pi}{4}, \]
+then the root of this function will yield the desired \(\theta\) value
+</p>
+
+<p>
+In <code>python</code>, we define this function along with a dataframe containing the independent <code>thetas</code>:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">f = <span style="color: #ff79c6;">lambda</span> x : <span style="color: #bd93f9; font-weight: bold;">0.5</span>*(x - np.sin(x)) - <span style="color: #bd93f9; font-weight: bold;">0.25</span>*np.pi
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">initialisation of the dataframe</span>
+df = pd.DataFrame( {<span style="color: #f1fa8c;">'thetas'</span> : np.linspace(-<span style="color: #bd93f9; font-weight: bold;">2</span>*np.pi, <span style="color: #bd93f9; font-weight: bold;">2</span>*np.pi, <span style="color: #bd93f9; font-weight: bold;">1000</span>)} )
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">populate a new column by applying the funtion</span>
+df[<span style="color: #f1fa8c;">'fs'</span>] = df.<span style="color: #ffb86c;">apply</span>(f, axis = <span style="color: #f1fa8c;">'columns'</span>)
+
+df.head()
+</pre>
+</div>
+
+<pre class="example" id="org2919a85">
+  thetas        fs
+  0 -6.283185 -3.926991
+  1 -6.270606 -3.926991
+  2 -6.258027 -3.926989
+  3 -6.245448 -3.926986
+  4 -6.232870 -3.926980
+</pre>
+
+<p>
+Since we are going to find the root of <code>f</code>, a simple plot comes in handy:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">plt.plot(df.thetas, df.fs)
+plt.grid()
+plt.show()
+</pre>
+</div>
+
+
+<div id="org12be2bc" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/1Gd5aV.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+
+<p>
+We thus see that the root is in some subinterval of \([0,4]\), let us use the
+Newton-Raphson method to approximate the actual value first:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">root = optimize.newton(f, <span style="color: #bd93f9; font-weight: bold;">4</span>)
+root
+</pre>
+</div>
+
+<pre class="example">
+2.3098814600100823
+</pre>
+<p>
+Therefore, whenever the angle is approximately 2.31 radians, the area of the
+circular segment is that of a quarter of the entire circle.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgea5fcb3" class="outline-2">
+<h2 id="orgea5fcb3"><span class="section-number-2">2</span> Projectile motion with drag</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Consider the motion of a projectile upon which a drag force is being exerted by
+the wind. According to a particular mathematical model, the path followed by the
+particle hinges on the wind&rsquo;s velocity and a friction force parameter \(b\).
+</p>
+
+<p>
+Let us define the following boundary conditions:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">v0 = <span style="color: #bd93f9; font-weight: bold;">60</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">m/s; initial projectile speed</span>
+u = v0/<span style="color: #bd93f9; font-weight: bold;">2</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">m/s; wind speed</span>
+
+alpha = np.pi <span style="color: #6272a4;"># </span><span style="color: #6272a4;">wind angle</span>
+theta = np.deg2rad(<span style="color: #bd93f9; font-weight: bold;">45</span>) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">launch angle</span>
+
+b = <span style="color: #bd93f9; font-weight: bold;">0.05</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">friction force parameter</span>
+g = <span style="color: #bd93f9; font-weight: bold;">9.8</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">m/s^2; gravitational acceleration</span>
+
+params = (v0, u, alpha, theta, b, g)
+</pre>
+</div>
+<p>
+Now we write the expressions for the standard position coordinates in 2D space.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">x</span>(t, v0, u, alpha, theta, b, g) :
+    <span style="color: #ff79c6;">return</span> u*t*np.cos(alpha) + b**(-<span style="color: #bd93f9; font-weight: bold;">1</span>)*(v0*np.cos(theta) - u*np.cos(alpha))*(<span style="color: #bd93f9; font-weight: bold;">1</span> - np.exp(-b*t))
+
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">y</span>(t, v0, u, alpha, theta, b, g) :
+    <span style="color: #ff79c6;">return</span> b**(-<span style="color: #bd93f9; font-weight: bold;">1</span>)*(g/b + v0*np.sin(theta) - u*np.sin(alpha))*(<span style="color: #bd93f9; font-weight: bold;">1</span> - np.exp(-b*t)) - (g/b - u*np.sin(alpha))*t
+</pre>
+</div>
+<p>
+We can explicitly compute each position coordinate from an arbitrary set of
+positive time parameters \(t\).
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">initialise a dataframe with time values</span>
+time = { <span style="color: #f1fa8c;">'t'</span>: np.linspace(<span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">10</span>, <span style="color: #bd93f9; font-weight: bold;">1000</span>) }
+df = pd.DataFrame(time)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">add X and Y coordinates</span>
+df[<span style="color: #f1fa8c;">'X'</span>] = df.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> row:
+                   x( row.get(<span style="color: #f1fa8c;">'t'</span>), *params ),
+                   axis = <span style="color: #f1fa8c;">'columns'</span>)
+df[<span style="color: #f1fa8c;">'Y'</span>] = df.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> row:
+                   y( row.get(<span style="color: #f1fa8c;">'t'</span>), *params ),
+                   axis = <span style="color: #f1fa8c;">'columns'</span>)
+df.head()
+</pre>
+</div>
+
+<pre class="example" id="orgfabdac1">
+  t         X         Y
+  0  0.00000  0.000000  0.000000
+  1  0.01001  0.424507  0.424092
+  2  0.02002  0.848652  0.846989
+  3  0.03003  1.272434  1.268694
+  4  0.04004  1.695854  1.689205
+</pre>
+
+<p>
+Let us directly plot the trajectory:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">fig = plt.figure(figsize=(<span style="color: #bd93f9; font-weight: bold;">12</span>,<span style="color: #bd93f9; font-weight: bold;">12</span>))
+fig.subplots_adjust(left=<span style="color: #bd93f9; font-weight: bold;">0.2</span>, wspace=<span style="color: #bd93f9; font-weight: bold;">0.6</span>)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">first set of axes, the X function</span>
+ax1 = plt.subplot2grid((<span style="color: #bd93f9; font-weight: bold;">3</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>), (<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">0</span>))
+ax1.plot(df.t, df.X, label=<span style="color: #f1fa8c;">'X'</span>)
+ax1.set_ylabel(<span style="color: #f1fa8c;">'t'</span>); ax1.set_xlabel(<span style="color: #f1fa8c;">'x(t)'</span>)
+ax1.legend()
+ax1.grid()
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">second set of axes, the Y function</span>
+ax2 = plt.subplot2grid((<span style="color: #bd93f9; font-weight: bold;">3</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>), (<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>))
+ax2.plot(df.t, df.Y, label=<span style="color: #f1fa8c;">'Y'</span>)
+ax2.set_ylabel(<span style="color: #f1fa8c;">'t'</span>); ax2.set_xlabel(<span style="color: #f1fa8c;">'y(t)'</span>)
+ax2.legend()
+ax2.grid()
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">third set of axes, the actual path</span>
+ax3 = plt.subplot2grid((<span style="color: #bd93f9; font-weight: bold;">3</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>), (<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">0</span>), colspan=<span style="color: #bd93f9; font-weight: bold;">2</span>)
+ax3.plot(df.X, df.Y, label=<span style="color: #f1fa8c;">'Path'</span>)
+ax3.plot(np.linspace(<span style="color: #bd93f9; font-weight: bold;">300</span>, <span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">10</span>), <span style="color: #bd93f9; font-weight: bold;">10</span>*[<span style="color: #bd93f9; font-weight: bold;">0</span>], label=<span style="color: #f1fa8c;">'Floor'</span>)
+ax3.set_ylabel(<span style="color: #f1fa8c;">'y'</span>); ax2.set_xlabel(<span style="color: #f1fa8c;">'x'</span>)
+ax3.legend()
+ax3.grid()
+
+plt.show()
+</pre>
+</div>
+
+
+<div id="orgc47bd49" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/6ZFnyj.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+
+<p>
+In order to find the maximum range, we must take \(y(\bar t) = 0\), solve for \(\bar t\), and evaluate \(x(\bar t)\).
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">max_t = optimize.newton(<span style="color: #ff79c6;">lambda</span> t : y(t, *params), <span style="color: #bd93f9; font-weight: bold;">40</span>)
+
+max_range = x(max_t, *params)
+max_range
+</pre>
+</div>
+<p>
+We can plot this point to see that it properly approximates the projectile&rsquo;s range.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">plt.plot(df.X, df.Y)
+plt.plot(max_range, y(max_t, *params), <span style="color: #f1fa8c;">'ro'</span>)
+plt.grid()
+plt.show()
+</pre>
+</div>
+
+
+<div id="org053e6d4" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/cHMsRK.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+<p>
+Now that we have gained some insight into this problem, we may get the maximum
+range as a function of the launch angle, so that we can see how the system
+behaves under different conditions.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #8995ba;">''' Wind projectile class '''</span>
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">x</span>(t, theta, v0=<span style="color: #bd93f9; font-weight: bold;">1</span>, u=<span style="color: #bd93f9; font-weight: bold;">1</span>, alpha=<span style="color: #bd93f9; font-weight: bold;">0.05</span>, b=<span style="color: #bd93f9; font-weight: bold;">0.05</span>, g=<span style="color: #bd93f9; font-weight: bold;">9.8</span>) :
+    <span style="color: #ff79c6;">return</span> u*t*np.cos(alpha) + b**(-<span style="color: #bd93f9; font-weight: bold;">1</span>)*(v0*np.cos(theta) - u*np.cos(alpha))*(<span style="color: #bd93f9; font-weight: bold;">1</span> - np.exp(-b*t))
+
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">y</span>(t, theta, v0=<span style="color: #bd93f9; font-weight: bold;">1</span>, u=<span style="color: #bd93f9; font-weight: bold;">1</span>, alpha=<span style="color: #bd93f9; font-weight: bold;">0.05</span>, b=<span style="color: #bd93f9; font-weight: bold;">0.05</span>, g=<span style="color: #bd93f9; font-weight: bold;">9.8</span>) :
+    <span style="color: #ff79c6;">return</span> b**(-<span style="color: #bd93f9; font-weight: bold;">1</span>)*(g/b + v0*np.sin(theta) - u*np.sin(alpha))*(<span style="color: #bd93f9; font-weight: bold;">1</span> - np.exp(-b*t)) - (g/b - u*np.sin(alpha))*t
+
+thetas = np.deg2rad( np.arange(<span style="color: #bd93f9; font-weight: bold;">10</span>, <span style="color: #bd93f9; font-weight: bold;">91</span>, <span style="color: #bd93f9; font-weight: bold;">5</span>) )
+
+<span style="color: #ff79c6;">class</span> <span style="color: #bd93f9;">windProjectile</span> :
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">__init__</span>(<span style="color: #ff79c6;">self</span>, thetas=thetas , **kwargs) :
+        <span style="color: #8995ba;">''' Attributes of windProjectile object</span>
+<span style="color: #8995ba;">        '''</span>
+        <span style="color: #ff79c6;">self</span>.x = <span style="color: #ff79c6;">lambda</span> t : x(t, thetas, **kwargs)
+        <span style="color: #ff79c6;">self</span>.y = np.array([ <span style="color: #ff79c6;">lambda</span> t : y(t, theta, **kwargs) <span style="color: #ff79c6;">for</span> theta <span style="color: #ff79c6;">in</span> thetas ])
+
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">max_range</span>(<span style="color: #ff79c6;">self</span>, plot=<span style="color: #8be9fd;">True</span>, fit=<span style="color: #8be9fd;">True</span>) :
+        <span style="color: #8995ba;">''' Method to get the maximum range of the projectile</span>
+<span style="color: #8995ba;">        '''</span>
+        opt       = np.vectorize(optimize.newton)
+        max_time  = opt(<span style="color: #ff79c6;">self</span>.y, <span style="color: #bd93f9; font-weight: bold;">40</span>)
+        max_range = <span style="color: #ff79c6;">self</span>.x(max_time)
+
+        <span style="color: #ff79c6;">if</span> plot :
+            plt.plot(thetas, max_range, <span style="color: #f1fa8c;">'k.'</span>)
+            <span style="color: #ff79c6;">if</span> fit :
+                trend_poly = interpolate.lagrange(thetas, max_range)
+                X = np.linspace(thetas[<span style="color: #bd93f9; font-weight: bold;">0</span>], thetas[-<span style="color: #bd93f9; font-weight: bold;">1</span>], <span style="color: #bd93f9; font-weight: bold;">100</span>)
+                plt.plot(X, trend_poly(X), <span style="color: #f1fa8c;">'b-'</span>)
+            plt.grid()
+            plt.show()
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-ipython">v0 = <span style="color: #bd93f9; font-weight: bold;">60</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">m/s; initial projectile speed</span>
+u = v0/<span style="color: #bd93f9; font-weight: bold;">2</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">m/s; wind speed</span>
+
+alpha = np.pi <span style="color: #6272a4;"># </span><span style="color: #6272a4;">wind angle</span>
+theta = np.deg2rad(<span style="color: #bd93f9; font-weight: bold;">45</span>) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">launch angle</span>
+
+b = <span style="color: #bd93f9; font-weight: bold;">0.05</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">friction force parameter</span>
+g = <span style="color: #bd93f9; font-weight: bold;">9.8</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">m/s^2; gravitational acceleration</span>
+
+params = {<span style="color: #f1fa8c;">'v0'</span>: v0, <span style="color: #f1fa8c;">'u'</span>: u, <span style="color: #f1fa8c;">'alpha'</span>: alpha, <span style="color: #f1fa8c;">'b'</span>: b, <span style="color: #f1fa8c;">'g'</span>: g}
+
+ls = windProjectile(**params)
+ls.max_range()
+</pre>
+</div>
+
+
+<div id="org242e301" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/Jsx9Wu.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Juan David Salcedo Hernández</p>
+<p class="date">Created: 2021-09-03 Fri 22:06</p>
+<p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
+</div>
+</body>
+</html>

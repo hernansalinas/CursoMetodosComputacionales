@@ -157,6 +157,9 @@ This definition is precisely the one that is implemented in scipy:
 from scipy.fft import fft, fftfreq
 ''' Fourier transform module '''
 
+# time step
+t_step = 33E-3
+
 # highest summation index
 m = len( df['Tiempo[ms]'] )
 
