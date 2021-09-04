@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-08-27 Fri 22:37 -->
+<!-- 2021-09-03 Fri 21:39 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Assignment06</title>
+<title>Assignment08</title>
 <meta name="author" content="Juan David Salcedo Hernández" />
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
@@ -193,12 +193,6 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/htmlize.css"/>
-<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/readtheorg.css"/>
-<script type="text/javascript" src="src/lib/js/jquery.min.js"></script>
-<script type="text/javascript" src="src/lib/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="src/lib/js/jquery.stickytableheaders.min.js"></script>
-<script type="text/javascript" src="src/readtheorg_theme/js/readtheorg.js"></script>
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
@@ -221,338 +215,79 @@
     /*]]>*///-->
 // @license-end
 </script>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
-</script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="content">
-<h1 class="title">Assignment06</h1>
-<div id="table-of-contents">
-<h2>Table of Contents</h2>
-<div id="text-table-of-contents">
-<ul>
-<li><a href="#orga775544">1. First problem: Finding the area of a circular section</a></li>
-<li><a href="#orgdf5ffa7">2. Projectile motion with drag</a></li>
-</ul>
+<h1 class="title">Assignment08</h1>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">import</span> scipy <span style="color: #ff79c6;">as</span> sc
+<span style="color: #ff79c6;">import</span> sympy <span style="color: #ff79c6;">as</span> sp
+<span style="color: #ff79c6;">from</span> scipy <span style="color: #ff79c6;">import</span> optimize
+</pre>
 </div>
-</div>
+
 <p>
-Usual display configurations and global imports:
+Class for finding approximate integral values and bounding errors in numerical integration.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">closed_set_max</span>(func, variable, lower_bound, upper_bound) :
+    <span style="color: #8995ba;">''' Find the maximum of a smooth funtion on an open interval '''</span>
+    d_func = sp.diff(func, variable, <span style="color: #bd93f9; font-weight: bold;">1</span>)
+    critical = sp.solveset(d_func, variable,
+                           domain=sp.Interval(lower_bound, upper_bound))
+    maximum = sp.Max(func.subs(variable, lower_bound),
+                     func.subs(variable, upper_bound),
+                     *[func.subs(variable, i) <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> critical])
+    <span style="color: #ff79c6;">return</span> <span style="color: #ffb86c;">float</span>(maximum)
 
-<span class="org-keyword">from</span> scipy <span class="org-keyword">import</span> optimize, interpolate
-<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
-<span class="org-keyword">import</span> pandas <span class="org-keyword">as</span> pd
-<span class="org-keyword">import</span> matplotlib.pyplot <span class="org-keyword">as</span> plt
+<span style="color: #ff79c6;">class</span> <span style="color: #bd93f9;">Function</span> :
+    <span style="color: #8995ba;">''' Properties of a $C^{\infty}$ function. Class for integration. '''</span>
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">__init__</span>(<span style="color: #ff79c6;">self</span>, expression, variable, a=<span style="color: #bd93f9; font-weight: bold;">0</span>, b=<span style="color: #bd93f9; font-weight: bold;">1</span>) :
+        <span style="color: #8995ba;">''' the mathematical expression must be a sympy object '''</span>
+        <span style="color: #ff79c6;">self</span>.numerical = sp.lambdify(variable, expression, <span style="color: #f1fa8c;">'numpy'</span>)
+        <span style="color: #ff79c6;">self</span>.symbol = variable
+        <span style="color: #ff79c6;">self</span>.symbolic = expression
+        <span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b = a, b
+
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">simpson_partition</span>(<span style="color: #ff79c6;">self</span>, epsilon=<span style="color: #bd93f9; font-weight: bold;">0.001</span>) :
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the fourth derivative with sympy</span>
+        fourth_deriv = sp.diff(<span style="color: #ff79c6;">self</span>.symbolic, <span style="color: #ff79c6;">self</span>.symbol, <span style="color: #bd93f9; font-weight: bold;">4</span>)
+
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">find an absolute maximum for the fourth derivative on the given domain</span>
+        maximum = closed_set_max(fourth_deriv, <span style="color: #ff79c6;">self</span>.symbol, <span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b)
+
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the number of intervals</span>
+        <span style="color: #ff79c6;">return</span> np.ceil( ((maximum*(<span style="color: #ff79c6;">self</span>.b - <span style="color: #ff79c6;">self</span>.a)**<span style="color: #bd93f9; font-weight: bold;">5</span>)/(epsilon*<span style="color: #bd93f9; font-weight: bold;">180</span>*<span style="color: #bd93f9; font-weight: bold;">2</span>**<span style="color: #bd93f9; font-weight: bold;">4</span>))**<span style="color: #bd93f9; font-weight: bold;">0.25</span> )
+
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">simpson</span>(<span style="color: #ff79c6;">self</span>, epsilon=<span style="color: #bd93f9; font-weight: bold;">0.001</span>) :
+        N = <span style="color: #ff79c6;">self</span>.simpson_partition(epsilon)
+        n_nodos = <span style="color: #ffb86c;">int</span>( np.ceil(<span style="color: #bd93f9; font-weight: bold;">2</span>*N + <span style="color: #bd93f9; font-weight: bold;">1</span>) ) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">(N+1 extremos de subintervalos) + (N puntos medios)</span>
+        x = np.linspace(<span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b, n_nodos)
+
+        x_impar = x[<span style="color: #bd93f9; font-weight: bold;">1</span>: :<span style="color: #bd93f9; font-weight: bold;">2</span>] <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Nodos con coordenada impar (ptos medios)</span>
+        x_par = x[<span style="color: #bd93f9; font-weight: bold;">2</span>:n_nodos-<span style="color: #bd93f9; font-weight: bold;">1</span>:<span style="color: #bd93f9; font-weight: bold;">2</span>] <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Nodos con coordenada par (salvo e</span>
+
+        h = (<span style="color: #ff79c6;">self</span>.b - <span style="color: #ff79c6;">self</span>.a)/(<span style="color: #bd93f9; font-weight: bold;">2</span>*N) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Distancia entre dos nodos de integraci&#243;n</span>
+        cuad = h/<span style="color: #bd93f9; font-weight: bold;">3</span>*(<span style="color: #ff79c6;">self</span>.numerical(<span style="color: #ff79c6;">self</span>.a) + <span style="color: #bd93f9; font-weight: bold;">2</span>*<span style="color: #ffb86c;">sum</span>(<span style="color: #ff79c6;">self</span>.numerical(x_par)) + <span style="color: #bd93f9; font-weight: bold;">4</span>*<span style="color: #ffb86c;">sum</span>(<span style="color: #ff79c6;">self</span>.numerical(x_impar)) + <span style="color: #ff79c6;">self</span>.numerical(<span style="color: #ff79c6;">self</span>.b))
+        <span style="color: #ff79c6;">return</span> f<span style="color: #f1fa8c;">'Value = {cuad} +/- {epsilon}'</span>
+
+x = sp.Symbol(<span style="color: #f1fa8c;">'x'</span>)
+f = Function(sp.log(<span style="color: #bd93f9; font-weight: bold;">1</span> + x**<span style="color: #bd93f9; font-weight: bold;">2</span>), x)
+
+f.simpson(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>)
 </pre>
 </div>
-<div id="outline-container-orga775544" class="outline-2">
-<h2 id="orga775544"><span class="section-number-2">1</span> First problem: Finding the area of a circular section</h2>
-<div class="outline-text-2" id="text-1">
-<p>
-Regard a circle of radius \(a\), and suppose that we want to use numerical methods to
-find a circular segment whose area is a quarter of it.
-</p>
 
-<p>
-So as to start solving this problem, we must find an expression for the area of
-a circular segment as a function of the subtended angle. Taking into
-consideration that a circular region subtending an angle of \(\theta\) radians has
-area
-\[
-A_1 = \frac{\theta a^2}{2},
-\]
-and that the triangle therein has an area
-\[
-A_2 = \frac{a^2\sin\theta}{2},
-\]
-it is relatively straightforward to show that the desired expression is given by
-\(A = A_1 - A_2\), or simply
-\[
-A = \frac{a^2}{2} \left(\theta - \sin\theta \right).
-\]
-By means thereof we define the condition that the area be a quarter of the total
-circle:
-\[
-\frac{a^2}{2}(\theta - \sin\theta) = \frac{\pi a^2}{4},
-\]
-which yields a function for which we can find a root corresponding to the
-desired \(\theta\) value:
-</p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">f</span> = <span class="org-keyword">lambda</span> x : <span class="org-highlight-numbers-number">0.5</span>*(x - np.sin(x)) - <span class="org-highlight-numbers-number">0.25</span>*np.pi
-
-<span class="org-variable-name">df</span> = pd.DataFrame( {<span class="org-string">'thetas'</span> : np.linspace(-<span class="org-highlight-numbers-number">2</span>*np.pi, <span class="org-highlight-numbers-number">2</span>*np.pi, <span class="org-highlight-numbers-number">1000</span>)} )
-<span class="org-variable-name">df</span>[<span class="org-string">'fs'</span>] = df.<span class="org-builtin">apply</span>(f, axis = <span class="org-string">'columns'</span>)
-
-df.head()
+<pre class="src src-ipython">g = Function(x**<span style="color: #bd93f9; font-weight: bold;">5</span>, x, a=<span style="color: #bd93f9; font-weight: bold;">1</span>, b=<span style="color: #bd93f9; font-weight: bold;">12</span>)
+g.simpson(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>)
 </pre>
-</div>
-
-<pre class="example" id="org8b67404">
-  thetas        fs
-  0 -6.283185 -3.926991
-  1 -6.270606 -3.926991
-  2 -6.258027 -3.926989
-  3 -6.245448 -3.926986
-  4 -6.232870 -3.926980
-</pre>
-
-<p>
-Since we are going to find the root of <code>f</code>, a simple plot comes in handy:
-</p>
-<div class="org-src-container">
-<pre class="src src-ipython">plt.plot(df.thetas, df.fs)
-plt.grid()
-plt.show()
-</pre>
-</div>
-
-
-<div id="org4cb27e6" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/kyoHgq.svg" class="org-svg">
-Sorry, your browser does not support SVG.</object>
-</p>
-</div>
-
-<p>
-We see that the root is in some subinterval of \([0,4]\), let us use the
-Newton-Raphson method first:
-</p>
-<div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">root</span> = optimize.newton( f, <span class="org-highlight-numbers-number">4</span> )
-root
-</pre>
-</div>
-<p>
-Therefore, whenever the angle is approximately 2.31 radians, the area of the
-circular segment is that of a quarter of the entire circle.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgdf5ffa7" class="outline-2">
-<h2 id="orgdf5ffa7"><span class="section-number-2">2</span> Projectile motion with drag</h2>
-<div class="outline-text-2" id="text-2">
-<p>
-Consider the motion of a projectile upon which a drag force is being exerted y
-the wind. According to a particular mathematical model, the path followed by the
-particle hinges on the wind&rsquo;s velocity and a friction force parameter \(b\).
-</p>
-
-<p>
-Let us define the following boundary conditions:
-</p>
-<div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">v0</span> = <span class="org-highlight-numbers-number">60</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s; initial projectile speed</span>
-<span class="org-variable-name">u</span> = v0/<span class="org-highlight-numbers-number">2</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s; wind speed</span>
-
-<span class="org-variable-name">alpha</span> = np.pi <span class="org-comment-delimiter"># </span><span class="org-comment">wind angle</span>
-<span class="org-variable-name">theta</span> = np.deg2rad(<span class="org-highlight-numbers-number">45</span>) <span class="org-comment-delimiter"># </span><span class="org-comment">launch angle</span>
-
-<span class="org-variable-name">b</span> = <span class="org-highlight-numbers-number">0.05</span> <span class="org-comment-delimiter"># </span><span class="org-comment">friction force parameter</span>
-<span class="org-variable-name">g</span> = <span class="org-highlight-numbers-number">9.8</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s^2; gravitational acceleration</span>
-
-<span class="org-variable-name">params</span> = (v0, u, alpha, theta, b, g)
-</pre>
-</div>
-<p>
-Now we write the expressions for the standard position coordinates in 2D space.
-</p>
-<div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">x</span>(t, v0, u, alpha, theta, b, g) :
-    <span class="org-keyword">return</span> u*t*np.cos(alpha) + b**(-<span class="org-highlight-numbers-number">1</span>)*(v0*np.cos(theta) - u*np.cos(alpha))*(<span class="org-highlight-numbers-number">1</span> - np.exp(-b*t))
-
-<span class="org-keyword">def</span> <span class="org-function-name">y</span>(t, v0, u, alpha, theta, b, g) :
-    <span class="org-keyword">return</span> b**(-<span class="org-highlight-numbers-number">1</span>)*(g/b + v0*np.sin(theta) - u*np.sin(alpha))*(<span class="org-highlight-numbers-number">1</span> - np.exp(-b*t)) - (g/b - u*np.sin(alpha))*t
-</pre>
-</div>
-<p>
-We can explicitly compute each position coordinate from an arbitrary set of
-positive time parameters \(t\).
-</p>
-<div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">time</span> = { <span class="org-string">'t'</span>: np.linspace(<span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">10</span>, <span class="org-highlight-numbers-number">1000</span>) }
-<span class="org-variable-name">df</span> = pd.DataFrame(time)
-
-<span class="org-comment-delimiter"># </span><span class="org-comment">add X and Y coordinates</span>
-<span class="org-variable-name">df</span>[<span class="org-string">'X'</span>] = df.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> row:
-                   x( row.get(<span class="org-string">'t'</span>), *params ),
-                   axis = <span class="org-string">'columns'</span>)
-<span class="org-variable-name">df</span>[<span class="org-string">'Y'</span>] = df.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> row:
-                   y( row.get(<span class="org-string">'t'</span>), *params ),
-                   axis = <span class="org-string">'columns'</span>)
-df.head()
-</pre>
-</div>
-
-<pre class="example" id="org0eba5c4">
-  t         X         Y
-  0  0.00000  0.000000  0.000000
-  1  0.01001  0.424507  0.424092
-  2  0.02002  0.848652  0.846989
-  3  0.03003  1.272434  1.268694
-  4  0.04004  1.695854  1.689205
-</pre>
-
-<p>
-Let us directly plot the trajectory:
-</p>
-<div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">fig</span> = plt.figure(figsize=(<span class="org-highlight-numbers-number">12</span>,<span class="org-highlight-numbers-number">12</span>))
-fig.subplots_adjust(left=<span class="org-highlight-numbers-number">0.2</span>, wspace=<span class="org-highlight-numbers-number">0.6</span>)
-
-<span class="org-comment-delimiter"># </span><span class="org-comment">first set of axes, the X function</span>
-<span class="org-variable-name">ax1</span> = plt.subplot2grid((<span class="org-highlight-numbers-number">3</span>,<span class="org-highlight-numbers-number">2</span>), (<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">0</span>))
-ax1.plot(df.t, df.X, label=<span class="org-string">'X'</span>)
-ax1.set_ylabel(<span class="org-string">'t'</span>); ax1.set_xlabel(<span class="org-string">'x(t)'</span>)
-ax1.legend()
-ax1.grid()
-
-<span class="org-comment-delimiter"># </span><span class="org-comment">second set of axes, the Y function</span>
-<span class="org-variable-name">ax2</span> = plt.subplot2grid((<span class="org-highlight-numbers-number">3</span>,<span class="org-highlight-numbers-number">2</span>), (<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">1</span>))
-ax2.plot(df.t, df.Y, label=<span class="org-string">'Y'</span>)
-ax2.set_ylabel(<span class="org-string">'t'</span>); ax2.set_xlabel(<span class="org-string">'y(t)'</span>)
-ax2.legend()
-ax2.grid()
-
-<span class="org-comment-delimiter"># </span><span class="org-comment">third set of axes, the actual path</span>
-<span class="org-variable-name">ax3</span> = plt.subplot2grid((<span class="org-highlight-numbers-number">3</span>,<span class="org-highlight-numbers-number">2</span>), (<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">0</span>), colspan=<span class="org-highlight-numbers-number">2</span>)
-ax3.plot(df.X, df.Y, label=<span class="org-string">'Path'</span>)
-ax3.plot(np.linspace(<span class="org-highlight-numbers-number">300</span>, <span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">10</span>), <span class="org-highlight-numbers-number">10</span>*[<span class="org-highlight-numbers-number">0</span>], label=<span class="org-string">'Floor'</span>)
-ax3.set_ylabel(<span class="org-string">'y'</span>); ax2.set_xlabel(<span class="org-string">'x'</span>)
-ax3.legend()
-ax3.grid()
-
-plt.show()
-</pre>
-</div>
-
-
-<div id="orgc43d248" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/4eAmJ7.svg" class="org-svg">
-Sorry, your browser does not support SVG.</object>
-</p>
-</div>
-
-<p>
-In order to find the maximum range, we must take \(y(\bar t) = 0\), solve for \(\bar t\), and evaluate \(x(\bar t)\).
-</p>
-<div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">max_t</span> = optimize.newton(<span class="org-keyword">lambda</span> t : y(t, *params), <span class="org-highlight-numbers-number">40</span>)
-
-<span class="org-variable-name">max_range</span> = x(max_t, *params)
-max_range
-</pre>
-</div>
-<p>
-We can plot this point to see that it properly approximates the projectile&rsquo;s range.
-</p>
-<div class="org-src-container">
-<pre class="src src-ipython">plt.plot(df.X, df.Y)
-plt.plot(max_range, y(max_t, *params), <span class="org-string">'ro'</span>)
-plt.grid()
-plt.show()
-</pre>
-</div>
-
-
-<div id="org838b596" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/pHrlpW.svg" class="org-svg">
-Sorry, your browser does not support SVG.</object>
-</p>
-</div>
-<p>
-Now that we have gained some insight into this problem, we may get the maximum
-range as a function of the launch angle, so that we can see how the system
-behaves under different conditions.
-</p>
-<div class="org-src-container">
-<pre class="src src-ipython"><span class="org-doc">''' Wind projectile class</span>
-<span class="org-doc">'''</span>
-<span class="org-keyword">def</span> <span class="org-function-name">x</span>(t, theta, v0=<span class="org-highlight-numbers-number">1</span>, u=<span class="org-highlight-numbers-number">1</span>, alpha=<span class="org-highlight-numbers-number">0.05</span>, b=<span class="org-highlight-numbers-number">0.05</span>, g=<span class="org-highlight-numbers-number">9.8</span>) :
-    <span class="org-keyword">return</span> u*t*np.cos(alpha) + b**(-<span class="org-highlight-numbers-number">1</span>)*(v0*np.cos(theta) - u*np.cos(alpha))*(<span class="org-highlight-numbers-number">1</span> - np.exp(-b*t))
-
-<span class="org-keyword">def</span> <span class="org-function-name">y</span>(t, theta, v0=<span class="org-highlight-numbers-number">1</span>, u=<span class="org-highlight-numbers-number">1</span>, alpha=<span class="org-highlight-numbers-number">0.05</span>, b=<span class="org-highlight-numbers-number">0.05</span>, g=<span class="org-highlight-numbers-number">9.8</span>) :
-    <span class="org-keyword">return</span> b**(-<span class="org-highlight-numbers-number">1</span>)*(g/b + v0*np.sin(theta) - u*np.sin(alpha))*(<span class="org-highlight-numbers-number">1</span> - np.exp(-b*t)) - (g/b - u*np.sin(alpha))*t
-
-<span class="org-variable-name">thetas</span> = np.deg2rad( np.arange(<span class="org-highlight-numbers-number">10</span>, <span class="org-highlight-numbers-number">91</span>, <span class="org-highlight-numbers-number">5</span>) )
-
-<span class="org-keyword">class</span> <span class="org-type">windProjectile</span> :
-    <span class="org-keyword">def</span> <span class="org-function-name">__init__</span>(<span class="org-keyword">self</span>, thetas=thetas , **kwargs) :
-        <span class="org-doc">''' Attributes of windProjectile object</span>
-<span class="org-doc">        '''</span>
-        <span class="org-keyword">self</span>.x = <span class="org-keyword">lambda</span> t : x(t, thetas, **kwargs)
-        <span class="org-keyword">self</span>.y = np.array([ <span class="org-keyword">lambda</span> t : y(t, theta, **kwargs) <span class="org-keyword">for</span> theta <span class="org-keyword">in</span> thetas ])
-
-    <span class="org-keyword">def</span> <span class="org-function-name">max_range</span>(<span class="org-keyword">self</span>, plot=<span class="org-constant">True</span>, fit=<span class="org-constant">True</span>) :
-        <span class="org-doc">''' Method to get the maximum range of the projectile</span>
-<span class="org-doc">        '''</span>
-        <span class="org-variable-name">opt</span>       = np.vectorize(optimize.newton)
-        <span class="org-variable-name">max_time</span>  = opt(<span class="org-keyword">self</span>.y, <span class="org-highlight-numbers-number">40</span>)
-        <span class="org-variable-name">max_range</span> = <span class="org-keyword">self</span>.x(max_time)
-
-        <span class="org-keyword">if</span> plot :
-            plt.plot(thetas, max_range, <span class="org-string">'k.'</span>)
-            <span class="org-keyword">if</span> fit :
-                <span class="org-variable-name">trend_poly</span> = interpolate.lagrange(thetas, max_range)
-                <span class="org-variable-name">X</span> = np.linspace(thetas[<span class="org-highlight-numbers-number">0</span>], thetas[-<span class="org-highlight-numbers-number">1</span>], <span class="org-highlight-numbers-number">100</span>)
-                plt.plot(X, trend_poly(X), <span class="org-string">'b-'</span>)
-            plt.grid()
-            plt.show()
-</pre>
-</div>
-<div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">v0</span> = <span class="org-highlight-numbers-number">60</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s; initial projectile speed</span>
-<span class="org-variable-name">u</span> = v0/<span class="org-highlight-numbers-number">2</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s; wind speed</span>
-
-<span class="org-variable-name">alpha</span> = np.pi <span class="org-comment-delimiter"># </span><span class="org-comment">wind angle</span>
-<span class="org-variable-name">theta</span> = np.deg2rad(<span class="org-highlight-numbers-number">45</span>) <span class="org-comment-delimiter"># </span><span class="org-comment">launch angle</span>
-
-<span class="org-variable-name">b</span> = <span class="org-highlight-numbers-number">0.05</span> <span class="org-comment-delimiter"># </span><span class="org-comment">friction force parameter</span>
-<span class="org-variable-name">g</span> = <span class="org-highlight-numbers-number">9.8</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s^2; gravitational acceleration</span>
-
-<span class="org-variable-name">params</span> = {<span class="org-string">'v0'</span>: v0, <span class="org-string">'u'</span>: u, <span class="org-string">'alpha'</span>: alpha, <span class="org-string">'b'</span>: b, <span class="org-string">'g'</span>: g}
-
-<span class="org-variable-name">ls</span> = windProjectile(**params)
-ls.max_range()
-</pre>
-</div>
-
-
-<div id="org014145c" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/N96Pc9.svg" class="org-svg">
-Sorry, your browser does not support SVG.</object>
-</p>
-</div>
-</div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-08-27 Fri 22:37</p>
+<p class="date">Created: 2021-09-03 Fri 21:39</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

@@ -1,0 +1,283 @@
+#+TITLE: Review of concepts 1
+#+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
+
+Usual display configurations and global imports:
+#+begin_src ipython :session asession :exports code :results raw drawer
+%config InlineBackend.figure_format = 'svg'
+
+from scipy import optimize, interpolate
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[14]:
+:end:
+* Finding the area of a circular section
+Suppose we have a circle of radius $a$; we wish to use numerical methods to
+find a circular segment whose area is a quarter of such a circle.
+
+So as to start solving this problem, we must find an expression for the area of
+a circular segment, which may as well be a function of the subtended angle. Taking into
+consideration that the area of a circular region subtending $\theta$ radians satisfies
+\[ A_1 = \frac{\theta a^2}{2}, \]
+and that the triangle therein inscribed has an area of
+\[ A_2 = \frac{a^2\sin\theta}{2}, \]
+it is relatively straightforward to show that the desired expression is given by
+$A = A_1 - A_2$, or simply
+\[ A = \frac{a^2}{2} \left(\theta - \sin\theta \right). \]
+By means thereof we define the condition that the area be a quarter of the total
+circle:
+\[ \frac{a^2}{2}(\theta - \sin\theta) = \frac{\pi a^2}{4}, \]
+which yields a function for which we can find a root corresponding to the
+desired $\theta$ value.
+
+Let $f : \mathbb{R} \to \mathbb{R}$ be a real function defined by
+\[ f(\theta) = \frac{1}{2}\left( \theta - \sin x \right) - \frac{\pi}{4}, \]
+then the root of this function will yield the desired $\theta$ value
+
+In ~python~, we define this function along with a dataframe containing the independent ~thetas~:
+#+begin_src ipython :session asession :exports both :results raw drawer
+f = lambda x : 0.5*(x - np.sin(x)) - 0.25*np.pi
+
+# initialisation of the dataframe
+df = pd.DataFrame( {'thetas' : np.linspace(-2*np.pi, 2*np.pi, 1000)} )
+# populate a new column by applying the funtion
+df['fs'] = df.apply(f, axis = 'columns')
+
+df.head()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[2]:
+#+BEGIN_EXAMPLE
+  thetas        fs
+  0 -6.283185 -3.926991
+  1 -6.270606 -3.926991
+  2 -6.258027 -3.926989
+  3 -6.245448 -3.926986
+  4 -6.232870 -3.926980
+#+END_EXAMPLE
+:end:
+
+Since we are going to find the root of ~f~, a simple plot comes in handy:
+#+begin_src ipython :session asession :exports both :results raw drawer
+plt.plot(df.thetas, df.fs)
+plt.grid()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[3]:
+[[file:./obipy-resources/DNRNCJ.svg]]
+:end:
+
+We thus see that the root is in some subinterval of $[0,4]$, let us use the
+Newton-Raphson method to approximate the actual value first:
+#+begin_src ipython :session asession :results raw drawer :exports both
+root = optimize.newton(f, 4)
+root
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[24]:
+: 2.3098814600100823
+:end:
+Therefore, whenever the angle is approximately 2.31 radians, the area of the
+circular segment is that of a quarter of the entire circle.
+
+* Projectile motion with drag
+Consider the motion of a projectile upon which a drag force is being exerted by
+the wind. According to a particular mathematical model, the path followed by the
+particle hinges on the wind's velocity and a friction force parameter $b$.
+
+Let us define the following boundary conditions:
+#+begin_src ipython :session asession :results raw drawer
+v0 = 60 # m/s; initial projectile speed
+u = v0/2 # m/s; wind speed
+
+alpha = np.pi # wind angle
+theta = np.deg2rad(45) # launch angle
+
+b = 0.05 # friction force parameter
+g = 9.8 # m/s^2; gravitational acceleration
+
+params = (v0, u, alpha, theta, b, g)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[7]:
+:end:
+Now we write the expressions for the standard position coordinates in 2D space.
+#+begin_src ipython :session asession :results raw drawer
+def x(t, v0, u, alpha, theta, b, g) :
+    return u*t*np.cos(alpha) + b**(-1)*(v0*np.cos(theta) - u*np.cos(alpha))*(1 - np.exp(-b*t))
+
+def y(t, v0, u, alpha, theta, b, g) :
+    return b**(-1)*(g/b + v0*np.sin(theta) - u*np.sin(alpha))*(1 - np.exp(-b*t)) - (g/b - u*np.sin(alpha))*t
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[8]:
+:end:
+We can explicitly compute each position coordinate from an arbitrary set of
+positive time parameters $t$.
+#+begin_src ipython :session asession :exports both :results raw drawer
+# initialise a dataframe with time values
+time = { 't': np.linspace(0, 10, 1000) }
+df = pd.DataFrame(time)
+
+# add X and Y coordinates
+df['X'] = df.apply(lambda row:
+                   x( row.get('t'), *params ),
+                   axis = 'columns')
+df['Y'] = df.apply(lambda row:
+                   y( row.get('t'), *params ),
+                   axis = 'columns')
+df.head()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[16]:
+#+BEGIN_EXAMPLE
+  t         X         Y
+  0  0.00000  0.000000  0.000000
+  1  0.01001  0.424507  0.424092
+  2  0.02002  0.848652  0.846989
+  3  0.03003  1.272434  1.268694
+  4  0.04004  1.695854  1.689205
+#+END_EXAMPLE
+:end:
+
+Let us directly plot the trajectory:
+#+begin_src ipython :session asession :exports both :results raw drawer
+fig = plt.figure(figsize=(12,12))
+fig.subplots_adjust(left=0.2, wspace=0.6)
+
+# first set of axes, the X function
+ax1 = plt.subplot2grid((3,2), (0,0))
+ax1.plot(df.t, df.X, label='X')
+ax1.set_ylabel('t'); ax1.set_xlabel('x(t)')
+ax1.legend()
+ax1.grid()
+
+# second set of axes, the Y function
+ax2 = plt.subplot2grid((3,2), (0,1))
+ax2.plot(df.t, df.Y, label='Y')
+ax2.set_ylabel('t'); ax2.set_xlabel('y(t)')
+ax2.legend()
+ax2.grid()
+
+# third set of axes, the actual path
+ax3 = plt.subplot2grid((3,2), (1,0), colspan=2)
+ax3.plot(df.X, df.Y, label='Path')
+ax3.plot(np.linspace(300, 0, 10), 10*[0], label='Floor')
+ax3.set_ylabel('y'); ax2.set_xlabel('x')
+ax3.legend()
+ax3.grid()
+
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[17]:
+[[file:./obipy-resources/6werTl.svg]]
+:end:
+
+In order to find the maximum range, we must take $y(\bar t) = 0$, solve for $\bar t$, and evaluate $x(\bar t)$.
+#+begin_src ipython :session asession :results raw drawer
+max_t = optimize.newton(lambda t : y(t, *params), 40)
+
+max_range = x(max_t, *params)
+max_range
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[20]:
+: 239.60614945520726
+:end:
+We can plot this point to see that it properly approximates the projectile's range.
+#+begin_src ipython :session asession :exports both :results raw drawer
+plt.plot(df.X, df.Y)
+plt.plot(max_range, y(max_t, *params), 'ro')
+plt.grid()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[24]:
+[[file:./obipy-resources/Faheg2.svg]]
+:end:
+Now that we have gained some insight into this problem, we may get the maximum
+range as a function of the launch angle, so that we can see how the system
+behaves under different conditions.
+#+begin_src ipython :session asession :results raw drawer
+''' Wind projectile class '''
+def x(t, theta, v0=1, u=1, alpha=0.05, b=0.05, g=9.8) :
+    return u*t*np.cos(alpha) + b**(-1)*(v0*np.cos(theta) - u*np.cos(alpha))*(1 - np.exp(-b*t))
+
+def y(t, theta, v0=1, u=1, alpha=0.05, b=0.05, g=9.8) :
+    return b**(-1)*(g/b + v0*np.sin(theta) - u*np.sin(alpha))*(1 - np.exp(-b*t)) - (g/b - u*np.sin(alpha))*t
+
+thetas = np.deg2rad( np.arange(10, 91, 5) )
+
+class windProjectile :
+    def __init__(self, thetas=thetas , **kwargs) :
+        ''' Attributes of windProjectile object
+        '''
+        self.x = lambda t : x(t, thetas, **kwargs)
+        self.y = np.array([ lambda t : y(t, theta, **kwargs) for theta in thetas ])
+
+    def max_range(self, plot=True, fit=True) :
+        ''' Method to get the maximum range of the projectile
+        '''
+        opt       = np.vectorize(optimize.newton)
+        max_time  = opt(self.y, 40)
+        max_range = self.x(max_time)
+
+        if plot :
+            plt.plot(thetas, max_range, 'k.')
+            if fit :
+                trend_poly = interpolate.lagrange(thetas, max_range)
+                X = np.linspace(thetas[0], thetas[-1], 100)
+                plt.plot(X, trend_poly(X), 'b-')
+            plt.grid()
+            plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[17]:
+:end:
+#+begin_src ipython :session asession :exports both :results raw drawer
+v0 = 60 # m/s; initial projectile speed
+u = v0/2 # m/s; wind speed
+
+alpha = np.pi # wind angle
+theta = np.deg2rad(45) # launch angle
+
+b = 0.05 # friction force parameter
+g = 9.8 # m/s^2; gravitational acceleration
+
+params = {'v0': v0, 'u': u, 'alpha': alpha, 'b': b, 'g': g}
+
+ls = windProjectile(**params)
+ls.max_range()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[18]:
+[[file:./obipy-resources/UtergQ.svg]]
+:end:

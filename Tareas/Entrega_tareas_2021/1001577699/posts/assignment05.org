@@ -1,16 +1,18 @@
 #+TITLE: Assignment05
 #+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
 
-John Conway's game of life.
-
-Imports:
-#+begin_src ipython :session asession :exports code :results raw drawer
+Usual display configurations and global imports:
+#+begin_src ipython :session asession :results raw drawer
 %config InlineBackend.figure_format = 'svg'
 
 import numpy as np
+import sympy as sp
+import scipy as sc
+# from scipy import init_printing
+import pandas as pd
 import matplotlib.pyplot as plt
-from IPython import display
-from matplotlib import animation, rc
+from tabulate import tabulate
+# init_printing()
 #+end_src
 
 #+RESULTS:
@@ -18,113 +20,218 @@ from matplotlib import animation, rc
 # Out[1]:
 :end:
 
-#+begin_src ipython :session asession :exports code :results raw drawer
-# Returns a random initial state for the array
-def init_state(n) :
-    # We use n + 2 grids so as to add padding
-    state = np.zeros((n + 2, n + 2))
-    # since we do not want to modify the first and last columns and rows,
-    # we constrain the double loop below
-    for i in range(1 ,n + 1) :
-        for j in range(1, n + 1) :
-            random = np.random.randint(0,2)
-            state[i,j] = random
-    return state
+* Analytic derivative with Sympy
+We first define a symbolic variable, which we call x; then we can construct a function with sympy's specific tools.
+#+begin_src ipython :session asession :results raw drawer :exports both
+x = sp.symbols('x')
+f = lambda x : sp.sin(x**2) + sp.log(x)
+f(x)
 #+end_src
 
 #+RESULTS:
 :results:
-# Out[6]:
+# Out[83]:
+: log(x) + sin(x**2)
+:end:
+Therewith we can perform different symbolic operations, for instace, we can differentiate the function ~f~:
+#+begin_src ipython :session asession :results raw drawer :exports both
+# first derrivative with respect to the variable x
+Df = sp.diff( f(x), x, 1 )
+Df
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[84]:
+: 2*x*cos(x**2) + 1/x
+:end:
+We cannot directly evaluate sympy-generated functions; we should lambdify them instead:
+#+begin_src ipython :session asession :results raw drawer :exports both
+Df_ = sp.lambdify(x, Df, 'numpy')
+
+# plot the graph of the function
+x_ = np.linspace(0.1, 5, 100)
+plt.plot(x_, Df_(x_), 'k-')
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[85]:
+[[file:./obipy-resources/Kbz7t9.svg]]
 :end:
 
-Now we must determine the number of neighbouring cells to pin down what must happen in the next time step.
-#+begin_src ipython :session asession :exports code :results raw drawer
-# Returns the number of alive neighbours each cell has
-def alive_neigh(state, n) :
-    # initialise neigh_state as an array of zeros
-    neigh_state = np.zeros((n + 2, n + 2))
-    for i in range(1, n+1) :
-        for j in range(1, n+1) :
-            # TODO turn this into another loop
-            num_alive_neigh = state[i-1,j-1] + state[i-1,j] + state[i-1,j+1] + state[i,j-1] + state[i,j+1] + state[i+1,j-1] + state[i+1,j] + state[i+1,j+1]
-            neigh_state[i, j] = num_alive_neigh
-    return neigh_state
+* Activity
+Handy sed command to manage pandas dataframes in emacs:
+#+NAME: test_org_post_clean
+#+begin_src sh :results verbatim :var data="" :results output
+echo "$data" | sed s/\^:\ \//g | grep -v "^$" | sed s/\'//g
+#+end_src
+
+#+RESULTS: test_org_post_clean
+
+The following dataset comes from an experimental setup in which the period of a simple pendulum was measured for different deflection angles:
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+path = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8btHZ-A6ChzV5Rx_CQmCzbhO10J7R6LvQAyHx9qOCoCDAL9RJgaGUATf2z5lTMo-SjByvrnaX02Cz/pub?output=csv"
+df = pd.read_csv(path, ';')
+tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[3]:
+|    |   Tiempo (ms) | Ángulo 1,        |
+|----+---------------+------------------|
+|  0 |             9 | 59,289611816406  |
+|  1 |            42 | 59,9823265075684 |
+|  2 |            75 | 61,2374534606934 |
+|  3 |           108 | 63,49247741699   |
+|  4 |           142 | 65,3887710571289 |
+:end:
+
+To begin with, we ought to transform these datapoints into reasonable units (radians). On
+the grounds that the angle series encompasses string values rather than
+numerical ones, we must perform a type conversion and then a unit conversion to
+obtain the desired result:
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+df = df.rename( columns = {'Tiempo (ms)': 'Tiempo[ms]', 'Ángulo 1,': 'AnguloDeg'} )
+
+# convert strings to float values
+df['AnguloDeg'] = df['AnguloDeg'].replace('[,]', '.', regex=True).astype(float)
+
+# add radians
+df['AnguloRad'] = df['AnguloDeg'].apply( lambda x : np.deg2rad(x) - 0.5*np.pi)
+
+tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
 #+end_src
 
 #+RESULTS:
 :results:
 # Out[4]:
+|    |   Tiempo[ms] |   AnguloDeg |   AnguloRad |
+|----+--------------+-------------+-------------|
+|  0 |            9 |     59.2896 |   -0.535997 |
+|  1 |           42 |     59.9823 |   -0.523907 |
+|  2 |           75 |     61.2375 |   -0.502001 |
+|  3 |          108 |     63.4925 |   -0.462644 |
+|  4 |          142 |     65.3888 |   -0.429547 |
 :end:
 
-#+begin_src ipython :session asession :exports code :results raw drawer
-def evolution(state, n) :
-    # evaluate conditions to be alive
-    neighbours = alive_neigh(state, n)
-    # if there are 2 or 3 alive neighbours, the cell is alive provided it was alive before
-    neigh_2_3 = np.logical_or( neighbours == 3, neighbours == 2)
-    if_alive = np.logical_and( state == 1, neigh_2_3 )
-    # if there are exactly 3 alive neighbours, a previously dead cell is born
-    if_dead = np.logical_and( state == 0, neighbours == 3 )
-    # merge conditions
-    evolution = np.logical_or( if_alive, if_dead )
-    # convert float into int
-    evolution = evolution.astype(int)
-    return evolution
+Aiming for an insightful visualisation of this phenomenon, we can easily plot these datapoints. We see that the pendulum's motion is, approximately, a damped harmonic oscillator:
+#+begin_src ipython :exports both :session asession :results raw drawer
+plt.plot(df['Tiempo[ms]'], df.AnguloRad, 'b.')
+plt.xlim(0, 20000)
+plt.show()
 #+end_src
 
 #+RESULTS:
 :results:
 # Out[5]:
+[[file:./obipy-resources/GzUYys.svg]]
 :end:
 
-Game of life routine
-#+begin_src ipython :session asession :exports code :results raw drawer
-def gameOfLife(tmax, N, init=None) :
-    # initial state of the array
-    states = list()
-    if init is None :
-        # whenever init is not given, create a random one
-        state = init_state(N)
-        states.append(state)
-    else :
-        # use the init state if given
-        states.append(init)
-    # populate the list with remaining states
-    for t in range(tmax) :
-        nth_state = evolution(states[-1], N)
-        states.append(nth_state)
-    return states
+Now we would like to obtain the frequency at which the pendulum moves. We can
+use the machinery of Fourier transforms to achieve this. The basic idea of a
+Fourier transform is that we can decompose a function $f$ describing the
+amplitude of a wave over time into the (potentially many) harmonic functions of
+_different frequencies_ that comprise such a wave. To do this we define a
+complex function $\hat f$ over a (real) _frequency_ domain such that its norm on
+the complex plane has local maximum values (intuitively, peak values) whenever
+the input frequency corresponds to the frequency of one of the harmonic
+functions that make up the original function $f$.
 
-time_steps = gameOfLife(10, 10)
+It turns out that this special complex-valued function $\hat f : \mathbb{R} \to
+\mathbb{C}$ is described by
+\[ \hat f(k) = \int_{-\infty}^{\infty} f(t) \exp(-2\pi i k t )\,dt; \]
+this integration is performed with respect to a time domain $t$, and $k$
+represents the input frequency of $\hat f$. This $\hat f$ function is the
+Fourier transform of $f$.
+
+For discrete values, though, we cannot hope to compute an integral, let alone an
+improper integral; instead we take the summation approach: If $\{a_n\}_{n=0}^m$ are thej
+observed amplitude values at the _evenly spaced times_, then we have
+\[ \hat f(k) = \sum_{n=0}^m a_n \exp\left( -2\pi ik \frac{n}{m} \right). \]
+
+This definition is precisely the one that is implemented in scipy:
+#+begin_src ipython :session asession :exports both :results raw drawer
+from scipy.fft import fft, fftfreq
+''' Fourier transform module '''
+
+# highest summation index
+m = len( df['Tiempo[ms]'] )
+
+# Fourier transform for angle values, defined as an array,
+# f hat computed at approptiate frequencies
+ft = fft(df['AnguloRad'].values)[:m//2]
+
+# frequencies corresponding to the Fourier transform
+frequencies = fftfreq(m, t_step)[:m//2]
+
+# Graph of the Fourier transform
+plt.plot(frequencies, np.abs(ft), 'bo')
+plt.ylabel("Fourier tranform value")
+plt.xlabel("Frequency")
+plt.xlim(0.6, 0.75)
+plt.grid()
+plt.show()
 #+end_src
 
 #+RESULTS:
 :results:
-# Out[10]:
+# Out[14]:
+[[file:./obipy-resources/Xqo5Vf.svg]]
 :end:
-#+begin_src ipython :session asession :exports code :results raw drawer
-def update(i) :
-      ax.clear()
-      ax.imshow(time_steps[i], cmap="gray")
-      ax.axis("off")
-      return ax
 
-# plots
-fig = plt.figure(figsize = (5,5))
-ax = plt.subplot(1,1,1)
-anim = animation.FuncAnimation(fig, update, frames = len(time_steps), interval = 400)
-plt.close()
+We may then interpolate these datapoints with cubic splines as follows:
+#+begin_src ipython :session asession :exports both :results raw drawer
+from scipy.interpolate import CubicSpline
+
+# domain and range of Fourier transform
+dom, ran = frequencies, np.abs(ft)
+
+# apply the cubic splines method
+cubic_sp = CubicSpline(dom, ran)
+
+# derivative of the interpolating spline
+Dcubic = cubic_sp.derivative()
+
+# visualise interpolation
+xs = np.linspace(0.6, 0.75, 1000)
+
+plt.plot(dom, ran, 'bo')
+plt.plot(xs, cubic_sp(xs), 'k-')
+# plt.plot(xs, Dcubic(xs), 'k-')
+plt.ylabel("TF")
+plt.xlabel("Frecuencia")
+plt.xlim(0.6, 0.75)
+plt.grid()
+plt.show()
 #+end_src
 
 #+RESULTS:
 :results:
-# Out[8]:
+# Out[15]:
+[[file:./obipy-resources/IBgtBg.svg]]
 :end:
-#+begin_src ipython :session asession :exports code :results raw drawer
-anim.save('/home/juan/Desktop/anim2.gif', writer='imagemagick', fps=1)
+
+Now we find a root for the derivative of the interpolation, which gives us the
+critical value that we want (the maximum).
+#+begin_src ipython :session asession :exports both :results output
+from scipy import optimize
+
+# find the value in which the drivative is 0
+root = optimize.bisect(Dcubic, 0.66, 0.68)
+
+# print the maximum point if the derivative evaluated at it
+# is sufficiently close to 0
+tol = 1e-5
+if abs( Dcubic(root) ) < tol :
+    print(root)
+else :
+    print('failed')
 #+end_src
 
 #+RESULTS:
-:results:
-# Out[9]:
-:end:
+: 0.6715600030391943
+
+Thus we can conclude that the frequency at which our pendulum oscillates is approximately $0.6715\,kHz$.
