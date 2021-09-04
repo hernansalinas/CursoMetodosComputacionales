@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 # Out[131]:
 :end:
 * Finding the area of a circular section
-Suppose we have a circle of radius $a$; we wish to use numerical methods to
+Suppose that we have a circle of radius $a$; we wish to use numerical methods to
 find a circular segment whose area is a quarter of such a circle.
 
 So as to start solving this problem, we must find an expression for the area of

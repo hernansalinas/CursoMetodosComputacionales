@@ -17,7 +17,7 @@ import matplotlib.pylab as plt
 * Finding solutions to an equation
 To begin with, we regard an equation which can be easily solved numerically:
 \[
-e^x - 2 = \cos(e^x - 2)
+e^x - 2 = \cos(e^x - 2).
 \]
 We may define a new function herein, so that its zero is the solution to the above equation; take, for instance
 \[

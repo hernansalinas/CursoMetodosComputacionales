@@ -2,7 +2,7 @@
 #+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
 
 * A short review of concepts
-Handy sed command
+Handy sed command:
 #+NAME: test_org_post_clean
 #+begin_src sh :results verbatim :var data="" :results output
 echo "$data" | sed s/\^:\ \//g | grep -v "^$" | sed s/\'//g

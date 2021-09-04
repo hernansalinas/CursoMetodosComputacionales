@@ -8,7 +8,7 @@ echo "$data" | sed s/\^:\ \//g | grep -v "^$" | sed s/\'//g
 
 #+RESULTS: test_org_post_clean
 
-We first import the necessary packages. Since we will plot some statistical data, the ~seaborn~ module will ease some steps.
+We first import the necessary packages. Since we will plot some statistical data, the ~seaborn~ module will ease some steps:
 #+begin_src ipython :session mysession :exports both :results raw drawer
 %config InlineBackend.figure_format = 'svg'
 

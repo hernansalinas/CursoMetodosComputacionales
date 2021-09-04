@@ -21,7 +21,7 @@ from tabulate import tabulate
 :end:
 
 * Analytic derivative with Sympy
-We first define a symbolic variable, which we call x; then we can construct a function with sympy's specific tools.
+We first define a symbolic variable, which we call x; then we can construct a function with sympy's specific tools:
 #+begin_src ipython :session asession :results raw drawer :exports both
 x = sp.symbols('x')
 f = lambda x : sp.sin(x**2) + sp.log(x)

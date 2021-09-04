@@ -16,7 +16,7 @@ import matplotlib.pylab as plt
 
 The electrostatic field due to some point source charge $q$ is given by Coulomb's law,
 \[
-\mathbf{E} = \frac{1}{4\pi \epsilon_0} \frac{q}{r^2} \hat{\mathbf{r}}
+\mathbf{E} = \frac{1}{4\pi \epsilon_0} \frac{q}{r^2} \hat{\mathbf{r}},
 \]
 where $r$ denotes the distance from the point charge to the field point, vectorially, if the field point is located at $\mathbf{l}$, and the source at $\mathbf{l}'$, then $\mathbf{r} = \mathbf{l} - \mathbf{l}'$. Notice that the above equation for the field yields a two-component equation in a two dimensional space. In such a case we have
 \[

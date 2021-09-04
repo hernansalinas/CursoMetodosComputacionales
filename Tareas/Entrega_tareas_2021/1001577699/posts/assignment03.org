@@ -15,7 +15,7 @@ import matplotlib.pylab as plt
 :end:
 
 * Alternating exponential function
-On the account of the convergence of the power series for the exponential function, it is possible to approximate its values via algebraic operations that can be carried out with a certain    amount of precision by the computer. Recall that the power series for such a function is given on all $\mathbb{R}$ by
+On the account of the convergence of the power series for the exponential function, it is possible to approximate its values via algebraic operations that can be carried out with a certain    amount of precision by the computer. Recall that the power series for such a function is given on all $\mathbb{R}$ by:
 \[
 \sum_{n=1}^{\infty} \frac{x^{n}}{n!}
 \]

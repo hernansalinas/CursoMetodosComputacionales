@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-09-03 Fri 22:17 -->
+<!-- 2021-09-03 Fri 22:18 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>John Conway's game of life.</title>
+<title>Review 2</title>
 <meta name="author" content="Juan David Salcedo Hernández" />
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
@@ -224,124 +224,134 @@
 </head>
 <body>
 <div id="content">
-<h1 class="title">John Conway&rsquo;s game of life.</h1>
+<h1 class="title">Review 2</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgf7bfb0e">1. Introduction</a></li>
+<li><a href="#org36c3bb4">1. A short review of concepts</a></li>
+<li><a href="#org5481c8c">2. Something</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgf7bfb0e" class="outline-2">
-<h2 id="orgf7bfb0e"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org36c3bb4" class="outline-2">
+<h2 id="org36c3bb4"><span class="section-number-2">1</span> A short review of concepts</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-Conway&rsquo;s game of life is a cellular automation program.
+Handy sed command:
 </p>
-
+<div class="org-src-container">
+<pre class="src src-sh" id="orgf201839"><span style="color: #bd93f9;">echo</span> <span style="color: #f1fa8c;">"</span><span style="color: #8be9fd;">$</span><span style="color: #f1fa8c;">data</span><span style="color: #f1fa8c;">"</span> | sed s/<span style="color: #f1fa8c;">\^</span>:<span style="color: #f1fa8c;">\ \/</span>/g | <span style="color: #bd93f9;">grep</span> -v <span style="color: #f1fa8c;">"^$"</span> | sed s/<span style="color: #f1fa8c;">\'</span>//g
+</pre>
+</div>
 <p>
-Usual <code>python</code> imports:
+We then import all the desired libraries.
 </p>
 <div class="org-src-container">
 <pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
+<span style="color: #ff79c6;">from</span> tabulate <span style="color: #ff79c6;">import</span> tabulate
 
+<span style="color: #ff79c6;">import</span> pandas <span style="color: #ff79c6;">as</span> pd
 <span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">from</span> scipy <span style="color: #ff79c6;">import</span> optimize
 <span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
-<span style="color: #ff79c6;">from</span> IPython <span style="color: #ff79c6;">import</span> display
-<span style="color: #ff79c6;">from</span> matplotlib <span style="color: #ff79c6;">import</span> animation, rc
 </pre>
 </div>
-
-<div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">Returns a random initial state for the array</span>
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">init_state</span>(n) :
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">We use n + 2 grids so as to add padding</span>
-    state = np.zeros((n + <span style="color: #bd93f9; font-weight: bold;">2</span>, n + <span style="color: #bd93f9; font-weight: bold;">2</span>))
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">since we do not want to modify the first and last columns and rows,</span>
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">we constrain the double loop below</span>
-    <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span> ,n + <span style="color: #bd93f9; font-weight: bold;">1</span>) :
-        <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n + <span style="color: #bd93f9; font-weight: bold;">1</span>) :
-            random = np.random.randint(<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>)
-            state[i,j] = random
-    <span style="color: #ff79c6;">return</span> state
-</pre>
-</div>
-
 <p>
-Now we must determine the number of neighbouring cells to pin down what must happen in the next time step.
+Read some random dataframe with rocket launcher data.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">Returns the number of alive neighbours each cell has</span>
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">alive_neigh</span>(state, n) :
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">initialise neigh_state as an array of zeros</span>
-    neigh_state = np.zeros((n + <span style="color: #bd93f9; font-weight: bold;">2</span>, n + <span style="color: #bd93f9; font-weight: bold;">2</span>))
-    <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n+<span style="color: #bd93f9; font-weight: bold;">1</span>) :
-        <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n+<span style="color: #bd93f9; font-weight: bold;">1</span>) :
-            <span style="color: #6272a4;"># </span><span style="color: #f1fa8c; font-weight: bold;">TODO</span><span style="color: #6272a4;"> turn this into another loop</span>
-            num_alive_neigh = state[i-<span style="color: #bd93f9; font-weight: bold;">1</span>,j-<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i-<span style="color: #bd93f9; font-weight: bold;">1</span>,j] + state[i-<span style="color: #bd93f9; font-weight: bold;">1</span>,j+<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i,j-<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i,j+<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i+<span style="color: #bd93f9; font-weight: bold;">1</span>,j-<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i+<span style="color: #bd93f9; font-weight: bold;">1</span>,j] + state[i+<span style="color: #bd93f9; font-weight: bold;">1</span>,j+<span style="color: #bd93f9; font-weight: bold;">1</span>]
-            neigh_state[i, j] = num_alive_neigh
-    <span style="color: #ff79c6;">return</span> neigh_state
+<pre class="src src-ipython">path = <span style="color: #f1fa8c;">'https://raw.githubusercontent.com/restrepo/ComputationalMethods/master/data/rocket.json'</span>
+df = pd.DataFrame(pd.read_json(path))
+tabulate(df, headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
 </div>
-
-<div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">evolution</span>(state, n) :
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">evaluate conditions to be alive</span>
-    neighbours = alive_neigh(state, n)
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">if there are 2 or 3 alive neighbours, the cell is alive provided it was alive before</span>
-    neigh_2_3 = np.logical_or( neighbours == <span style="color: #bd93f9; font-weight: bold;">3</span>, neighbours == <span style="color: #bd93f9; font-weight: bold;">2</span>)
-    if_alive = np.logical_and( state == <span style="color: #bd93f9; font-weight: bold;">1</span>, neigh_2_3 )
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">if there are exactly 3 alive neighbours, a previously dead cell is born</span>
-    if_dead = np.logical_and( state == <span style="color: #bd93f9; font-weight: bold;">0</span>, neighbours == <span style="color: #bd93f9; font-weight: bold;">3</span> )
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">merge conditions</span>
-    evolution = np.logical_or( if_alive, if_dead )
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">convert float into int</span>
-    evolution = evolution.astype(<span style="color: #ffb86c;">int</span>)
-    <span style="color: #ff79c6;">return</span> evolution
-</pre>
-</div>
-
 <p>
-Game of life routine
+Proof that <code>mdot</code> is the only column that changes in value:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">gameOfLife</span>(tmax, N, init=<span style="color: #8be9fd;">None</span>) :
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">initial state of the array</span>
-    states = <span style="color: #ffb86c;">list</span>()
-    <span style="color: #ff79c6;">if</span> init <span style="color: #ff79c6;">is</span> <span style="color: #8be9fd;">None</span> :
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">whenever init is not given, create a random one</span>
-        state = init_state(N)
-        states.append(state)
-    <span style="color: #ff79c6;">else</span> :
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">use the init state if given</span>
-        states.append(init)
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">populate the list with remaining states</span>
-    <span style="color: #ff79c6;">for</span> t <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(tmax) :
-        nth_state = evolution(states[-<span style="color: #bd93f9; font-weight: bold;">1</span>], N)
-        states.append(nth_state)
-    <span style="color: #ff79c6;">return</span> states
+<pre class="src src-ipython"><span style="color: #ffb86c;">list</span>(
+df.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> column :
+         column.name <span style="color: #ff79c6;">if</span> (column.to_numpy()[<span style="color: #bd93f9; font-weight: bold;">0</span>] != column.to_numpy()).<span style="color: #ffb86c;">any</span>() <span style="color: #ff79c6;">else</span> <span style="color: #8be9fd;">None</span>).dropna())
+</pre>
+</div>
+<p>
+Testing convergence of the Newton-Raphson method for finding roots in this specific case
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">f = <span style="color: #ff79c6;">lambda</span> t : df.u[<span style="color: #bd93f9; font-weight: bold;">0</span>]*np.log( df.M0[<span style="color: #bd93f9; font-weight: bold;">0</span>]/(df.M0[<span style="color: #bd93f9; font-weight: bold;">0</span>] - df.mdot[<span style="color: #bd93f9; font-weight: bold;">0</span>]*t) ) - df.g[<span style="color: #bd93f9; font-weight: bold;">0</span>]*t - <span style="color: #bd93f9; font-weight: bold;">335</span>
+t = np.linspace(<span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">500</span>, <span style="color: #bd93f9; font-weight: bold;">1000</span>)
 
-time_steps = gameOfLife(<span style="color: #bd93f9; font-weight: bold;">10</span>, <span style="color: #bd93f9; font-weight: bold;">10</span>)
+plt.plot(t, f(t), <span style="color: #f1fa8c;">'k-'</span>)
+plt.grid()
+plt.show()
+</pre>
+</div>
+<p>
+Notice that the root value is less than 150, setting such a value as our initial guess will thus suffice:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">df[<span style="color: #f1fa8c;">'t'</span>] = df.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> row : optimize.newton(<span style="color: #ff79c6;">lambda</span> t : row.u*np.log( row.M0/(row.M0 - row.mdot*t) ) - row.g*t - <span style="color: #bd93f9; font-weight: bold;">335</span>, x0 = <span style="color: #bd93f9; font-weight: bold;">150</span>),
+                                                   axis = <span style="color: #f1fa8c;">'columns'</span>)
+tabulate(df, headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
+</pre>
+</div>
+<p>
+Graph of the function.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">x = df[<span style="color: #f1fa8c;">'t'</span>]
+y = df[<span style="color: #f1fa8c;">'mdot'</span>]
+
+plt.plot(x, y, <span style="color: #f1fa8c;">'ro'</span>)
+plt.xlabel(<span style="color: #f1fa8c;">'$\dot{m}$ / kg/s'</span>)
+plt.ylabel(<span style="color: #f1fa8c;">'$t$ / s'</span>)
+plt.grid()
+plt.show()
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org5481c8c" class="outline-2">
+<h2 id="org5481c8c"><span class="section-number-2">2</span> Something</h2>
+<div class="outline-text-2" id="text-2">
+<div class="org-src-container">
+<pre class="src src-ipython">path = <span style="color: #f1fa8c;">'https://raw.githubusercontent.com/justmarkham/DAT8/master/data/chipotle.tsv'</span>
+chipo = pd.read_csv(path, sep=<span style="color: #f1fa8c;">'\t'</span>)
+
+tabulate(chipo.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-ipython">chipo[<span style="color: #f1fa8c;">'item_price'</span>] = chipo[<span style="color: #f1fa8c;">'item_price'</span>].replace(<span style="color: #f1fa8c;">'\$'</span>, <span style="color: #f1fa8c;">''</span>, regex=<span style="color: #8be9fd;">True</span>).astype(<span style="color: #ffb86c;">float</span>)
+tabulate(chipo.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
 </div>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">update</span>(i) :
-      ax.clear()
-      ax.imshow(time_steps[i], cmap=<span style="color: #f1fa8c;">"gray"</span>)
-      ax.axis(<span style="color: #f1fa8c;">"off"</span>)
-      <span style="color: #ff79c6;">return</span> ax
-
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">plots</span>
-fig = plt.figure(figsize = (<span style="color: #bd93f9; font-weight: bold;">5</span>,<span style="color: #bd93f9; font-weight: bold;">5</span>))
-ax = plt.subplot(<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>)
-anim = animation.FuncAnimation(fig, update, frames = <span style="color: #ffb86c;">len</span>(time_steps), interval = <span style="color: #bd93f9; font-weight: bold;">400</span>)
-plt.close()
+<pre class="src src-ipython">greater_than_10 = chipo[ chipo.item_price &gt; <span style="color: #bd93f9; font-weight: bold;">10</span> ]
+<span style="color: #ffb86c;">len</span>( greater_than_10.index )
 </pre>
 </div>
 <div class="org-src-container">
-<pre class="src src-ipython">anim.save(<span style="color: #f1fa8c;">'/home/juan/Desktop/anim2.gif'</span>, writer=<span style="color: #f1fa8c;">'imagemagick'</span>, fps=<span style="color: #bd93f9; font-weight: bold;">1</span>)
+<pre class="src src-ipython">chipo[<span style="color: #f1fa8c;">'item_name'</span>].sort_values()
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-ipython">tabulate(chipo[[<span style="color: #f1fa8c;">'item_name'</span>,<span style="color: #f1fa8c;">'item_price'</span>]].head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-ipython">max_price = chipo[ chipo[<span style="color: #f1fa8c;">'item_price'</span>] == chipo[<span style="color: #f1fa8c;">'item_price'</span>].<span style="color: #ffb86c;">max</span>() ]
+max_price[<span style="color: #f1fa8c;">'quantity'</span>].<span style="color: #ffb86c;">sum</span>()
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-ipython">veggie = chipo[ chipo[<span style="color: #f1fa8c;">'item_name'</span>] == <span style="color: #f1fa8c;">'Veggie Salad Bowl'</span> ]
+veggie[<span style="color: #f1fa8c;">'quantity'</span>].<span style="color: #ffb86c;">sum</span>()
 </pre>
 </div>
 </div>
@@ -349,7 +359,7 @@ plt.close()
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-09-03 Fri 22:17</p>
+<p class="date">Created: 2021-09-03 Fri 22:18</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

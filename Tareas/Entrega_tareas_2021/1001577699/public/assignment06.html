@@ -6,7 +6,7 @@
 <!-- 2021-09-03 Fri 22:17 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>John Conway's game of life.</title>
+<title>Assignment08</title>
 <meta name="author" content="Juan David Salcedo Hernández" />
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
@@ -224,127 +224,71 @@
 </head>
 <body>
 <div id="content">
-<h1 class="title">John Conway&rsquo;s game of life.</h1>
-<div id="table-of-contents">
-<h2>Table of Contents</h2>
-<div id="text-table-of-contents">
-<ul>
-<li><a href="#orgf7bfb0e">1. Introduction</a></li>
-</ul>
-</div>
-</div>
-
-<div id="outline-container-orgf7bfb0e" class="outline-2">
-<h2 id="orgf7bfb0e"><span class="section-number-2">1</span> Introduction</h2>
-<div class="outline-text-2" id="text-1">
-<p>
-Conway&rsquo;s game of life is a cellular automation program.
-</p>
-
-<p>
-Usual <code>python</code> imports:
-</p>
+<h1 class="title">Assignment08</h1>
 <div class="org-src-container">
-<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
-
-<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
-<span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
-<span style="color: #ff79c6;">from</span> IPython <span style="color: #ff79c6;">import</span> display
-<span style="color: #ff79c6;">from</span> matplotlib <span style="color: #ff79c6;">import</span> animation, rc
-</pre>
-</div>
-
-<div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">Returns a random initial state for the array</span>
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">init_state</span>(n) :
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">We use n + 2 grids so as to add padding</span>
-    state = np.zeros((n + <span style="color: #bd93f9; font-weight: bold;">2</span>, n + <span style="color: #bd93f9; font-weight: bold;">2</span>))
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">since we do not want to modify the first and last columns and rows,</span>
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">we constrain the double loop below</span>
-    <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span> ,n + <span style="color: #bd93f9; font-weight: bold;">1</span>) :
-        <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n + <span style="color: #bd93f9; font-weight: bold;">1</span>) :
-            random = np.random.randint(<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>)
-            state[i,j] = random
-    <span style="color: #ff79c6;">return</span> state
+<pre class="src src-ipython"><span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">import</span> scipy <span style="color: #ff79c6;">as</span> sc
+<span style="color: #ff79c6;">import</span> sympy <span style="color: #ff79c6;">as</span> sp
+<span style="color: #ff79c6;">from</span> scipy <span style="color: #ff79c6;">import</span> optimize
 </pre>
 </div>
 
 <p>
-Now we must determine the number of neighbouring cells to pin down what must happen in the next time step.
+Class for finding approximate integral values and bounding errors in numerical integration.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">Returns the number of alive neighbours each cell has</span>
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">alive_neigh</span>(state, n) :
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">initialise neigh_state as an array of zeros</span>
-    neigh_state = np.zeros((n + <span style="color: #bd93f9; font-weight: bold;">2</span>, n + <span style="color: #bd93f9; font-weight: bold;">2</span>))
-    <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n+<span style="color: #bd93f9; font-weight: bold;">1</span>) :
-        <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n+<span style="color: #bd93f9; font-weight: bold;">1</span>) :
-            <span style="color: #6272a4;"># </span><span style="color: #f1fa8c; font-weight: bold;">TODO</span><span style="color: #6272a4;"> turn this into another loop</span>
-            num_alive_neigh = state[i-<span style="color: #bd93f9; font-weight: bold;">1</span>,j-<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i-<span style="color: #bd93f9; font-weight: bold;">1</span>,j] + state[i-<span style="color: #bd93f9; font-weight: bold;">1</span>,j+<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i,j-<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i,j+<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i+<span style="color: #bd93f9; font-weight: bold;">1</span>,j-<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i+<span style="color: #bd93f9; font-weight: bold;">1</span>,j] + state[i+<span style="color: #bd93f9; font-weight: bold;">1</span>,j+<span style="color: #bd93f9; font-weight: bold;">1</span>]
-            neigh_state[i, j] = num_alive_neigh
-    <span style="color: #ff79c6;">return</span> neigh_state
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">closed_set_max</span>(func, variable, lower_bound, upper_bound) :
+    <span style="color: #8995ba;">''' Find the maximum of a smooth funtion on an open interval '''</span>
+    d_func = sp.diff(func, variable, <span style="color: #bd93f9; font-weight: bold;">1</span>)
+    critical = sp.solveset(d_func, variable,
+                           domain=sp.Interval(lower_bound, upper_bound))
+    maximum = sp.Max(func.subs(variable, lower_bound),
+                     func.subs(variable, upper_bound),
+                     *[func.subs(variable, i) <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> critical])
+    <span style="color: #ff79c6;">return</span> <span style="color: #ffb86c;">float</span>(maximum)
+
+<span style="color: #ff79c6;">class</span> <span style="color: #bd93f9;">Function</span> :
+    <span style="color: #8995ba;">''' Properties of a $C^{\infty}$ function. Class for integration. '''</span>
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">__init__</span>(<span style="color: #ff79c6;">self</span>, expression, variable, a=<span style="color: #bd93f9; font-weight: bold;">0</span>, b=<span style="color: #bd93f9; font-weight: bold;">1</span>) :
+        <span style="color: #8995ba;">''' the mathematical expression must be a sympy object '''</span>
+        <span style="color: #ff79c6;">self</span>.numerical = sp.lambdify(variable, expression, <span style="color: #f1fa8c;">'numpy'</span>)
+        <span style="color: #ff79c6;">self</span>.symbol = variable
+        <span style="color: #ff79c6;">self</span>.symbolic = expression
+        <span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b = a, b
+
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">simpson_partition</span>(<span style="color: #ff79c6;">self</span>, epsilon=<span style="color: #bd93f9; font-weight: bold;">0.001</span>) :
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the fourth derivative with sympy</span>
+        fourth_deriv = sp.diff(<span style="color: #ff79c6;">self</span>.symbolic, <span style="color: #ff79c6;">self</span>.symbol, <span style="color: #bd93f9; font-weight: bold;">4</span>)
+
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">find an absolute maximum for the fourth derivative on the given domain</span>
+        maximum = closed_set_max(fourth_deriv, <span style="color: #ff79c6;">self</span>.symbol, <span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b)
+
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the number of intervals</span>
+        <span style="color: #ff79c6;">return</span> np.ceil( ((maximum*(<span style="color: #ff79c6;">self</span>.b - <span style="color: #ff79c6;">self</span>.a)**<span style="color: #bd93f9; font-weight: bold;">5</span>)/(epsilon*<span style="color: #bd93f9; font-weight: bold;">180</span>*<span style="color: #bd93f9; font-weight: bold;">2</span>**<span style="color: #bd93f9; font-weight: bold;">4</span>))**<span style="color: #bd93f9; font-weight: bold;">0.25</span> )
+
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">simpson</span>(<span style="color: #ff79c6;">self</span>, epsilon=<span style="color: #bd93f9; font-weight: bold;">0.001</span>) :
+        N = <span style="color: #ff79c6;">self</span>.simpson_partition(epsilon)
+        n_nodos = <span style="color: #ffb86c;">int</span>( np.ceil(<span style="color: #bd93f9; font-weight: bold;">2</span>*N + <span style="color: #bd93f9; font-weight: bold;">1</span>) ) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">(N+1 extremos de subintervalos) + (N puntos medios)</span>
+        x = np.linspace(<span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b, n_nodos)
+
+        x_impar = x[<span style="color: #bd93f9; font-weight: bold;">1</span>: :<span style="color: #bd93f9; font-weight: bold;">2</span>] <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Nodos con coordenada impar (ptos medios)</span>
+        x_par = x[<span style="color: #bd93f9; font-weight: bold;">2</span>:n_nodos-<span style="color: #bd93f9; font-weight: bold;">1</span>:<span style="color: #bd93f9; font-weight: bold;">2</span>] <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Nodos con coordenada par (salvo e</span>
+
+        h = (<span style="color: #ff79c6;">self</span>.b - <span style="color: #ff79c6;">self</span>.a)/(<span style="color: #bd93f9; font-weight: bold;">2</span>*N) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Distancia entre dos nodos de integraci&#243;n</span>
+        cuad = h/<span style="color: #bd93f9; font-weight: bold;">3</span>*(<span style="color: #ff79c6;">self</span>.numerical(<span style="color: #ff79c6;">self</span>.a) + <span style="color: #bd93f9; font-weight: bold;">2</span>*<span style="color: #ffb86c;">sum</span>(<span style="color: #ff79c6;">self</span>.numerical(x_par)) + <span style="color: #bd93f9; font-weight: bold;">4</span>*<span style="color: #ffb86c;">sum</span>(<span style="color: #ff79c6;">self</span>.numerical(x_impar)) + <span style="color: #ff79c6;">self</span>.numerical(<span style="color: #ff79c6;">self</span>.b))
+        <span style="color: #ff79c6;">return</span> f<span style="color: #f1fa8c;">'Value = {cuad} +/- {epsilon}'</span>
+
+x = sp.Symbol(<span style="color: #f1fa8c;">'x'</span>)
+f = Function(sp.log(<span style="color: #bd93f9; font-weight: bold;">1</span> + x**<span style="color: #bd93f9; font-weight: bold;">2</span>), x)
+
+f.simpson(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>)
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">evolution</span>(state, n) :
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">evaluate conditions to be alive</span>
-    neighbours = alive_neigh(state, n)
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">if there are 2 or 3 alive neighbours, the cell is alive provided it was alive before</span>
-    neigh_2_3 = np.logical_or( neighbours == <span style="color: #bd93f9; font-weight: bold;">3</span>, neighbours == <span style="color: #bd93f9; font-weight: bold;">2</span>)
-    if_alive = np.logical_and( state == <span style="color: #bd93f9; font-weight: bold;">1</span>, neigh_2_3 )
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">if there are exactly 3 alive neighbours, a previously dead cell is born</span>
-    if_dead = np.logical_and( state == <span style="color: #bd93f9; font-weight: bold;">0</span>, neighbours == <span style="color: #bd93f9; font-weight: bold;">3</span> )
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">merge conditions</span>
-    evolution = np.logical_or( if_alive, if_dead )
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">convert float into int</span>
-    evolution = evolution.astype(<span style="color: #ffb86c;">int</span>)
-    <span style="color: #ff79c6;">return</span> evolution
+<pre class="src src-ipython">g = Function(x**<span style="color: #bd93f9; font-weight: bold;">5</span>, x, a=<span style="color: #bd93f9; font-weight: bold;">1</span>, b=<span style="color: #bd93f9; font-weight: bold;">12</span>)
+g.simpson(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>)
 </pre>
-</div>
-
-<p>
-Game of life routine
-</p>
-<div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">gameOfLife</span>(tmax, N, init=<span style="color: #8be9fd;">None</span>) :
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">initial state of the array</span>
-    states = <span style="color: #ffb86c;">list</span>()
-    <span style="color: #ff79c6;">if</span> init <span style="color: #ff79c6;">is</span> <span style="color: #8be9fd;">None</span> :
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">whenever init is not given, create a random one</span>
-        state = init_state(N)
-        states.append(state)
-    <span style="color: #ff79c6;">else</span> :
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">use the init state if given</span>
-        states.append(init)
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">populate the list with remaining states</span>
-    <span style="color: #ff79c6;">for</span> t <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(tmax) :
-        nth_state = evolution(states[-<span style="color: #bd93f9; font-weight: bold;">1</span>], N)
-        states.append(nth_state)
-    <span style="color: #ff79c6;">return</span> states
-
-time_steps = gameOfLife(<span style="color: #bd93f9; font-weight: bold;">10</span>, <span style="color: #bd93f9; font-weight: bold;">10</span>)
-</pre>
-</div>
-<div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">update</span>(i) :
-      ax.clear()
-      ax.imshow(time_steps[i], cmap=<span style="color: #f1fa8c;">"gray"</span>)
-      ax.axis(<span style="color: #f1fa8c;">"off"</span>)
-      <span style="color: #ff79c6;">return</span> ax
-
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">plots</span>
-fig = plt.figure(figsize = (<span style="color: #bd93f9; font-weight: bold;">5</span>,<span style="color: #bd93f9; font-weight: bold;">5</span>))
-ax = plt.subplot(<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>)
-anim = animation.FuncAnimation(fig, update, frames = <span style="color: #ffb86c;">len</span>(time_steps), interval = <span style="color: #bd93f9; font-weight: bold;">400</span>)
-plt.close()
-</pre>
-</div>
-<div class="org-src-container">
-<pre class="src src-ipython">anim.save(<span style="color: #f1fa8c;">'/home/juan/Desktop/anim2.gif'</span>, writer=<span style="color: #f1fa8c;">'imagemagick'</span>, fps=<span style="color: #bd93f9; font-weight: bold;">1</span>)
-</pre>
-</div>
-</div>
 </div>
 </div>
 <div id="postamble" class="status">

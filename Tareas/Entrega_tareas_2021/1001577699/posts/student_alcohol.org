@@ -2,7 +2,7 @@
 #+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
 
 * Overview
-We first import the necessary libraries. Moreover, we add a ~sed~ command to properly format our dataframes in emacs.
+We first import the necessary libraries. Moreover, we add a ~sed~ command to properly format our dataframes in emacs:
 #+begin_src ipython :session asession :exports code :results raw drawer
 import pandas as pd
 import numpy as np
