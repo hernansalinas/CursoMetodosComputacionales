@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-09-11 Sat 18:56 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Assignment07</title>
+<meta name="author" content="Juan David Salcedo Hernández" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Assignment07</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org38fdcb3">1. Plot the graph of the single-variable function \(A_\varphi(1.1,\theta)\).</a></li>
+</ul>
+</div>
+</div>
+<div class="org-src-container">
+<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
+
+<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">import</span> scipy <span style="color: #ff79c6;">as</span> sc
+<span style="color: #ff79c6;">import</span> sympy <span style="color: #ff79c6;">as</span> sp
+<span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
+</pre>
+</div>
+
+<p>
+The magnetic vector potential for a loop of radius \(a\) carrying a steady current \(I\) at a point a distance \(r\) from the centre of the loop and with an angle \(\theta\) is given by the following expression:
+\[ A_\varphi(r,\theta) = \frac{\mu_0}{4\pi} \frac{4Ia}{\sqrt{a^2 + r^2 + 2ar\sin\theta}} \left( \frac{(2 - k^2) K(k) - 2E(k))}{k^2} \right) \]
+where
+</p>
+\begin{gather*}
+K(k) = \int_0^{\pi/2} \frac{d\varphi}{\sqrt{1 - k^2 \sin^2 \varphi}},\\
+E(k) = \int_0^{\pi/2} \sqrt{1 - k^2 \sin^2 \varphi}\,d\varphi,
+\end{gather*}
+<p>
+and
+\[ k^2 = \frac{4ar\sin\theta}{a^2 + r^2 + 2ar\sin\theta} \]
+</p>
+
+<div id="outline-container-org38fdcb3" class="outline-2">
+<h2 id="org38fdcb3"><span class="section-number-2">1</span> Plot the graph of the single-variable function \(A_\varphi(1.1,\theta)\).</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+We may as well define a function whose input is a number \(\theta\), and whose value is \(k^2\). This value could then be used to compute the elliptic integrals seen above, and then the whole thing could be replaced in the function \(\left.A_\varphi\right|_{r=1.1} : [0,\pi/2] \to \mathbb{R}\).
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">k_sr</span>(r, theta, a) :
+    num = <span style="color: #bd93f9; font-weight: bold;">4</span>*a*r*np.sin(theta)
+    den = a**<span style="color: #bd93f9; font-weight: bold;">2</span> + r**<span style="color: #bd93f9; font-weight: bold;">2</span> + <span style="color: #bd93f9; font-weight: bold;">2</span>*a*r*np.sin(theta)
+    <span style="color: #ff79c6;">return</span> num/den
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">driver code</span>
+theta = np.linspace(<span style="color: #bd93f9; font-weight: bold;">0</span>, np.pi/<span style="color: #bd93f9; font-weight: bold;">2</span>, <span style="color: #bd93f9; font-weight: bold;">100</span>)
+
+plt.plot(theta, k_sr(<span style="color: #bd93f9; font-weight: bold;">1.1</span>, theta, <span style="color: #bd93f9; font-weight: bold;">1</span>), <span style="color: #f1fa8c;">'k-'</span>)
+plt.grid()
+plt.plot()
+</pre>
+</div>
+
+<p>
+We&rsquo;re going to be using the following class:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">closed_set_max</span>(func, variable, lower_bound, upper_bound) :
+    <span style="color: #8995ba;">''' Find the maximum of a smooth funtion on an open interval '''</span>
+    d_func = sp.diff(func, variable, <span style="color: #bd93f9; font-weight: bold;">1</span>)
+    critical = sp.solveset(d_func, variable,
+                           domain=sp.Interval(lower_bound, upper_bound))
+    <span style="color: #ff79c6;">assert</span> critical.is_FiniteSet
+    maximum = sp.Max(func.subs(variable, lower_bound),
+                     func.subs(variable, upper_bound),
+                     *[func.subs(variable, i) <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> critical])
+    <span style="color: #ff79c6;">return</span> <span style="color: #ffb86c;">float</span>(maximum)
+
+<span style="color: #ff79c6;">class</span> <span style="color: #bd93f9;">Function</span> :
+    <span style="color: #8995ba;">''' Properties of a $C^{\infty}$ function. Class for integration. '''</span>
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">__init__</span>(<span style="color: #ff79c6;">self</span>, expression, variable, a=<span style="color: #bd93f9; font-weight: bold;">0</span>, b=<span style="color: #bd93f9; font-weight: bold;">1</span>) :
+        <span style="color: #8995ba;">''' the mathematical expression must be a sympy object '''</span>
+        <span style="color: #ff79c6;">self</span>.numerical = sp.lambdify(variable, expression, <span style="color: #f1fa8c;">'numpy'</span>)
+        <span style="color: #ff79c6;">self</span>.symbol = variable
+        <span style="color: #ff79c6;">self</span>.symbolic = expression
+        <span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b = a, b
+
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">simpson_partition</span>(<span style="color: #ff79c6;">self</span>, epsilon=<span style="color: #bd93f9; font-weight: bold;">0.001</span>) :
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the fourth derivative with sympy</span>
+        fourth_deriv = sp.diff(<span style="color: #ff79c6;">self</span>.symbolic, <span style="color: #ff79c6;">self</span>.symbol, <span style="color: #bd93f9; font-weight: bold;">4</span>)
+
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">find an absolute maximum for the fourth derivative on the given domain</span>
+        maximum = closed_set_max(fourth_deriv, <span style="color: #ff79c6;">self</span>.symbol, <span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b)
+
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the number of intervals</span>
+        <span style="color: #ff79c6;">return</span> np.ceil( ((maximum*(<span style="color: #ff79c6;">self</span>.b - <span style="color: #ff79c6;">self</span>.a)**<span style="color: #bd93f9; font-weight: bold;">5</span>)/(epsilon*<span style="color: #bd93f9; font-weight: bold;">180</span>*<span style="color: #bd93f9; font-weight: bold;">2</span>**<span style="color: #bd93f9; font-weight: bold;">4</span>))**<span style="color: #bd93f9; font-weight: bold;">0.25</span> )
+
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">simpson</span>(<span style="color: #ff79c6;">self</span>, epsilon=<span style="color: #bd93f9; font-weight: bold;">0.001</span>) :
+        N = <span style="color: #ff79c6;">self</span>.simpson_partition(epsilon)
+        n_nodos = <span style="color: #ffb86c;">int</span>( np.ceil(<span style="color: #bd93f9; font-weight: bold;">2</span>*N + <span style="color: #bd93f9; font-weight: bold;">1</span>) ) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">(N+1 extremos de subintervalos) + (N puntos medios)</span>
+        x = np.linspace(<span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b, n_nodos)
+
+        x_impar = x[<span style="color: #bd93f9; font-weight: bold;">1</span>: :<span style="color: #bd93f9; font-weight: bold;">2</span>] <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Nodos con coordenada impar (ptos medios)</span>
+        x_par = x[<span style="color: #bd93f9; font-weight: bold;">2</span>:n_nodos-<span style="color: #bd93f9; font-weight: bold;">1</span>:<span style="color: #bd93f9; font-weight: bold;">2</span>] <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Nodos con coordenada par (salvo e</span>
+
+        h = (<span style="color: #ff79c6;">self</span>.b - <span style="color: #ff79c6;">self</span>.a)/(<span style="color: #bd93f9; font-weight: bold;">2</span>*N) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Distancia entre dos nodos de integraci&#243;n</span>
+        cuad = h/<span style="color: #bd93f9; font-weight: bold;">3</span>*(<span style="color: #ff79c6;">self</span>.numerical(<span style="color: #ff79c6;">self</span>.a) + <span style="color: #bd93f9; font-weight: bold;">2</span>*<span style="color: #ffb86c;">sum</span>(<span style="color: #ff79c6;">self</span>.numerical(x_par)) + <span style="color: #bd93f9; font-weight: bold;">4</span>*<span style="color: #ffb86c;">sum</span>(<span style="color: #ff79c6;">self</span>.numerical(x_impar)) + <span style="color: #ff79c6;">self</span>.numerical(<span style="color: #ff79c6;">self</span>.b))
+        <span style="color: #ff79c6;">return</span> f<span style="color: #f1fa8c;">'Value = {cuad} +/- {epsilon}'</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">K</span>(r, theta, a) :
+    k = sp.S(k_sr(r, theta, a))
+
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Generate symbolic expression</span>
+    phi = sp.Symbol(<span style="color: #f1fa8c;">'phi'</span>)
+    func = Function(<span style="color: #bd93f9; font-weight: bold;">1</span>/sp.sqrt(<span style="color: #bd93f9; font-weight: bold;">1</span> - k*sp.sin(phi)**<span style="color: #bd93f9; font-weight: bold;">2</span>), phi, a=<span style="color: #bd93f9; font-weight: bold;">0</span>, b=np.pi/<span style="color: #bd93f9; font-weight: bold;">2</span>)
+
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Compute the integral</span>
+    func.simpson()
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">K(1.1, np.pi/4, 1)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Juan David Salcedo Hernández</p>
+<p class="date">Created: 2021-09-11 Sat 18:56</p>
+<p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
+</div>
+</body>
+</html>

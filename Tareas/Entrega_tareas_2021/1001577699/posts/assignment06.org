@@ -1,32 +1,245 @@
 #+TITLE: Assignment08
 #+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
 
+Usual imports and graphics configurations:
 #+begin_src ipython :session asession :results raw drawer
+%config InlineBackend.figure_format = 'svg'
+
 import numpy as np
-import scipy as sc
+import scipy.integrate as integrate
+from scipy.special import roots_legendre
+from scipy.misc import derivative
 import sympy as sp
-from scipy import optimize
+import matplotlib.pyplot as plt
 #+end_src
 
 #+RESULTS:
 :results:
-# Out[1]:
+# Out[27]:
 :end:
 
-Class for finding approximate integral values and bounding errors in numerical integration.
+* Differentiation: Lucy's quartic kernel
+A certain model in smoothed particle hydrodynamics (SPH) is given by a function
+$W : \mathbb{R}^2 \to \mathbb{R}$, which is in turn described by
+\[ W(r,h) = \begin{cases}
+\alpha_D (1 + 3q)(1 - q^3), & 0 \le q < h\\
+                         0, & \text{otherwise}.
+\end{cases} \]
+Here we have:
+\[ q = \frac{\rVert r - r' \rVert}{h}, \]
+and
+\[ \alpha_D = \frac{5}{\pi h^2}. \]
+
+We can for instance consider the restriction function $\left. W \right|_{h=1}$,
+with $r' = 0$; considering that we want to study this funciton's derivative both
+numerically and symbolically, we can make use of the following numerical
+approach to derivatives:
+#+begin_src ipython :session asession :results raw drawer :exports both
+def diff(func, x0, **kwargs) :
+    ''' numerical derivative, computes the finite differences '''
+    try :
+        # force IndexError in case of evaluation at a single point
+        n_ = np.asarray(x0).shape[0]
+        derivate = np.vectorize(derivative)
+    except IndexError :
+        derivate = derivative
+
+    return derivate(func, x0, **kwargs)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[28]:
+:end:
+Here we are just vectorising the ~derivative~ operation that is available on the
+~scipy~ module. In fact, we use the ~derivative~ operation itself if we are
+trying to evaluate a single point, and use the vectorised operation otherwise.
+
+Now we can proceed by making the desired graph. A few remarks:
+- The symbolic derivative, which I have denoted ~Sw()~ is computed only for numbers satisfying the ''interesting'' condition. Later on, in the ~graph()~ routine, I define a wrapper function ~sw()~ that evaluates ~Sw()~ at some point, provided it satisfies the stipulated conditions.
+- The ~w()~ function has a corresponding wrapper ~_w()~ in the ~graph()~ routine, which returns another function depending solely on the numerical parameter ~r~; we can differentiate this function to obtain a new function ~Dw()~.
+#+begin_src ipython :session asession :results raw drawer
+def Sw(h, r_src) :
+    ''' symbolic derivative of the function in the interesting case '''
+    r = sp.Symbol('r')
+
+    q = sp.sqrt((r - r_src)**2)/h
+    alpha = 5/(sp.pi*h**2)
+
+    w = alpha*(1 + 3*q)*(1 - q**3)
+    Sw = sp.diff(w, r)
+
+    Sw = sp.lambdify(r, Sw, 'numpy')
+    return Sw
+
+def w(r, h, r_src) :
+    ''' two-dimensional implementation of Lucy's quintic kernel '''
+    q = np.abs(r - r_src)/h
+    alpha = 5/(np.pi*h**2)
+
+    # define the cases for input elements
+    conditions = [ np.logical_and(0 <= q, q < 1), np.logical_or(0 > q, q >= 1) ]
+    # define the output depending on the case
+    output = [ alpha*(1 + 3*q)*(1 - q**3), 0 ]
+
+    return np.select(conditions, output)
+
+def graph(h, r_src, r0=-1.5, rf=1.5) :
+    ''' routine to plot the graphs of the function and its derivative '''
+    # define the domain
+    _r = np.linspace(r0, rf, 1000)
+
+    # wrapper function define the graph of w with its corresponding parameters
+    _w = lambda r : w(r, h, r_src)
+
+    # wrapper functions to define numerical and symbolic derivatives
+    Dw = lambda r : diff(_w, r, dx=1E-7)
+    def sw(r, h=h, r_src=r_src) :
+        q = np.abs(r - r_src)/h
+        if (0 <= q) and (q < 1) :
+            return Sw(h, r_src)(r)
+        else :
+            return 0.0
+
+    plt.plot(_r, _w(_r), 'k-', label='Kernel')
+    plt.plot(_r, Dw(_r), 'r-', label='Numerical derivative')
+    plt.plot(_r, [ sw(r) for r in _r ], 'b--', label='Analytic derivative')
+
+    plt.ylim(-5, 5)
+    plt.grid()
+    plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[132]:
+:end:
+#+begin_src ipython :session asession :results raw drawer :exports both
+graph(h=1, r_src=0)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[133]:
+[[file:./obipy-resources/VwFhWm.svg]]
+:end:
+
+* Integration
+We may proceed by describing what it takes to appropriately compute
+an approximation to the integral and its bounding error.
+
+** Trapezoid method
+Let $f : \mathbb{R} \to \mathbb{R}$ be an integrable function, we want to
+approximate the integral of $f$ on a closed interval $[a,b]$. For that purpose,
+we may start with the trapezoids' approach, which we describe below.
+
+The fact that the area under a sufficiently nice curve is approximately equal to
+the area under the straight line segment joining the interval's boundary points
+seems perfectly reasonable, and in fact can be more accurately stated in terms
+of the first order Lagrange polynomial of those boundary points.
+
+In pinning down our discussion, we shall turn to the fact that, if
+$f$ is a $C^\infty$ function and $(x_0,\ldots,x_n)$ is a sequence of points in
+the domain of $f$, then the following equality holds for all $x$ in the domain:
+\[ f(x) = \underbrace{\sum_{i=0}^n f(x_i) \cdot \mathcal{L}_i(x)}_{\mathcal{L}(x)} + \frac{f^{(n+1)}(\xi(x))}{(n+1)!}(x - x_0)(x - x_1)\cdots(x - x_n);\]
+here $\mathcal{L}$ denotes the Lagrange polynomial for the points $f(x_0),
+\ldots, f(x_n)$, and $\xi(x)$ is an unknown number in the domain of $f$ that
+depends on the input value $x$.
+
+In particular, if we take the first degree Lagrange polynomial of $f(a), f(b)$
+we will find an equation for the straight line through the boundary points that
+we mentioned earlier; thus our integral becomes:
+\[ \int_a^b f = \int_a^b \left( \frac{x - b}{a - b}f(a) + \frac{x - a}{a - b}f(b) \right) dx + \frac{1}{2}\int_a^b f''(\xi(x))(x - a)(x - b) dx. \]
+
+The first term on the right side must be the trapezoidal area we require for the
+approximation, which is straightforward to compute, and can even be regarded
+from a geometrical viewpoint. Its value is
+\[ f(a)(b - a) + \frac{(b - a)(f(b) - f(a))}{2} = \frac{b - a}{2}(f(a) + f(b)). \]
+
+On the other hand, the second term on the right amounts to the approximation
+error. The expression $(x - a)(x - b)$ is obviously nonnegative over the
+interval $[a,b]$, and so provided $f$ has continuous derivatives of all orders
+we can use the Mean Value Theorem for Integrals, i.e., we can assure that there
+exists some number $\xi \in [a,b]$ such that the integral equals
+\[ f''(\xi) \int_a^b (x - a)(x - b) dx = -\frac{(b - a)^3}{12} f''(\xi). \]
+
+We thus conclude that
+\[ \int_a^b f = \frac{b - a}{2}(f(a) + f(b)) - \frac{(b - a)^3}{12} f''(\xi). \]
+
+Furthermore, by definition of integral, it is easy to see that if we have some
+partition $(t_1,\ldots,t_n)$ of the interval $[a,b]$, then
+\[ \int_a^b f = \int_{t_0}^{t_1} f + \cdots + \int_{t_{n-1}}^{t_n} f; \]
+this fact readily allows us to improve the precision of the trapezoidal method,
+by increasing the number of elements our partition has.
+
+In general, if the partition we regard is evenly spaced (i.e., $t_{i} - t_{i-1}
+= h = (b - a)/n$), we can write
+\begin{align*}
+  \int_a^b f &= \int_{t_0}^{t_1} f + \cdots + \int_{t_{n-1}}^{t_n} f, \\
+             &\approx \frac{t_1 - t_0}{2}(f(t_0) + f(t_1)) + \cdots + \frac{t_n - t_{n-1}}{2}(f(t_{n-1}) + f(t_n)), \\
+             &= \frac{h}{2}(f(t_0) + 2f(t_1) + \cdots + 2f(t_{n-1}) + f(t_n)), \\
+             &= h\left( \frac12 f(a) + \sum_{i=1}^{n-1} f(t_i) + \frac12 f(b) \right).
+\end{align*}
+This expression has a bounding error which can be written as:
+\[ -\frac{n h^3}{12}f''(\xi) = -\frac{(b - a)h^2}{12}f''(\xi). \]
+
+** Simpson's rule
+A similar reasoning leads to the so-called Simpson's rule, if we take the second order Lagrange polynomial interpolating three values $(f(t_i), f(t_{i+1}), f(t_{i+2}))$ of an evenly spaced partition $(t_0, \ldots, t_n)$.
+
+The formula for the composite Simpson's rule can be written as
+\[ \int_a^b f = \frac{h}{3}\left( f(a) + 2 \sum_{i=1}^{(n/2)-1} f(x_{2i}) + 4 \sum_{i=1}^{n/2} f(x_{2i-1}) + f(b) \right), \]
+with an error term of
+\[ -\frac{(b - a)h^4}{180} f^{(4)}(\xi) \]
+
+** Gaussian quadrature
+Both the trapezoid and Simpson's methods make use of evenly spaced intervals to
+compute the integral of a function $f$ over a closed interval. The Gaussian
+quadrature method gets rid of this condition, so we can choose the partition in
+a more optimal manner. The collection $t_0, \ldots, t_n$ that composes a
+partition of the interval $[-1,1]$ is chosen, along with a set of coefficients
+$c_0,\ldots, c_n$, to minimize the error bound to the following approximation:
+\[ \int_a^b f \approx \frac{b - a}{2} \sum_{i=0}^n c_i f\left( \frac{b - a}{2}t_i + \frac{a + b}{2} \right) \]
+
+As it turns out, the points $t_i$ needed to approximate the function's integral
+are the roots of the $n$-th degree Legenrde Polynomial, and the weighing
+coefficients are also determined by dint of these roots.
+
+** Symbolic-numerical implementation
+As a remark, it should be acknowledged that the following is not an effective
+approach to numerical integration, insomuch as it encompasses a symbolic
+implementation of the Simpson's method algorithm, which hinges upon the explicit
+computation of a formula for the fourth derivative of the used expression to
+estimate an upper bound for the error.
+
+For the implementation we must find an upper bound for the error term in each
+method. Which is to say we must come up with a routine to find the maximum value
+of a single-variable function on a closed interval, assuming the given function
+is continuous. To find these values, we must find the critical points, in which
+the derivative of the function is zero, and compare them against the upper and
+lower bounds of the interval under consideration, these manipulations can be
+preformed symbolically if the input function is sufficiently  (it must be
+continuously differentiable).
+
+Then, to find out the number of elements our partitions must have, we make use
+of the mathematical relations we have seen above.
 #+begin_src ipython :session asession :results raw drawer
 def closed_set_max(func, variable, lower_bound, upper_bound) :
-    ''' Find the maximum of a smooth funtion on an open interval '''
+    ''' Find the maximum of a smooth function on an open interval '''
     d_func = sp.diff(func, variable, 1)
     critical = sp.solveset(d_func, variable,
                            domain=sp.Interval(lower_bound, upper_bound))
-    maximum = sp.Max(func.subs(variable, lower_bound),
-                     func.subs(variable, upper_bound),
-                     ,*[func.subs(variable, i) for i in critical])
+    try :
+        maximum = sp.Max(func.subs(variable, lower_bound),
+                         func.subs(variable, upper_bound),
+                         *[func.subs(variable, i) for i in critical])
+    except :
+        # if this fails, then the set of critical points is not iterable
+        maximum = sp.Max(func.subs(variable, lower_bound),
+                         func.subs(variable, upper_bound))
     return float(maximum)
 
 class Function :
-    ''' Properties of a $C^{\infty}$ function. Class for integration. '''
+    ''' Properties of a smooth function. Class for integration. '''
     def __init__(self, expression, variable, a=0, b=1) :
         ''' the mathematical expression must be a sympy object '''
         self.numerical = sp.lambdify(variable, expression, 'numpy')
@@ -39,42 +252,343 @@ class Function :
         fourth_deriv = sp.diff(self.symbolic, self.symbol, 4)
 
         # find an absolute maximum for the fourth derivative on the given domain
-        maximum = closed_set_max(fourth_deriv, self.symbol, self.a, self.b)
+        maximum = np.abs( closed_set_max(fourth_deriv, self.symbol, self.a, self.b) )
 
-        # compute the number of intervals
+        # compute the number of required intervals
         return np.ceil( ((maximum*(self.b - self.a)**5)/(epsilon*180*2**4))**0.25 )
 
+    def trapezoid_partition(self, epsilon=0.001) :
+        # compute the second derivative with sympy
+        second_deriv = sp.diff(self.symbolic, self.symbol, 2)
+
+        # find an absolute maximum for the fourth derivative on the given domain
+        maximum = np.abs( closed_set_max(second_deriv, self.symbol, self.a, self.b) )
+
+        # compute the number of required intervals
+        return np.ceil( ((maximum*(self.b - self.a)**3)/(epsilon*12))**0.5 )
+
     def simpson(self, epsilon=0.001) :
-        N = self.simpson_partition(epsilon)
-        n_nodos = int( np.ceil(2*N + 1) ) # (N+1 extremos de subintervalos) + (N puntos medios)
-        x = np.linspace(self.a, self.b, n_nodos)
+        # get the size of the partition from the required uncertainty level
+        n = int( self.simpson_partition(epsilon) )
+        n_nodes = 2*n + 1
+        # partition the interval
+        partition = np.linspace(self.a, self.b, n_nodes)
 
-        x_impar = x[1: :2] # Nodos con coordenada impar (ptos medios)
-        x_par = x[2:n_nodos-1:2] # Nodos con coordenada par (salvo e
+        # odd-indexed nodes
+        t_odd = partition[1::2]
+        # even-indexed nodes
+        t_even = partition[2:n_nodes-1:2]
 
-        h = (self.b - self.a)/(2*N) # Distancia entre dos nodos de integración
-        cuad = h/3*(self.numerical(self.a) + 2*sum(self.numerical(x_par)) + 4*sum(self.numerical(x_impar)) + self.numerical(self.b))
-        return f'Value = {cuad} +/- {epsilon}'
+        # distance between two nodes
+        h = (self.b - self.a)/(2*n)
+        integral = h/3*(self.numerical(self.a) + 2*sum(self.numerical(t_even)) + 4*sum(self.numerical(t_odd)) + self.numerical(self.b))
+        return integral
 
-x = sp.Symbol('x')
-f = Function(sp.log(1 + x**2), x)
+    def trapezoid(self, epsilon=0.001) :
+        # get the size of the partition from the required uncertainty level
+        n = int( self.trapezoid_partition(epsilon) )
+        n_nodes = 2*n + 1
+        # partition the interval
+        partition = np.linspace(self.a, self.b, n_nodes)
+        # intermediate nodes
+        nodes = partition[1:n_nodes-1]
 
-f.simpson(epsilon=1e-5)
+        # distance between two nodes
+        h = (self.b - self.a)/(2*n)
+
+        integral = h*(0.5*self.numerical(self.a) + sum(self.numerical(nodes)) + 0.5*self.numerical(self.b))
+        return integral
 #+end_src
 
 #+RESULTS:
 :results:
-# Out[3]:
-: 'Value = 0.2639421665115566 +/- 1e-05'
+# Out[134]:
+:end:
+** Proof of concept
+We can, for instance find the following integral:
+\[ \int_1^{12} x^5 dx. \]
+#+begin_src ipython :session asession :results raw drawer :exports both
+x = sp.Symbol('x')
+g = Function(x**5, x, a=1, b=12)
+g.trapezoid(epsilon=1e-5), g.simpson(epsilon=1e-5)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[136]:
+: (497663.83333400625, 497663.8333387183)
 :end:
 
-#+begin_src ipython :session asession :results raw drawer
-g = Function(x**5, x, a=1, b=12)
-g.simpson(epsilon=1e-5)
+If we wish to compute
+\[ \int_0^1 e^{1 - x^2} dx, \]
+we can use the different methods we have defined:
+#+begin_src ipython :session asession :results raw drawer :exports both
+f = Function(sp.exp(1 - x**2), x, a=0, b=1)
+
+# tuple with integral values: trapezoid, simpson, quadrature (reference value)
+trap, simp, quad, err_quad = f.trapezoid(epsilon=1e-5), f.simpson(epsilon=1e-5), *integrate.quad(f.numerical, 0, 1)
+trap, simp, quad
 #+end_src
 
 #+RESULTS:
 :results:
-# Out[4]:
-: 'Value = 497663.8333387183 +/- 1e-05'
+# Out[137]:
+: (2.0300760037942545, 2.030079539104097, 2.030078469278705)
+:end:
+
+For the integral
+\[ \int_e^{2e} \frac{1}{\log x} dx, \]
+we have:
+#+begin_src ipython :session asession :results raw drawer :exports both
+h = Function(1/sp.log(x), x, np.e, 2*np.e)
+
+# tuple with integral values: trapezoid, simpson, quadrature (reference value)
+trap, simp, quad, err_quad = h.trapezoid(epsilon=1e-5), h.simpson(epsilon=1e-5), *integrate.quad(h.numerical, np.e, 2*np.e)
+trap, simp, quad
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[168]:
+: (2.00381124795606, 2.0038118326682275, 2.0038105616240243)
+:end:
+
+To compute the improper integral
+\[ \int_{-\infty}^{\infty} \frac{1}{1 + x^2} dx = \int_{-\infty}^0 \frac{1}{1 + x^2} dx + \int_0^{\infty} \frac{1}{1 + x^2} dx, \]
+we shall use a substitution on left hand side integrals:
+
+- $\int_{-\infty}^0 1/(1 + x^2) dx$.
+
+  Let
+  \[ x = \frac{t}{1 + t}, \quad dx = \frac{1}{(1 + t)^2}, \]
+  so that $x \to -\infty$ as $t \to -1$, and the integral becomes
+  \[ \int_{-\infty}^0 \frac{1}{1 + x^2} dx = \int_{-1}^0 \frac{1}{2t^2 + 2t + 1} dt \]
+
+- $\int_0^{\infty} 1/(1 + x^2) dx$.
+
+  Let
+  \[ x = \frac{t}{1 - t}, \quad dx = \frac{1}{(1 - t)^2}, \]
+  so that $x \to \infty$ as $t \to 1$, and the integral becomes
+  \[ \int_0^{\infty} \frac{1}{1 + x^2} dx = \int_0^1 \frac{1}{2t^2 - 2t + 1} dt \]
+
+With these considerations, we have:
+#+begin_src ipython :session asession :results raw drawer :exports both
+phi1 = Function(1/(2*x**2 - 2*x + 1), x, 0, 1)
+phi2 = Function(1/(2*x**2 + 2*x + 1), x, -1, 0)
+
+trap = phi1.trapezoid(epsilon=1e-5) + phi2.trapezoid(epsilon=1e-5)
+simp = phi1.simpson(epsilon=1e-5) + phi2.simpson(epsilon=1e-5)
+quad, err_quad = integrate.quad(lambda x : 1/(1 + x**2), -np.inf, np.inf)
+trap, simp, quad
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[177]:
+: (3.141587676831256, 3.1415926453708467, 3.141592653589793)
+:end:
+
+Numerical iterated integrals. TODO.
+
+** Application: Escape velocity
+Suppose that a body of mass $m$ is travelling vertically upward, starting at the surface
+of the earth. If all resistance is neglected, the escape velocity $v$ (i.e. the
+minimum velocity the body must acquire to escape the earth's gravitational
+field) is given by:
+\[ v = \sqrt{2gR \int_1^{\infty} \frac{1}{z^2} dz}, \]
+where $R$ is the radius of the earth and $z = x/R$.
+
+With these conditions, it is fairly straightforward to see that
+\[ \int_1^{\infty} \frac{1}{z^2} dz = R^2 \int_1^{\infty} \frac{1}{x^2} dx, \]
+so that
+\[ v = \sqrt{2gR^3 \int_1^{\infty} \frac{1}{x^2} dx}. \]
+
+The value of this integral is clearly one, but we can still inegrate it numerically:
+#+begin_src ipython :session asession :results raw drawer :exports both
+# compute the integral
+quad, err_quad = integrate.quad(lambda x : 1/x**2, 1, np.inf)
+
+# define the other parameters
+g, R = 9.8, 6.3e6
+
+# compute the escape velocity
+v = np.sqrt(2*g*R**3*quad)
+v
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[178]:
+: 70006579690.76907
+:end:
+
+** Error analysis
+ The ~Function~ class I wrote above already provides implementations for both
+ the trapezoid and Simpson's methods; however, they cannot directly parse a
+ number of partitions $n$. We may easily rewrite them as:
+#+begin_src ipython :session asession :results raw drawer
+def trapezoid(function, n, a=0, b=1) :
+    n_nodes = 2*n + 1
+    # partition the interval
+    partition = np.linspace(a, b, n_nodes)
+    # intermediate nodes
+    nodes = partition[1:n_nodes-1]
+
+    # distance between two nodes
+    h = (b - a)/(2*n)
+
+    integral = h*(0.5*function(a) + sum(function(nodes)) + 0.5*function(b))
+    return integral
+
+def simpson(function, n, a=0, b=1) :
+    n_nodes = 2*n + 1
+    # partition the interval
+    partition = np.linspace(a, b, n_nodes)
+
+    # odd-indexed nodes
+    t_odd = partition[1::2]
+    # even-indexed nodes
+    t_even = partition[2:n_nodes-1:2]
+
+    # distance between two nodes
+    h = (b - a)/(2*n)
+    integral = h/3*(function(a) + 2*sum(function(t_even)) + 4*sum(function(t_odd)) + function(b))
+    return integral
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[102]:
+:end:
+Also, we can come up with a fairly uncomplicated implementation of the Gaussian
+quadrature approximation:
+#+begin_src ipython :session asession :results raw drawer
+def quadrature(function, n, a=0, b=1) :
+    partition, coeff = roots_legendre(n + 1)
+    integral = 0.5*(b - a)*sum(coeff*function(0.5*(b - a)*partition + 0.5*(b + a)))
+    return integral
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[116]:
+:end:
+
+Suppose that we want to analyse the error in computing the integrals we've seen
+so far for different values of $n$.
+
+We are going to be using dataframes, so the following command comes in handy for
+appropriate formatting in emacs:
+#+NAME: test_org_post_clean
+#+BEGIN_SRC sh :results verbatim :var data="" :results output
+echo "$data" | sed s/\^:\ \//g | grep -v "^$" | sed s/\'//g
+#+END_SRC
+
+#+RESULTS: test_org_post_clean
+
+#+RESULTS:
+
+We need to initialise a dataframe with the size of the partition in each case
+#+begin_src ipython :session asession :results raw drawer :display text/org :post test_org_post_clean(data=*this*) :exports both
+import pandas as pd
+from tabulate import tabulate
+
+# dataframe initialisation
+indexes = { 'n' : [2, 10, 20 , 40 , 80, 160] }
+df = pd.DataFrame(indexes)
+
+# define the function we are analysing along with the exact value for its integral
+f = lambda x : np.exp(-x)
+exact = 1 - 1/np.e
+
+# vectorise the numerical procedures
+_trapezoid = np.vectorize(trapezoid)
+_simpson = np.vectorize(simpson)
+_quadrature = np.vectorize(quadrature)
+
+# compute numerical estimates
+df['trap'] = _trapezoid(f, df['n'])
+df['simp'] = _simpson(f, df['n'])
+df['quad'] = _quadrature(f, df['n'])
+
+# compute relative errors
+df['eps_trap'] = df.trap.apply(lambda item:
+                               abs(item - exact)/exact)
+df['eps_simp'] = df.simp.apply(lambda item:
+                               abs(item - exact)/exact)
+df['eps_quad'] = df.quad.apply(lambda item:
+                               abs(item - exact)/exact)
+
+# clean the data
+del df['trap']; del df['simp']; del df['quad']
+
+tabulate(df, headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[121]:
+|    |   n |    eps_trap |    eps_simp |    eps_quad |
+|----+-----+-------------+-------------+-------------|
+|  0 |   2 | 0.00520292  | 2.1541e-05  | 4.79599e-07 |
+|  1 |  10 | 0.000208325 | 3.47119e-08 | 1.75635e-16 |
+|  2 |  20 | 5.20828e-05 | 2.16998e-09 | 1.75635e-16 |
+|  3 |  40 | 1.30208e-05 | 1.35631e-10 | 3.51269e-16 |
+|  4 |  80 | 3.25521e-06 | 8.47683e-12 | 0           |
+|  5 | 160 | 8.13802e-07 | 5.30241e-13 | 3.51269e-16 |
+:end:
+
+We can draw up the required plot:
+#+begin_src ipython :session asession :results raw drawer :exports both
+plt.loglog(df.n, df.eps_trap, 'bo', label='trap')
+plt.loglog(df.n, df.eps_simp, 'ro', label='simp')
+plt.loglog(df.n, df.eps_quad, 'ko', label='quad')
+
+plt.xlabel('n')
+plt.ylabel('eps')
+
+plt.legend()
+plt.grid()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[131]:
+[[file:./obipy-resources/T7lKpm.svg]]
+:end:
+The trapezoid and Simpson errors are apparently a straight line, we can find an equation for them as follows:
+#+begin_src ipython :session asession :results raw drawer :exports both
+from scipy.optimize import curve_fit
+
+# n = np.log10(df.n)
+# trap_ = np.log10(df.eps_trap)
+# simp_ = np.log10(df.eps_simp)
+
+# fit a straight line
+f = lambda n, alpha, c : c*n**alpha
+opt_trap, cov_trap = curve_fit(f, df.n, df.eps_trap)
+opt_simp, cov_simp = curve_fit(f, df.n, df.eps_simp)
+
+# actual points
+plt.loglog(df.n, df.eps_trap, 'bo', label='trap')
+plt.loglog(df.n, df.eps_simp, 'ro', label='simp')
+plt.loglog(df.n, df.eps_quad, 'ko', label='quad')
+
+# trend lines
+plt.plot(df.n, f(df.n, *opt_trap), 'b-', label='trap fit')
+plt.plot(df.n, f(df.n, *opt_simp), 'r-', label='simp fit')
+
+plt.xlabel('n')
+plt.ylabel('eps')
+
+plt.legend()
+plt.grid()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[157]:
+[[file:./obipy-resources/bOFEco.svg]]
 :end:

@@ -117,7 +117,9 @@ tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
 |  4 |          142 |     65.3888 |   -0.429547 |
 :end:
 
-Aiming for an insightful visualisation of this phenomenon, we can easily plot these datapoints. We see that the pendulum's motion is, approximately, a damped harmonic oscillator:
+Aiming for an insightful visualisation of this phenomenon, we can easily plot
+these datapoints. We see that the pendulum's motion is, approximately, a damped
+harmonic oscillator:
 #+begin_src ipython :exports both :session asession :results raw drawer
 plt.plot(df['Tiempo[ms]'], df.AnguloRad, 'b.')
 plt.xlim(0, 20000)
@@ -148,8 +150,8 @@ represents the input frequency of $\hat f$. This $\hat f$ function is the
 Fourier transform of $f$.
 
 For discrete values, though, we cannot hope to compute an integral, let alone an
-improper integral; instead we take the summation approach: If $\{a_n\}_{n=0}^m$ are thej
-observed amplitude values at the _evenly spaced times_, then we have
+improper integral; instead we take the summation approach: If $\{a_n\}_{n=0}^m$ are the
+observed amplitude values on an _evenly partitioned time domain_, then we have
 \[ \hat f(k) = \sum_{n=0}^m a_n \exp\left( -2\pi ik \frac{n}{m} \right). \]
 
 This definition is precisely the one that is implemented in scipy:

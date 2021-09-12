@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-09-03 Fri 22:17 -->
+<!-- 2021-09-12 Sun 16:34 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Assignment08</title>
@@ -221,34 +221,351 @@
     /*]]>*///-->
 // @license-end
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="content">
 <h1 class="title">Assignment08</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orge9370b5">1. Differentiation: Lucy&rsquo;s quartic kernel</a></li>
+<li><a href="#org18c9141">2. Integration</a>
+<ul>
+<li><a href="#org41bca72">2.1. Trapezoid method</a></li>
+<li><a href="#org1e8b43a">2.2. Simpson&rsquo;s rule</a></li>
+<li><a href="#org81fc49c">2.3. Gaussian quadrature</a></li>
+<li><a href="#org459c851">2.4. Symbolic-numerical implementation</a></li>
+<li><a href="#org1e47864">2.5. Proof of concept</a></li>
+<li><a href="#orgfd0e886">2.6. Application: Escape velocity</a></li>
+<li><a href="#org0397a32">2.7. Error analysis</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+Usual imports and graphics configurations:
+</p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
-<span style="color: #ff79c6;">import</span> scipy <span style="color: #ff79c6;">as</span> sc
+<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
+
+<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">import</span> scipy.integrate <span style="color: #ff79c6;">as</span> integrate
+<span style="color: #ff79c6;">from</span> scipy.special <span style="color: #ff79c6;">import</span> roots_legendre
+<span style="color: #ff79c6;">from</span> scipy.misc <span style="color: #ff79c6;">import</span> derivative
 <span style="color: #ff79c6;">import</span> sympy <span style="color: #ff79c6;">as</span> sp
-<span style="color: #ff79c6;">from</span> scipy <span style="color: #ff79c6;">import</span> optimize
+<span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
+</pre>
+</div>
+
+<div id="outline-container-orge9370b5" class="outline-2">
+<h2 id="orge9370b5"><span class="section-number-2">1</span> Differentiation: Lucy&rsquo;s quartic kernel</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+A certain model in smoothed particle hydrodynamics (SPH) is given by a function
+\(W : \mathbb{R}^2 \to \mathbb{R}\), which is in turn described by
+\[ W(r,h) = \begin{cases}
+\alpha_D (1 + 3q)(1 - q^3), & 0 \le q < h\\
+                         0, & \text{otherwise}.
+\end{cases} \]
+Here we have:
+\[ q = \frac{\rVert r - r' \rVert}{h}, \]
+and
+\[ \alpha_D = \frac{5}{\pi h^2}. \]
+</p>
+
+<p>
+We can for instance consider the restriction function \(\left. W \right|_{h=1}\),
+with \(r' = 0\); considering that we want to study this funciton&rsquo;s derivative both
+numerically and symbolically, we can make use of the following numerical
+approach to derivatives:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">diff</span>(func, x0, **kwargs) :
+    <span style="color: #8995ba;">''' numerical derivative, computes the finite differences '''</span>
+    <span style="color: #ff79c6;">try</span> :
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">force IndexError in case of evaluation at a single point</span>
+        n_ = np.asarray(x0).shape[<span style="color: #bd93f9; font-weight: bold;">0</span>]
+        derivate = np.vectorize(derivative)
+    <span style="color: #ff79c6;">except</span> <span style="color: #bd93f9;">IndexError</span> :
+        derivate = derivative
+
+    <span style="color: #ff79c6;">return</span> derivate(func, x0, **kwargs)
 </pre>
 </div>
 
 <p>
-Class for finding approximate integral values and bounding errors in numerical integration.
+Here we are just vectorising the <code>derivative</code> operation that is available on the
+<code>scipy</code> module. In fact, we use the <code>derivative</code> operation itself if we are
+trying to evaluate a single point, and use the vectorised operation otherwise.
+</p>
+
+<p>
+Now we can proceed by making the desired graph. A few remarks:
+</p>
+<ul class="org-ul">
+<li>The symbolic derivative, which I have denoted <code>Sw()</code> is computed only for numbers satisfying the &rsquo;&rsquo;interesting&rsquo;&rsquo; condition. Later on, in the <code>graph()</code> routine, I define a wrapper function <code>sw()</code> that evaluates <code>Sw()</code> at some point, provided it satisfies the stipulated conditions.</li>
+<li>The <code>w()</code> function has a corresponding wrapper <code>_w()</code> in the <code>graph()</code> routine, which returns another function depending solely on the numerical parameter <code>r</code>; we can differentiate this function to obtain a new function <code>Dw()</code>.</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">Sw</span>(h, r_src) :
+    <span style="color: #8995ba;">''' symbolic derivative of the function in the interesting case '''</span>
+    r = sp.Symbol(<span style="color: #f1fa8c;">'r'</span>)
+
+    q = sp.sqrt((r - r_src)**<span style="color: #bd93f9; font-weight: bold;">2</span>)/h
+    alpha = <span style="color: #bd93f9; font-weight: bold;">5</span>/(sp.pi*h**<span style="color: #bd93f9; font-weight: bold;">2</span>)
+
+    w = alpha*(<span style="color: #bd93f9; font-weight: bold;">1</span> + <span style="color: #bd93f9; font-weight: bold;">3</span>*q)*(<span style="color: #bd93f9; font-weight: bold;">1</span> - q**<span style="color: #bd93f9; font-weight: bold;">3</span>)
+    Sw = sp.diff(w, r)
+
+    Sw = sp.lambdify(r, Sw, <span style="color: #f1fa8c;">'numpy'</span>)
+    <span style="color: #ff79c6;">return</span> Sw
+
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">w</span>(r, h, r_src) :
+    <span style="color: #8995ba;">''' two-dimensional implementation of Lucy's quintic kernel '''</span>
+    q = np.<span style="color: #ffb86c;">abs</span>(r - r_src)/h
+    alpha = <span style="color: #bd93f9; font-weight: bold;">5</span>/(np.pi*h**<span style="color: #bd93f9; font-weight: bold;">2</span>)
+
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">define the cases for input elements</span>
+    conditions = [ np.logical_and(<span style="color: #bd93f9; font-weight: bold;">0</span> &lt;= q, q &lt; <span style="color: #bd93f9; font-weight: bold;">1</span>), np.logical_or(<span style="color: #bd93f9; font-weight: bold;">0</span> &gt; q, q &gt;= <span style="color: #bd93f9; font-weight: bold;">1</span>) ]
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">define the output depending on the case</span>
+    output = [ alpha*(<span style="color: #bd93f9; font-weight: bold;">1</span> + <span style="color: #bd93f9; font-weight: bold;">3</span>*q)*(<span style="color: #bd93f9; font-weight: bold;">1</span> - q**<span style="color: #bd93f9; font-weight: bold;">3</span>), <span style="color: #bd93f9; font-weight: bold;">0</span> ]
+
+    <span style="color: #ff79c6;">return</span> np.select(conditions, output)
+
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">graph</span>(h, r_src, r0=-<span style="color: #bd93f9; font-weight: bold;">1.5</span>, rf=<span style="color: #bd93f9; font-weight: bold;">1.5</span>) :
+    <span style="color: #8995ba;">''' routine to plot the graphs of the function and its derivative '''</span>
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">define the domain</span>
+    _r = np.linspace(r0, rf, <span style="color: #bd93f9; font-weight: bold;">1000</span>)
+
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">wrapper function define the graph of w with its corresponding parameters</span>
+    _w = <span style="color: #ff79c6;">lambda</span> r : w(r, h, r_src)
+
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">wrapper functions to define numerical and symbolic derivatives</span>
+    Dw = <span style="color: #ff79c6;">lambda</span> r : diff(_w, r, dx=1E-<span style="color: #bd93f9; font-weight: bold;">7</span>)
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">sw</span>(r, h=h, r_src=r_src) :
+        q = np.<span style="color: #ffb86c;">abs</span>(r - r_src)/h
+        <span style="color: #ff79c6;">if</span> (<span style="color: #bd93f9; font-weight: bold;">0</span> &lt;= q) <span style="color: #ff79c6;">and</span> (q &lt; <span style="color: #bd93f9; font-weight: bold;">1</span>) :
+            <span style="color: #ff79c6;">return</span> Sw(h, r_src)(r)
+        <span style="color: #ff79c6;">else</span> :
+            <span style="color: #ff79c6;">return</span> <span style="color: #bd93f9; font-weight: bold;">0.0</span>
+
+    plt.plot(_r, _w(_r), <span style="color: #f1fa8c;">'k-'</span>, label=<span style="color: #f1fa8c;">'Kernel'</span>)
+    plt.plot(_r, Dw(_r), <span style="color: #f1fa8c;">'r-'</span>, label=<span style="color: #f1fa8c;">'Numerical derivative'</span>)
+    plt.plot(_r, [ sw(r) <span style="color: #ff79c6;">for</span> r <span style="color: #ff79c6;">in</span> _r ], <span style="color: #f1fa8c;">'b--'</span>, label=<span style="color: #f1fa8c;">'Analytic derivative'</span>)
+
+    plt.ylim(-<span style="color: #bd93f9; font-weight: bold;">5</span>, <span style="color: #bd93f9; font-weight: bold;">5</span>)
+    plt.grid()
+    plt.legend()
+    plt.show()
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-ipython">graph(h=<span style="color: #bd93f9; font-weight: bold;">1</span>, r_src=<span style="color: #bd93f9; font-weight: bold;">0</span>)
+</pre>
+</div>
+
+
+<div id="org70e17ae" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/jgdAtF.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org18c9141" class="outline-2">
+<h2 id="org18c9141"><span class="section-number-2">2</span> Integration</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+We may proceed by describing what it takes to appropriately compute
+an approximation to the integral and its bounding error.
+</p>
+</div>
+
+<div id="outline-container-org41bca72" class="outline-3">
+<h3 id="org41bca72"><span class="section-number-3">2.1</span> Trapezoid method</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Let \(f : \mathbb{R} \to \mathbb{R}\) be an integrable function, we want to
+approximate the integral of \(f\) on a closed interval \([a,b]\). For that purpose,
+we may start with the trapezoids&rsquo; approach, which we describe below.
+</p>
+
+<p>
+The fact that the area under a sufficiently nice curve is approximately equal to
+the area under the straight line segment joining the interval&rsquo;s boundary points
+seems perfectly reasonable, and in fact can be more accurately stated in terms
+of the first order Lagrange polynomial of those boundary points.
+</p>
+
+<p>
+In pinning down our discussion, we shall turn to the fact that, if
+\(f\) is a \(C^\infty\) function and \((x_0,\ldots,x_n)\) is a sequence of points in
+the domain of \(f\), then the following equality holds for all \(x\) in the domain:
+\[ f(x) = \underbrace{\sum_{i=0}^n f(x_i) \cdot \mathcal{L}_i(x)}_{\mathcal{L}(x)} + \frac{f^{(n+1)}(\xi(x))}{(n+1)!}(x - x_0)(x - x_1)\cdots(x - x_n);\]
+here \(\mathcal{L}\) denotes the Lagrange polynomial for the points \(f(x_0),
+\ldots, f(x_n)\), and \(\xi(x)\) is an unknown number in the domain of \(f\) that
+depends on the input value \(x\).
+</p>
+
+<p>
+In particular, if we take the first degree Lagrange polynomial of \(f(a), f(b)\)
+we will find an equation for the straight line through the boundary points that
+we mentioned earlier; thus our integral becomes:
+\[ \int_a^b f = \int_a^b \left( \frac{x - b}{a - b}f(a) + \frac{x - a}{a - b}f(b) \right) dx + \frac{1}{2}\int_a^b f''(\xi(x))(x - a)(x - b) dx. \]
+</p>
+
+<p>
+The first term on the right side must be the trapezoidal area we require for the
+approximation, which is straightforward to compute, and can even be regarded
+from a geometrical viewpoint. Its value is
+\[ f(a)(b - a) + \frac{(b - a)(f(b) - f(a))}{2} = \frac{b - a}{2}(f(a) + f(b)). \]
+</p>
+
+<p>
+On the other hand, the second term on the right amounts to the approximation
+error. The expression \((x - a)(x - b)\) is obviously nonnegative over the
+interval \([a,b]\), and so provided \(f\) has continuous derivatives of all orders
+we can use the Mean Value Theorem for Integrals, i.e., we can assure that there
+exists some number \(\xi \in [a,b]\) such that the integral equals
+\[ f''(\xi) \int_a^b (x - a)(x - b) dx = -\frac{(b - a)^3}{12} f''(\xi). \]
+</p>
+
+<p>
+We thus conclude that
+\[ \int_a^b f = \frac{b - a}{2}(f(a) + f(b)) - \frac{(b - a)^3}{12} f''(\xi). \]
+</p>
+
+<p>
+Furthermore, by definition of integral, it is easy to see that if we have some
+partition \((t_1,\ldots,t_n)\) of the interval \([a,b]\), then
+\[ \int_a^b f = \int_{t_0}^{t_1} f + \cdots + \int_{t_{n-1}}^{t_n} f; \]
+this fact readily allows us to improve the precision of the trapezoidal method,
+by increasing the number of elements our partition has.
+</p>
+
+<p>
+In general, if the partition we regard is evenly spaced (i.e., \(t_{i} - t_{i-1}
+= h = (b - a)/n\)), we can write
+</p>
+\begin{align*}
+  \int_a^b f &= \int_{t_0}^{t_1} f + \cdots + \int_{t_{n-1}}^{t_n} f, \\
+             &\approx \frac{t_1 - t_0}{2}(f(t_0) + f(t_1)) + \cdots + \frac{t_n - t_{n-1}}{2}(f(t_{n-1}) + f(t_n)), \\
+             &= \frac{h}{2}(f(t_0) + 2f(t_1) + \cdots + 2f(t_{n-1}) + f(t_n)), \\
+             &= h\left( \frac12 f(a) + \sum_{i=1}^{n-1} f(t_i) + \frac12 f(b) \right).
+\end{align*}
+<p>
+This expression has a bounding error which can be written as:
+\[ -\frac{n h^3}{12}f''(\xi) = -\frac{(b - a)h^2}{12}f''(\xi). \]
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1e8b43a" class="outline-3">
+<h3 id="org1e8b43a"><span class="section-number-3">2.2</span> Simpson&rsquo;s rule</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+A similar reasoning leads to the so-called Simpson&rsquo;s rule, if we take the second order Lagrange polynomial interpolating three values \((f(t_i), f(t_{i+1}), f(t_{i+2}))\) of an evenly spaced partition \((t_0, \ldots, t_n)\).
+</p>
+
+<p>
+The formula for the composite Simpson&rsquo;s rule can be written as
+\[ \int_a^b f = \frac{h}{3}\left( f(a) + 2 \sum_{i=1}^{(n/2)-1} f(x_{2i}) + 4 \sum_{i=1}^{n/2} f(x_{2i-1}) + f(b) \right), \]
+with an error term of
+\[ -\frac{(b - a)h^4}{180} f^{(4)}(\xi) \]
+</p>
+</div>
+</div>
+
+<div id="outline-container-org81fc49c" class="outline-3">
+<h3 id="org81fc49c"><span class="section-number-3">2.3</span> Gaussian quadrature</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+Both the trapezoid and Simpson&rsquo;s methods make use of evenly spaced intervals to
+compute the integral of a function \(f\) over a closed interval. The Gaussian
+quadrature method gets rid of this condition, so we can choose the partition in
+a more optimal manner. The collection \(t_0, \ldots, t_n\) that composes a
+partition of the interval \([-1,1]\) is chosen, along with a set of coefficients
+\(c_0,\ldots, c_n\), to minimize the error bound to the following approximation:
+\[ \int_a^b f \approx \frac{b - a}{2} \sum_{i=0}^n c_i f\left( \frac{b - a}{2}t_i + \frac{a + b}{2} \right) \]
+</p>
+
+<p>
+As it turns out, the points \(t_i\) needed to approximate the function&rsquo;s integral
+are the roots of the $n$-th degree Legenrde Polynomial, and the weighing
+coefficients are also determined by dint of these roots.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org459c851" class="outline-3">
+<h3 id="org459c851"><span class="section-number-3">2.4</span> Symbolic-numerical implementation</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+As a remark, it should be acknowledged that the following is not an effective
+approach to numerical integration, insomuch as it encompasses a symbolic
+implementation of the Simpson&rsquo;s method algorithm, which hinges upon the explicit
+computation of a formula for the fourth derivative of the used expression to
+estimate an upper bound for the error.
+</p>
+
+<p>
+For the implementation we must find an upper bound for the error term in each
+method. Which is to say we must come up with a routine to find the maximum value
+of a single-variable function on a closed interval, assuming the given function
+is continuous. To find these values, we must find the critical points, in which
+the derivative of the function is zero, and compare them against the upper and
+lower bounds of the interval under consideration, these manipulations can be
+preformed symbolically if the input function is sufficiently  (it must be
+continuously differentiable).
+</p>
+
+<p>
+Then, to find out the number of elements our partitions must have, we make use
+of the mathematical relations we have seen above.
 </p>
 <div class="org-src-container">
 <pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">closed_set_max</span>(func, variable, lower_bound, upper_bound) :
-    <span style="color: #8995ba;">''' Find the maximum of a smooth funtion on an open interval '''</span>
+    <span style="color: #8995ba;">''' Find the maximum of a smooth function on an open interval '''</span>
     d_func = sp.diff(func, variable, <span style="color: #bd93f9; font-weight: bold;">1</span>)
     critical = sp.solveset(d_func, variable,
                            domain=sp.Interval(lower_bound, upper_bound))
-    maximum = sp.Max(func.subs(variable, lower_bound),
-                     func.subs(variable, upper_bound),
-                     *[func.subs(variable, i) <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> critical])
+    <span style="color: #ff79c6;">try</span> :
+        maximum = sp.Max(func.subs(variable, lower_bound),
+                         func.subs(variable, upper_bound),
+                         *[func.subs(variable, i) <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> critical])
+    <span style="color: #ff79c6;">except</span> :
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">if this fails, then the set of critical points is not iterable</span>
+        maximum = sp.Max(func.subs(variable, lower_bound),
+                         func.subs(variable, upper_bound))
     <span style="color: #ff79c6;">return</span> <span style="color: #ffb86c;">float</span>(maximum)
 
 <span style="color: #ff79c6;">class</span> <span style="color: #bd93f9;">Function</span> :
-    <span style="color: #8995ba;">''' Properties of a $C^{\infty}$ function. Class for integration. '''</span>
+    <span style="color: #8995ba;">''' Properties of a smooth function. Class for integration. '''</span>
     <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">__init__</span>(<span style="color: #ff79c6;">self</span>, expression, variable, a=<span style="color: #bd93f9; font-weight: bold;">0</span>, b=<span style="color: #bd93f9; font-weight: bold;">1</span>) :
         <span style="color: #8995ba;">''' the mathematical expression must be a sympy object '''</span>
         <span style="color: #ff79c6;">self</span>.numerical = sp.lambdify(variable, expression, <span style="color: #f1fa8c;">'numpy'</span>)
@@ -261,39 +578,452 @@ Class for finding approximate integral values and bounding errors in numerical i
         fourth_deriv = sp.diff(<span style="color: #ff79c6;">self</span>.symbolic, <span style="color: #ff79c6;">self</span>.symbol, <span style="color: #bd93f9; font-weight: bold;">4</span>)
 
         <span style="color: #6272a4;"># </span><span style="color: #6272a4;">find an absolute maximum for the fourth derivative on the given domain</span>
-        maximum = closed_set_max(fourth_deriv, <span style="color: #ff79c6;">self</span>.symbol, <span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b)
+        maximum = np.<span style="color: #ffb86c;">abs</span>( closed_set_max(fourth_deriv, <span style="color: #ff79c6;">self</span>.symbol, <span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b) )
 
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the number of intervals</span>
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the number of required intervals</span>
         <span style="color: #ff79c6;">return</span> np.ceil( ((maximum*(<span style="color: #ff79c6;">self</span>.b - <span style="color: #ff79c6;">self</span>.a)**<span style="color: #bd93f9; font-weight: bold;">5</span>)/(epsilon*<span style="color: #bd93f9; font-weight: bold;">180</span>*<span style="color: #bd93f9; font-weight: bold;">2</span>**<span style="color: #bd93f9; font-weight: bold;">4</span>))**<span style="color: #bd93f9; font-weight: bold;">0.25</span> )
 
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">trapezoid_partition</span>(<span style="color: #ff79c6;">self</span>, epsilon=<span style="color: #bd93f9; font-weight: bold;">0.001</span>) :
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the second derivative with sympy</span>
+        second_deriv = sp.diff(<span style="color: #ff79c6;">self</span>.symbolic, <span style="color: #ff79c6;">self</span>.symbol, <span style="color: #bd93f9; font-weight: bold;">2</span>)
+
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">find an absolute maximum for the fourth derivative on the given domain</span>
+        maximum = np.<span style="color: #ffb86c;">abs</span>( closed_set_max(second_deriv, <span style="color: #ff79c6;">self</span>.symbol, <span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b) )
+
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the number of required intervals</span>
+        <span style="color: #ff79c6;">return</span> np.ceil( ((maximum*(<span style="color: #ff79c6;">self</span>.b - <span style="color: #ff79c6;">self</span>.a)**<span style="color: #bd93f9; font-weight: bold;">3</span>)/(epsilon*<span style="color: #bd93f9; font-weight: bold;">12</span>))**<span style="color: #bd93f9; font-weight: bold;">0.5</span> )
+
     <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">simpson</span>(<span style="color: #ff79c6;">self</span>, epsilon=<span style="color: #bd93f9; font-weight: bold;">0.001</span>) :
-        N = <span style="color: #ff79c6;">self</span>.simpson_partition(epsilon)
-        n_nodos = <span style="color: #ffb86c;">int</span>( np.ceil(<span style="color: #bd93f9; font-weight: bold;">2</span>*N + <span style="color: #bd93f9; font-weight: bold;">1</span>) ) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">(N+1 extremos de subintervalos) + (N puntos medios)</span>
-        x = np.linspace(<span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b, n_nodos)
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">get the size of the partition from the required uncertainty level</span>
+        n = <span style="color: #ffb86c;">int</span>( <span style="color: #ff79c6;">self</span>.simpson_partition(epsilon) )
+        n_nodes = <span style="color: #bd93f9; font-weight: bold;">2</span>*n + <span style="color: #bd93f9; font-weight: bold;">1</span>
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">partition the interval</span>
+        partition = np.linspace(<span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b, n_nodes)
 
-        x_impar = x[<span style="color: #bd93f9; font-weight: bold;">1</span>: :<span style="color: #bd93f9; font-weight: bold;">2</span>] <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Nodos con coordenada impar (ptos medios)</span>
-        x_par = x[<span style="color: #bd93f9; font-weight: bold;">2</span>:n_nodos-<span style="color: #bd93f9; font-weight: bold;">1</span>:<span style="color: #bd93f9; font-weight: bold;">2</span>] <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Nodos con coordenada par (salvo e</span>
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">odd-indexed nodes</span>
+        t_odd = partition[<span style="color: #bd93f9; font-weight: bold;">1</span>::<span style="color: #bd93f9; font-weight: bold;">2</span>]
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">even-indexed nodes</span>
+        t_even = partition[<span style="color: #bd93f9; font-weight: bold;">2</span>:n_nodes-<span style="color: #bd93f9; font-weight: bold;">1</span>:<span style="color: #bd93f9; font-weight: bold;">2</span>]
 
-        h = (<span style="color: #ff79c6;">self</span>.b - <span style="color: #ff79c6;">self</span>.a)/(<span style="color: #bd93f9; font-weight: bold;">2</span>*N) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Distancia entre dos nodos de integraci&#243;n</span>
-        cuad = h/<span style="color: #bd93f9; font-weight: bold;">3</span>*(<span style="color: #ff79c6;">self</span>.numerical(<span style="color: #ff79c6;">self</span>.a) + <span style="color: #bd93f9; font-weight: bold;">2</span>*<span style="color: #ffb86c;">sum</span>(<span style="color: #ff79c6;">self</span>.numerical(x_par)) + <span style="color: #bd93f9; font-weight: bold;">4</span>*<span style="color: #ffb86c;">sum</span>(<span style="color: #ff79c6;">self</span>.numerical(x_impar)) + <span style="color: #ff79c6;">self</span>.numerical(<span style="color: #ff79c6;">self</span>.b))
-        <span style="color: #ff79c6;">return</span> f<span style="color: #f1fa8c;">'Value = {cuad} +/- {epsilon}'</span>
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">distance between two nodes</span>
+        h = (<span style="color: #ff79c6;">self</span>.b - <span style="color: #ff79c6;">self</span>.a)/(<span style="color: #bd93f9; font-weight: bold;">2</span>*n)
+        integral = h/<span style="color: #bd93f9; font-weight: bold;">3</span>*(<span style="color: #ff79c6;">self</span>.numerical(<span style="color: #ff79c6;">self</span>.a) + <span style="color: #bd93f9; font-weight: bold;">2</span>*<span style="color: #ffb86c;">sum</span>(<span style="color: #ff79c6;">self</span>.numerical(t_even)) + <span style="color: #bd93f9; font-weight: bold;">4</span>*<span style="color: #ffb86c;">sum</span>(<span style="color: #ff79c6;">self</span>.numerical(t_odd)) + <span style="color: #ff79c6;">self</span>.numerical(<span style="color: #ff79c6;">self</span>.b))
+        <span style="color: #ff79c6;">return</span> integral
 
-x = sp.Symbol(<span style="color: #f1fa8c;">'x'</span>)
-f = Function(sp.log(<span style="color: #bd93f9; font-weight: bold;">1</span> + x**<span style="color: #bd93f9; font-weight: bold;">2</span>), x)
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">trapezoid</span>(<span style="color: #ff79c6;">self</span>, epsilon=<span style="color: #bd93f9; font-weight: bold;">0.001</span>) :
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">get the size of the partition from the required uncertainty level</span>
+        n = <span style="color: #ffb86c;">int</span>( <span style="color: #ff79c6;">self</span>.trapezoid_partition(epsilon) )
+        n_nodes = <span style="color: #bd93f9; font-weight: bold;">2</span>*n + <span style="color: #bd93f9; font-weight: bold;">1</span>
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">partition the interval</span>
+        partition = np.linspace(<span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b, n_nodes)
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">intermediate nodes</span>
+        nodes = partition[<span style="color: #bd93f9; font-weight: bold;">1</span>:n_nodes-<span style="color: #bd93f9; font-weight: bold;">1</span>]
 
-f.simpson(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>)
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">distance between two nodes</span>
+        h = (<span style="color: #ff79c6;">self</span>.b - <span style="color: #ff79c6;">self</span>.a)/(<span style="color: #bd93f9; font-weight: bold;">2</span>*n)
+
+        integral = h*(<span style="color: #bd93f9; font-weight: bold;">0.5</span>*<span style="color: #ff79c6;">self</span>.numerical(<span style="color: #ff79c6;">self</span>.a) + <span style="color: #ffb86c;">sum</span>(<span style="color: #ff79c6;">self</span>.numerical(nodes)) + <span style="color: #bd93f9; font-weight: bold;">0.5</span>*<span style="color: #ff79c6;">self</span>.numerical(<span style="color: #ff79c6;">self</span>.b))
+        <span style="color: #ff79c6;">return</span> integral
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org1e47864" class="outline-3">
+<h3 id="org1e47864"><span class="section-number-3">2.5</span> Proof of concept</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+We can, for instance find the following integral:
+\[ \int_1^{12} x^5 dx. \]
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">x = sp.Symbol(<span style="color: #f1fa8c;">'x'</span>)
+g = Function(x**<span style="color: #bd93f9; font-weight: bold;">5</span>, x, a=<span style="color: #bd93f9; font-weight: bold;">1</span>, b=<span style="color: #bd93f9; font-weight: bold;">12</span>)
+g.trapezoid(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>), g.simpson(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>)
 </pre>
 </div>
 
-<div class="org-src-container">
-<pre class="src src-ipython">g = Function(x**<span style="color: #bd93f9; font-weight: bold;">5</span>, x, a=<span style="color: #bd93f9; font-weight: bold;">1</span>, b=<span style="color: #bd93f9; font-weight: bold;">12</span>)
-g.simpson(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>)
+<pre class="example">
+(497663.83333400625, 497663.8333387183)
 </pre>
+
+<p>
+If we wish to compute
+\[ \int_0^1 e^{1 - x^2} dx, \]
+we can use the different methods we have defined:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">f = Function(sp.exp(<span style="color: #bd93f9; font-weight: bold;">1</span> - x**<span style="color: #bd93f9; font-weight: bold;">2</span>), x, a=<span style="color: #bd93f9; font-weight: bold;">0</span>, b=<span style="color: #bd93f9; font-weight: bold;">1</span>)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">tuple with integral values: trapezoid, simpson, quadrature (reference value)</span>
+trap, simp, quad, err_quad = f.trapezoid(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>), f.simpson(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>), *integrate.quad(f.numerical, <span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">1</span>)
+trap, simp, quad
+</pre>
+</div>
+
+<pre class="example">
+(2.0300760037942545, 2.030079539104097, 2.030078469278705)
+</pre>
+
+<p>
+For the integral
+\[ \int_e^{2e} \frac{1}{\log x} dx, \]
+we have:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">h = Function(<span style="color: #bd93f9; font-weight: bold;">1</span>/sp.log(x), x, np.e, <span style="color: #bd93f9; font-weight: bold;">2</span>*np.e)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">tuple with integral values: trapezoid, simpson, quadrature (reference value)</span>
+trap, simp, quad, err_quad = h.trapezoid(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>), h.simpson(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>), *integrate.quad(h.numerical, np.e, <span style="color: #bd93f9; font-weight: bold;">2</span>*np.e)
+trap, simp, quad
+</pre>
+</div>
+
+<pre class="example">
+(2.00381124795606, 2.0038118326682275, 2.0038105616240243)
+</pre>
+
+<p>
+To compute the improper integral
+\[ \int_{-\infty}^{\infty} \frac{1}{1 + x^2} dx = \int_{-\infty}^0 \frac{1}{1 + x^2} dx + \int_0^{\infty} \frac{1}{1 + x^2} dx, \]
+we shall use a substitution on left hand side integrals:
+</p>
+
+<ul class="org-ul">
+<li><p>
+\(\int_{-\infty}^0 1/(1 + x^2) dx\).
+</p>
+
+<p>
+Let
+\[ x = \frac{t}{1 + t}, \quad dx = \frac{1}{(1 + t)^2}, \]
+so that \(x \to -\infty\) as \(t \to -1\), and the integral becomes
+\[ \int_{-\infty}^0 \frac{1}{1 + x^2} dx = \int_{-1}^0 \frac{1}{2t^2 + 2t + 1} dt \]
+</p></li>
+
+<li><p>
+\(\int_0^{\infty} 1/(1 + x^2) dx\).
+</p>
+
+<p>
+Let
+\[ x = \frac{t}{1 - t}, \quad dx = \frac{1}{(1 - t)^2}, \]
+so that \(x \to \infty\) as \(t \to 1\), and the integral becomes
+\[ \int_0^{\infty} \frac{1}{1 + x^2} dx = \int_0^1 \frac{1}{2t^2 - 2t + 1} dt \]
+</p></li>
+</ul>
+
+<p>
+With these considerations, we have:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">phi1 = Function(<span style="color: #bd93f9; font-weight: bold;">1</span>/(<span style="color: #bd93f9; font-weight: bold;">2</span>*x**<span style="color: #bd93f9; font-weight: bold;">2</span> - <span style="color: #bd93f9; font-weight: bold;">2</span>*x + <span style="color: #bd93f9; font-weight: bold;">1</span>), x, <span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">1</span>)
+phi2 = Function(<span style="color: #bd93f9; font-weight: bold;">1</span>/(<span style="color: #bd93f9; font-weight: bold;">2</span>*x**<span style="color: #bd93f9; font-weight: bold;">2</span> + <span style="color: #bd93f9; font-weight: bold;">2</span>*x + <span style="color: #bd93f9; font-weight: bold;">1</span>), x, -<span style="color: #bd93f9; font-weight: bold;">1</span>, <span style="color: #bd93f9; font-weight: bold;">0</span>)
+
+trap = phi1.trapezoid(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>) + phi2.trapezoid(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>)
+simp = phi1.simpson(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>) + phi2.simpson(epsilon=1e-<span style="color: #bd93f9; font-weight: bold;">5</span>)
+quad, err_quad = integrate.quad(<span style="color: #ff79c6;">lambda</span> x : <span style="color: #bd93f9; font-weight: bold;">1</span>/(<span style="color: #bd93f9; font-weight: bold;">1</span> + x**<span style="color: #bd93f9; font-weight: bold;">2</span>), -np.inf, np.inf)
+trap, simp, quad
+</pre>
+</div>
+
+<pre class="example">
+(3.141587676831256, 3.1415926453708467, 3.141592653589793)
+</pre>
+
+<p>
+Numerical iterated integrals. TODO.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfd0e886" class="outline-3">
+<h3 id="orgfd0e886"><span class="section-number-3">2.6</span> Application: Escape velocity</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+Suppose that a body of mass \(m\) is travelling vertically upward, starting at the surface
+of the earth. If all resistance is neglected, the escape velocity \(v\) (i.e. the
+minimum velocity the body must acquire to escape the earth&rsquo;s gravitational
+field) is given by:
+\[ v = \sqrt{2gR \int_1^{\infty} \frac{1}{z^2} dz}, \]
+where \(R\) is the radius of the earth and \(z = x/R\).
+</p>
+
+<p>
+With these conditions, it is fairly straightforward to see that
+\[ \int_1^{\infty} \frac{1}{z^2} dz = R^2 \int_1^{\infty} \frac{1}{x^2} dx, \]
+so that
+\[ v = \sqrt{2gR^3 \int_1^{\infty} \frac{1}{x^2} dx}. \]
+</p>
+
+<p>
+The value of this integral is clearly one, but we can still inegrate it numerically:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the integral</span>
+quad, err_quad = integrate.quad(<span style="color: #ff79c6;">lambda</span> x : <span style="color: #bd93f9; font-weight: bold;">1</span>/x**<span style="color: #bd93f9; font-weight: bold;">2</span>, <span style="color: #bd93f9; font-weight: bold;">1</span>, np.inf)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">define the other parameters</span>
+g, R = <span style="color: #bd93f9; font-weight: bold;">9.8</span>, <span style="color: #bd93f9; font-weight: bold;">6</span>.3e6
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the escape velocity</span>
+v = np.sqrt(<span style="color: #bd93f9; font-weight: bold;">2</span>*g*R**<span style="color: #bd93f9; font-weight: bold;">3</span>*quad)
+v
+</pre>
+</div>
+
+<pre class="example">
+70006579690.76907
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org0397a32" class="outline-3">
+<h3 id="org0397a32"><span class="section-number-3">2.7</span> Error analysis</h3>
+<div class="outline-text-3" id="text-2-7">
+<p>
+The <code>Function</code> class I wrote above already provides implementations for both
+the trapezoid and Simpson&rsquo;s methods; however, they cannot directly parse a
+number of partitions \(n\). We may easily rewrite them as:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">trapezoid</span>(function, n, a=<span style="color: #bd93f9; font-weight: bold;">0</span>, b=<span style="color: #bd93f9; font-weight: bold;">1</span>) :
+    n_nodes = <span style="color: #bd93f9; font-weight: bold;">2</span>*n + <span style="color: #bd93f9; font-weight: bold;">1</span>
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">partition the interval</span>
+    partition = np.linspace(a, b, n_nodes)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">intermediate nodes</span>
+    nodes = partition[<span style="color: #bd93f9; font-weight: bold;">1</span>:n_nodes-<span style="color: #bd93f9; font-weight: bold;">1</span>]
+
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">distance between two nodes</span>
+    h = (b - a)/(<span style="color: #bd93f9; font-weight: bold;">2</span>*n)
+
+    integral = h*(<span style="color: #bd93f9; font-weight: bold;">0.5</span>*function(a) + <span style="color: #ffb86c;">sum</span>(function(nodes)) + <span style="color: #bd93f9; font-weight: bold;">0.5</span>*function(b))
+    <span style="color: #ff79c6;">return</span> integral
+
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">simpson</span>(function, n, a=<span style="color: #bd93f9; font-weight: bold;">0</span>, b=<span style="color: #bd93f9; font-weight: bold;">1</span>) :
+    n_nodes = <span style="color: #bd93f9; font-weight: bold;">2</span>*n + <span style="color: #bd93f9; font-weight: bold;">1</span>
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">partition the interval</span>
+    partition = np.linspace(a, b, n_nodes)
+
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">odd-indexed nodes</span>
+    t_odd = partition[<span style="color: #bd93f9; font-weight: bold;">1</span>::<span style="color: #bd93f9; font-weight: bold;">2</span>]
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">even-indexed nodes</span>
+    t_even = partition[<span style="color: #bd93f9; font-weight: bold;">2</span>:n_nodes-<span style="color: #bd93f9; font-weight: bold;">1</span>:<span style="color: #bd93f9; font-weight: bold;">2</span>]
+
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">distance between two nodes</span>
+    h = (b - a)/(<span style="color: #bd93f9; font-weight: bold;">2</span>*n)
+    integral = h/<span style="color: #bd93f9; font-weight: bold;">3</span>*(function(a) + <span style="color: #bd93f9; font-weight: bold;">2</span>*<span style="color: #ffb86c;">sum</span>(function(t_even)) + <span style="color: #bd93f9; font-weight: bold;">4</span>*<span style="color: #ffb86c;">sum</span>(function(t_odd)) + function(b))
+    <span style="color: #ff79c6;">return</span> integral
+</pre>
+</div>
+<p>
+Also, we can come up with a fairly uncomplicated implementation of the Gaussian
+quadrature approximation:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">quadrature</span>(function, n, a=<span style="color: #bd93f9; font-weight: bold;">0</span>, b=<span style="color: #bd93f9; font-weight: bold;">1</span>) :
+    partition, coeff = roots_legendre(n + <span style="color: #bd93f9; font-weight: bold;">1</span>)
+    integral = <span style="color: #bd93f9; font-weight: bold;">0.5</span>*(b - a)*<span style="color: #ffb86c;">sum</span>(coeff*function(<span style="color: #bd93f9; font-weight: bold;">0.5</span>*(b - a)*partition + <span style="color: #bd93f9; font-weight: bold;">0.5</span>*(b + a)))
+    <span style="color: #ff79c6;">return</span> integral
+</pre>
+</div>
+
+<p>
+Suppose that we want to analyse the error in computing the integrals we&rsquo;ve seen
+so far for different values of \(n\).
+</p>
+
+<p>
+We are going to be using dataframes, so the following command comes in handy for
+appropriate formatting in emacs:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh" id="orgf3cd87d"><span style="color: #bd93f9;">echo</span> <span style="color: #f1fa8c;">"</span><span style="color: #8be9fd;">$</span><span style="color: #f1fa8c;">data</span><span style="color: #f1fa8c;">"</span> | sed s/<span style="color: #f1fa8c;">\^</span>:<span style="color: #f1fa8c;">\ \/</span>/g | <span style="color: #bd93f9;">grep</span> -v <span style="color: #f1fa8c;">"^$"</span> | sed s/<span style="color: #f1fa8c;">\'</span>//g
+</pre>
+</div>
+
+<p>
+We need to initialise a dataframe with the size of the partition in each case
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">import</span> pandas <span style="color: #ff79c6;">as</span> pd
+<span style="color: #ff79c6;">from</span> tabulate <span style="color: #ff79c6;">import</span> tabulate
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">dataframe initialisation</span>
+indexes = { <span style="color: #f1fa8c;">'n'</span> : [<span style="color: #bd93f9; font-weight: bold;">2</span>, <span style="color: #bd93f9; font-weight: bold;">10</span>, <span style="color: #bd93f9; font-weight: bold;">20</span> , <span style="color: #bd93f9; font-weight: bold;">40</span> , <span style="color: #bd93f9; font-weight: bold;">80</span>, <span style="color: #bd93f9; font-weight: bold;">160</span>] }
+df = pd.DataFrame(indexes)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">define the function we are analysing along with the exact value for its integral</span>
+f = <span style="color: #ff79c6;">lambda</span> x : np.exp(-x)
+exact = <span style="color: #bd93f9; font-weight: bold;">1</span> - <span style="color: #bd93f9; font-weight: bold;">1</span>/np.e
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">vectorise the numerical procedures</span>
+_trapezoid = np.vectorize(trapezoid)
+_simpson = np.vectorize(simpson)
+_quadrature = np.vectorize(quadrature)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute numerical estimates</span>
+df[<span style="color: #f1fa8c;">'trap'</span>] = _trapezoid(f, df[<span style="color: #f1fa8c;">'n'</span>])
+df[<span style="color: #f1fa8c;">'simp'</span>] = _simpson(f, df[<span style="color: #f1fa8c;">'n'</span>])
+df[<span style="color: #f1fa8c;">'quad'</span>] = _quadrature(f, df[<span style="color: #f1fa8c;">'n'</span>])
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute relative errors</span>
+df[<span style="color: #f1fa8c;">'eps_trap'</span>] = df.trap.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> item:
+                               <span style="color: #ffb86c;">abs</span>(item - exact)/exact)
+df[<span style="color: #f1fa8c;">'eps_simp'</span>] = df.simp.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> item:
+                               <span style="color: #ffb86c;">abs</span>(item - exact)/exact)
+df[<span style="color: #f1fa8c;">'eps_quad'</span>] = df.quad.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> item:
+                               <span style="color: #ffb86c;">abs</span>(item - exact)/exact)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">clean the data</span>
+<span style="color: #ff79c6;">del</span> df[<span style="color: #f1fa8c;">'trap'</span>]; <span style="color: #ff79c6;">del</span> df[<span style="color: #f1fa8c;">'simp'</span>]; <span style="color: #ff79c6;">del</span> df[<span style="color: #f1fa8c;">'quad'</span>]
+
+tabulate(df, headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-right">n</th>
+<th scope="col" class="org-right">eps<sub>trap</sub></th>
+<th scope="col" class="org-right">eps<sub>simp</sub></th>
+<th scope="col" class="org-right">eps<sub>quad</sub></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">2</td>
+<td class="org-right">0.00520292</td>
+<td class="org-right">2.1541e-05</td>
+<td class="org-right">4.79599e-07</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">10</td>
+<td class="org-right">0.000208325</td>
+<td class="org-right">3.47119e-08</td>
+<td class="org-right">1.75635e-16</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">20</td>
+<td class="org-right">5.20828e-05</td>
+<td class="org-right">2.16998e-09</td>
+<td class="org-right">1.75635e-16</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-right">40</td>
+<td class="org-right">1.30208e-05</td>
+<td class="org-right">1.35631e-10</td>
+<td class="org-right">3.51269e-16</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-right">80</td>
+<td class="org-right">3.25521e-06</td>
+<td class="org-right">8.47683e-12</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">5</td>
+<td class="org-right">160</td>
+<td class="org-right">8.13802e-07</td>
+<td class="org-right">5.30241e-13</td>
+<td class="org-right">3.51269e-16</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+We can draw up the required plot:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">plt.loglog(df.n, df.eps_trap, <span style="color: #f1fa8c;">'bo'</span>, label=<span style="color: #f1fa8c;">'trap'</span>)
+plt.loglog(df.n, df.eps_simp, <span style="color: #f1fa8c;">'ro'</span>, label=<span style="color: #f1fa8c;">'simp'</span>)
+plt.loglog(df.n, df.eps_quad, <span style="color: #f1fa8c;">'ko'</span>, label=<span style="color: #f1fa8c;">'quad'</span>)
+
+plt.xlabel(<span style="color: #f1fa8c;">'n'</span>)
+plt.ylabel(<span style="color: #f1fa8c;">'eps'</span>)
+
+plt.legend()
+plt.grid()
+plt.show()
+</pre>
+</div>
+
+
+<div id="org263fee5" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/5TClBB.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+<p>
+The trapezoid and Simpson errors are apparently a straight line, we can find an equation for them as follows:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">from</span> scipy.optimize <span style="color: #ff79c6;">import</span> curve_fit
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">n = np.log10(df.n)</span>
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">trap_ = np.log10(df.eps_trap)</span>
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">simp_ = np.log10(df.eps_simp)</span>
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">fit a straight line</span>
+f = <span style="color: #ff79c6;">lambda</span> n, alpha, c : c*n**alpha
+opt_trap, cov_trap = curve_fit(f, df.n, df.eps_trap)
+opt_simp, cov_simp = curve_fit(f, df.n, df.eps_simp)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">actual points</span>
+plt.loglog(df.n, df.eps_trap, <span style="color: #f1fa8c;">'bo'</span>, label=<span style="color: #f1fa8c;">'trap'</span>)
+plt.loglog(df.n, df.eps_simp, <span style="color: #f1fa8c;">'ro'</span>, label=<span style="color: #f1fa8c;">'simp'</span>)
+plt.loglog(df.n, df.eps_quad, <span style="color: #f1fa8c;">'ko'</span>, label=<span style="color: #f1fa8c;">'quad'</span>)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">trend lines</span>
+plt.plot(df.n, f(df.n, *opt_trap), <span style="color: #f1fa8c;">'b-'</span>, label=<span style="color: #f1fa8c;">'trap fit'</span>)
+plt.plot(df.n, f(df.n, *opt_simp), <span style="color: #f1fa8c;">'r-'</span>, label=<span style="color: #f1fa8c;">'simp fit'</span>)
+
+plt.xlabel(<span style="color: #f1fa8c;">'n'</span>)
+plt.ylabel(<span style="color: #f1fa8c;">'eps'</span>)
+
+plt.legend()
+plt.grid()
+plt.show()
+</pre>
+</div>
+
+
+<div id="orgebd0c6d" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/Gmpb41.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-09-03 Fri 22:17</p>
+<p class="date">Created: 2021-09-12 Sun 16:34</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>
