@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-09-11 Sat 18:56 -->
+<!-- 2021-09-12 Sun 21:11 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Assignment00</title>
@@ -284,11 +284,11 @@ a_4 = 4 \cdot a_3 = 4 \cdot 3 \cdot 2 \cdot 1,
 and so on and so forth, until arriving at the value \(a_n\). The function just returns the last item on the list.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython" id="orgd5bbf4e"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">factorial</span>(n) :
-    factorial_list = [<span style="color: #bd93f9; font-weight: bold;">1</span>]
-    <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n+<span style="color: #bd93f9; font-weight: bold;">1</span>) : <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Python interprets this as an interval [1 .. n]</span>
-        factorial_list.append(i*factorial_list[i-<span style="color: #bd93f9; font-weight: bold;">1</span>])
-    <span style="color: #ff79c6;">print</span>(factorial_list[-<span style="color: #bd93f9; font-weight: bold;">1</span>])
+<pre class="src src-ipython" id="orgd5bbf4e"><span class="org-keyword">def</span> <span class="org-function-name">factorial</span>(n) :
+    <span class="org-variable-name">factorial_list</span> = [<span class="org-highlight-numbers-number">1</span>]
+    <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-highlight-numbers-number">1</span>, n+<span class="org-highlight-numbers-number">1</span>) : <span class="org-comment-delimiter"># </span><span class="org-comment">Python interprets this as an interval [1 .. n]</span>
+        factorial_list.append(i*factorial_list[i-<span class="org-highlight-numbers-number">1</span>])
+    <span class="org-keyword">print</span>(factorial_list[-<span class="org-highlight-numbers-number">1</span>])
 </pre>
 </div>
 
@@ -296,8 +296,8 @@ and so on and so forth, until arriving at the value \(a_n\). The function just r
 We may now evaluate the factorial function for some values:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">factorial(<span style="color: #bd93f9; font-weight: bold;">11</span>)
-factorial(<span style="color: #bd93f9; font-weight: bold;">20</span>)
+<pre class="src src-ipython">factorial(<span class="org-highlight-numbers-number">11</span>)
+factorial(<span class="org-highlight-numbers-number">20</span>)
 </pre>
 </div>
 
@@ -335,20 +335,20 @@ d < \sqrt{n} \Leftrightarrow n/d > \sqrt{n},
 which establishes the desired relation and allows us to find all divisors of an integer by iterating up to \(\sqrt{n}\).
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython" id="orgfffb902"><span style="color: #ff79c6;">import</span> math
+<pre class="src src-ipython" id="orgfffb902"><span class="org-keyword">import</span> math
 
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">div_list</span>(n) :
-    div_list = [<span style="color: #bd93f9; font-weight: bold;">1</span>]
-    i = <span style="color: #bd93f9; font-weight: bold;">2</span>
-    <span style="color: #ff79c6;">while</span> i &lt;= math.sqrt(n) :
-        <span style="color: #ff79c6;">if</span> n % i == <span style="color: #bd93f9; font-weight: bold;">0</span> :
-            <span style="color: #ff79c6;">if</span> n//i == i :
+<span class="org-keyword">def</span> <span class="org-function-name">div_list</span>(n) :
+    <span class="org-variable-name">div_list</span> = [<span class="org-highlight-numbers-number">1</span>]
+    <span class="org-variable-name">i</span> = <span class="org-highlight-numbers-number">2</span>
+    <span class="org-keyword">while</span> i &lt;= math.sqrt(n) :
+        <span class="org-keyword">if</span> n % i == <span class="org-highlight-numbers-number">0</span> :
+            <span class="org-keyword">if</span> n//i == i :
                 div_list.append(i)
-            <span style="color: #ff79c6;">else</span> :
+            <span class="org-keyword">else</span> :
                 div_list.append(i)
                 div_list.append(n//i)
-        i += <span style="color: #bd93f9; font-weight: bold;">1</span>
-    <span style="color: #ff79c6;">return</span> div_list
+        <span class="org-variable-name">i</span> += <span class="org-highlight-numbers-number">1</span>
+    <span class="org-keyword">return</span> div_list
 </pre>
 </div>
 
@@ -481,34 +481,34 @@ Simply put:
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-ipython" id="orgb9b8269"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">is_semiperfect</span>(m) :
-        divisors_list = []
-        divisors_list = div_list(m)
+<pre class="src src-ipython" id="orgb9b8269"><span class="org-keyword">def</span> <span class="org-function-name">is_semiperfect</span>(m) :
+        <span class="org-variable-name">divisors_list</span> = []
+        <span class="org-variable-name">divisors_list</span> = div_list(m)
         divisors_list.sort()
 
-        n = <span style="color: #ffb86c;">len</span>(divisors_list)
+        <span class="org-variable-name">n</span> = <span class="org-builtin">len</span>(divisors_list)
 
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">We create an (n x m) matrix.</span>
-        bool_matrix = [[<span style="color: #bd93f9; font-weight: bold;">0</span> <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(m + <span style="color: #bd93f9; font-weight: bold;">1</span>)] <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(n + <span style="color: #bd93f9; font-weight: bold;">1</span>)]
+        <span class="org-comment-delimiter"># </span><span class="org-comment">We create an (n x m) matrix.</span>
+        <span class="org-variable-name">bool_matrix</span> = [[<span class="org-highlight-numbers-number">0</span> <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(m + <span class="org-highlight-numbers-number">1</span>)] <span class="org-keyword">for</span> j <span class="org-keyword">in</span> <span class="org-builtin">range</span>(n + <span class="org-highlight-numbers-number">1</span>)]
 
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">set first column to True</span>
-        <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(n + <span style="color: #bd93f9; font-weight: bold;">1</span>) :
-                bool_matrix[i][<span style="color: #bd93f9; font-weight: bold;">0</span>] = <span style="color: #8be9fd;">True</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">set first column to True</span>
+        <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(n + <span class="org-highlight-numbers-number">1</span>) :
+                bool_matrix[i][<span class="org-highlight-numbers-number">0</span>] = <span class="org-constant">True</span>
 
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">set first column to False</span>
-        <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, m + <span style="color: #bd93f9; font-weight: bold;">1</span>) :
-                bool_matrix[<span style="color: #bd93f9; font-weight: bold;">0</span>][i] = <span style="color: #8be9fd;">False</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">set first column to False</span>
+        <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-highlight-numbers-number">1</span>, m + <span class="org-highlight-numbers-number">1</span>) :
+                bool_matrix[<span class="org-highlight-numbers-number">0</span>][i] = <span class="org-constant">False</span>
 
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">evaluation through the boolean matrix as described</span>
-        <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n+<span style="color: #bd93f9; font-weight: bold;">1</span>) :
-                <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, m+<span style="color: #bd93f9; font-weight: bold;">1</span>) :
-                        <span style="color: #ff79c6;">if</span> j &lt; divisors_list[i-<span style="color: #bd93f9; font-weight: bold;">1</span>] : <span style="color: #6272a4;"># </span><span style="color: #6272a4;">we subtract 1 because we appended 0 at the beginning of the array</span>
-                                bool_matrix[i][j] = bool_matrix[i-<span style="color: #bd93f9; font-weight: bold;">1</span>][j]
-                        <span style="color: #ff79c6;">else</span> :
-                                bool_matrix[i][j] = bool_matrix[i-<span style="color: #bd93f9; font-weight: bold;">1</span>][j] <span style="color: #ff79c6;">or</span> bool_matrix[i-<span style="color: #bd93f9; font-weight: bold;">1</span>][j-divisors_list[i-<span style="color: #bd93f9; font-weight: bold;">1</span>]]
+        <span class="org-comment-delimiter"># </span><span class="org-comment">evaluation through the boolean matrix as described</span>
+        <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-highlight-numbers-number">1</span>, n+<span class="org-highlight-numbers-number">1</span>) :
+                <span class="org-keyword">for</span> j <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-highlight-numbers-number">1</span>, m+<span class="org-highlight-numbers-number">1</span>) :
+                        <span class="org-keyword">if</span> j &lt; divisors_list[i-<span class="org-highlight-numbers-number">1</span>] : <span class="org-comment-delimiter"># </span><span class="org-comment">we subtract 1 because we appended 0 at the beginning of the array</span>
+                                bool_matrix[i][j] = bool_matrix[i-<span class="org-highlight-numbers-number">1</span>][j]
+                        <span class="org-keyword">else</span> :
+                                bool_matrix[i][j] = bool_matrix[i-<span class="org-highlight-numbers-number">1</span>][j] <span class="org-keyword">or</span> bool_matrix[i-<span class="org-highlight-numbers-number">1</span>][j-divisors_list[i-<span class="org-highlight-numbers-number">1</span>]]
 
-        <span style="color: #ff79c6;">if</span> bool_matrix[n][m] == <span style="color: #8be9fd;">True</span> :
-                <span style="color: #ff79c6;">print</span>(f<span style="color: #f1fa8c;">'{m} is semi-perfect'</span>)
+        <span class="org-keyword">if</span> bool_matrix[n][m] == <span class="org-constant">True</span> :
+                <span class="org-keyword">print</span>(f<span class="org-string">'{m} is semi-perfect'</span>)
 </pre>
 </div>
 
@@ -516,25 +516,25 @@ Simply put:
 The following are just trivial definitions.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython" id="orgca5d4b4"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">are_amicable</span>(n, m, div_sum_n, div_sum_m) :
-        <span style="color: #ff79c6;">if</span> n == div_sum_m <span style="color: #ff79c6;">and</span> m == div_sum_n :
-                <span style="color: #ff79c6;">print</span>(f<span style="color: #f1fa8c;">'{n} and {m} are amicable'</span>)
+<pre class="src src-ipython" id="orgca5d4b4"><span class="org-keyword">def</span> <span class="org-function-name">are_amicable</span>(n, m, div_sum_n, div_sum_m) :
+        <span class="org-keyword">if</span> n == div_sum_m <span class="org-keyword">and</span> m == div_sum_n :
+                <span class="org-keyword">print</span>(f<span class="org-string">'{n} and {m} are amicable'</span>)
 
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">is_prime</span>(n, div) :
-        <span style="color: #ff79c6;">if</span> <span style="color: #ffb86c;">len</span>(div) == <span style="color: #bd93f9; font-weight: bold;">1</span> :
-                <span style="color: #ff79c6;">print</span>(f<span style="color: #f1fa8c;">'{n} is prime'</span>)
+<span class="org-keyword">def</span> <span class="org-function-name">is_prime</span>(n, div) :
+        <span class="org-keyword">if</span> <span class="org-builtin">len</span>(div) == <span class="org-highlight-numbers-number">1</span> :
+                <span class="org-keyword">print</span>(f<span class="org-string">'{n} is prime'</span>)
 
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">is_defective</span>(n, div_sum) :
-        <span style="color: #ff79c6;">if</span> div_sum &lt; n :
-                <span style="color: #ff79c6;">print</span>(f<span style="color: #f1fa8c;">'{n} is defective'</span>)
+<span class="org-keyword">def</span> <span class="org-function-name">is_defective</span>(n, div_sum) :
+        <span class="org-keyword">if</span> div_sum &lt; n :
+                <span class="org-keyword">print</span>(f<span class="org-string">'{n} is defective'</span>)
 
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">is_abundant</span>(n, div_sum) :
-        <span style="color: #ff79c6;">if</span> div_sum &gt; n :
-                <span style="color: #ff79c6;">print</span>(f<span style="color: #f1fa8c;">'{n} is abundant'</span>)
+<span class="org-keyword">def</span> <span class="org-function-name">is_abundant</span>(n, div_sum) :
+        <span class="org-keyword">if</span> div_sum &gt; n :
+                <span class="org-keyword">print</span>(f<span class="org-string">'{n} is abundant'</span>)
 
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">is_perfect</span>(n, div_sum) :
-        <span style="color: #ff79c6;">if</span> div_sum == n :
-                <span style="color: #ff79c6;">print</span>(f<span style="color: #f1fa8c;">'{n} is perfect'</span>)
+<span class="org-keyword">def</span> <span class="org-function-name">is_perfect</span>(n, div_sum) :
+        <span class="org-keyword">if</span> div_sum == n :
+                <span class="org-keyword">print</span>(f<span class="org-string">'{n} is perfect'</span>)
 </pre>
 </div>
 
@@ -542,14 +542,14 @@ The following are just trivial definitions.
 Finally, it all comes together:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython" id="org547acf5"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">kind_of_number</span>(a,b) :
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">we gather together the variables we require</span>
-        div_a = div_list(a)
-        div_b = div_list(b)
-        sum_a = <span style="color: #ffb86c;">sum</span>(div_a)
-        sum_b = <span style="color: #ffb86c;">sum</span>(div_b)
+<pre class="src src-ipython" id="org547acf5"><span class="org-keyword">def</span> <span class="org-function-name">kind_of_number</span>(a,b) :
+        <span class="org-comment-delimiter"># </span><span class="org-comment">we gather together the variables we require</span>
+        <span class="org-variable-name">div_a</span> = div_list(a)
+        <span class="org-variable-name">div_b</span> = div_list(b)
+        <span class="org-variable-name">sum_a</span> = <span class="org-builtin">sum</span>(div_a)
+        <span class="org-variable-name">sum_b</span> = <span class="org-builtin">sum</span>(div_b)
 
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">print the statements</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">print the statements</span>
         are_amicable(a,b,sum_a,sum_b)
 
         is_prime(a, div_a)
@@ -577,8 +577,8 @@ Execution example:
 Output
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">kind_of_number(<span style="color: #bd93f9; font-weight: bold;">40</span>,<span style="color: #bd93f9; font-weight: bold;">12</span>)
-kind_of_number(<span style="color: #bd93f9; font-weight: bold;">220</span>,<span style="color: #bd93f9; font-weight: bold;">284</span>)
+<pre class="src src-ipython">kind_of_number(<span class="org-highlight-numbers-number">40</span>,<span class="org-highlight-numbers-number">12</span>)
+kind_of_number(<span class="org-highlight-numbers-number">220</span>,<span class="org-highlight-numbers-number">284</span>)
 </pre>
 </div>
 
@@ -610,12 +610,12 @@ kind_of_number(<span style="color: #bd93f9; font-weight: bold;">220</span>,<span
 This is an easy one, we need only evaluate a given number as if it is a string of characters, thus as if it is a list. We just decide whether the reversed list is exactly the same as the original one.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">palindrome</span>(number) :
-        string = <span style="color: #ffb86c;">str</span>(number)
-        <span style="color: #ff79c6;">if</span> string[<span style="color: #bd93f9; font-weight: bold;">0</span>:] == string[::-<span style="color: #bd93f9; font-weight: bold;">1</span>] :
-                <span style="color: #ff79c6;">print</span>(<span style="color: #8be9fd;">True</span>)
-        <span style="color: #ff79c6;">else</span> :
-                <span style="color: #ff79c6;">print</span>(<span style="color: #8be9fd;">False</span>)
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">palindrome</span>(number) :
+        <span class="org-variable-name">string</span> = <span class="org-builtin">str</span>(number)
+        <span class="org-keyword">if</span> string[<span class="org-highlight-numbers-number">0</span>:] == string[::-<span class="org-highlight-numbers-number">1</span>] :
+                <span class="org-keyword">print</span>(<span class="org-constant">True</span>)
+        <span class="org-keyword">else</span> :
+                <span class="org-keyword">print</span>(<span class="org-constant">False</span>)
 </pre>
 </div>
 
@@ -627,7 +627,7 @@ Execution example:
 Output
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">palindrome(<span style="color: #bd93f9; font-weight: bold;">3333333</span>), palindrome(<span style="color: #bd93f9; font-weight: bold;">2323</span>), palindrome(<span style="color: #bd93f9; font-weight: bold;">1111349111111</span>)
+<pre class="src src-ipython">palindrome(<span class="org-highlight-numbers-number">3333333</span>), palindrome(<span class="org-highlight-numbers-number">2323</span>), palindrome(<span class="org-highlight-numbers-number">1111349111111</span>)
 </pre>
 </div>
 
@@ -649,30 +649,30 @@ False
 This equally comes down to manipulating a list of characters.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">string</span>(string) :
-        chars = []
-        vocals = <span style="color: #f1fa8c;">'aeiou'</span>
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">string</span>(string) :
+        <span class="org-variable-name">chars</span> = []
+        <span class="org-variable-name">vocals</span> = <span class="org-string">'aeiou'</span>
 
-        <span style="color: #ff79c6;">if</span> <span style="color: #ffb86c;">len</span>(string) % <span style="color: #bd93f9; font-weight: bold;">2</span> == <span style="color: #bd93f9; font-weight: bold;">0</span> :
-                 chars.append(<span style="color: #8be9fd;">False</span>)
-        <span style="color: #ff79c6;">elif</span> string[<span style="color: #ffb86c;">int</span>(<span style="color: #ffb86c;">len</span>(string) / <span style="color: #bd93f9; font-weight: bold;">2</span>)] <span style="color: #ff79c6;">in</span> vocals :
-                chars.append(<span style="color: #8be9fd;">True</span>)
-        <span style="color: #ff79c6;">else</span> :
-                chars.append(<span style="color: #8be9fd;">False</span>)
+        <span class="org-keyword">if</span> <span class="org-builtin">len</span>(string) % <span class="org-highlight-numbers-number">2</span> == <span class="org-highlight-numbers-number">0</span> :
+                 chars.append(<span class="org-constant">False</span>)
+        <span class="org-keyword">elif</span> string[<span class="org-builtin">int</span>(<span class="org-builtin">len</span>(string) / <span class="org-highlight-numbers-number">2</span>)] <span class="org-keyword">in</span> vocals :
+                chars.append(<span class="org-constant">True</span>)
+        <span class="org-keyword">else</span> :
+                chars.append(<span class="org-constant">False</span>)
 
-        vocals_in_str = <span style="color: #bd93f9; font-weight: bold;">0</span>
-        consonants_in_str = <span style="color: #bd93f9; font-weight: bold;">0</span>
-        <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> string :
-                <span style="color: #ff79c6;">if</span> i <span style="color: #ff79c6;">in</span> vocals :
-                        vocals_in_str += <span style="color: #bd93f9; font-weight: bold;">1</span>
-                <span style="color: #ff79c6;">else</span> :
-                        consonants_in_str += <span style="color: #bd93f9; font-weight: bold;">1</span>
+        <span class="org-variable-name">vocals_in_str</span> = <span class="org-highlight-numbers-number">0</span>
+        <span class="org-variable-name">consonants_in_str</span> = <span class="org-highlight-numbers-number">0</span>
+        <span class="org-keyword">for</span> i <span class="org-keyword">in</span> string :
+                <span class="org-keyword">if</span> i <span class="org-keyword">in</span> vocals :
+                        <span class="org-variable-name">vocals_in_str</span> += <span class="org-highlight-numbers-number">1</span>
+                <span class="org-keyword">else</span> :
+                        <span class="org-variable-name">consonants_in_str</span> += <span class="org-highlight-numbers-number">1</span>
         chars.append(vocals_in_str)
         chars.append(consonants_in_str)
 
-        chars.append(string[::-<span style="color: #bd93f9; font-weight: bold;">1</span>])
+        chars.append(string[::-<span class="org-highlight-numbers-number">1</span>])
 
-        <span style="color: #ff79c6;">print</span>(chars)
+        <span class="org-keyword">print</span>(chars)
 </pre>
 </div>
 
@@ -684,7 +684,7 @@ Execution example:
 Output
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">string(<span style="color: #f1fa8c;">'perro'</span>), string(<span style="color: #f1fa8c;">'murcielago'</span>)
+<pre class="src src-ipython">string(<span class="org-string">'perro'</span>), string(<span class="org-string">'murcielago'</span>)
 </pre>
 </div>
 
@@ -709,11 +709,11 @@ F_2 = 1, \\
 F_n = F_{n-1} + F_{n-2}
 \end{gather*}
 <div class="org-src-container">
-<pre class="src src-ipython" id="orga80ac1e"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">fib</span>(n) :
-        fib_list = [<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>]
-        <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">2</span>, n+<span style="color: #bd93f9; font-weight: bold;">1</span>) :
-                fib_list.append(fib_list[i-<span style="color: #bd93f9; font-weight: bold;">1</span>] + fib_list[i-<span style="color: #bd93f9; font-weight: bold;">2</span>])
-        <span style="color: #ff79c6;">print</span>(fib_list[-<span style="color: #bd93f9; font-weight: bold;">2</span>])
+<pre class="src src-ipython" id="orga80ac1e"><span class="org-keyword">def</span> <span class="org-function-name">fib</span>(n) :
+        <span class="org-variable-name">fib_list</span> = [<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>]
+        <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-highlight-numbers-number">2</span>, n+<span class="org-highlight-numbers-number">1</span>) :
+                fib_list.append(fib_list[i-<span class="org-highlight-numbers-number">1</span>] + fib_list[i-<span class="org-highlight-numbers-number">2</span>])
+        <span class="org-keyword">print</span>(fib_list[-<span class="org-highlight-numbers-number">2</span>])
 </pre>
 </div>
 
@@ -725,7 +725,7 @@ Execution example:
 Output
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">fib(<span style="color: #bd93f9; font-weight: bold;">50</span>), fib(<span style="color: #bd93f9; font-weight: bold;">63</span>)
+<pre class="src src-ipython">fib(<span class="org-highlight-numbers-number">50</span>), fib(<span class="org-highlight-numbers-number">63</span>)
 </pre>
 </div>
 
@@ -766,41 +766,41 @@ Three straightforward rules must be followed by these pointers, namely:
 The algorithm will repeatedly apply this process, firstly on the original array, and subsequently on the partitions of the list; each partition is defined by an index, which in turn fixes the ending point of one list and the beginning of another.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">partition</span>(array, lowest_index, greatest_index) :
-    pivot = array[greatest_index]
-    less_pointer = lowest_index
-    greater_pointer = greatest_index - <span style="color: #bd93f9; font-weight: bold;">1</span>
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">partition</span>(array, lowest_index, greatest_index) :
+    <span class="org-variable-name">pivot</span> = array[greatest_index]
+    <span class="org-variable-name">less_pointer</span> = lowest_index
+    <span class="org-variable-name">greater_pointer</span> = greatest_index - <span class="org-highlight-numbers-number">1</span>
 
-    <span style="color: #ff79c6;">while</span> <span style="color: #8be9fd;">True</span> :
-        <span style="color: #ff79c6;">if</span> array[greater_pointer] &gt;= pivot <span style="color: #ff79c6;">and</span> less_pointer &lt;= greater_pointer:
-            greater_pointer -= <span style="color: #bd93f9; font-weight: bold;">1</span>
+    <span class="org-keyword">while</span> <span class="org-constant">True</span> :
+        <span class="org-keyword">if</span> array[greater_pointer] &gt;= pivot <span class="org-keyword">and</span> less_pointer &lt;= greater_pointer:
+            <span class="org-variable-name">greater_pointer</span> -= <span class="org-highlight-numbers-number">1</span>
 
-        <span style="color: #ff79c6;">if</span> array[less_pointer] &lt;= pivot <span style="color: #ff79c6;">and</span> less_pointer &lt;= greater_pointer:
-            less_pointer += <span style="color: #bd93f9; font-weight: bold;">1</span>
+        <span class="org-keyword">if</span> array[less_pointer] &lt;= pivot <span class="org-keyword">and</span> less_pointer &lt;= greater_pointer:
+            <span class="org-variable-name">less_pointer</span> += <span class="org-highlight-numbers-number">1</span>
 
-        <span style="color: #ff79c6;">if</span> less_pointer &gt; greater_pointer :
-            <span style="color: #ff79c6;">break</span>
-        <span style="color: #ff79c6;">else</span>:
-            array[less_pointer], array[greater_pointer] = array[greater_pointer], array[less_pointer]
+        <span class="org-keyword">if</span> less_pointer &gt; greater_pointer :
+            <span class="org-keyword">break</span>
+        <span class="org-keyword">else</span>:
+            array[less_pointer], <span class="org-variable-name">array</span>[greater_pointer] = array[greater_pointer], array[less_pointer]
 
-    array[less_pointer], array[greatest_index] = array[greatest_index], array[less_pointer]
-    <span style="color: #ff79c6;">return</span> less_pointer
+    array[less_pointer], <span class="org-variable-name">array</span>[greatest_index] = array[greatest_index], array[less_pointer]
+    <span class="org-keyword">return</span> less_pointer
 
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">quick_sort_wrapper</span>(array, lowest_index, greatest_index) :
-    <span style="color: #ff79c6;">if</span> greatest_index == lowest_index :
-            <span style="color: #ff79c6;">return</span> array
-    <span style="color: #ff79c6;">if</span> lowest_index &lt; greatest_index:
-            partitionIndex = partition(array, lowest_index, greatest_index)
-            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">apply the same algorithm to resulting partitions</span>
-            quick_sort_wrapper(array,lowest_index,partitionIndex-<span style="color: #bd93f9; font-weight: bold;">1</span>)
-            quick_sort_wrapper(array,partitionIndex+<span style="color: #bd93f9; font-weight: bold;">1</span>,greatest_index)
+<span class="org-keyword">def</span> <span class="org-function-name">quick_sort_wrapper</span>(array, lowest_index, greatest_index) :
+    <span class="org-keyword">if</span> greatest_index == lowest_index :
+            <span class="org-keyword">return</span> array
+    <span class="org-keyword">if</span> lowest_index &lt; greatest_index:
+            <span class="org-variable-name">partitionIndex</span> = partition(array, lowest_index, greatest_index)
+            <span class="org-comment-delimiter"># </span><span class="org-comment">apply the same algorithm to resulting partitions</span>
+            quick_sort_wrapper(array,lowest_index,partitionIndex-<span class="org-highlight-numbers-number">1</span>)
+            quick_sort_wrapper(array,partitionIndex+<span class="org-highlight-numbers-number">1</span>,greatest_index)
 
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">quicksort</span>(array) :
-    quick_sort_wrapper(array,<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #ffb86c;">len</span>(array)-<span style="color: #bd93f9; font-weight: bold;">1</span>)
+<span class="org-keyword">def</span> <span class="org-function-name">quicksort</span>(array) :
+    quick_sort_wrapper(array,<span class="org-highlight-numbers-number">0</span>,<span class="org-builtin">len</span>(array)-<span class="org-highlight-numbers-number">1</span>)
 
-alist = [<span style="color: #bd93f9; font-weight: bold;">23</span>, <span style="color: #bd93f9; font-weight: bold;">32</span>, <span style="color: #bd93f9; font-weight: bold;">42</span>, <span style="color: #bd93f9; font-weight: bold;">12</span>, <span style="color: #bd93f9; font-weight: bold;">22</span>, <span style="color: #bd93f9; font-weight: bold;">31</span>, <span style="color: #bd93f9; font-weight: bold;">41</span>, <span style="color: #bd93f9; font-weight: bold;">11</span>, <span style="color: #bd93f9; font-weight: bold;">12</span>, <span style="color: #bd93f9; font-weight: bold;">232</span>, <span style="color: #bd93f9; font-weight: bold;">44</span>, <span style="color: #bd93f9; font-weight: bold;">12</span>, <span style="color: #bd93f9; font-weight: bold;">22</span>]
+<span class="org-variable-name">alist</span> = [<span class="org-highlight-numbers-number">23</span>, <span class="org-highlight-numbers-number">32</span>, <span class="org-highlight-numbers-number">42</span>, <span class="org-highlight-numbers-number">12</span>, <span class="org-highlight-numbers-number">22</span>, <span class="org-highlight-numbers-number">31</span>, <span class="org-highlight-numbers-number">41</span>, <span class="org-highlight-numbers-number">11</span>, <span class="org-highlight-numbers-number">12</span>, <span class="org-highlight-numbers-number">232</span>, <span class="org-highlight-numbers-number">44</span>, <span class="org-highlight-numbers-number">12</span>, <span class="org-highlight-numbers-number">22</span>]
 quicksort(alist)
-<span style="color: #ff79c6;">print</span>(alist)
+<span class="org-keyword">print</span>(alist)
 </pre>
 </div>
 
@@ -813,7 +813,7 @@ quicksort(alist)
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-09-11 Sat 18:56</p>
+<p class="date">Created: 2021-09-12 Sun 21:11</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

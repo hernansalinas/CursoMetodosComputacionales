@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 
 #+RESULTS:
 :results:
-# Out[27]:
+# Out[1]:
 :end:
 
 * Differentiation: Lucy's quartic kernel
@@ -302,7 +302,7 @@ class Function :
 
 #+RESULTS:
 :results:
-# Out[134]:
+# Out[2]:
 :end:
 ** Proof of concept
 We can, for instance find the following integral:
@@ -315,7 +315,7 @@ g.trapezoid(epsilon=1e-5), g.simpson(epsilon=1e-5)
 
 #+RESULTS:
 :results:
-# Out[136]:
+# Out[3]:
 : (497663.83333400625, 497663.8333387183)
 :end:
 
@@ -384,11 +384,32 @@ trap, simp, quad
 
 #+RESULTS:
 :results:
-# Out[177]:
+# Out[5]:
 : (3.141587676831256, 3.1415926453708467, 3.141592653589793)
 :end:
 
-Numerical iterated integrals. TODO.
+Numerical iterated integrals: Consider the integral
+\[ I = \int_0^{\pi/4} \int_{\sin x}^{\cos x} (2y \sin x + \cos^2 x) dy dx. \]
+
+This problem can be simplified by symbolically manipulating the inner integral,
+by means of which we have:
+\begin{align*}
+ I &= \int_0^{\pi/4} \left\{ 2 \sin x \int_{\sin x}^{\cos x} y dy + \cos^2 x \int_{\sin x}^{\cos x} dy \right\} dx, \\
+   &= \int_0^{\pi/4} \left\{ \sin x (\cos^2 x - \sin^2 x) + \cos^2 x (\cos x - \sin x) \right\} dx, \\
+   &= \int_0^{\pi/4} (\cos^3 x - \sin^3 x) dx.
+\end{align*}
+Therefore our problem amounts to computing this last integral.
+#+begin_src ipython :session asession :results raw drawer :exports both
+phi = Function(sp.cos(x)**3 - sp.sin(x)**3, x, a=0, b=np.pi/4)
+trap, simp, quad, err_quad = phi.trapezoid(epsilon=1e-5), phi.simpson(epsilon=1e-5), *integrate.quad(phi.numerical, 0, np.pi/4)
+trap, simp, quad
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[7]:
+: (0.4840164686312476, 0.5118481687502379, 0.5118446353109126)
+:end:
 
 ** Application: Escape velocity
 Suppose that a body of mass $m$ is travelling vertically upward, starting at the surface
