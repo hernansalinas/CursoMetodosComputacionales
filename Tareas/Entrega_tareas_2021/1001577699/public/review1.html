@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-09-12 Sun 21:11 -->
+<!-- 2021-09-15 Wed 10:27 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Review 1</title>
@@ -260,12 +260,12 @@
 Usual display configurations and global imports:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
+<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
 
-<span class="org-keyword">from</span> scipy <span class="org-keyword">import</span> optimize, interpolate
-<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
-<span class="org-keyword">import</span> pandas <span class="org-keyword">as</span> pd
-<span class="org-keyword">import</span> matplotlib.pyplot <span class="org-keyword">as</span> plt
+<span style="color: #ff79c6;">from</span> scipy <span style="color: #ff79c6;">import</span> optimize, interpolate
+<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">import</span> pandas <span style="color: #ff79c6;">as</span> pd
+<span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
 </pre>
 </div>
 <div id="outline-container-org118be1d" class="outline-2">
@@ -303,18 +303,18 @@ then the root of this function will yield the desired \(\theta\) value
 In <code>python</code>, we define this function along with a dataframe containing the independent <code>thetas</code>:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">f</span> = <span class="org-keyword">lambda</span> x : <span class="org-highlight-numbers-number">0.5</span>*(x - np.sin(x)) - <span class="org-highlight-numbers-number">0.25</span>*np.pi
+<pre class="src src-ipython">f = <span style="color: #ff79c6;">lambda</span> x : <span style="color: #bd93f9; font-weight: bold;">0.5</span>*(x - np.sin(x)) - <span style="color: #bd93f9; font-weight: bold;">0.25</span>*np.pi
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">initialisation of the dataframe</span>
-<span class="org-variable-name">df</span> = pd.DataFrame( {<span class="org-string">'thetas'</span> : np.linspace(-<span class="org-highlight-numbers-number">2</span>*np.pi, <span class="org-highlight-numbers-number">2</span>*np.pi, <span class="org-highlight-numbers-number">1000</span>)} )
-<span class="org-comment-delimiter"># </span><span class="org-comment">populate a new column by applying the funtion</span>
-<span class="org-variable-name">df</span>[<span class="org-string">'fs'</span>] = df.<span class="org-builtin">apply</span>(f, axis = <span class="org-string">'columns'</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">initialisation of the dataframe</span>
+df = pd.DataFrame( {<span style="color: #f1fa8c;">'thetas'</span> : np.linspace(-<span style="color: #bd93f9; font-weight: bold;">2</span>*np.pi, <span style="color: #bd93f9; font-weight: bold;">2</span>*np.pi, <span style="color: #bd93f9; font-weight: bold;">1000</span>)} )
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">populate a new column by applying the funtion</span>
+df[<span style="color: #f1fa8c;">'fs'</span>] = df.<span style="color: #ffb86c;">apply</span>(f, axis = <span style="color: #f1fa8c;">'columns'</span>)
 
 df.head()
 </pre>
 </div>
 
-<pre class="example" id="orga72c6d1">
+<pre class="example" id="orgfcf76e1">
   thetas        fs
   0 -6.283185 -3.926991
   1 -6.270606 -3.926991
@@ -334,8 +334,8 @@ plt.show()
 </div>
 
 
-<div id="orgdb20aac" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/D5FSdI.svg" class="org-svg">
+<div id="org71daab2" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/V7zJWK.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -345,7 +345,7 @@ We thus see that the root is in some subinterval of \([0,4]\), let us use the
 Newton-Raphson method to approximate the actual value first:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">root</span> = optimize.newton(f, <span class="org-highlight-numbers-number">4</span>)
+<pre class="src src-ipython">root = optimize.newton(f, <span style="color: #bd93f9; font-weight: bold;">4</span>)
 root
 </pre>
 </div>
@@ -373,27 +373,27 @@ particle hinges on the wind&rsquo;s velocity and a friction force parameter \(b\
 Let us define the following boundary conditions:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">v0</span> = <span class="org-highlight-numbers-number">60</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s; initial projectile speed</span>
-<span class="org-variable-name">u</span> = v0/<span class="org-highlight-numbers-number">2</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s; wind speed</span>
+<pre class="src src-ipython">v0 = <span style="color: #bd93f9; font-weight: bold;">60</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">m/s; initial projectile speed</span>
+u = v0/<span style="color: #bd93f9; font-weight: bold;">2</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">m/s; wind speed</span>
 
-<span class="org-variable-name">alpha</span> = np.pi <span class="org-comment-delimiter"># </span><span class="org-comment">wind angle</span>
-<span class="org-variable-name">theta</span> = np.deg2rad(<span class="org-highlight-numbers-number">45</span>) <span class="org-comment-delimiter"># </span><span class="org-comment">launch angle</span>
+alpha = np.pi <span style="color: #6272a4;"># </span><span style="color: #6272a4;">wind angle</span>
+theta = np.deg2rad(<span style="color: #bd93f9; font-weight: bold;">45</span>) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">launch angle</span>
 
-<span class="org-variable-name">b</span> = <span class="org-highlight-numbers-number">0.05</span> <span class="org-comment-delimiter"># </span><span class="org-comment">friction force parameter</span>
-<span class="org-variable-name">g</span> = <span class="org-highlight-numbers-number">9.8</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s^2; gravitational acceleration</span>
+b = <span style="color: #bd93f9; font-weight: bold;">0.05</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">friction force parameter</span>
+g = <span style="color: #bd93f9; font-weight: bold;">9.8</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">m/s^2; gravitational acceleration</span>
 
-<span class="org-variable-name">params</span> = (v0, u, alpha, theta, b, g)
+params = (v0, u, alpha, theta, b, g)
 </pre>
 </div>
 <p>
 Now we write the expressions for the standard position coordinates in 2D space.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">x</span>(t, v0, u, alpha, theta, b, g) :
-    <span class="org-keyword">return</span> u*t*np.cos(alpha) + b**(-<span class="org-highlight-numbers-number">1</span>)*(v0*np.cos(theta) - u*np.cos(alpha))*(<span class="org-highlight-numbers-number">1</span> - np.exp(-b*t))
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">x</span>(t, v0, u, alpha, theta, b, g) :
+    <span style="color: #ff79c6;">return</span> u*t*np.cos(alpha) + b**(-<span style="color: #bd93f9; font-weight: bold;">1</span>)*(v0*np.cos(theta) - u*np.cos(alpha))*(<span style="color: #bd93f9; font-weight: bold;">1</span> - np.exp(-b*t))
 
-<span class="org-keyword">def</span> <span class="org-function-name">y</span>(t, v0, u, alpha, theta, b, g) :
-    <span class="org-keyword">return</span> b**(-<span class="org-highlight-numbers-number">1</span>)*(g/b + v0*np.sin(theta) - u*np.sin(alpha))*(<span class="org-highlight-numbers-number">1</span> - np.exp(-b*t)) - (g/b - u*np.sin(alpha))*t
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">y</span>(t, v0, u, alpha, theta, b, g) :
+    <span style="color: #ff79c6;">return</span> b**(-<span style="color: #bd93f9; font-weight: bold;">1</span>)*(g/b + v0*np.sin(theta) - u*np.sin(alpha))*(<span style="color: #bd93f9; font-weight: bold;">1</span> - np.exp(-b*t)) - (g/b - u*np.sin(alpha))*t
 </pre>
 </div>
 <p>
@@ -401,22 +401,22 @@ We can explicitly compute each position coordinate from an arbitrary set of
 positive time parameters \(t\).
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-comment-delimiter"># </span><span class="org-comment">initialise a dataframe with time values</span>
-<span class="org-variable-name">time</span> = { <span class="org-string">'t'</span>: np.linspace(<span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">10</span>, <span class="org-highlight-numbers-number">1000</span>) }
-<span class="org-variable-name">df</span> = pd.DataFrame(time)
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">initialise a dataframe with time values</span>
+time = { <span style="color: #f1fa8c;">'t'</span>: np.linspace(<span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">10</span>, <span style="color: #bd93f9; font-weight: bold;">1000</span>) }
+df = pd.DataFrame(time)
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">add X and Y coordinates</span>
-<span class="org-variable-name">df</span>[<span class="org-string">'X'</span>] = df.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> row:
-                   x( row.get(<span class="org-string">'t'</span>), *params ),
-                   axis = <span class="org-string">'columns'</span>)
-<span class="org-variable-name">df</span>[<span class="org-string">'Y'</span>] = df.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> row:
-                   y( row.get(<span class="org-string">'t'</span>), *params ),
-                   axis = <span class="org-string">'columns'</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">add X and Y coordinates</span>
+df[<span style="color: #f1fa8c;">'X'</span>] = df.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> row:
+                   x( row.get(<span style="color: #f1fa8c;">'t'</span>), *params ),
+                   axis = <span style="color: #f1fa8c;">'columns'</span>)
+df[<span style="color: #f1fa8c;">'Y'</span>] = df.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> row:
+                   y( row.get(<span style="color: #f1fa8c;">'t'</span>), *params ),
+                   axis = <span style="color: #f1fa8c;">'columns'</span>)
 df.head()
 </pre>
 </div>
 
-<pre class="example" id="orgda44e59">
+<pre class="example" id="orgee7e0cc">
   t         X         Y
   0  0.00000  0.000000  0.000000
   1  0.01001  0.424507  0.424092
@@ -429,28 +429,28 @@ df.head()
 Let us directly plot the trajectory:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">fig</span> = plt.figure(figsize=(<span class="org-highlight-numbers-number">12</span>,<span class="org-highlight-numbers-number">12</span>))
-fig.subplots_adjust(left=<span class="org-highlight-numbers-number">0.2</span>, wspace=<span class="org-highlight-numbers-number">0.6</span>)
+<pre class="src src-ipython">fig = plt.figure(figsize=(<span style="color: #bd93f9; font-weight: bold;">12</span>,<span style="color: #bd93f9; font-weight: bold;">12</span>))
+fig.subplots_adjust(left=<span style="color: #bd93f9; font-weight: bold;">0.2</span>, wspace=<span style="color: #bd93f9; font-weight: bold;">0.6</span>)
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">first set of axes, the X function</span>
-<span class="org-variable-name">ax1</span> = plt.subplot2grid((<span class="org-highlight-numbers-number">3</span>,<span class="org-highlight-numbers-number">2</span>), (<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">0</span>))
-ax1.plot(df.t, df.X, label=<span class="org-string">'X'</span>)
-ax1.set_ylabel(<span class="org-string">'t'</span>); ax1.set_xlabel(<span class="org-string">'x(t)'</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">first set of axes, the X function</span>
+ax1 = plt.subplot2grid((<span style="color: #bd93f9; font-weight: bold;">3</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>), (<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">0</span>))
+ax1.plot(df.t, df.X, label=<span style="color: #f1fa8c;">'X'</span>)
+ax1.set_ylabel(<span style="color: #f1fa8c;">'t'</span>); ax1.set_xlabel(<span style="color: #f1fa8c;">'x(t)'</span>)
 ax1.legend()
 ax1.grid()
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">second set of axes, the Y function</span>
-<span class="org-variable-name">ax2</span> = plt.subplot2grid((<span class="org-highlight-numbers-number">3</span>,<span class="org-highlight-numbers-number">2</span>), (<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">1</span>))
-ax2.plot(df.t, df.Y, label=<span class="org-string">'Y'</span>)
-ax2.set_ylabel(<span class="org-string">'t'</span>); ax2.set_xlabel(<span class="org-string">'y(t)'</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">second set of axes, the Y function</span>
+ax2 = plt.subplot2grid((<span style="color: #bd93f9; font-weight: bold;">3</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>), (<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>))
+ax2.plot(df.t, df.Y, label=<span style="color: #f1fa8c;">'Y'</span>)
+ax2.set_ylabel(<span style="color: #f1fa8c;">'t'</span>); ax2.set_xlabel(<span style="color: #f1fa8c;">'y(t)'</span>)
 ax2.legend()
 ax2.grid()
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">third set of axes, the actual path</span>
-<span class="org-variable-name">ax3</span> = plt.subplot2grid((<span class="org-highlight-numbers-number">3</span>,<span class="org-highlight-numbers-number">2</span>), (<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">0</span>), colspan=<span class="org-highlight-numbers-number">2</span>)
-ax3.plot(df.X, df.Y, label=<span class="org-string">'Path'</span>)
-ax3.plot(np.linspace(<span class="org-highlight-numbers-number">300</span>, <span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">10</span>), <span class="org-highlight-numbers-number">10</span>*[<span class="org-highlight-numbers-number">0</span>], label=<span class="org-string">'Floor'</span>)
-ax3.set_ylabel(<span class="org-string">'y'</span>); ax2.set_xlabel(<span class="org-string">'x'</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">third set of axes, the actual path</span>
+ax3 = plt.subplot2grid((<span style="color: #bd93f9; font-weight: bold;">3</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>), (<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">0</span>), colspan=<span style="color: #bd93f9; font-weight: bold;">2</span>)
+ax3.plot(df.X, df.Y, label=<span style="color: #f1fa8c;">'Path'</span>)
+ax3.plot(np.linspace(<span style="color: #bd93f9; font-weight: bold;">300</span>, <span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">10</span>), <span style="color: #bd93f9; font-weight: bold;">10</span>*[<span style="color: #bd93f9; font-weight: bold;">0</span>], label=<span style="color: #f1fa8c;">'Floor'</span>)
+ax3.set_ylabel(<span style="color: #f1fa8c;">'y'</span>); ax2.set_xlabel(<span style="color: #f1fa8c;">'x'</span>)
 ax3.legend()
 ax3.grid()
 
@@ -459,8 +459,8 @@ plt.show()
 </div>
 
 
-<div id="orge38202b" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/GDHOOR.svg" class="org-svg">
+<div id="org8c46787" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/Vtdyov.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -469,9 +469,9 @@ Sorry, your browser does not support SVG.</object>
 In order to find the maximum range, we must take \(y(\bar t) = 0\), solve for \(\bar t\), and evaluate \(x(\bar t)\).
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">max_t</span> = optimize.newton(<span class="org-keyword">lambda</span> t : y(t, *params), <span class="org-highlight-numbers-number">40</span>)
+<pre class="src src-ipython">max_t = optimize.newton(<span style="color: #ff79c6;">lambda</span> t : y(t, *params), <span style="color: #bd93f9; font-weight: bold;">40</span>)
 
-<span class="org-variable-name">max_range</span> = x(max_t, *params)
+max_range = x(max_t, *params)
 max_range
 </pre>
 </div>
@@ -480,15 +480,15 @@ We can plot this point to see that it properly approximates the projectile&rsquo
 </p>
 <div class="org-src-container">
 <pre class="src src-ipython">plt.plot(df.X, df.Y)
-plt.plot(max_range, y(max_t, *params), <span class="org-string">'ro'</span>)
+plt.plot(max_range, y(max_t, *params), <span style="color: #f1fa8c;">'ro'</span>)
 plt.grid()
 plt.show()
 </pre>
 </div>
 
 
-<div id="org65f1226" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/8b1Uq0.svg" class="org-svg">
+<div id="orgb645680" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/T2kZTA.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -498,59 +498,59 @@ range as a function of the launch angle, so that we can see how the system
 behaves under different conditions.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-doc">''' Wind projectile class '''</span>
-<span class="org-keyword">def</span> <span class="org-function-name">x</span>(t, theta, v0=<span class="org-highlight-numbers-number">1</span>, u=<span class="org-highlight-numbers-number">1</span>, alpha=<span class="org-highlight-numbers-number">0.05</span>, b=<span class="org-highlight-numbers-number">0.05</span>, g=<span class="org-highlight-numbers-number">9.8</span>) :
-    <span class="org-keyword">return</span> u*t*np.cos(alpha) + b**(-<span class="org-highlight-numbers-number">1</span>)*(v0*np.cos(theta) - u*np.cos(alpha))*(<span class="org-highlight-numbers-number">1</span> - np.exp(-b*t))
+<pre class="src src-ipython"><span style="color: #8995ba;">''' Wind projectile class '''</span>
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">x</span>(t, theta, v0=<span style="color: #bd93f9; font-weight: bold;">1</span>, u=<span style="color: #bd93f9; font-weight: bold;">1</span>, alpha=<span style="color: #bd93f9; font-weight: bold;">0.05</span>, b=<span style="color: #bd93f9; font-weight: bold;">0.05</span>, g=<span style="color: #bd93f9; font-weight: bold;">9.8</span>) :
+    <span style="color: #ff79c6;">return</span> u*t*np.cos(alpha) + b**(-<span style="color: #bd93f9; font-weight: bold;">1</span>)*(v0*np.cos(theta) - u*np.cos(alpha))*(<span style="color: #bd93f9; font-weight: bold;">1</span> - np.exp(-b*t))
 
-<span class="org-keyword">def</span> <span class="org-function-name">y</span>(t, theta, v0=<span class="org-highlight-numbers-number">1</span>, u=<span class="org-highlight-numbers-number">1</span>, alpha=<span class="org-highlight-numbers-number">0.05</span>, b=<span class="org-highlight-numbers-number">0.05</span>, g=<span class="org-highlight-numbers-number">9.8</span>) :
-    <span class="org-keyword">return</span> b**(-<span class="org-highlight-numbers-number">1</span>)*(g/b + v0*np.sin(theta) - u*np.sin(alpha))*(<span class="org-highlight-numbers-number">1</span> - np.exp(-b*t)) - (g/b - u*np.sin(alpha))*t
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">y</span>(t, theta, v0=<span style="color: #bd93f9; font-weight: bold;">1</span>, u=<span style="color: #bd93f9; font-weight: bold;">1</span>, alpha=<span style="color: #bd93f9; font-weight: bold;">0.05</span>, b=<span style="color: #bd93f9; font-weight: bold;">0.05</span>, g=<span style="color: #bd93f9; font-weight: bold;">9.8</span>) :
+    <span style="color: #ff79c6;">return</span> b**(-<span style="color: #bd93f9; font-weight: bold;">1</span>)*(g/b + v0*np.sin(theta) - u*np.sin(alpha))*(<span style="color: #bd93f9; font-weight: bold;">1</span> - np.exp(-b*t)) - (g/b - u*np.sin(alpha))*t
 
-<span class="org-variable-name">thetas</span> = np.deg2rad( np.arange(<span class="org-highlight-numbers-number">10</span>, <span class="org-highlight-numbers-number">91</span>, <span class="org-highlight-numbers-number">5</span>) )
+thetas = np.deg2rad( np.arange(<span style="color: #bd93f9; font-weight: bold;">10</span>, <span style="color: #bd93f9; font-weight: bold;">91</span>, <span style="color: #bd93f9; font-weight: bold;">5</span>) )
 
-<span class="org-keyword">class</span> <span class="org-type">windProjectile</span> :
-    <span class="org-keyword">def</span> <span class="org-function-name">__init__</span>(<span class="org-keyword">self</span>, thetas=thetas , **kwargs) :
-        <span class="org-doc">''' Attributes of windProjectile object</span>
-<span class="org-doc">        '''</span>
-        <span class="org-keyword">self</span>.x = <span class="org-keyword">lambda</span> t : x(t, thetas, **kwargs)
-        <span class="org-keyword">self</span>.y = np.array([ <span class="org-keyword">lambda</span> t : y(t, theta, **kwargs) <span class="org-keyword">for</span> theta <span class="org-keyword">in</span> thetas ])
+<span style="color: #ff79c6;">class</span> <span style="color: #bd93f9;">windProjectile</span> :
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">__init__</span>(<span style="color: #ff79c6;">self</span>, thetas=thetas , **kwargs) :
+        <span style="color: #8995ba;">''' Attributes of windProjectile object</span>
+<span style="color: #8995ba;">        '''</span>
+        <span style="color: #ff79c6;">self</span>.x = <span style="color: #ff79c6;">lambda</span> t : x(t, thetas, **kwargs)
+        <span style="color: #ff79c6;">self</span>.y = np.array([ <span style="color: #ff79c6;">lambda</span> t : y(t, theta, **kwargs) <span style="color: #ff79c6;">for</span> theta <span style="color: #ff79c6;">in</span> thetas ])
 
-    <span class="org-keyword">def</span> <span class="org-function-name">max_range</span>(<span class="org-keyword">self</span>, plot=<span class="org-constant">True</span>, fit=<span class="org-constant">True</span>) :
-        <span class="org-doc">''' Method to get the maximum range of the projectile</span>
-<span class="org-doc">        '''</span>
-        <span class="org-variable-name">opt</span>       = np.vectorize(optimize.newton)
-        <span class="org-variable-name">max_time</span>  = opt(<span class="org-keyword">self</span>.y, <span class="org-highlight-numbers-number">40</span>)
-        <span class="org-variable-name">max_range</span> = <span class="org-keyword">self</span>.x(max_time)
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">max_range</span>(<span style="color: #ff79c6;">self</span>, plot=<span style="color: #8be9fd;">True</span>, fit=<span style="color: #8be9fd;">True</span>) :
+        <span style="color: #8995ba;">''' Method to get the maximum range of the projectile</span>
+<span style="color: #8995ba;">        '''</span>
+        opt       = np.vectorize(optimize.newton)
+        max_time  = opt(<span style="color: #ff79c6;">self</span>.y, <span style="color: #bd93f9; font-weight: bold;">40</span>)
+        max_range = <span style="color: #ff79c6;">self</span>.x(max_time)
 
-        <span class="org-keyword">if</span> plot :
-            plt.plot(thetas, max_range, <span class="org-string">'k.'</span>)
-            <span class="org-keyword">if</span> fit :
-                <span class="org-variable-name">trend_poly</span> = interpolate.lagrange(thetas, max_range)
-                <span class="org-variable-name">X</span> = np.linspace(thetas[<span class="org-highlight-numbers-number">0</span>], thetas[-<span class="org-highlight-numbers-number">1</span>], <span class="org-highlight-numbers-number">100</span>)
-                plt.plot(X, trend_poly(X), <span class="org-string">'b-'</span>)
+        <span style="color: #ff79c6;">if</span> plot :
+            plt.plot(thetas, max_range, <span style="color: #f1fa8c;">'k.'</span>)
+            <span style="color: #ff79c6;">if</span> fit :
+                trend_poly = interpolate.lagrange(thetas, max_range)
+                X = np.linspace(thetas[<span style="color: #bd93f9; font-weight: bold;">0</span>], thetas[-<span style="color: #bd93f9; font-weight: bold;">1</span>], <span style="color: #bd93f9; font-weight: bold;">100</span>)
+                plt.plot(X, trend_poly(X), <span style="color: #f1fa8c;">'b-'</span>)
             plt.grid()
             plt.show()
 </pre>
 </div>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">v0</span> = <span class="org-highlight-numbers-number">60</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s; initial projectile speed</span>
-<span class="org-variable-name">u</span> = v0/<span class="org-highlight-numbers-number">2</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s; wind speed</span>
+<pre class="src src-ipython">v0 = <span style="color: #bd93f9; font-weight: bold;">60</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">m/s; initial projectile speed</span>
+u = v0/<span style="color: #bd93f9; font-weight: bold;">2</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">m/s; wind speed</span>
 
-<span class="org-variable-name">alpha</span> = np.pi <span class="org-comment-delimiter"># </span><span class="org-comment">wind angle</span>
-<span class="org-variable-name">theta</span> = np.deg2rad(<span class="org-highlight-numbers-number">45</span>) <span class="org-comment-delimiter"># </span><span class="org-comment">launch angle</span>
+alpha = np.pi <span style="color: #6272a4;"># </span><span style="color: #6272a4;">wind angle</span>
+theta = np.deg2rad(<span style="color: #bd93f9; font-weight: bold;">45</span>) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">launch angle</span>
 
-<span class="org-variable-name">b</span> = <span class="org-highlight-numbers-number">0.05</span> <span class="org-comment-delimiter"># </span><span class="org-comment">friction force parameter</span>
-<span class="org-variable-name">g</span> = <span class="org-highlight-numbers-number">9.8</span> <span class="org-comment-delimiter"># </span><span class="org-comment">m/s^2; gravitational acceleration</span>
+b = <span style="color: #bd93f9; font-weight: bold;">0.05</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">friction force parameter</span>
+g = <span style="color: #bd93f9; font-weight: bold;">9.8</span> <span style="color: #6272a4;"># </span><span style="color: #6272a4;">m/s^2; gravitational acceleration</span>
 
-<span class="org-variable-name">params</span> = {<span class="org-string">'v0'</span>: v0, <span class="org-string">'u'</span>: u, <span class="org-string">'alpha'</span>: alpha, <span class="org-string">'b'</span>: b, <span class="org-string">'g'</span>: g}
+params = {<span style="color: #f1fa8c;">'v0'</span>: v0, <span style="color: #f1fa8c;">'u'</span>: u, <span style="color: #f1fa8c;">'alpha'</span>: alpha, <span style="color: #f1fa8c;">'b'</span>: b, <span style="color: #f1fa8c;">'g'</span>: g}
 
-<span class="org-variable-name">ls</span> = windProjectile(**params)
+ls = windProjectile(**params)
 ls.max_range()
 </pre>
 </div>
 
 
-<div id="org16d1887" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/7VOgdW.svg" class="org-svg">
+<div id="org64bee2c" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/aS8GnU.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -559,7 +559,7 @@ Sorry, your browser does not support SVG.</object>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-09-12 Sun 21:11</p>
+<p class="date">Created: 2021-09-15 Wed 10:27</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

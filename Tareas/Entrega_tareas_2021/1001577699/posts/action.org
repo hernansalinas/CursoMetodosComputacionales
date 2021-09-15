@@ -1,0 +1,462 @@
+#+TITLE: Application of the Principle of Least Action
+#+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
+
+#+begin_src ipython :session asession :results raw drawer
+%config InlineBackend.figure_format = 'svg'
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import scipy.integrate as integrate
+from scipy.optimize import fmin_powell
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[5]:
+:end:
+
+* Simple pendulum problem
+
+We have a pendulum with a certain bob of mass $m$, and whose period is given, we
+wish to find the trajectory of the bob using Lagrangians.
+#+begin_src ipython :session asession :results raw drawer
+th_f = np.deg2rad(10)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[247]:
+:end:
+
+We define the lagrangian of the system, which is equal to the quantity
+$\mathcal{L} = K - U$, and sum it over discrete paths to get their action. The
+action function takes an $n$-tuple and returns a single number, thus we need to
+minimize a funtion from $\mathbb{R}^n$ to $\mathbb{R}$.
+#+begin_src ipython :session asession :results raw drawer :exports both
+def action(thetas, theta_0=0, theta_f=th_f, t_f=0.5026, m=0.2, l=1, g=9.8):
+    ''' The lagrangian defines a function from Rn to R,
+    which takes possible discrete n-paths as inputs
+    and returns their action.
+    '''
+    thetas = np.asarray(thetas)
+    # fix the boundary
+    thetas[0], thetas[-1] = theta_0, theta_f
+
+    time_domain = np.linspace(0, t_f, thetas.shape[0])
+
+    # get an approximation to the angular speed given
+    # the array of angles
+    dt = np.diff(time_domain)
+    angular_speed = np.diff(thetas)/dt
+
+    # get the lagrangian
+    kinetic = 0.5*m*(l*angular_speed)**2
+    potential = m*g*l*(1 - np.cos(thetas[1:]))
+    return np.dot(kinetic - potential, dt)
+
+action([1,2,3,4])
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[257]:
+: 7.238087883494
+:end:
+
+The object's path is the $n$-tuple that minimises the action function.
+#+begin_src ipython :session asession :results raw drawer :exports both
+def path(N, theta_0=0, theta_f=th_f):
+    thetas = fmin_powell( action, x0=np.zeros(int(N)) )
+    # fix the boundary
+    thetas[0], thetas[-1] = theta_0, theta_f
+    return thetas
+
+path(50)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[263]:
+#+BEGIN_EXAMPLE
+  array([0. , 0.00559656, 0.01118722, 0.01676634, 0.02232795,
+  0.02786655, 0.03337642, 0.03885188, 0.04428761, 0.0496777 ,
+  0.05501686, 0.06029933, 0.06551943, 0.07067203, 0.07575125,
+  0.08075244, 0.08567029, 0.09049991, 0.09523704, 0.09987613,
+  0.10441326, 0.10884293, 0.11316026, 0.11736117, 0.12143981,
+  0.12539355, 0.1292177 , 0.13290898, 0.1364654 , 0.13988156,
+  0.14315608, 0.1462835 , 0.14925956, 0.1520823 , 0.15474516,
+  0.15724911, 0.159591  , 0.16176904, 0.16378597, 0.16563478,
+  0.16731596, 0.16882544, 0.170156  , 0.17131196, 0.17228901,
+  0.17309303, 0.17372212, 0.17417115, 0.17444151, 0.17453293])
+#+END_EXAMPLE
+:end:
+
+From mechanics, we know that the angular speed of the pedulum is given by the
+formula $\omega = 2\pi/T$, where $T$ is the pendulum's period. In turn, assuming
+small oscillations:
+\[ T = 2\pi\sqrt{\frac{L}{g}} \]
+#+begin_src ipython :session asession :results raw drawer :exports both
+def graph(t_f=0.5026, m=0.2, l=1, theta_f=th_f, N=50, g=9.8):
+    T = lambda l : 2*np.pi*np.sqrt(l/g)
+    time_domain = np.linspace(0, t_f, N)
+    ang_speed = 2*np.pi/T(l)
+
+    minimise_path = path(N)
+    expected_path = theta_f*np.sin(ang_speed*time_domain)
+    return time_domain, minimise_path, expected_path
+
+def plot(graph):
+    _t, path, expected_path = graph()
+    plt.plot(_t, path, 'b.')
+    plt.plot(_t, expected_path, 'g-')
+    plt.grid()
+    plt.show()
+
+@plot
+def _graph():
+    return graph()
+_graph
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[277]:
+[[file:./obipy-resources/Y5ERnN.svg]]
+:end:
+#+begin_src ipython :session asession :results raw drawer :exports both
+def energy(m=0.2, l=1, g=9.8):
+    _t, path, expected_path = graph()
+    angular_speed = np.diff(path)/np.diff(_t)
+
+    kinetic = 0.5*m*(l*angular_speed)**2
+    potential = m*g*l*(1 - np.cos(path[1:]))
+
+    plt.plot(_t[1:], kinetic + potential, 'r.')
+    plt.plot(_t[1:], kinetic, 'b.')
+    plt.plot(_t[1:], potential, 'g.')
+    plt.grid()
+    plt.show()
+
+energy()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[284]:
+[[file:./obipy-resources/z42DKR.svg]]
+:end:
+
+* Mass attached to a spring
+We wish to use lagrangian mechanics to characterize a system consisting of a mass attached to a string.
+
+We know the time it takes for the spring to complete an oscillation.
+
+As before, we must define the action, which is the integral of the lagrangian, as a function of possible $n$-paths consisting of an array of possible positions.
+#+begin_src ipython :session asession :results raw drawer :exports both
+def _action(x, x_0=0.707106, x_f=0.707106, t_0=np.pi/8, t_f=3*np.pi/8, m=0.2, k=0.8):
+    ''' The lagrangian defines a function from Rn to R,
+    which takes possible discrete n-paths as inputs
+    and returns their action.
+    '''
+    x = np.asarray(x)
+    # fix the boundary
+    x[0], x[-1] = x_0, x_f
+
+    time_domain = np.linspace(t_0, t_f, x.shape[0])
+
+    # get an approximation to the speed given
+    # the array of positions
+    dt = np.diff(time_domain)
+    speed = np.diff(x)/dt
+
+    # get the lagrangian
+    kinetic = 0.5*m*speed**2
+    potential = 0.5*k*x[1:]**2
+    # return the action
+    return np.dot(kinetic - potential, dt)
+
+_action([1,2,3,4])
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[35]:
+: 3.986249271332106
+:end:
+#+begin_src ipython :session asession :results raw drawer :exports both
+def _path(N, x_0=0.707106, x_f=0.707106):
+    x = fmin_powell( _action, x0=np.zeros(int(N)) )
+    # fix the boundary
+    x[0], x[-1] = x_0, x_f
+    return x
+
+_path(51)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[36]:
+#+BEGIN_EXAMPLE
+  array([0.707106  , 0.72896324, 0.74992768, 0.77043328, 0.79009548,
+  0.80897771, 0.82703792, 0.84429362, 0.86070009, 0.87626238,
+  0.89095823, 0.90477491, 0.91770246, 0.92972336, 0.94083031,
+  0.95100818, 0.96024932, 0.96854261, 0.97588024, 0.98225472,
+  0.98766077, 0.99209205, 0.99554648, 0.99801834, 0.9995034 ,
+  1.00000198, 0.99951   , 0.99803155, 0.99557785, 0.99214158,
+  0.98772744, 0.98233857, 0.9759515 , 0.96860117, 0.96031583,
+  0.95108267, 0.9409571 , 0.92990286, 0.9178419 , 0.90487507,
+  0.89099313, 0.87623182, 0.86077175, 0.84446213, 0.82722866,
+  0.80917875, 0.79019668, 0.77043472, 0.75007153, 0.72894849,
+  0.707106  ])
+#+END_EXAMPLE
+:end:
+
+#+begin_src ipython :session asession :results raw drawer :exports both
+def graph(t_0=np.pi/8, t_f=3*np.pi/8, m=0.2, k=0.8, x_0=0.707106, x_f=0.707106, N=50, g=9.8):
+    time_domain = np.linspace(t_0, t_f, N)
+    ang_speed = np.sqrt(k/m)
+
+    minimised_path = _path(N)
+    expected_path = np.sin(ang_speed*time_domain)
+    return time_domain, minimised_path, expected_path
+
+def plot(graph):
+    _t, path, expected_path = graph()
+    plt.plot(_t, path, 'b.')
+    plt.plot(_t, expected_path, 'g-')
+    plt.grid()
+    plt.show()
+
+@plot
+def _graph():
+    return graph()
+
+_graph
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[37]:
+[[file:./obipy-resources/y4gsZw.svg]]
+:end:
+
+#+begin_src ipython :session asession :results raw drawer :exports both
+def energy(m=0.2, k=0.8):
+    _t, path, expected_path = graph()
+    speed = np.diff(path)/np.diff(_t)
+
+    kinetic = 0.5*m*speed**2
+    potential = 0.5*k*path[1:]**2
+
+    plt.plot(_t[1:], kinetic + potential, 'r.')
+    plt.plot(_t[1:], kinetic, 'b.')
+    plt.plot(_t[1:], potential, 'g.')
+    plt.grid()
+    plt.show()
+
+energy()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[39]:
+[[file:./obipy-resources/8Aj2bh.svg]]
+:end:
+#+begin_src ipython :session asession :results raw drawer :exports both
+def position_derivatives(m=0.2, k=0.8):
+    _t, path, expected_path = graph()
+    dt = np.diff(_t)
+
+    # get the numerical derivatives
+    speed = np.diff(path)/dt
+    accel = np.diff(speed)/dt[1:]
+    angular_speed = np.sqrt(k/m)
+
+    plt.plot(_t, path, 'k')
+    plt.plot(_t[1:], speed/angular_speed, 'b.')
+    plt.plot(_t[2:], -accel/angular_speed**2, 'g.')
+    plt.grid()
+    plt.show()
+
+position_derivatives()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[40]:
+[[file:./obipy-resources/7HVwDT.svg]]
+:end:
+
+* Generalisation
+We can define a class for this whole process:
+#+begin_src ipython :session asession :results raw drawer
+class Lagrangian:
+    ''' Minimises the action of a specified system and returns the
+    corresponding path
+    '''
+    def __init__(self, kinetic, potential, path_ini, path_end, time_ini, time_end, theoretical_path=None):
+        # define functions describing the system
+        self.kinetic = kinetic
+        self.potential = potential
+        self.theoretical_path = theoretical_path
+
+        # define the constraints on the system
+        self.path_ini = path_ini
+        self.path_end = path_end
+        self.time_ini = time_ini
+        self.time_end = time_end
+
+    def action(self, path, *args):
+        ''' The Lagrangian defines a function from Rn to R,
+        which takes possible discrete n-paths as inputs
+        and returns their action
+        '''
+        # read the n-array input
+        path = np.asarray(path)
+        # fix the boundary
+        path[0], path[-1] = self.path_ini, self.path_end
+
+        # define a sensible time domain corresponding to the
+        # path, which we assume to be evenly spaced
+        time_domain = np.linspace(self.time_ini, self.time_end, path.shape[0])
+
+        # get an approximation to the speed (time derivative
+        # of path), given the n-path
+        dt = np.diff(time_domain)
+        speed = np.diff(path)/dt
+
+        # get the lagrangian
+        kinetic = self.kinetic(speed, *args)
+        potential = self.potential(path[1:], *args)
+        return np.dot(kinetic - potential, dt)
+
+    def path(self, N, args=()):
+        ''' Returns the N-path minimising the action '''
+        # minimize the action
+        path = fmin_powell( self.action, x0=np.zeros(int(N)), args=args )
+
+        # fix the boundary
+        path[0], path[-1] = self.path_ini, self.path_end
+        return path
+
+    def graph(self, N, energy_args=(), expected_args=()):
+        ''' Returns the graph of the minimised path and, if given,
+        the expected path
+        '''
+        time_domain = np.linspace(self.time_ini, self.time_end, N)
+        minimised_path = self.path(N, args=energy_args)
+
+        # evaluate the expected path if given
+        if self.theoretical_path is not None:
+            expected_path = self.theoretical_path(time_domain, *expected_args)
+            return time_domain, minimised_path, expected_path
+        else:
+            return time_domain, minimised_path
+
+    def plot(self, N, energy_args=(), expected_args=()):
+        ''' Call this object to yield the plot, i.e., write:
+            L = Lagrangian(..)
+            L.plot
+        '''
+        try:
+            _t, path, expected_path = self.graph(N, energy_args=energy_args, expected_args=expected_args)
+            plt.plot(_t, expected_path, 'g-', label='Expected')
+        except:
+            _t, path = self.graph(N, energy_args, expected_args)
+
+        plt.plot(_t, path, 'b.', label='Minimised')
+        plt.grid()
+        plt.legend()
+        plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[29]:
+:end:
+
+We can make use of this newly defined class by defining the functions that
+characterise the system's behaviour, and processing them accordingly.
+#+begin_src ipython :session asession :results raw drawer :exports both
+# The pendulum problem
+def kinetic(speed, m=1, g=9.8, L=1):
+    return 0.5*m*(L*speed)**2
+
+def potential(thetas, m=1, g=9.8, L=1):
+    return m*g*L*(1 - np.cos(thetas))
+
+def theoretical(t, theta_end=np.deg2rad(10), g=9.8, L=1):
+    T = 2*np.pi*np.sqrt(L/g)
+    ang_speed = 2*np.pi/T
+
+    return theta_end*np.sin(ang_speed*t)
+
+system = Lagrangian(kinetic, potential,
+                    path_ini=0, path_end=np.deg2rad(10),
+                    time_ini=0, time_end=0.5026,
+                    theoretical_path=theoretical)
+
+system.plot(50, energy_args=(1, 9.8, 1),
+            expected_args=(np.deg2rad(10), 9.8, 1))
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[30]:
+[[file:./obipy-resources/cvnSGx.svg]]
+:end:
+
+As before, we can build up the energy plot, so as to prove that it is conserved:
+#+begin_src ipython :session asession :results raw drawer :exports both
+def energy(m=0.2, L=1, g=9.8) :
+    # get the graph of both the expected function
+    # and the minimised one
+    _t, path, expected_path = system.graph(50)
+    angular_speed = np.diff(path)/np.diff(_t)
+
+    kinetic = 0.5*m*(L*angular_speed)**2
+    potential = m*g*L*(1 - np.cos(path[1:]))
+
+    plt.plot(_t[1:], kinetic + potential, 'r.', label='Mechanical energy')
+    plt.plot(_t[1:], kinetic, 'b.', label='Kinetic energy')
+    plt.plot(_t[1:], potential, 'g.', label='Potential energy')
+    plt.grid()
+    plt.legend()
+    plt.show()
+
+energy()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[41]:
+[[file:./obipy-resources/oJtrLR.svg]]
+:end:
+Similarly:
+#+begin_src ipython :session asession :results raw drawer :exports both
+# The spring problem
+def kinetic(speed, m=0.2, k=0.8):
+    return 0.5*m*speed**2
+
+def potential(position, m=0.2, k=0.8):
+    return 0.5*k*position**2
+
+def theoretical(t, m=0.2, k=0.8):
+    ang_speed = np.sqrt(k/m)
+    return np.sin(ang_speed*t)
+
+system = Lagrangian(kinetic, potential,
+                    path_ini=0.707106, path_end=0.707106,
+                    time_ini=np.pi/8, time_end=3*np.pi/8,
+                    theoretical_path=theoretical)
+
+system.plot(50, energy_args=(0.2, 0.8),
+            expected_args=(0.2, 0.8))
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[44]:
+[[file:./obipy-resources/3QsDT3.svg]]
+:end:

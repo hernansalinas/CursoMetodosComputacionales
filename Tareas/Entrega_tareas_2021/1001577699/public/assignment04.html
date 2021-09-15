@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-09-12 Sun 21:11 -->
+<!-- 2021-09-15 Wed 10:26 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Assignment04</title>
@@ -259,11 +259,11 @@
 </div>
 </div>
 <div class="org-src-container">
-<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
+<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
 
-<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
-<span class="org-keyword">from</span> scipy <span class="org-keyword">import</span> optimize
-<span class="org-keyword">import</span> matplotlib.pylab <span class="org-keyword">as</span> plt
+<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">from</span> scipy <span style="color: #ff79c6;">import</span> optimize
+<span style="color: #ff79c6;">import</span> matplotlib.pylab <span style="color: #ff79c6;">as</span> plt
 </pre>
 </div>
 
@@ -285,8 +285,8 @@ f(x) = e^x - 2 - \cos(e^x - 2)
 In order to have a sense for the interval in which the root of such a function is, we may look at the graph, which is provided below.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">f</span> = <span class="org-keyword">lambda</span> x : np.exp(x) - np.cos(np.exp(x) - <span class="org-highlight-numbers-number">2</span>) - <span class="org-highlight-numbers-number">2</span>
-<span class="org-variable-name">x</span> = np.linspace(-<span class="org-highlight-numbers-number">4</span>, <span class="org-highlight-numbers-number">2.5</span>, <span class="org-highlight-numbers-number">1000</span>)
+<pre class="src src-ipython">f = <span style="color: #ff79c6;">lambda</span> x : np.exp(x) - np.cos(np.exp(x) - <span style="color: #bd93f9; font-weight: bold;">2</span>) - <span style="color: #bd93f9; font-weight: bold;">2</span>
+x = np.linspace(-<span style="color: #bd93f9; font-weight: bold;">4</span>, <span style="color: #bd93f9; font-weight: bold;">2.5</span>, <span style="color: #bd93f9; font-weight: bold;">1000</span>)
 
 plt.plot(x, f(x), label=f(x))
 plt.grid()
@@ -294,8 +294,8 @@ plt.grid()
 </div>
 
 
-<div id="org34482f8" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/lrtBeW.svg" class="org-svg">
+<div id="orgb5f2fb0" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/DLD3fY.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -315,7 +315,7 @@ where \(a\) and \(b\) stand for the limits of the interval we are taking into co
 We could take the interval \([-0.8,1.2]\), for which we then require a number of iterations \(n > \log_2 \left( 10^{10}(0.4) \right)\). Now, the logarithm at issue gives:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">np.log( 1E10*<span class="org-highlight-numbers-number">0.4</span> )/np.log(<span class="org-highlight-numbers-number">2</span>) <span class="org-comment-delimiter"># </span><span class="org-comment">this is log_2</span>
+<pre class="src src-ipython">np.log( 1E10*<span style="color: #bd93f9; font-weight: bold;">0.4</span> )/np.log(<span style="color: #bd93f9; font-weight: bold;">2</span>) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">this is log_2</span>
 </pre>
 </div>
 
@@ -328,7 +328,7 @@ This means that a number of 32 iterations will suffice. We can then use the meth
 </p>
 
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">root</span> = optimize.bisect(f, <span class="org-highlight-numbers-number">0.8</span>, <span class="org-highlight-numbers-number">1.2</span>, maxiter=<span class="org-highlight-numbers-number">32</span>, xtol=1E-<span class="org-highlight-numbers-number">10</span>)
+<pre class="src src-ipython">root = optimize.bisect(f, <span style="color: #bd93f9; font-weight: bold;">0.8</span>, <span style="color: #bd93f9; font-weight: bold;">1.2</span>, maxiter=<span style="color: #bd93f9; font-weight: bold;">32</span>, xtol=1E-<span style="color: #bd93f9; font-weight: bold;">10</span>)
 root
 </pre>
 </div>
@@ -364,19 +364,19 @@ f(x) = 0.5 + \frac{g}{2\omega^2} \left( \frac{e^{\omega} - e^{-\omega}}{2} - \si
 Once again, we may graph the equation as to estimate on an intuitive basis the interval in which the root may be:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">g</span> = <span class="org-highlight-numbers-number">9.75</span>
-<span class="org-variable-name">h</span> = <span class="org-keyword">lambda</span> omega : <span class="org-highlight-numbers-number">0.5</span> + g/(<span class="org-highlight-numbers-number">2</span>*omega**<span class="org-highlight-numbers-number">2</span>)*( np.sinh(omega) - np.sin(omega) )
-<span class="org-variable-name">x</span> = np.linspace(-<span class="org-highlight-numbers-number">5</span>, <span class="org-highlight-numbers-number">5</span>, <span class="org-highlight-numbers-number">1000</span>)
+<pre class="src src-ipython">g = <span style="color: #bd93f9; font-weight: bold;">9.75</span>
+h = <span style="color: #ff79c6;">lambda</span> omega : <span style="color: #bd93f9; font-weight: bold;">0.5</span> + g/(<span style="color: #bd93f9; font-weight: bold;">2</span>*omega**<span style="color: #bd93f9; font-weight: bold;">2</span>)*( np.sinh(omega) - np.sin(omega) )
+x = np.linspace(-<span style="color: #bd93f9; font-weight: bold;">5</span>, <span style="color: #bd93f9; font-weight: bold;">5</span>, <span style="color: #bd93f9; font-weight: bold;">1000</span>)
 
-plt.plot(x, h(x), label=<span class="org-string">'f(x)'</span>)
+plt.plot(x, h(x), label=<span style="color: #f1fa8c;">'f(x)'</span>)
 plt.legend()
 plt.grid()
 </pre>
 </div>
 
 
-<div id="org5c95fd6" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/1pIEtp.svg" class="org-svg">
+<div id="org5fa014d" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/m7CE31.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -385,7 +385,7 @@ Sorry, your browser does not support SVG.</object>
 Once again, to find the value to within \(10^{-5}\), we need \(n > \log_2 \left( 10^{5}(b - a) \right)\). We can choose an interval \([-0.8, 0.5]\), for which the number of iterations required to bound the error is \(n > \log_2 \left( 10^{5}(1.3) \right)\)
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">np.log( 1E5*<span class="org-highlight-numbers-number">1.3</span> )/np.log(<span class="org-highlight-numbers-number">2</span>) <span class="org-comment-delimiter"># </span><span class="org-comment">this is log_2</span>
+<pre class="src src-ipython">np.log( 1E5*<span style="color: #bd93f9; font-weight: bold;">1.3</span> )/np.log(<span style="color: #bd93f9; font-weight: bold;">2</span>) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">this is log_2</span>
 </pre>
 </div>
 
@@ -397,7 +397,7 @@ Once again, to find the value to within \(10^{-5}\), we need \(n > \log_2 \left(
 We can then take 17 iterations:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">root</span> = optimize.bisect(h, -<span class="org-highlight-numbers-number">0.8</span>, <span class="org-highlight-numbers-number">0.5</span>, maxiter=<span class="org-highlight-numbers-number">17</span>, xtol=1E-<span class="org-highlight-numbers-number">5</span>)
+<pre class="src src-ipython">root = optimize.bisect(h, -<span style="color: #bd93f9; font-weight: bold;">0.8</span>, <span style="color: #bd93f9; font-weight: bold;">0.5</span>, maxiter=<span style="color: #bd93f9; font-weight: bold;">17</span>, xtol=1E-<span style="color: #bd93f9; font-weight: bold;">5</span>)
 root
 </pre>
 </div>
@@ -435,18 +435,18 @@ to then find its root via the bisection method; this will yield a value for the 
 To begin with, we graph the equation, whereby we can have an initial guess for the interval in which our root is going to be.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">t</span> = <span class="org-keyword">lambda</span> h : <span class="org-highlight-numbers-number">12.4</span> - <span class="org-highlight-numbers-number">10</span>*( <span class="org-highlight-numbers-number">0.5</span>*np.pi - np.arcsin(h) - h*np.sqrt(<span class="org-highlight-numbers-number">1</span> - h**<span class="org-highlight-numbers-number">2</span>) )
-<span class="org-variable-name">x</span> = np.linspace(-<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">1000</span>)
+<pre class="src src-ipython">t = <span style="color: #ff79c6;">lambda</span> h : <span style="color: #bd93f9; font-weight: bold;">12.4</span> - <span style="color: #bd93f9; font-weight: bold;">10</span>*( <span style="color: #bd93f9; font-weight: bold;">0.5</span>*np.pi - np.arcsin(h) - h*np.sqrt(<span style="color: #bd93f9; font-weight: bold;">1</span> - h**<span style="color: #bd93f9; font-weight: bold;">2</span>) )
+x = np.linspace(-<span style="color: #bd93f9; font-weight: bold;">1</span>, <span style="color: #bd93f9; font-weight: bold;">1</span>, <span style="color: #bd93f9; font-weight: bold;">1000</span>)
 
-plt.plot(x, t(x), label=<span class="org-string">'f(x)'</span>)
+plt.plot(x, t(x), label=<span style="color: #f1fa8c;">'f(x)'</span>)
 plt.legend()
 plt.grid()
 </pre>
 </div>
 
 
-<div id="org91ec567" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/oCTtRE.svg" class="org-svg">
+<div id="org3b6190a" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/biX7t3.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -455,7 +455,7 @@ Sorry, your browser does not support SVG.</object>
 Hence the root is in \([0, 0.25]\). To bound the error we would then have a number of iterations \(n > \log_2 \left( 10^{2}(b - a) \right) = \log_2 \left( 10^{2}(0.25) \right)\):
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">np.log( 1E2*<span class="org-highlight-numbers-number">0.25</span> )/np.log(<span class="org-highlight-numbers-number">2</span>) <span class="org-comment-delimiter"># </span><span class="org-comment">this is log_2</span>
+<pre class="src src-ipython">np.log( 1E2*<span style="color: #bd93f9; font-weight: bold;">0.25</span> )/np.log(<span style="color: #bd93f9; font-weight: bold;">2</span>) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">this is log_2</span>
 </pre>
 </div>
 
@@ -467,7 +467,7 @@ Hence the root is in \([0, 0.25]\). To bound the error we would then have a numb
 so we only need 5 iterations:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">root</span> = optimize.bisect(t, <span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">0.25</span>, maxiter=<span class="org-highlight-numbers-number">5</span>, xtol=1E-<span class="org-highlight-numbers-number">2</span>)
+<pre class="src src-ipython">root = optimize.bisect(t, <span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">0.25</span>, maxiter=<span style="color: #bd93f9; font-weight: bold;">5</span>, xtol=1E-<span style="color: #bd93f9; font-weight: bold;">2</span>)
 root
 </pre>
 </div>
@@ -509,22 +509,22 @@ whose root is the value of the maximum angle, according to the definition given 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-comment-delimiter"># </span><span class="org-comment">Defining given values</span>
-<span class="org-variable-name">L</span> = <span class="org-highlight-numbers-number">89</span>
-<span class="org-variable-name">h</span> = <span class="org-highlight-numbers-number">49</span>
-<span class="org-variable-name">D</span> = <span class="org-highlight-numbers-number">55</span>
-<span class="org-variable-name">beta</span> = np.deg2rad(<span class="org-highlight-numbers-number">11.5</span>)
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">Defining given values</span>
+L = <span style="color: #bd93f9; font-weight: bold;">89</span>
+h = <span style="color: #bd93f9; font-weight: bold;">49</span>
+D = <span style="color: #bd93f9; font-weight: bold;">55</span>
+beta = np.deg2rad(<span style="color: #bd93f9; font-weight: bold;">11.5</span>)
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">Pugging in these values</span>
-<span class="org-variable-name">A</span> = L*np.sin(beta)
-<span class="org-variable-name">B</span> = L*np.cos(beta)
-<span class="org-variable-name">C</span> = (h + <span class="org-highlight-numbers-number">0.5</span>*D)*np.sin(beta) - <span class="org-highlight-numbers-number">0.5</span>*D*np.tan(beta)
-<span class="org-variable-name">E</span> = (h + <span class="org-highlight-numbers-number">0.5</span>*D)*np.cos(beta) - <span class="org-highlight-numbers-number">0.5</span>*D
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Pugging in these values</span>
+A = L*np.sin(beta)
+B = L*np.cos(beta)
+C = (h + <span style="color: #bd93f9; font-weight: bold;">0.5</span>*D)*np.sin(beta) - <span style="color: #bd93f9; font-weight: bold;">0.5</span>*D*np.tan(beta)
+E = (h + <span style="color: #bd93f9; font-weight: bold;">0.5</span>*D)*np.cos(beta) - <span style="color: #bd93f9; font-weight: bold;">0.5</span>*D
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">Defining the function</span>
-<span class="org-variable-name">v</span> = <span class="org-keyword">lambda</span> alpha : A*np.sin(alpha)*np.cos(alpha) + B*(np.sin(alpha))**<span class="org-highlight-numbers-number">2</span> - C*np.cos(alpha) - E*np.sin(alpha)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Defining the function</span>
+v = <span style="color: #ff79c6;">lambda</span> alpha : A*np.sin(alpha)*np.cos(alpha) + B*(np.sin(alpha))**<span style="color: #bd93f9; font-weight: bold;">2</span> - C*np.cos(alpha) - E*np.sin(alpha)
 
-<span class="org-variable-name">x</span> = np.linspace(-np.pi,np.pi,<span class="org-highlight-numbers-number">1000</span>)
+x = np.linspace(-np.pi,np.pi,<span style="color: #bd93f9; font-weight: bold;">1000</span>)
 
 plt.plot(x, v(x))
 plt.grid()
@@ -533,8 +533,8 @@ plt.show()
 </div>
 
 
-<div id="org34d58e2" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/71vywI.svg" class="org-svg">
+<div id="org61a6ad4" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/zGyNRO.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -543,7 +543,7 @@ Sorry, your browser does not support SVG.</object>
 We can use Newton&rsquo;s secant method to find a root that is within the interval \([0, \pi /2]\), that is the only interval that makes sense for the angle to be in from a physical stand point.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">root</span> = optimize.newton(v, <span class="org-highlight-numbers-number">1</span>)
+<pre class="src src-ipython">root = optimize.newton(v, <span style="color: #bd93f9; font-weight: bold;">1</span>)
 np.rad2deg(root)
 </pre>
 </div>
@@ -560,7 +560,7 @@ Notice, then, that our root is nearly \(33^{\circ}\), as stated.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-09-12 Sun 21:11</p>
+<p class="date">Created: 2021-09-15 Wed 10:26</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

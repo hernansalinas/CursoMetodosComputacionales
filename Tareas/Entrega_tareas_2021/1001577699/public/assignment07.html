@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-09-12 Sun 21:11 -->
+<!-- 2021-09-15 Wed 10:26 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Assignment07</title>
@@ -250,12 +250,12 @@
 </div>
 </div>
 <div class="org-src-container">
-<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
+<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
 
-<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
-<span class="org-keyword">import</span> scipy <span class="org-keyword">as</span> sc
-<span class="org-keyword">import</span> sympy <span class="org-keyword">as</span> sp
-<span class="org-keyword">import</span> matplotlib.pyplot <span class="org-keyword">as</span> plt
+<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">import</span> scipy <span style="color: #ff79c6;">as</span> sc
+<span style="color: #ff79c6;">import</span> sympy <span style="color: #ff79c6;">as</span> sp
+<span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
 </pre>
 </div>
 
@@ -280,15 +280,15 @@ and
 We may as well define a function whose input is a number \(\theta\), and whose value is \(k^2\). This value could then be used to compute the elliptic integrals seen above, and then the whole thing could be replaced in the function \(\left.A_\varphi\right|_{r=1.1} : [0,\pi/2] \to \mathbb{R}\).
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">k_sr</span>(r, theta, a) :
-    <span class="org-variable-name">num</span> = <span class="org-highlight-numbers-number">4</span>*a*r*np.sin(theta)
-    <span class="org-variable-name">den</span> = a**<span class="org-highlight-numbers-number">2</span> + r**<span class="org-highlight-numbers-number">2</span> + <span class="org-highlight-numbers-number">2</span>*a*r*np.sin(theta)
-    <span class="org-keyword">return</span> num/den
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">k_sr</span>(r, theta, a) :
+    num = <span style="color: #bd93f9; font-weight: bold;">4</span>*a*r*np.sin(theta)
+    den = a**<span style="color: #bd93f9; font-weight: bold;">2</span> + r**<span style="color: #bd93f9; font-weight: bold;">2</span> + <span style="color: #bd93f9; font-weight: bold;">2</span>*a*r*np.sin(theta)
+    <span style="color: #ff79c6;">return</span> num/den
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">driver code</span>
-<span class="org-variable-name">theta</span> = np.linspace(<span class="org-highlight-numbers-number">0</span>, np.pi/<span class="org-highlight-numbers-number">2</span>, <span class="org-highlight-numbers-number">100</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">driver code</span>
+theta = np.linspace(<span style="color: #bd93f9; font-weight: bold;">0</span>, np.pi/<span style="color: #bd93f9; font-weight: bold;">2</span>, <span style="color: #bd93f9; font-weight: bold;">100</span>)
 
-plt.plot(theta, k_sr(<span class="org-highlight-numbers-number">1.1</span>, theta, <span class="org-highlight-numbers-number">1</span>), <span class="org-string">'k-'</span>)
+plt.plot(theta, k_sr(<span style="color: #bd93f9; font-weight: bold;">1.1</span>, theta, <span style="color: #bd93f9; font-weight: bold;">1</span>), <span style="color: #f1fa8c;">'k-'</span>)
 plt.grid()
 plt.plot()
 </pre>
@@ -298,61 +298,61 @@ plt.plot()
 We&rsquo;re going to be using the following class:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">closed_set_max</span>(func, variable, lower_bound, upper_bound) :
-    <span class="org-doc">''' Find the maximum of a smooth funtion on an open interval '''</span>
-    <span class="org-variable-name">d_func</span> = sp.diff(func, variable, <span class="org-highlight-numbers-number">1</span>)
-    <span class="org-variable-name">critical</span> = sp.solveset(d_func, variable,
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">closed_set_max</span>(func, variable, lower_bound, upper_bound) :
+    <span style="color: #8995ba;">''' Find the maximum of a smooth funtion on an open interval '''</span>
+    d_func = sp.diff(func, variable, <span style="color: #bd93f9; font-weight: bold;">1</span>)
+    critical = sp.solveset(d_func, variable,
                            domain=sp.Interval(lower_bound, upper_bound))
-    <span class="org-keyword">assert</span> critical.is_FiniteSet
-    <span class="org-variable-name">maximum</span> = sp.Max(func.subs(variable, lower_bound),
+    <span style="color: #ff79c6;">assert</span> critical.is_FiniteSet
+    maximum = sp.Max(func.subs(variable, lower_bound),
                      func.subs(variable, upper_bound),
-                     *[func.subs(variable, i) <span class="org-keyword">for</span> i <span class="org-keyword">in</span> critical])
-    <span class="org-keyword">return</span> <span class="org-builtin">float</span>(maximum)
+                     *[func.subs(variable, i) <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> critical])
+    <span style="color: #ff79c6;">return</span> <span style="color: #ffb86c;">float</span>(maximum)
 
-<span class="org-keyword">class</span> <span class="org-type">Function</span> :
-    <span class="org-doc">''' Properties of a $C^{\infty}$ function. Class for integration. '''</span>
-    <span class="org-keyword">def</span> <span class="org-function-name">__init__</span>(<span class="org-keyword">self</span>, expression, variable, a=<span class="org-highlight-numbers-number">0</span>, b=<span class="org-highlight-numbers-number">1</span>) :
-        <span class="org-doc">''' the mathematical expression must be a sympy object '''</span>
-        <span class="org-keyword">self</span>.numerical = sp.lambdify(variable, expression, <span class="org-string">'numpy'</span>)
-        <span class="org-keyword">self</span>.symbol = variable
-        <span class="org-keyword">self</span>.symbolic = expression
-        <span class="org-keyword">self</span>.a, <span class="org-keyword">self</span>.b = a, b
+<span style="color: #ff79c6;">class</span> <span style="color: #bd93f9;">Function</span> :
+    <span style="color: #8995ba;">''' Properties of a $C^{\infty}$ function. Class for integration. '''</span>
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">__init__</span>(<span style="color: #ff79c6;">self</span>, expression, variable, a=<span style="color: #bd93f9; font-weight: bold;">0</span>, b=<span style="color: #bd93f9; font-weight: bold;">1</span>) :
+        <span style="color: #8995ba;">''' the mathematical expression must be a sympy object '''</span>
+        <span style="color: #ff79c6;">self</span>.numerical = sp.lambdify(variable, expression, <span style="color: #f1fa8c;">'numpy'</span>)
+        <span style="color: #ff79c6;">self</span>.symbol = variable
+        <span style="color: #ff79c6;">self</span>.symbolic = expression
+        <span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b = a, b
 
-    <span class="org-keyword">def</span> <span class="org-function-name">simpson_partition</span>(<span class="org-keyword">self</span>, epsilon=<span class="org-highlight-numbers-number">0.001</span>) :
-        <span class="org-comment-delimiter"># </span><span class="org-comment">compute the fourth derivative with sympy</span>
-        <span class="org-variable-name">fourth_deriv</span> = sp.diff(<span class="org-keyword">self</span>.symbolic, <span class="org-keyword">self</span>.symbol, <span class="org-highlight-numbers-number">4</span>)
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">simpson_partition</span>(<span style="color: #ff79c6;">self</span>, epsilon=<span style="color: #bd93f9; font-weight: bold;">0.001</span>) :
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the fourth derivative with sympy</span>
+        fourth_deriv = sp.diff(<span style="color: #ff79c6;">self</span>.symbolic, <span style="color: #ff79c6;">self</span>.symbol, <span style="color: #bd93f9; font-weight: bold;">4</span>)
 
-        <span class="org-comment-delimiter"># </span><span class="org-comment">find an absolute maximum for the fourth derivative on the given domain</span>
-        <span class="org-variable-name">maximum</span> = closed_set_max(fourth_deriv, <span class="org-keyword">self</span>.symbol, <span class="org-keyword">self</span>.a, <span class="org-keyword">self</span>.b)
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">find an absolute maximum for the fourth derivative on the given domain</span>
+        maximum = closed_set_max(fourth_deriv, <span style="color: #ff79c6;">self</span>.symbol, <span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b)
 
-        <span class="org-comment-delimiter"># </span><span class="org-comment">compute the number of intervals</span>
-        <span class="org-keyword">return</span> np.ceil( ((maximum*(<span class="org-keyword">self</span>.b - <span class="org-keyword">self</span>.a)**<span class="org-highlight-numbers-number">5</span>)/(epsilon*<span class="org-highlight-numbers-number">180</span>*<span class="org-highlight-numbers-number">2</span>**<span class="org-highlight-numbers-number">4</span>))**<span class="org-highlight-numbers-number">0.25</span> )
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the number of intervals</span>
+        <span style="color: #ff79c6;">return</span> np.ceil( ((maximum*(<span style="color: #ff79c6;">self</span>.b - <span style="color: #ff79c6;">self</span>.a)**<span style="color: #bd93f9; font-weight: bold;">5</span>)/(epsilon*<span style="color: #bd93f9; font-weight: bold;">180</span>*<span style="color: #bd93f9; font-weight: bold;">2</span>**<span style="color: #bd93f9; font-weight: bold;">4</span>))**<span style="color: #bd93f9; font-weight: bold;">0.25</span> )
 
-    <span class="org-keyword">def</span> <span class="org-function-name">simpson</span>(<span class="org-keyword">self</span>, epsilon=<span class="org-highlight-numbers-number">0.001</span>) :
-        <span class="org-variable-name">N</span> = <span class="org-keyword">self</span>.simpson_partition(epsilon)
-        <span class="org-variable-name">n_nodos</span> = <span class="org-builtin">int</span>( np.ceil(<span class="org-highlight-numbers-number">2</span>*N + <span class="org-highlight-numbers-number">1</span>) ) <span class="org-comment-delimiter"># </span><span class="org-comment">(N+1 extremos de subintervalos) + (N puntos medios)</span>
-        <span class="org-variable-name">x</span> = np.linspace(<span class="org-keyword">self</span>.a, <span class="org-keyword">self</span>.b, n_nodos)
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">simpson</span>(<span style="color: #ff79c6;">self</span>, epsilon=<span style="color: #bd93f9; font-weight: bold;">0.001</span>) :
+        N = <span style="color: #ff79c6;">self</span>.simpson_partition(epsilon)
+        n_nodos = <span style="color: #ffb86c;">int</span>( np.ceil(<span style="color: #bd93f9; font-weight: bold;">2</span>*N + <span style="color: #bd93f9; font-weight: bold;">1</span>) ) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">(N+1 extremos de subintervalos) + (N puntos medios)</span>
+        x = np.linspace(<span style="color: #ff79c6;">self</span>.a, <span style="color: #ff79c6;">self</span>.b, n_nodos)
 
-        <span class="org-variable-name">x_impar</span> = x[<span class="org-highlight-numbers-number">1</span>: :<span class="org-highlight-numbers-number">2</span>] <span class="org-comment-delimiter"># </span><span class="org-comment">Nodos con coordenada impar (ptos medios)</span>
-        <span class="org-variable-name">x_par</span> = x[<span class="org-highlight-numbers-number">2</span>:n_nodos-<span class="org-highlight-numbers-number">1</span>:<span class="org-highlight-numbers-number">2</span>] <span class="org-comment-delimiter"># </span><span class="org-comment">Nodos con coordenada par (salvo e</span>
+        x_impar = x[<span style="color: #bd93f9; font-weight: bold;">1</span>: :<span style="color: #bd93f9; font-weight: bold;">2</span>] <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Nodos con coordenada impar (ptos medios)</span>
+        x_par = x[<span style="color: #bd93f9; font-weight: bold;">2</span>:n_nodos-<span style="color: #bd93f9; font-weight: bold;">1</span>:<span style="color: #bd93f9; font-weight: bold;">2</span>] <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Nodos con coordenada par (salvo e</span>
 
-        <span class="org-variable-name">h</span> = (<span class="org-keyword">self</span>.b - <span class="org-keyword">self</span>.a)/(<span class="org-highlight-numbers-number">2</span>*N) <span class="org-comment-delimiter"># </span><span class="org-comment">Distancia entre dos nodos de integraci&#243;n</span>
-        <span class="org-variable-name">cuad</span> = h/<span class="org-highlight-numbers-number">3</span>*(<span class="org-keyword">self</span>.numerical(<span class="org-keyword">self</span>.a) + <span class="org-highlight-numbers-number">2</span>*<span class="org-builtin">sum</span>(<span class="org-keyword">self</span>.numerical(x_par)) + <span class="org-highlight-numbers-number">4</span>*<span class="org-builtin">sum</span>(<span class="org-keyword">self</span>.numerical(x_impar)) + <span class="org-keyword">self</span>.numerical(<span class="org-keyword">self</span>.b))
-        <span class="org-keyword">return</span> f<span class="org-string">'Value = {cuad} +/- {epsilon}'</span>
+        h = (<span style="color: #ff79c6;">self</span>.b - <span style="color: #ff79c6;">self</span>.a)/(<span style="color: #bd93f9; font-weight: bold;">2</span>*N) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Distancia entre dos nodos de integraci&#243;n</span>
+        cuad = h/<span style="color: #bd93f9; font-weight: bold;">3</span>*(<span style="color: #ff79c6;">self</span>.numerical(<span style="color: #ff79c6;">self</span>.a) + <span style="color: #bd93f9; font-weight: bold;">2</span>*<span style="color: #ffb86c;">sum</span>(<span style="color: #ff79c6;">self</span>.numerical(x_par)) + <span style="color: #bd93f9; font-weight: bold;">4</span>*<span style="color: #ffb86c;">sum</span>(<span style="color: #ff79c6;">self</span>.numerical(x_impar)) + <span style="color: #ff79c6;">self</span>.numerical(<span style="color: #ff79c6;">self</span>.b))
+        <span style="color: #ff79c6;">return</span> f<span style="color: #f1fa8c;">'Value = {cuad} +/- {epsilon}'</span>
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">K</span>(r, theta, a) :
-    <span class="org-variable-name">k</span> = sp.S(k_sr(r, theta, a))
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">K</span>(r, theta, a) :
+    k = sp.S(k_sr(r, theta, a))
 
-    <span class="org-comment-delimiter"># </span><span class="org-comment">Generate symbolic expression</span>
-    <span class="org-variable-name">phi</span> = sp.Symbol(<span class="org-string">'phi'</span>)
-    <span class="org-variable-name">func</span> = Function(<span class="org-highlight-numbers-number">1</span>/sp.sqrt(<span class="org-highlight-numbers-number">1</span> - k*sp.sin(phi)**<span class="org-highlight-numbers-number">2</span>), phi, a=<span class="org-highlight-numbers-number">0</span>, b=np.pi/<span class="org-highlight-numbers-number">2</span>)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Generate symbolic expression</span>
+    phi = sp.Symbol(<span style="color: #f1fa8c;">'phi'</span>)
+    func = Function(<span style="color: #bd93f9; font-weight: bold;">1</span>/sp.sqrt(<span style="color: #bd93f9; font-weight: bold;">1</span> - k*sp.sin(phi)**<span style="color: #bd93f9; font-weight: bold;">2</span>), phi, a=<span style="color: #bd93f9; font-weight: bold;">0</span>, b=np.pi/<span style="color: #bd93f9; font-weight: bold;">2</span>)
 
-    <span class="org-comment-delimiter"># </span><span class="org-comment">Compute the integral</span>
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Compute the integral</span>
     func.simpson()
-<span class="org-comment-delimiter"># </span><span class="org-comment">K(1.1, np.pi/4, 1)</span>
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">K(1.1, np.pi/4, 1)</span>
 </pre>
 </div>
 </div>
@@ -360,7 +360,7 @@ We&rsquo;re going to be using the following class:
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-09-12 Sun 21:11</p>
+<p class="date">Created: 2021-09-15 Wed 10:26</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

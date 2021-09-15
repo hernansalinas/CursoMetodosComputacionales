@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-09-12 Sun 21:12 -->
+<!-- 2021-09-15 Wed 10:27 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Assignment03</title>
@@ -258,11 +258,11 @@
 </div>
 </div>
 <div class="org-src-container">
-<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
+<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
 
-<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
-<span class="org-keyword">import</span> math <span class="org-keyword">as</span> mt
-<span class="org-keyword">import</span> matplotlib.pylab <span class="org-keyword">as</span> plt
+<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">import</span> math <span style="color: #ff79c6;">as</span> mt
+<span style="color: #ff79c6;">import</span> matplotlib.pylab <span style="color: #ff79c6;">as</span> plt
 </pre>
 </div>
 
@@ -280,21 +280,21 @@ On the account of the convergence of the power series for the exponential functi
 A simple implementation of this formula is presented below; notice that the terms of the sequence which we are summing up have been truncated up to the 80-th one, and a tolerance has been added as to provide a criterion under which te sequence is considered to have numerically converged. We may compare the obtained value for something like \(\exp(-0.5)\) with the one provided by the built-in function <code>numpy.exp()</code>.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">exp</span>(x, terms=<span class="org-highlight-numbers-number">80</span>, tolerance=1E-<span class="org-highlight-numbers-number">7</span>) :
-    <span class="org-variable-name">exponent</span> = <span class="org-highlight-numbers-number">0</span>
-    <span class="org-variable-name">sequence_sum</span> = <span class="org-highlight-numbers-number">0</span>
-    <span class="org-keyword">while</span> ( exponent &lt; terms ) :
-        <span class="org-variable-name">sequence_sum</span> += (x**exponent) / mt.factorial(exponent)
-        <span class="org-variable-name">exponent</span> = exponent + <span class="org-highlight-numbers-number">1</span>
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">exp</span>(x, terms=<span style="color: #bd93f9; font-weight: bold;">80</span>, tolerance=1E-<span style="color: #bd93f9; font-weight: bold;">7</span>) :
+    exponent = <span style="color: #bd93f9; font-weight: bold;">0</span>
+    sequence_sum = <span style="color: #bd93f9; font-weight: bold;">0</span>
+    <span style="color: #ff79c6;">while</span> ( exponent &lt; terms ) :
+        sequence_sum += (x**exponent) / mt.factorial(exponent)
+        exponent = exponent + <span style="color: #bd93f9; font-weight: bold;">1</span>
 
-        <span class="org-comment-delimiter"># </span><span class="org-comment">Convergence criterion</span>
-        <span class="org-variable-name">nth_plus</span> = (x**(exponent + <span class="org-highlight-numbers-number">1</span>)) / mt.factorial(exponent + <span class="org-highlight-numbers-number">1</span>)
-        <span class="org-keyword">if</span> ( <span class="org-builtin">abs</span>(nth_plus) &lt;= tolerance*<span class="org-builtin">abs</span>(sequence_sum) ) :
-            <span class="org-keyword">break</span>
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Convergence criterion</span>
+        nth_plus = (x**(exponent + <span style="color: #bd93f9; font-weight: bold;">1</span>)) / mt.factorial(exponent + <span style="color: #bd93f9; font-weight: bold;">1</span>)
+        <span style="color: #ff79c6;">if</span> ( <span style="color: #ffb86c;">abs</span>(nth_plus) &lt;= tolerance*<span style="color: #ffb86c;">abs</span>(sequence_sum) ) :
+            <span style="color: #ff79c6;">break</span>
 
-    <span class="org-keyword">return</span> sequence_sum
+    <span style="color: #ff79c6;">return</span> sequence_sum
 
-exp(-<span class="org-highlight-numbers-number">0.5</span>, tolerance=1E-<span class="org-highlight-numbers-number">16</span>), <span class="org-highlight-numbers-number">1</span>/exp(<span class="org-highlight-numbers-number">0.5</span>, tolerance=1E-<span class="org-highlight-numbers-number">16</span>), np.exp(-<span class="org-highlight-numbers-number">0.5</span>)
+exp(-<span style="color: #bd93f9; font-weight: bold;">0.5</span>, tolerance=1E-<span style="color: #bd93f9; font-weight: bold;">16</span>), <span style="color: #bd93f9; font-weight: bold;">1</span>/exp(<span style="color: #bd93f9; font-weight: bold;">0.5</span>, tolerance=1E-<span style="color: #bd93f9; font-weight: bold;">16</span>), np.exp(-<span style="color: #bd93f9; font-weight: bold;">0.5</span>)
 </pre>
 </div>
 
@@ -302,32 +302,32 @@ exp(-<span class="org-highlight-numbers-number">0.5</span>, tolerance=1E-<span c
 As to visualize the subtractive cancellations that occur during the application of this algorithm, we can use matplotlib:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">view_cancellations</span>(x_tuple) :
-    <span class="org-variable-name">x</span> = <span class="org-builtin">list</span>(x_tuple)
-    <span class="org-variable-name">N</span> = np.arange(<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">80</span>)
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">view_cancellations</span>(x_tuple) :
+    x = <span style="color: #ffb86c;">list</span>(x_tuple)
+    N = np.arange(<span style="color: #bd93f9; font-weight: bold;">1</span>, <span style="color: #bd93f9; font-weight: bold;">80</span>)
 
-    <span class="org-variable-name">exp_list_1</span> = np.zeros(<span class="org-builtin">len</span>(N))
-    <span class="org-variable-name">exp_list_2</span> = np.zeros(<span class="org-builtin">len</span>(N))
+    exp_list_1 = np.zeros(<span style="color: #ffb86c;">len</span>(N))
+    exp_list_2 = np.zeros(<span style="color: #ffb86c;">len</span>(N))
 
-    <span class="org-variable-name">fig</span>, <span class="org-variable-name">ax</span> = plt.subplots(<span class="org-builtin">len</span>(x), figsize=(<span class="org-highlight-numbers-number">15</span>,<span class="org-highlight-numbers-number">12</span>), sharex=<span class="org-constant">True</span>)
+    fig, ax = plt.subplots(<span style="color: #ffb86c;">len</span>(x), figsize=(<span style="color: #bd93f9; font-weight: bold;">15</span>,<span style="color: #bd93f9; font-weight: bold;">12</span>), sharex=<span style="color: #8be9fd;">True</span>)
 
-    <span class="org-keyword">for</span> n <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(x)):
-        <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(N)):
-            <span class="org-variable-name">exp_list_1</span>[i] = exp(x[n], terms=i, tolerance=1E-<span class="org-highlight-numbers-number">16</span>)
-            <span class="org-variable-name">exp_list_2</span>[i] = <span class="org-highlight-numbers-number">1</span>/exp(-x[n], terms=i+<span class="org-highlight-numbers-number">1</span>, tolerance=1E-<span class="org-highlight-numbers-number">16</span>)
+    <span style="color: #ff79c6;">for</span> n <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #ffb86c;">len</span>(x)):
+        <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #ffb86c;">len</span>(N)):
+            exp_list_1[i] = exp(x[n], terms=i, tolerance=1E-<span style="color: #bd93f9; font-weight: bold;">16</span>)
+            exp_list_2[i] = <span style="color: #bd93f9; font-weight: bold;">1</span>/exp(-x[n], terms=i+<span style="color: #bd93f9; font-weight: bold;">1</span>, tolerance=1E-<span style="color: #bd93f9; font-weight: bold;">16</span>)
 
-        ax[n].grid(b=<span class="org-constant">True</span>, which=<span class="org-string">'major'</span>, color=<span class="org-string">'#666666'</span>, linestyle=<span class="org-string">'-'</span>, alpha=<span class="org-highlight-numbers-number">0.3</span>)
-        ax[n].plot(N,exp_list_1, label=<span class="org-string">"Partial sum values for method with differences"</span>)
-        ax[n].plot(N,exp_list_2, label=<span class="org-string">'Second method'</span>)
+        ax[n].grid(b=<span style="color: #8be9fd;">True</span>, which=<span style="color: #f1fa8c;">'major'</span>, color=<span style="color: #f1fa8c;">'#666666'</span>, linestyle=<span style="color: #f1fa8c;">'-'</span>, alpha=<span style="color: #bd93f9; font-weight: bold;">0.3</span>)
+        ax[n].plot(N,exp_list_1, label=<span style="color: #f1fa8c;">"Partial sum values for method with differences"</span>)
+        ax[n].plot(N,exp_list_2, label=<span style="color: #f1fa8c;">'Second method'</span>)
         ax[n].legend()
 
-view_cancellations((-<span class="org-highlight-numbers-number">0.5</span>,-<span class="org-highlight-numbers-number">1</span>,-<span class="org-highlight-numbers-number">10</span>,-<span class="org-highlight-numbers-number">20</span>, -<span class="org-highlight-numbers-number">50</span>, -<span class="org-highlight-numbers-number">80</span>))
+view_cancellations((-<span style="color: #bd93f9; font-weight: bold;">0.5</span>,-<span style="color: #bd93f9; font-weight: bold;">1</span>,-<span style="color: #bd93f9; font-weight: bold;">10</span>,-<span style="color: #bd93f9; font-weight: bold;">20</span>, -<span style="color: #bd93f9; font-weight: bold;">50</span>, -<span style="color: #bd93f9; font-weight: bold;">80</span>))
 </pre>
 </div>
 
 
-<div id="org9f20f49" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/SMGHo6.svg" class="org-svg">
+<div id="org7decabb" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/hrqAzZ.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -340,29 +340,29 @@ Note that the first method exhibits a remarkable oscillatory behaviour that even
 Now we define a new routine to view the errors
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">error_vs_n</span>(x_tuple) :
-    <span class="org-variable-name">x</span> = <span class="org-builtin">list</span>(x_tuple)
-    <span class="org-variable-name">N</span> = np.arange(<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">80</span>)
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">error_vs_n</span>(x_tuple) :
+    x = <span style="color: #ffb86c;">list</span>(x_tuple)
+    N = np.arange(<span style="color: #bd93f9; font-weight: bold;">1</span>, <span style="color: #bd93f9; font-weight: bold;">80</span>)
 
-    <span class="org-variable-name">exp_error</span> = np.zeros(<span class="org-builtin">len</span>(N))
+    exp_error = np.zeros(<span style="color: #ffb86c;">len</span>(N))
 
-    <span class="org-variable-name">fig</span>, <span class="org-variable-name">ax</span> = plt.subplots(<span class="org-builtin">len</span>(x), figsize=(<span class="org-highlight-numbers-number">15</span>,<span class="org-highlight-numbers-number">12</span>), sharex=<span class="org-constant">True</span>)
+    fig, ax = plt.subplots(<span style="color: #ffb86c;">len</span>(x), figsize=(<span style="color: #bd93f9; font-weight: bold;">15</span>,<span style="color: #bd93f9; font-weight: bold;">12</span>), sharex=<span style="color: #8be9fd;">True</span>)
 
-    <span class="org-keyword">for</span> n <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(x)):
-        <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(N)):
-            <span class="org-variable-name">exp_error</span>[i] = <span class="org-builtin">abs</span>( exp(x[n], terms=i, tolerance=1E-<span class="org-highlight-numbers-number">16</span>) - np.exp(x[n]) )
+    <span style="color: #ff79c6;">for</span> n <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #ffb86c;">len</span>(x)):
+        <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #ffb86c;">len</span>(N)):
+            exp_error[i] = <span style="color: #ffb86c;">abs</span>( exp(x[n], terms=i, tolerance=1E-<span style="color: #bd93f9; font-weight: bold;">16</span>) - np.exp(x[n]) )
 
-        ax[n].grid(b=<span class="org-constant">True</span>, which=<span class="org-string">'major'</span>, color=<span class="org-string">'#666666'</span>, linestyle=<span class="org-string">'-'</span>, alpha=<span class="org-highlight-numbers-number">0.3</span>)
-        ax[n].plot(N,exp_error, <span class="org-string">'k-'</span>, label=<span class="org-string">"Absolute error for partial sums"</span>)
+        ax[n].grid(b=<span style="color: #8be9fd;">True</span>, which=<span style="color: #f1fa8c;">'major'</span>, color=<span style="color: #f1fa8c;">'#666666'</span>, linestyle=<span style="color: #f1fa8c;">'-'</span>, alpha=<span style="color: #bd93f9; font-weight: bold;">0.3</span>)
+        ax[n].plot(N,exp_error, <span style="color: #f1fa8c;">'k-'</span>, label=<span style="color: #f1fa8c;">"Absolute error for partial sums"</span>)
         ax[n].legend()
 
-error_vs_n((-<span class="org-highlight-numbers-number">0.5</span>, -<span class="org-highlight-numbers-number">1</span>, -<span class="org-highlight-numbers-number">10</span>, -<span class="org-highlight-numbers-number">20</span>, -<span class="org-highlight-numbers-number">50</span>, -<span class="org-highlight-numbers-number">80</span>))
+error_vs_n((-<span style="color: #bd93f9; font-weight: bold;">0.5</span>, -<span style="color: #bd93f9; font-weight: bold;">1</span>, -<span style="color: #bd93f9; font-weight: bold;">10</span>, -<span style="color: #bd93f9; font-weight: bold;">20</span>, -<span style="color: #bd93f9; font-weight: bold;">50</span>, -<span style="color: #bd93f9; font-weight: bold;">80</span>))
 </pre>
 </div>
 
 
-<div id="orgf0a7d5f" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/25m0BW.svg" class="org-svg">
+<div id="orgf35153d" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/GGTiyo.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -395,39 +395,39 @@ Analitically, this can be then written as
 To begin with, we implement the algorithms to calculate each form of this summation.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">s_1</span>(N) :
-    <span class="org-variable-name">n</span> = <span class="org-highlight-numbers-number">1</span>
-    <span class="org-variable-name">sequence_sum</span> = <span class="org-highlight-numbers-number">0</span>
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">s_1</span>(N) :
+    n = <span style="color: #bd93f9; font-weight: bold;">1</span>
+    sequence_sum = <span style="color: #bd93f9; font-weight: bold;">0</span>
 
-    <span class="org-keyword">while</span> ( n &lt;= <span class="org-highlight-numbers-number">2</span>*N ) :
-        <span class="org-variable-name">sequence_sum</span> += (-<span class="org-highlight-numbers-number">1</span>)**n * n/(n + <span class="org-highlight-numbers-number">1</span>)
-        <span class="org-variable-name">n</span> += <span class="org-highlight-numbers-number">1</span>
+    <span style="color: #ff79c6;">while</span> ( n &lt;= <span style="color: #bd93f9; font-weight: bold;">2</span>*N ) :
+        sequence_sum += (-<span style="color: #bd93f9; font-weight: bold;">1</span>)**n * n/(n + <span style="color: #bd93f9; font-weight: bold;">1</span>)
+        n += <span style="color: #bd93f9; font-weight: bold;">1</span>
 
-    <span class="org-keyword">return</span> sequence_sum
+    <span style="color: #ff79c6;">return</span> sequence_sum
 
-<span class="org-keyword">def</span> <span class="org-function-name">s_2</span>(N) :
-    <span class="org-variable-name">n</span> = <span class="org-highlight-numbers-number">1</span>
-    <span class="org-variable-name">sequence_sum_1</span> = <span class="org-highlight-numbers-number">0</span>
-    <span class="org-variable-name">sequence_sum_2</span> = <span class="org-highlight-numbers-number">0</span>
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">s_2</span>(N) :
+    n = <span style="color: #bd93f9; font-weight: bold;">1</span>
+    sequence_sum_1 = <span style="color: #bd93f9; font-weight: bold;">0</span>
+    sequence_sum_2 = <span style="color: #bd93f9; font-weight: bold;">0</span>
 
-    <span class="org-keyword">while</span> ( n &lt;= N ) :
-        <span class="org-variable-name">sequence_sum_1</span> += <span class="org-highlight-numbers-number">2</span>*n/(<span class="org-highlight-numbers-number">2</span>*n + <span class="org-highlight-numbers-number">1</span>)
-        <span class="org-variable-name">sequence_sum_2</span> += (<span class="org-highlight-numbers-number">2</span>*n - <span class="org-highlight-numbers-number">1</span>)/(<span class="org-highlight-numbers-number">2</span>*n)
-        <span class="org-variable-name">n</span> += <span class="org-highlight-numbers-number">1</span>
+    <span style="color: #ff79c6;">while</span> ( n &lt;= N ) :
+        sequence_sum_1 += <span style="color: #bd93f9; font-weight: bold;">2</span>*n/(<span style="color: #bd93f9; font-weight: bold;">2</span>*n + <span style="color: #bd93f9; font-weight: bold;">1</span>)
+        sequence_sum_2 += (<span style="color: #bd93f9; font-weight: bold;">2</span>*n - <span style="color: #bd93f9; font-weight: bold;">1</span>)/(<span style="color: #bd93f9; font-weight: bold;">2</span>*n)
+        n += <span style="color: #bd93f9; font-weight: bold;">1</span>
 
-    <span class="org-keyword">return</span> sequence_sum_1 - sequence_sum_2
+    <span style="color: #ff79c6;">return</span> sequence_sum_1 - sequence_sum_2
 
-<span class="org-keyword">def</span> <span class="org-function-name">s_3</span>(N) :
-    <span class="org-variable-name">n</span> = <span class="org-highlight-numbers-number">1</span>
-    <span class="org-variable-name">sequence_sum</span> = <span class="org-highlight-numbers-number">0</span>
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">s_3</span>(N) :
+    n = <span style="color: #bd93f9; font-weight: bold;">1</span>
+    sequence_sum = <span style="color: #bd93f9; font-weight: bold;">0</span>
 
-    <span class="org-keyword">while</span> ( n &lt;= N ) :
-        <span class="org-variable-name">sequence_sum</span> += <span class="org-highlight-numbers-number">1</span>/(<span class="org-highlight-numbers-number">2</span>*n*(<span class="org-highlight-numbers-number">2</span>*n + <span class="org-highlight-numbers-number">1</span>))
-        <span class="org-variable-name">n</span> += <span class="org-highlight-numbers-number">1</span>
+    <span style="color: #ff79c6;">while</span> ( n &lt;= N ) :
+        sequence_sum += <span style="color: #bd93f9; font-weight: bold;">1</span>/(<span style="color: #bd93f9; font-weight: bold;">2</span>*n*(<span style="color: #bd93f9; font-weight: bold;">2</span>*n + <span style="color: #bd93f9; font-weight: bold;">1</span>))
+        n += <span style="color: #bd93f9; font-weight: bold;">1</span>
 
-    <span class="org-keyword">return</span> sequence_sum
+    <span style="color: #ff79c6;">return</span> sequence_sum
 
-<span class="org-keyword">print</span>( <span class="org-builtin">abs</span>(<span class="org-highlight-numbers-number">1</span> - s_1(<span class="org-highlight-numbers-number">1583</span>)/s_3(<span class="org-highlight-numbers-number">1583</span>)), <span class="org-builtin">abs</span>(<span class="org-highlight-numbers-number">1</span> - s_2(<span class="org-highlight-numbers-number">1583</span>)/s_3(<span class="org-highlight-numbers-number">1583</span>)) )
+<span style="color: #ff79c6;">print</span>( <span style="color: #ffb86c;">abs</span>(<span style="color: #bd93f9; font-weight: bold;">1</span> - s_1(<span style="color: #bd93f9; font-weight: bold;">1583</span>)/s_3(<span style="color: #bd93f9; font-weight: bold;">1583</span>)), <span style="color: #ffb86c;">abs</span>(<span style="color: #bd93f9; font-weight: bold;">1</span> - s_2(<span style="color: #bd93f9; font-weight: bold;">1583</span>)/s_3(<span style="color: #bd93f9; font-weight: bold;">1583</span>)) )
 </pre>
 </div>
 
@@ -435,34 +435,34 @@ To begin with, we implement the algorithms to calculate each form of this summat
 Then we may analise what happens to these results as we increase the number of iterations. The <code>visualize_convergence</code> routine establishes a sway of viewing some partial sums for this series as we increase the values of \(N\), that is, the number of terms.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">visualize_convergence</span>() :
-    <span class="org-variable-name">num_terms</span> = np.arange(<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">1600</span>)
-    <span class="org-variable-name">s_list</span> = [np.zeros(<span class="org-builtin">len</span>(num_terms)), np.zeros(<span class="org-builtin">len</span>(num_terms)), np.zeros(<span class="org-builtin">len</span>(num_terms))]
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">visualize_convergence</span>() :
+    num_terms = np.arange(<span style="color: #bd93f9; font-weight: bold;">1</span>, <span style="color: #bd93f9; font-weight: bold;">1600</span>)
+    s_list = [np.zeros(<span style="color: #ffb86c;">len</span>(num_terms)), np.zeros(<span style="color: #ffb86c;">len</span>(num_terms)), np.zeros(<span style="color: #ffb86c;">len</span>(num_terms))]
 
-    <span class="org-variable-name">i</span> = <span class="org-highlight-numbers-number">1</span>
-    <span class="org-keyword">while</span> (i &lt; <span class="org-builtin">len</span>(num_terms)) :
-        s_list[<span class="org-highlight-numbers-number">0</span>][i] = s_1(i)
-        s_list[<span class="org-highlight-numbers-number">1</span>][i] = s_2(i)
-        s_list[<span class="org-highlight-numbers-number">2</span>][i] = s_3(i)
-        <span class="org-variable-name">i</span> += <span class="org-highlight-numbers-number">1</span>
+    i = <span style="color: #bd93f9; font-weight: bold;">1</span>
+    <span style="color: #ff79c6;">while</span> (i &lt; <span style="color: #ffb86c;">len</span>(num_terms)) :
+        s_list[<span style="color: #bd93f9; font-weight: bold;">0</span>][i] = s_1(i)
+        s_list[<span style="color: #bd93f9; font-weight: bold;">1</span>][i] = s_2(i)
+        s_list[<span style="color: #bd93f9; font-weight: bold;">2</span>][i] = s_3(i)
+        i += <span style="color: #bd93f9; font-weight: bold;">1</span>
 
-    <span class="org-variable-name">fig</span>, <span class="org-variable-name">ax</span> = plt.subplots(<span class="org-highlight-numbers-number">1</span>, figsize=(<span class="org-highlight-numbers-number">15</span>,<span class="org-highlight-numbers-number">6</span>))
+    fig, ax = plt.subplots(<span style="color: #bd93f9; font-weight: bold;">1</span>, figsize=(<span style="color: #bd93f9; font-weight: bold;">15</span>,<span style="color: #bd93f9; font-weight: bold;">6</span>))
 
     plt.rcParams.update({
-        <span class="org-string">"text.usetex"</span> : <span class="org-constant">True</span>,
-        <span class="org-string">"font.family"</span> : <span class="org-string">'serif'</span>,
-        <span class="org-string">"font.serif"</span> :  [<span class="org-string">"Times"</span>],
-        <span class="org-string">"font.size"</span> : <span class="org-highlight-numbers-number">12</span>
+        <span style="color: #f1fa8c;">"text.usetex"</span> : <span style="color: #8be9fd;">True</span>,
+        <span style="color: #f1fa8c;">"font.family"</span> : <span style="color: #f1fa8c;">'serif'</span>,
+        <span style="color: #f1fa8c;">"font.serif"</span> :  [<span style="color: #f1fa8c;">"Times"</span>],
+        <span style="color: #f1fa8c;">"font.size"</span> : <span style="color: #bd93f9; font-weight: bold;">12</span>
     })
 
-    <span class="org-variable-name">option</span> = [[<span class="org-string">'b-'</span>,r<span class="org-string">'$S_N^{(1)}$'</span>],
-              [<span class="org-string">'g-'</span>,r<span class="org-string">'$S_N^{(2)}$'</span>],
-              [<span class="org-string">'k-'</span>,r<span class="org-string">'$S_N^{(3)}$'</span>]]
+    option = [[<span style="color: #f1fa8c;">'b-'</span>,r<span style="color: #f1fa8c;">'$S_N^{(1)}$'</span>],
+              [<span style="color: #f1fa8c;">'g-'</span>,r<span style="color: #f1fa8c;">'$S_N^{(2)}$'</span>],
+              [<span style="color: #f1fa8c;">'k-'</span>,r<span style="color: #f1fa8c;">'$S_N^{(3)}$'</span>]]
 
-    <span class="org-keyword">for</span> n <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-highlight-numbers-number">3</span>) :
-        ax.grid(b=<span class="org-constant">True</span>, which=<span class="org-string">'major'</span>, color=<span class="org-string">'#666666'</span>, linestyle=<span class="org-string">'-'</span>, alpha=<span class="org-highlight-numbers-number">0.3</span>)
-        ax.<span class="org-builtin">set</span>(xlabel=<span class="org-string">'Number of terms in the sum'</span>, ylabel=<span class="org-string">'Value of the sum'</span>)
-        ax.plot(num_terms,s_list[n], option[n][<span class="org-highlight-numbers-number">0</span>], markersize=<span class="org-highlight-numbers-number">1</span>, label=option[n][<span class="org-highlight-numbers-number">1</span>])
+    <span style="color: #ff79c6;">for</span> n <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">3</span>) :
+        ax.grid(b=<span style="color: #8be9fd;">True</span>, which=<span style="color: #f1fa8c;">'major'</span>, color=<span style="color: #f1fa8c;">'#666666'</span>, linestyle=<span style="color: #f1fa8c;">'-'</span>, alpha=<span style="color: #bd93f9; font-weight: bold;">0.3</span>)
+        ax.<span style="color: #ffb86c;">set</span>(xlabel=<span style="color: #f1fa8c;">'Number of terms in the sum'</span>, ylabel=<span style="color: #f1fa8c;">'Value of the sum'</span>)
+        ax.plot(num_terms,s_list[n], option[n][<span style="color: #bd93f9; font-weight: bold;">0</span>], markersize=<span style="color: #bd93f9; font-weight: bold;">1</span>, label=option[n][<span style="color: #bd93f9; font-weight: bold;">1</span>])
         plt.legend()
 
     plt.show()
@@ -472,8 +472,8 @@ visualize_convergence()
 </div>
 
 
-<div id="org32bfc25" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/DrMf9t.svg" class="org-svg">
+<div id="org9d4bfad" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/PCXJio.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -490,31 +490,31 @@ Now we must write a routine to visualise the evolution of the relative error of 
 moreover, we suppose that the exact value is given by the sum \(\mathrm{S}_N^{(3)}\).
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">visualize_error</span>() :
-    <span class="org-variable-name">num_terms</span> = np.arange(<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">1600</span>)
-    <span class="org-variable-name">error_list</span> = [np.zeros(<span class="org-builtin">len</span>(num_terms)), np.zeros(<span class="org-builtin">len</span>(num_terms))]
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">visualize_error</span>() :
+    num_terms = np.arange(<span style="color: #bd93f9; font-weight: bold;">1</span>, <span style="color: #bd93f9; font-weight: bold;">1600</span>)
+    error_list = [np.zeros(<span style="color: #ffb86c;">len</span>(num_terms)), np.zeros(<span style="color: #ffb86c;">len</span>(num_terms))]
 
-    <span class="org-variable-name">i</span> = <span class="org-highlight-numbers-number">1</span>
-    <span class="org-keyword">while</span> (i &lt; <span class="org-builtin">len</span>(num_terms)) :
-        error_list[<span class="org-highlight-numbers-number">0</span>][i] = <span class="org-builtin">abs</span>( <span class="org-highlight-numbers-number">1</span> - s_1(i)/s_3(i) )
-        error_list[<span class="org-highlight-numbers-number">1</span>][i] = <span class="org-builtin">abs</span>( <span class="org-highlight-numbers-number">1</span> - s_2(i)/s_3(i) )
-        <span class="org-variable-name">i</span> += <span class="org-highlight-numbers-number">1</span>
+    i = <span style="color: #bd93f9; font-weight: bold;">1</span>
+    <span style="color: #ff79c6;">while</span> (i &lt; <span style="color: #ffb86c;">len</span>(num_terms)) :
+        error_list[<span style="color: #bd93f9; font-weight: bold;">0</span>][i] = <span style="color: #ffb86c;">abs</span>( <span style="color: #bd93f9; font-weight: bold;">1</span> - s_1(i)/s_3(i) )
+        error_list[<span style="color: #bd93f9; font-weight: bold;">1</span>][i] = <span style="color: #ffb86c;">abs</span>( <span style="color: #bd93f9; font-weight: bold;">1</span> - s_2(i)/s_3(i) )
+        i += <span style="color: #bd93f9; font-weight: bold;">1</span>
 
-    <span class="org-variable-name">fig</span>, <span class="org-variable-name">ax</span> = plt.subplots(<span class="org-highlight-numbers-number">1</span>, figsize=(<span class="org-highlight-numbers-number">15</span>,<span class="org-highlight-numbers-number">6</span>))
+    fig, ax = plt.subplots(<span style="color: #bd93f9; font-weight: bold;">1</span>, figsize=(<span style="color: #bd93f9; font-weight: bold;">15</span>,<span style="color: #bd93f9; font-weight: bold;">6</span>))
     plt.rcParams.update({
-        <span class="org-string">"text.usetex"</span> : <span class="org-constant">True</span>,
-        <span class="org-string">"font.family"</span> : <span class="org-string">'serif'</span>,
-        <span class="org-string">"font.serif"</span> :  [<span class="org-string">"Times"</span>],
-        <span class="org-string">"font.size"</span> : <span class="org-highlight-numbers-number">12</span>
+        <span style="color: #f1fa8c;">"text.usetex"</span> : <span style="color: #8be9fd;">True</span>,
+        <span style="color: #f1fa8c;">"font.family"</span> : <span style="color: #f1fa8c;">'serif'</span>,
+        <span style="color: #f1fa8c;">"font.serif"</span> :  [<span style="color: #f1fa8c;">"Times"</span>],
+        <span style="color: #f1fa8c;">"font.size"</span> : <span style="color: #bd93f9; font-weight: bold;">12</span>
     })
 
-    <span class="org-variable-name">option</span> = [[<span class="org-string">'b-'</span>, r<span class="org-string">'Error in $S_N^{(1)}$'</span>],
-              [<span class="org-string">'g-'</span>, r<span class="org-string">'Error in $S_N^{(2)}$'</span>]]
+    option = [[<span style="color: #f1fa8c;">'b-'</span>, r<span style="color: #f1fa8c;">'Error in $S_N^{(1)}$'</span>],
+              [<span style="color: #f1fa8c;">'g-'</span>, r<span style="color: #f1fa8c;">'Error in $S_N^{(2)}$'</span>]]
 
-    <span class="org-keyword">for</span> n <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-highlight-numbers-number">2</span>) :
-        ax.grid(b=<span class="org-constant">True</span>, which=<span class="org-string">'major'</span>, color=<span class="org-string">'#666666'</span>, linestyle=<span class="org-string">'-'</span>, alpha=<span class="org-highlight-numbers-number">0.3</span>)
-        ax.<span class="org-builtin">set</span>(xlabel=<span class="org-string">'Number of terms in the sum'</span>, ylabel=r<span class="org-string">'Relative error with respect to $S_N^{(3)}$'</span>)
-        ax.loglog(num_terms, error_list[n], option[n][<span class="org-highlight-numbers-number">0</span>], label=option[n][<span class="org-highlight-numbers-number">1</span>])
+    <span style="color: #ff79c6;">for</span> n <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">2</span>) :
+        ax.grid(b=<span style="color: #8be9fd;">True</span>, which=<span style="color: #f1fa8c;">'major'</span>, color=<span style="color: #f1fa8c;">'#666666'</span>, linestyle=<span style="color: #f1fa8c;">'-'</span>, alpha=<span style="color: #bd93f9; font-weight: bold;">0.3</span>)
+        ax.<span style="color: #ffb86c;">set</span>(xlabel=<span style="color: #f1fa8c;">'Number of terms in the sum'</span>, ylabel=r<span style="color: #f1fa8c;">'Relative error with respect to $S_N^{(3)}$'</span>)
+        ax.loglog(num_terms, error_list[n], option[n][<span style="color: #bd93f9; font-weight: bold;">0</span>], label=option[n][<span style="color: #bd93f9; font-weight: bold;">1</span>])
         ax.legend()
 
     plt.show()
@@ -524,8 +524,8 @@ visualize_error()
 </div>
 
 
-<div id="org44b4cb5" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/UknBMX.svg" class="org-svg">
+<div id="orge9bb43e" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/4nVp9n.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -557,36 +557,36 @@ We then establish a Class in python to describe the initial conditions of our sy
 </p>
 
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">class</span> <span class="org-type">InitialConditions</span> :
-    <span class="org-keyword">def</span> <span class="org-function-name">__init__</span>(<span class="org-keyword">self</span>, x_init, r_value, iterations, mapping_func):
-        <span class="org-keyword">self</span>.x_init = x_init
-        <span class="org-keyword">self</span>.r_value = r_value
-        <span class="org-keyword">self</span>.iterations = iterations
-        <span class="org-variable-name">functions_list</span> = [<span class="org-keyword">lambda</span> x,r : r*x*(<span class="org-highlight-numbers-number">1</span> - x), <span class="org-keyword">lambda</span> x,r : r*(x - x**<span class="org-highlight-numbers-number">2</span>), <span class="org-keyword">lambda</span> x,r : r*(x**<span class="org-highlight-numbers-number">2</span>)*(<span class="org-highlight-numbers-number">1</span>/x - <span class="org-highlight-numbers-number">1</span>)]
-        <span class="org-keyword">try</span> :
-            <span class="org-keyword">self</span>.mapping_func = functions_list[mapping_func]
-        <span class="org-keyword">except</span> :
-            <span class="org-type">ValueError</span>(<span class="org-string">'Not a function'</span>)
+<pre class="src src-ipython"><span style="color: #ff79c6;">class</span> <span style="color: #bd93f9;">InitialConditions</span> :
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">__init__</span>(<span style="color: #ff79c6;">self</span>, x_init, r_value, iterations, mapping_func):
+        <span style="color: #ff79c6;">self</span>.x_init = x_init
+        <span style="color: #ff79c6;">self</span>.r_value = r_value
+        <span style="color: #ff79c6;">self</span>.iterations = iterations
+        functions_list = [<span style="color: #ff79c6;">lambda</span> x,r : r*x*(<span style="color: #bd93f9; font-weight: bold;">1</span> - x), <span style="color: #ff79c6;">lambda</span> x,r : r*(x - x**<span style="color: #bd93f9; font-weight: bold;">2</span>), <span style="color: #ff79c6;">lambda</span> x,r : r*(x**<span style="color: #bd93f9; font-weight: bold;">2</span>)*(<span style="color: #bd93f9; font-weight: bold;">1</span>/x - <span style="color: #bd93f9; font-weight: bold;">1</span>)]
+        <span style="color: #ff79c6;">try</span> :
+            <span style="color: #ff79c6;">self</span>.mapping_func = functions_list[mapping_func]
+        <span style="color: #ff79c6;">except</span> :
+            <span style="color: #bd93f9;">ValueError</span>(<span style="color: #f1fa8c;">'Not a function'</span>)
 
-    <span class="org-keyword">def</span> <span class="org-function-name">logistic_mapping</span>(<span class="org-keyword">self</span>) :
-        <span class="org-variable-name">values_list</span> = [<span class="org-keyword">self</span>.x_init]
-        <span class="org-variable-name">n</span> = <span class="org-highlight-numbers-number">0</span>
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">logistic_mapping</span>(<span style="color: #ff79c6;">self</span>) :
+        values_list = [<span style="color: #ff79c6;">self</span>.x_init]
+        n = <span style="color: #bd93f9; font-weight: bold;">0</span>
 
-        <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-highlight-numbers-number">1</span>, <span class="org-keyword">self</span>.iterations+<span class="org-highlight-numbers-number">1</span>) : <span class="org-comment-delimiter"># </span><span class="org-comment">Python interprets this as an interval [1 .. x]</span>
-            <span class="org-variable-name">n</span> = <span class="org-keyword">self</span>.mapping_func(values_list[i-<span class="org-highlight-numbers-number">1</span>], <span class="org-keyword">self</span>.r_value)
+        <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, <span style="color: #ff79c6;">self</span>.iterations+<span style="color: #bd93f9; font-weight: bold;">1</span>) : <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Python interprets this as an interval [1 .. x]</span>
+            n = <span style="color: #ff79c6;">self</span>.mapping_func(values_list[i-<span style="color: #bd93f9; font-weight: bold;">1</span>], <span style="color: #ff79c6;">self</span>.r_value)
             values_list.append(n)
 
-        <span class="org-keyword">return</span> values_list
+        <span style="color: #ff79c6;">return</span> values_list
 
-<span class="org-variable-name">conditions</span> = [<span class="org-highlight-numbers-number">0</span>]*<span class="org-highlight-numbers-number">3</span>
+conditions = [<span style="color: #bd93f9; font-weight: bold;">0</span>]*<span style="color: #bd93f9; font-weight: bold;">3</span>
 
-<span class="org-variable-name">i</span> = <span class="org-highlight-numbers-number">0</span>
-<span class="org-keyword">while</span> ( i &lt;= <span class="org-highlight-numbers-number">2</span> ) :
-    <span class="org-variable-name">conditions</span>[i] = InitialConditions(x_init=<span class="org-highlight-numbers-number">0.8</span>,
-                                      r_value=<span class="org-highlight-numbers-number">3.9</span>,
-                                      iterations=<span class="org-highlight-numbers-number">100</span>,
+i = <span style="color: #bd93f9; font-weight: bold;">0</span>
+<span style="color: #ff79c6;">while</span> ( i &lt;= <span style="color: #bd93f9; font-weight: bold;">2</span> ) :
+    conditions[i] = InitialConditions(x_init=<span style="color: #bd93f9; font-weight: bold;">0.8</span>,
+                                      r_value=<span style="color: #bd93f9; font-weight: bold;">3.9</span>,
+                                      iterations=<span style="color: #bd93f9; font-weight: bold;">100</span>,
                                       mapping_func=i)
-    <span class="org-variable-name">i</span> += <span class="org-highlight-numbers-number">1</span>
+    i += <span style="color: #bd93f9; font-weight: bold;">1</span>
 </pre>
 </div>
 
@@ -595,27 +595,27 @@ Finally, we can put it all together in a plot, which is going to show the differ
 </p>
 
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">plot</span>() :
-    <span class="org-variable-name">N</span> = np.arange(<span class="org-highlight-numbers-number">101</span>)
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">plot</span>() :
+    N = np.arange(<span style="color: #bd93f9; font-weight: bold;">101</span>)
 
-    <span class="org-variable-name">fig</span>, <span class="org-variable-name">ax</span> = plt.subplots(<span class="org-highlight-numbers-number">1</span>, figsize=(<span class="org-highlight-numbers-number">15</span>,<span class="org-highlight-numbers-number">6</span>))
+    fig, ax = plt.subplots(<span style="color: #bd93f9; font-weight: bold;">1</span>, figsize=(<span style="color: #bd93f9; font-weight: bold;">15</span>,<span style="color: #bd93f9; font-weight: bold;">6</span>))
 
     plt.rcParams.update({
-        <span class="org-string">"text.usetex"</span> : <span class="org-constant">True</span>,
-        <span class="org-string">"font.family"</span> : <span class="org-string">'serif'</span>,
-        <span class="org-string">"font.serif"</span> :  [<span class="org-string">"Times"</span>],
-        <span class="org-string">"font.size"</span> : <span class="org-highlight-numbers-number">15</span>
+        <span style="color: #f1fa8c;">"text.usetex"</span> : <span style="color: #8be9fd;">True</span>,
+        <span style="color: #f1fa8c;">"font.family"</span> : <span style="color: #f1fa8c;">'serif'</span>,
+        <span style="color: #f1fa8c;">"font.serif"</span> :  [<span style="color: #f1fa8c;">"Times"</span>],
+        <span style="color: #f1fa8c;">"font.size"</span> : <span style="color: #bd93f9; font-weight: bold;">15</span>
     })
 
-    <span class="org-variable-name">option</span> = [[<span class="org-string">'b-'</span>, r<span class="org-string">'$r x (1 - x)$'</span>],
-              [<span class="org-string">'g-'</span>, r<span class="org-string">'$r (x - x^2)$'</span>],
-              [<span class="org-string">'k-'</span>, r<span class="org-string">'$r x^2 \left(\frac{1}{x} - 1\right)$'</span>]]
-    <span class="org-variable-name">i</span> = <span class="org-highlight-numbers-number">0</span>
-    <span class="org-keyword">while</span> ( i &lt;= <span class="org-highlight-numbers-number">2</span> ) :
-        ax.grid(b=<span class="org-constant">True</span>, which=<span class="org-string">'major'</span>, color=<span class="org-string">'#666666'</span>, linestyle=<span class="org-string">'-'</span>, alpha=<span class="org-highlight-numbers-number">0.3</span>)
-        ax.plot(N, conditions[i].logistic_mapping(), option[i][<span class="org-highlight-numbers-number">0</span>], label=option[i][<span class="org-highlight-numbers-number">1</span>])
+    option = [[<span style="color: #f1fa8c;">'b-'</span>, r<span style="color: #f1fa8c;">'$r x (1 - x)$'</span>],
+              [<span style="color: #f1fa8c;">'g-'</span>, r<span style="color: #f1fa8c;">'$r (x - x^2)$'</span>],
+              [<span style="color: #f1fa8c;">'k-'</span>, r<span style="color: #f1fa8c;">'$r x^2 \left(\frac{1}{x} - 1\right)$'</span>]]
+    i = <span style="color: #bd93f9; font-weight: bold;">0</span>
+    <span style="color: #ff79c6;">while</span> ( i &lt;= <span style="color: #bd93f9; font-weight: bold;">2</span> ) :
+        ax.grid(b=<span style="color: #8be9fd;">True</span>, which=<span style="color: #f1fa8c;">'major'</span>, color=<span style="color: #f1fa8c;">'#666666'</span>, linestyle=<span style="color: #f1fa8c;">'-'</span>, alpha=<span style="color: #bd93f9; font-weight: bold;">0.3</span>)
+        ax.plot(N, conditions[i].logistic_mapping(), option[i][<span style="color: #bd93f9; font-weight: bold;">0</span>], label=option[i][<span style="color: #bd93f9; font-weight: bold;">1</span>])
         plt.legend()
-        <span class="org-variable-name">i</span> += <span class="org-highlight-numbers-number">1</span>
+        i += <span style="color: #bd93f9; font-weight: bold;">1</span>
 
     plt.show()
 
@@ -624,8 +624,8 @@ plot()
 </div>
 
 
-<div id="org3d30511" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/dSXU3l.svg" class="org-svg">
+<div id="orgb9caada" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/FDoJSo.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -638,7 +638,7 @@ Notice how the graphs for them differ for values of N greater than 50, this is o
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-09-12 Sun 21:12</p>
+<p class="date">Created: 2021-09-15 Wed 10:27</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>
