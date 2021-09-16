@@ -1,0 +1,102 @@
+#+TITLE: Review3
+
+#+begin_src ipython :session asession :results raw drawer :exports both
+%config InlineBackend.figure_format = 'svg'
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from tabulate import tabulate
+import scipy.interpolate as interpolate
+import scipy.optimize as optimize
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[15]:
+:end:
+#+NAME: test_org_post_clean
+#+BEGIN_SRC sh :results verbatim :var data="" :results output
+echo "$data" | sed s/\^:\ \//g | grep -v "^$" | sed s/\'//g
+#+END_SRC
+
+#+RESULTS: test_org_post_clean
+
+A particle of mass 0.2 kg moves for 0.4 s according to the physical trajectory described by the data over in the following dataframe:
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+path = 'https://raw.githubusercontent.com/restrepo/ComputationalMethods/master/data/mvto.csv'
+df = pd.read_csv(path)
+# add error column
+df['xerror'] = [1e-08]*df.shape[0]
+
+tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[13]:
+|    |         t |          x |   xerror |
+|----+-----------+------------+----------|
+|  0 | 0         | -0         |    1e-08 |
+|  1 | 0.0444444 |  0.0670359 |    1e-08 |
+|  2 | 0.0888889 |  0.125986  |    1e-08 |
+|  3 | 0.133333  |  0.169741  |    1e-08 |
+|  4 | 0.177778  |  0.193022  |    1e-08 |
+:end:
+
+We shall check whether the particle is moving in free fall or simple harmonic
+motion. To do this we may fit the data to both models, and decide by means of
+the absolute error in each datapoint.
+#+begin_src ipython :session asession :results raw drawer :exports both
+def compare_models(functions, _t, _x, _xerror=None):
+    if _xerror is None:
+        _xerror = _x.shape[0]
+
+    func_names = np.empty(len(functions), dtype='S10')
+    predictions = np.zeros([len(functions), len(_t)])
+    i = 0
+    for function in functions:
+        # populate the array of function tags
+        func_names[i] = function.__name__
+        # perform the optimisation process and populate the
+        # array of predictions
+        popt, pcov = optimize.curve_fit(function, _t, _x, sigma=_xerror)
+        predictions[i,:] = function(_t, *popt)
+        i += 1
+
+    # redefine the array of actual x values with the same shape
+    # as the array of predictions
+    x_array = np.array([_x])
+    x_array = np.repeat(x_array, repeats=predictions.shape[0], axis=0)
+    # compute absolute errors
+    abs_err = np.abs(x_array - predictions).sum(axis=1)
+
+    return {A: B for A, B in zip(func_names, abs_err)}
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[86]:
+:end:
+#+begin_src ipython :session asession :results raw drawer :exports both
+# define our datapoints
+_t = df['t']
+_x = df['x']
+_xerror = df['xerror']
+# define our model functions
+def _harmonic(t, A, ang_freq):
+    # the simple harmonic motion equation is: x = A*sin(ang_freq*t)
+    return A*np.sin(ang_freq*t)
+def _free_fall(t, x_ini, v_ini, g=9.8):
+    return x_ini + v_ini*t - 0.5*g*t**2
+
+functions = [_harmonic, _free_fall]
+
+compare_models(functions, _t, _x, _xerror=_xerror)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[89]:
+: {b'_harmonic': 6.154342270279314e-08, b'_free_fall': 0.04000247638415919}
+:end:

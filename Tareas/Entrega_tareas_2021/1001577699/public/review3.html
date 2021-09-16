@@ -6,7 +6,7 @@
 <!-- 2021-09-15 Wed 21:07 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Contents</title>
+<title>Review3</title>
 <meta name="author" content="Juan David Salcedo Hernández" />
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
@@ -193,12 +193,6 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/htmlize.css"/>
-<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/readtheorg.css"/>
-<script type="text/javascript" src="src/lib/js/jquery.min.js"></script>
-<script type="text/javascript" src="src/lib/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="src/lib/js/jquery.stickytableheaders.min.js"></script>
-<script type="text/javascript" src="src/readtheorg_theme/js/readtheorg.js"></script>
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
@@ -224,24 +218,149 @@
 </head>
 <body>
 <div id="content">
-<h1 class="title">Contents</h1>
-<ul class="org-ul">
-<li><a href="action.html">Application of the Principle of Least Action</a></li>
-<li><a href="assignment00.html">Assignment00</a></li>
-<li><a href="assignment01.html">Assignment01</a></li>
-<li><a href="assignment02.html">Assignment02</a></li>
-<li><a href="assignment03.html">Assignment03</a></li>
-<li><a href="assignment04.html">Assignment04</a></li>
-<li><a href="assignment05.html">Assignment05</a></li>
-<li><a href="assignment06.html">Assignment06</a></li>
-<li><a href="assignment07.html">Assignment07</a></li>
-<li><a href="index.html">Contents</a></li>
-<li><a href="game_of_life.html">John Conway&rsquo;s game of life.</a></li>
-<li><a href="review2.html">Review</a></li>
-<li><a href="review1.html">Review of concepts 1</a></li>
-<li><a href="review3.html">Review3</a></li>
-<li><a href="student_alcohol.html">Student Alcohol Consumption</a></li>
-</ul>
+<h1 class="title">Review3</h1>
+<div class="org-src-container">
+<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
+
+<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">import</span> pandas <span style="color: #ff79c6;">as</span> pd
+<span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
+<span style="color: #ff79c6;">from</span> tabulate <span style="color: #ff79c6;">import</span> tabulate
+<span style="color: #ff79c6;">import</span> scipy.interpolate <span style="color: #ff79c6;">as</span> interpolate
+<span style="color: #ff79c6;">import</span> scipy.optimize <span style="color: #ff79c6;">as</span> optimize
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-sh" id="org429fdd2"><span style="color: #bd93f9;">echo</span> <span style="color: #f1fa8c;">"</span><span style="color: #8be9fd;">$</span><span style="color: #f1fa8c;">data</span><span style="color: #f1fa8c;">"</span> | sed s/<span style="color: #f1fa8c;">\^</span>:<span style="color: #f1fa8c;">\ \/</span>/g | <span style="color: #bd93f9;">grep</span> -v <span style="color: #f1fa8c;">"^$"</span> | sed s/<span style="color: #f1fa8c;">\'</span>//g
+</pre>
+</div>
+
+<p>
+A particle of mass 0.2 kg moves for 0.4 s according to the physical trajectory described by the data over in the following dataframe:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">path = <span style="color: #f1fa8c;">'https://raw.githubusercontent.com/restrepo/ComputationalMethods/master/data/mvto.csv'</span>
+df = pd.read_csv(path)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">add error column</span>
+df[<span style="color: #f1fa8c;">'xerror'</span>] = [1e-<span style="color: #bd93f9; font-weight: bold;">08</span>]*df.shape[<span style="color: #bd93f9; font-weight: bold;">0</span>]
+
+tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-right">t</th>
+<th scope="col" class="org-right">x</th>
+<th scope="col" class="org-right">xerror</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">-0</td>
+<td class="org-right">1e-08</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">0.0444444</td>
+<td class="org-right">0.0670359</td>
+<td class="org-right">1e-08</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">0.0888889</td>
+<td class="org-right">0.125986</td>
+<td class="org-right">1e-08</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-right">0.133333</td>
+<td class="org-right">0.169741</td>
+<td class="org-right">1e-08</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-right">0.177778</td>
+<td class="org-right">0.193022</td>
+<td class="org-right">1e-08</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+We shall check whether the particle is moving in free fall or simple harmonic
+motion. To do this we may fit the data to both models, and decide by means of
+the absolute error in each datapoint.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">compare_models</span>(functions, _t, _x, _xerror=<span style="color: #8be9fd;">None</span>):
+    <span style="color: #ff79c6;">if</span> _xerror <span style="color: #ff79c6;">is</span> <span style="color: #8be9fd;">None</span>:
+        _xerror = _x.shape[<span style="color: #bd93f9; font-weight: bold;">0</span>]
+
+    func_names = np.empty(<span style="color: #ffb86c;">len</span>(functions), dtype=<span style="color: #f1fa8c;">'S10'</span>)
+    predictions = np.zeros([<span style="color: #ffb86c;">len</span>(functions), <span style="color: #ffb86c;">len</span>(_t)])
+    i = <span style="color: #bd93f9; font-weight: bold;">0</span>
+    <span style="color: #ff79c6;">for</span> function <span style="color: #ff79c6;">in</span> functions:
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">populate the array of function tags</span>
+        func_names[i] = function.<span style="color: #ffb86c;">__name__</span>
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">perform the optimisation process and populate the</span>
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">array of predictions</span>
+        popt, pcov = optimize.curve_fit(function, _t, _x, sigma=_xerror)
+        predictions[i,:] = function(_t, *popt)
+        i += <span style="color: #bd93f9; font-weight: bold;">1</span>
+
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">redefine the array of actual x values with the same shape</span>
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">as the array of predictions</span>
+    x_array = np.array([_x])
+    x_array = np.repeat(x_array, repeats=predictions.shape[<span style="color: #bd93f9; font-weight: bold;">0</span>], axis=<span style="color: #bd93f9; font-weight: bold;">0</span>)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute absolute errors</span>
+    abs_err = np.<span style="color: #ffb86c;">abs</span>(x_array - predictions).<span style="color: #ffb86c;">sum</span>(axis=<span style="color: #bd93f9; font-weight: bold;">1</span>)
+
+    <span style="color: #ff79c6;">return</span> {A: B <span style="color: #ff79c6;">for</span> A, B <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">zip</span>(func_names, abs_err)}
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">define our datapoints</span>
+_t = df[<span style="color: #f1fa8c;">'t'</span>]
+_x = df[<span style="color: #f1fa8c;">'x'</span>]
+_xerror = df[<span style="color: #f1fa8c;">'xerror'</span>]
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">define our model functions</span>
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">_harmonic</span>(t, A, ang_freq):
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">the simple harmonic motion equation is: x = A*sin(ang_freq*t)</span>
+    <span style="color: #ff79c6;">return</span> A*np.sin(ang_freq*t)
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">_free_fall</span>(t, x_ini, v_ini, g=<span style="color: #bd93f9; font-weight: bold;">9.8</span>):
+    <span style="color: #ff79c6;">return</span> x_ini + v_ini*t - <span style="color: #bd93f9; font-weight: bold;">0.5</span>*g*t**<span style="color: #bd93f9; font-weight: bold;">2</span>
+
+functions = [_harmonic, _free_fall]
+
+compare_models(functions, _t, _x, _xerror=_xerror)
+</pre>
+</div>
+
+<pre class="example">
+{b'_harmonic': 6.154342270279314e-08, b'_free_fall': 0.04000247638415919}
+</pre>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
