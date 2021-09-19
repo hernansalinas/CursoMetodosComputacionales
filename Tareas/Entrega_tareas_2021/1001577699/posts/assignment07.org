@@ -1,20 +1,23 @@
 #+TITLE: Assignment07
+#+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
 
 #+begin_src ipython :session asession :results raw drawer
 %config InlineBackend.figure_format = 'svg'
 
 import numpy as np
-import scipy as sc
-import sympy as sp
 import matplotlib.pyplot as plt
+import scipy.integrate as integrate
 #+end_src
 
 #+RESULTS:
 :results:
-# Out[1]:
+# Out[9]:
 :end:
 
-The magnetic vector potential for a loop of radius $a$ carrying a steady current $I$ at a point a distance $r$ from the centre of the loop and with an angle $\theta$ is given by the following expression:
+* Setting up the problem
+The magnetic vector potential for a loop of radius $a$ carrying a steady current
+$I$ at a point a distance $r$ from the centre of the loop and with an angle
+$\theta$ is given by the following expression:
 \[ A_\varphi(r,\theta) = \frac{\mu_0}{4\pi} \frac{4Ia}{\sqrt{a^2 + r^2 + 2ar\sin\theta}} \left( \frac{(2 - k^2) K(k) - 2E(k))}{k^2} \right) \]
 where
 \begin{gather*}
@@ -24,93 +27,115 @@ E(k) = \int_0^{\pi/2} \sqrt{1 - k^2 \sin^2 \varphi}\,d\varphi,
 and
 \[ k^2 = \frac{4ar\sin\theta}{a^2 + r^2 + 2ar\sin\theta} \]
 
-* Plot the graph of the single-variable function $A_\varphi(1.1,\theta)$.
-We may as well define a function whose input is a number $\theta$, and whose value is $k^2$. This value could then be used to compute the elliptic integrals seen above, and then the whole thing could be replaced in the function $\left.A_\varphi\right|_{r=1.1} : [0,\pi/2] \to \mathbb{R}$.
+We may define a function whose input is a number $\theta$, and whose
+value is $k^2$. This value could then be used to compute the elliptic integrals
+seen above, and then the whole thing could be replaced in the function
+$\left.A_\varphi\right|_{r=1.1} : [0,\pi/2] \to \mathbb{R}$.
 #+begin_src ipython :session asession :results raw drawer
 def k_sr(r, theta, a) :
     num = 4*a*r*np.sin(theta)
     den = a**2 + r**2 + 2*a*r*np.sin(theta)
     return num/den
-
-# driver code
-theta = np.linspace(0, np.pi/2, 100)
-
-plt.plot(theta, k_sr(1.1, theta, 1), 'k-')
-plt.grid()
-plt.plot()
 #+end_src
 
 #+RESULTS:
 :results:
 # Out[2]:
-: []
-[[file:./obipy-resources/PNEhsH.svg]]
 :end:
 
-We're going to be using the following class:
-#+begin_src ipython :session asession :results raw drawer
-def closed_set_max(func, variable, lower_bound, upper_bound) :
-    ''' Find the maximum of a smooth funtion on an open interval '''
-    d_func = sp.diff(func, variable, 1)
-    critical = sp.solveset(d_func, variable,
-                           domain=sp.Interval(lower_bound, upper_bound))
-    assert critical.is_FiniteSet
-    maximum = sp.Max(func.subs(variable, lower_bound),
-                     func.subs(variable, upper_bound),
-                     *[func.subs(variable, i) for i in critical])
-    return float(maximum)
+We can visualise this function over the domain on which we're integrating it, as
+usual:
+#+begin_src ipython :session asession :results raw drawer :exports both
+theta = np.linspace(0, np.pi/2, 100)
 
-class Function :
-    ''' Properties of a $C^{\infty}$ function. Class for integration. '''
-    def __init__(self, expression, variable, a=0, b=1) :
-        ''' the mathematical expression must be a sympy object '''
-        self.numerical = sp.lambdify(variable, expression, 'numpy')
-        self.symbol = variable
-        self.symbolic = expression
-        self.a, self.b = a, b
-
-    def simpson_partition(self, epsilon=0.001) :
-        # compute the fourth derivative with sympy
-        fourth_deriv = sp.diff(self.symbolic, self.symbol, 4)
-
-        # find an absolute maximum for the fourth derivative on the given domain
-        maximum = closed_set_max(fourth_deriv, self.symbol, self.a, self.b)
-
-        # compute the number of intervals
-        return np.ceil( ((maximum*(self.b - self.a)**5)/(epsilon*180*2**4))**0.25 )
-
-    def simpson(self, epsilon=0.001) :
-        N = self.simpson_partition(epsilon)
-        n_nodos = int( np.ceil(2*N + 1) ) # (N+1 extremos de subintervalos) + (N puntos medios)
-        x = np.linspace(self.a, self.b, n_nodos)
-
-        x_impar = x[1: :2] # Nodos con coordenada impar (ptos medios)
-        x_par = x[2:n_nodos-1:2] # Nodos con coordenada par (salvo e
-
-        h = (self.b - self.a)/(2*N) # Distancia entre dos nodos de integración
-        cuad = h/3*(self.numerical(self.a) + 2*sum(self.numerical(x_par)) + 4*sum(self.numerical(x_impar)) + self.numerical(self.b))
-        return f'Value = {cuad} +/- {epsilon}'
-#+end_src
-
-#+RESULTS:
-:results:
-# Out[3]:
-:end:
-
-#+begin_src ipython :session asession :results raw drawer
-def K(r, theta, a) :
-    k = sp.S(k_sr(r, theta, a))
-
-    # Generate symbolic expression
-    phi = sp.Symbol('phi')
-    func = Function(1/sp.sqrt(1 - k*sp.sin(phi)**2), phi, a=0, b=np.pi/2)
-
-    # Compute the integral
-    func.simpson()
-# K(1.1, np.pi/4, 1)
+plt.plot(theta, k_sr(1.1, theta, 1), 'k-')
+plt.xlabel('angle')
+plt.ylabel('k²')
+plt.grid()
+plt.show()
 #+end_src
 
 #+RESULTS:
 :results:
 # Out[5]:
+[[file:./obipy-resources/pX31uY.svg]]
+:end:
+
+Now that we have the number $k$, we may proceed with the computation of the
+elliptic integrals $K(k)$ and $E(k)$
+#+begin_src ipython :session asession :results raw drawer
+def K(r, theta, a):
+    _k = k_sr(r, theta, a)
+    # Generate an expression for the integrand
+    func = lambda phi: 1/np.sqrt(1 - _k*np.sin(phi)**2)
+    # Compute the integral
+    K, eps = integrate.quad(func, 0, np.pi/2)
+    return K
+
+def E(r, theta, a):
+    _k = k_sr(r, theta, a)
+    # Generate an expression for the integrand
+    func = lambda phi: np.sqrt(1 - _k*np.sin(phi)**2)
+    # Compute the integral
+    K, eps = integrate.quad(func, 0, np.pi/2)
+    return K
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[11]:
+:end:
+We can thereupon define a function that yeields the norm of the magnetic vector
+potential:
+#+begin_src ipython :session asession :results raw drawer
+K, E = np.vectorize(K), np.vectorize(E)
+def vector_potential(r, theta, I=3, a=1):
+    _K = K(r, theta, a)
+    _E = E(r, theta, a)
+    _k = k_sr(r, theta, a)
+
+    potential = 4*I*a/np.sqrt(a**2 + r**2 + 2*a*r*np.sin(theta))
+    potential *= (_K*(2 - _k) - 2*_E)/_k
+    return potential
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[17]:
+:end:
+
+* Plot the graph of the single-variable function $A_\varphi(1.1,\theta)$.
+The required graph is then:
+#+begin_src ipython :session asession :results raw drawer :exports both
+thetas = np.linspace(0.1, np.pi, 200)
+potential = vector_potential(1.1, thetas)
+
+plt.plot(thetas, potential, 'k-')
+plt.xlabel('Polar angle')
+plt.ylabel('Vector potential at r = 1.1')
+plt.grid()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[23]:
+[[file:./obipy-resources/4D3XjU.svg]]
+:end:
+* Plot the graph of the single-variable function $A_\varphi(r,\pi/3)$.
+#+begin_src ipython :session asession :results raw drawer :exports both
+distances = np.linspace(1, 25, 200)
+potential = vector_potential(distances, np.pi/3)
+
+plt.plot(thetas, potential, 'k-')
+plt.xlabel('Polar angle')
+plt.ylabel('Vector potential at an angle of 60°')
+plt.grid()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[22]:
+[[file:./obipy-resources/yRstWn.svg]]
 :end:
