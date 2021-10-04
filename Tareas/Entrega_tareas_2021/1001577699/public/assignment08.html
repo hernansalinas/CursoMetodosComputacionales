@@ -1,0 +1,812 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-09-30 Thu 12:22 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Assignment08</title>
+<meta name="author" content="Juan David Salcedo Hernández" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/readtheorg.css"/>
+<script type="text/javascript" src="src/lib/js/jquery.min.js"></script>
+<script type="text/javascript" src="src/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="src/readtheorg_theme/js/readtheorg.js"></script>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Assignment08</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org519aba5">1. Insightful routines for matrix operations in python</a></li>
+<li><a href="#org9a38516">2. Linear algebra and differential equations</a></li>
+<li><a href="#org184c8c4">3. Encryption</a></li>
+</ul>
+</div>
+</div>
+<p>
+Usual imports and configs
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
+
+<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">import</span> pandas <span style="color: #ff79c6;">as</span> pd
+<span style="color: #ff79c6;">import</span> numpy.linalg <span style="color: #ff79c6;">as</span> la
+<span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
+<span style="color: #ff79c6;">import</span> matplotlib.gridspec <span style="color: #ff79c6;">as</span> gridspec
+<span style="color: #ff79c6;">from</span> tabulate <span style="color: #ff79c6;">import</span> tabulate
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-sh" id="orgdd0c417"><span style="color: #bd93f9;">echo</span> <span style="color: #f1fa8c;">"</span><span style="color: #8be9fd;">$</span><span style="color: #f1fa8c;">data</span><span style="color: #f1fa8c;">"</span> | sed s/<span style="color: #f1fa8c;">\^</span>:<span style="color: #f1fa8c;">\ \/</span>/g | <span style="color: #bd93f9;">grep</span> -v <span style="color: #f1fa8c;">"^$"</span> | sed s/<span style="color: #f1fa8c;">\'</span>//g
+</pre>
+</div>
+
+<div id="outline-container-org519aba5" class="outline-2">
+<h2 id="org519aba5"><span class="section-number-2">1</span> Insightful routines for matrix operations in python</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+As is known, every operator on a vector space has a basis with respect to which
+its matrix is lower triangular. We can find this tirangular form with Gaussian
+elimination. The aforementioned process greatly simplifies the computations for
+finding the determinant of an operator.
+</p>
+
+<p>
+In the <code>determinant</code> routine, we resort to the device of row-reducing the
+matrix, so that the process then reduces to multiplyng the resulting diagonal
+entries.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">determinant</span>(A):
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Define the dimension and the matrix</span>
+    dimension = <span style="color: #ffb86c;">len</span>(A)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">it turns out to be crucial that the elements of the array be floats</span>
+    M = A.copy().astype(<span style="color: #ffb86c;">float</span>)
+
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Fast row-wise operations</span>
+    <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(dimension-<span style="color: #bd93f9; font-weight: bold;">1</span>,-<span style="color: #bd93f9; font-weight: bold;">1</span>,-<span style="color: #bd93f9; font-weight: bold;">1</span>):
+        <span style="color: #ff79c6;">if</span> M[i,i] != <span style="color: #bd93f9; font-weight: bold;">0.0</span>:
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Select the diagonal element</span>
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">diag_arg stands for diagonal argument</span>
+            diag_arg = M[i,i]
+        <span style="color: #ff79c6;">else</span>:
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Almost zero, good enough. Used to circumvent division by 0</span>
+            diag_arg = <span style="color: #bd93f9; font-weight: bold;">1</span>.0e-<span style="color: #bd93f9; font-weight: bold;">18</span>
+            M[i,i] = diag_arg
+        <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(i):
+            scalar = -M[j,i]/diag_arg
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">M[j] += scalar*M[i]</span>
+            <span style="color: #ff79c6;">for</span> k <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(dimension):
+                M[j,k] += scalar*M[i,k]
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Compute the determinant</span>
+    det = <span style="color: #bd93f9; font-weight: bold;">1.0</span>
+    <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(dimension):
+        det *= M[i,i]
+    <span style="color: #ff79c6;">return</span> det
+
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">LUdecomposition</span>(A):
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Define the dimension and the matrix</span>
+    dimension = <span style="color: #ffb86c;">len</span>(A)
+    M = A.copy().astype(<span style="color: #ffb86c;">float</span>)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Initialise L as the identity operator</span>
+    L = np.eye(dimension, dtype=<span style="color: #ffb86c;">float</span>)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Initialise U as the original matrix</span>
+    U = A.copy().astype(<span style="color: #ffb86c;">float</span>)
+
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">solve by inspection</span>
+    <span style="color: #ff79c6;">for</span> k <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(dimension):
+        <span style="color: #ff79c6;">if</span> U[k,k] != <span style="color: #bd93f9; font-weight: bold;">0.0</span>:
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Select the diagonal element</span>
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">diag_arg stands for diagonal argument</span>
+            diag_arg = U[k,k]
+        <span style="color: #ff79c6;">else</span>:
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Almost zero, good enough. Used to circumvent division by 0</span>
+            diag_arg = <span style="color: #bd93f9; font-weight: bold;">1</span>.0e-<span style="color: #bd93f9; font-weight: bold;">18</span>
+        <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(k+<span style="color: #bd93f9; font-weight: bold;">1</span>, dimension):
+            scalar = U[j,k]/diag_arg
+            L[j,k] = scalar
+            U[j] -= scalar*U[k]
+    <span style="color: #ff79c6;">return</span> L, U
+
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">adjugate_matrix</span>(A):
+    <span style="color: #8995ba;">''' Warning: this is a quite inefficient method '''</span>
+    dimension = <span style="color: #ffb86c;">len</span>(A)
+    M = A.copy().astype(<span style="color: #ffb86c;">float</span>)
+    C = np.eye(dimension, dtype=<span style="color: #ffb86c;">float</span>)
+
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Compute the determinants of minor matrices</span>
+    <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(dimension):
+        <span style="color: #ff79c6;">for</span> k <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(dimension):
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">remove the k-th row and the j-th column</span>
+            minor = np.delete(M, k, <span style="color: #bd93f9; font-weight: bold;">0</span>)
+            minor = np.delete(minor, j, <span style="color: #bd93f9; font-weight: bold;">1</span>)
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the cofactor matrix</span>
+            C[j,k] = (-<span style="color: #bd93f9; font-weight: bold;">1</span>)**(j+k) * determinant(minor)
+    <span style="color: #ff79c6;">return</span> C
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-ipython">A = np.array([[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>,<span style="color: #bd93f9; font-weight: bold;">4</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">8</span>,<span style="color: #bd93f9; font-weight: bold;">5</span>,<span style="color: #bd93f9; font-weight: bold;">6</span>,<span style="color: #bd93f9; font-weight: bold;">7</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">9</span>,<span style="color: #bd93f9; font-weight: bold;">12</span>,<span style="color: #bd93f9; font-weight: bold;">10</span>,<span style="color: #bd93f9; font-weight: bold;">11</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">13</span>,<span style="color: #bd93f9; font-weight: bold;">14</span>,<span style="color: #bd93f9; font-weight: bold;">16</span>,<span style="color: #bd93f9; font-weight: bold;">15</span>,<span style="color: #bd93f9; font-weight: bold;">4</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">10</span>,<span style="color: #bd93f9; font-weight: bold;">8</span>,<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">4</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>]])
+la.inv(A) * determinant(A)
+</pre>
+</div>
+
+<pre class="example" id="org816c7b6">
+  array([[  60.,  -60.,  -30.,   30.,   15.],
+  [  32.,   18.,  -46.,   16.,    3.],
+  [ -10.,   60.,   80.,  -80.,  -15.],
+  [  92., -192., -226.,  196.,   93.],
+  [-612.,  612.,  786., -606., -348.]])
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-ipython">adjugate_matrix(A)
+</pre>
+</div>
+
+<pre class="example" id="org349b5db">
+  array([[  60.,  -60.,  -30.,   30.,   15.],
+  [  32.,   18.,  -46.,   16.,    3.],
+  [ -10.,   60.,   80.,  -80.,  -15.],
+  [  92., -192., -226.,  196.,   93.],
+  [-612.,  612.,  786., -606., -348.]])
+</pre>
+<p>
+Now, we may implement the famous matrix multiplication algorithm. I suppose we
+all know how matrix multiplication works, we require that the number of columns
+of the matrix on the left be the same as the number of rows of the matrix on the
+left; each enry of the resulting matrix is the &ldquo;dot product&rdquo; of the
+corresponding rows and columns in the left and right matrices, respectively.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">class</span> <span style="color: #bd93f9;">matrix</span>:
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">__init__</span>(<span style="color: #ff79c6;">self</span>, M):
+        <span style="color: #ff79c6;">self</span>.M = np.array(M)
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">__mul__</span>(<span style="color: #ff79c6;">self</span>, other):
+        <span style="color: #8995ba;">''' Overload magic operator '''</span>
+        rows = np.shape(<span style="color: #ff79c6;">self</span>.M)[<span style="color: #bd93f9; font-weight: bold;">0</span>]
+        cols = np.shape(other.M)[<span style="color: #bd93f9; font-weight: bold;">1</span>]
+        C = np.zeros((rows, cols))
+        <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(rows):
+            <span style="color: #ff79c6;">for</span> k <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(cols):
+                C[j,k] = <span style="color: #ffb86c;">sum</span>(<span style="color: #ff79c6;">self</span>.M[j]*other.M.T[k])
+        <span style="color: #ff79c6;">return</span> C
+
+A = matrix([[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>],
+            [<span style="color: #bd93f9; font-weight: bold;">4</span>,<span style="color: #bd93f9; font-weight: bold;">5</span>,<span style="color: #bd93f9; font-weight: bold;">6</span>]])
+B = matrix([[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>],
+            [<span style="color: #bd93f9; font-weight: bold;">4</span>,<span style="color: #bd93f9; font-weight: bold;">5</span>,<span style="color: #bd93f9; font-weight: bold;">6</span>],
+            [<span style="color: #bd93f9; font-weight: bold;">7</span>,<span style="color: #bd93f9; font-weight: bold;">8</span>,<span style="color: #bd93f9; font-weight: bold;">9</span>]])
+A*B
+</pre>
+</div>
+
+<pre class="example" id="org4d30a02">
+  array([[30., 36., 42.],
+  [66., 81., 96.]])
+</pre>
+
+<p>
+To prove that this is correct, consider:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">A = np.array([[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>],
+            [<span style="color: #bd93f9; font-weight: bold;">4</span>,<span style="color: #bd93f9; font-weight: bold;">5</span>,<span style="color: #bd93f9; font-weight: bold;">6</span>]])
+B = np.array([[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>],
+            [<span style="color: #bd93f9; font-weight: bold;">4</span>,<span style="color: #bd93f9; font-weight: bold;">5</span>,<span style="color: #bd93f9; font-weight: bold;">6</span>],
+            [<span style="color: #bd93f9; font-weight: bold;">7</span>,<span style="color: #bd93f9; font-weight: bold;">8</span>,<span style="color: #bd93f9; font-weight: bold;">9</span>]])
+A @ B
+</pre>
+</div>
+
+<pre class="example" id="orgf9be14c">
+  array([[30, 36, 42],
+  [66, 81, 96]])
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org9a38516" class="outline-2">
+<h2 id="org9a38516"><span class="section-number-2">2</span> Linear algebra and differential equations</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Suppose that we have the following coupled <i>linear</i> system of ordinary
+differential equations:
+</p>
+\begin{align*}
+  x'(t) &= 2x(t) - y(t) + z(t) \\
+  y'(t) &= 3y(t) - z(t) \\
+  z'(t) &= 2x(t) + y(t) + 3z(t).
+\end{align*}
+<p>
+where \(x, y, z : \mathbb{R} \to \mathbb{R}\). This system may be represented in
+vector form as \(\gamma'(t) = T\gamma(t)\), where \(T\) is the operator whose matrix
+with respect to the standard basis for \(\mathbb{R}^3\) is
+\[ \mathcal{M}(T, (e_1, e_3, e_3)) = \begin{pmatrix}
+2 & -1 & 1 \\
+0 & 3 & -1 \\
+2 & 1 & 3
+\end{pmatrix}. \]
+The analytical solution to this system of equations is given by the matrix
+exponential of \(tT\), which is called the fundamental operator of the system. Thus
+\(\gamma(t) = \exp(tT) \gamma(0)\) and we only need to know the value of \(\gamma\)
+at 0.
+</p>
+
+<p>
+Now, if \(T\) is diagonalisable, then we can find some basis \((v_1, v_2, v_3)\) of \(\mathbb{R}^3\) consisting of eigenvectors of \(T\), with respect to which \(T\)
+has a diagonal matrix. Indeed, using the change of basis formula, if we define \(A := \mathcal{M}(\text{Id}, (v_1, v_2, v_3), (e_1, e_2, e_3))\), then we have
+\[ \mathcal{M}(T, (v_1, v_2, v_3)) = A^{-1} \mathcal{M}(T, (e_1, e_3, e_3)) A, \]
+and so we can simply rewrite the original matrix as:
+\[ \mathcal{M}(T, (e_1, e_3, e_3)) = A \mathcal{M}(T, (v_1, v_2, v_3)) A^{-1}, \]
+where \(A\) turns out to be the matrix \(\begin{pmatrix} v_1 & v_2 & v_3
+\end{pmatrix}\), i.e., the matrix whose columns are the usual representation of
+each of the basis eigenvectors of \(T\). Now, we are interested in the matrix exponential of \(\mathcal{M}(T, (e_1, e_3, e_3))\), which satisfies:
+\[ \exp\left( \mathcal{M}(T, (e_1, e_3, e_3)) \right) = A \exp \underbrace{\left( \mathcal{M}(T, (v_1, v_2, v_3)) \right)}_{\text{diagonal matrix}} A^{-1} \].
+</p>
+
+<p>
+We apply all of this knowledge to the suggested problem, hoping that the matrix here is diagonalisable.
+</p>
+
+<p>
+Diagonalisation process:
+We consider diagonalisable matrices that lie &ldquo;close&rdquo; to non-diagonalisable ones as non-diagonalisable
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">is_diagonalizable</span>(T):
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">solve for eigenvalues and eigenvectors of T</span>
+    eigvals, eigvecs = la.eig(T)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">if the condition number of the eigenvectors matrix big, then  it is close to non-diagonalisable, numerically speaking</span>
+    cond = la.cond(eigvecs)
+    <span style="color: #ff79c6;">if</span> cond &gt;= 1e+<span style="color: #bd93f9; font-weight: bold;">10</span>:
+        <span style="color: #ff79c6;">return</span> <span style="color: #8be9fd;">False</span>, <span style="color: #8be9fd;">False</span>, <span style="color: #8be9fd;">False</span>
+    <span style="color: #ff79c6;">else</span>:
+        diag = eigvals
+        <span style="color: #ff79c6;">return</span> <span style="color: #8be9fd;">True</span>, diag, eigvecs
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">This matrix is diagonalisable</span>
+A = np.array([[<span style="color: #bd93f9; font-weight: bold;">2</span>, -<span style="color: #bd93f9; font-weight: bold;">1</span>, <span style="color: #bd93f9; font-weight: bold;">1</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">3</span>, -<span style="color: #bd93f9; font-weight: bold;">1</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">2</span>, <span style="color: #bd93f9; font-weight: bold;">1</span>, <span style="color: #bd93f9; font-weight: bold;">3</span>]])
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">This one is not</span>
+B = np.array([[<span style="color: #bd93f9; font-weight: bold;">6</span>, <span style="color: #bd93f9; font-weight: bold;">3</span>, -<span style="color: #bd93f9; font-weight: bold;">8</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">0</span>, -<span style="color: #bd93f9; font-weight: bold;">2</span>, <span style="color: #bd93f9; font-weight: bold;">0</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">1</span>, <span style="color: #bd93f9; font-weight: bold;">0</span>, -<span style="color: #bd93f9; font-weight: bold;">3</span>]])
+is_diagonalizable(A)[<span style="color: #bd93f9; font-weight: bold;">0</span>], is_diagonalizable(B)[<span style="color: #bd93f9; font-weight: bold;">0</span>]
+</pre>
+</div>
+
+<pre class="example">
+(True, False)
+</pre>
+<p>
+Thus we can proceed to compute the
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">positions</span>(time_domain, init_state, A):
+    is_diag, diag, basis_matrix = is_diagonalizable(A)
+    <span style="color: #ff79c6;">if</span> is_diag:
+        positions = np.zeros((time_domain.shape[<span style="color: #bd93f9; font-weight: bold;">0</span>], <span style="color: #bd93f9; font-weight: bold;">3</span>))
+        j = <span style="color: #bd93f9; font-weight: bold;">0</span>
+        <span style="color: #ff79c6;">for</span> t <span style="color: #ff79c6;">in</span> time_domain:
+            positions[j] = ((basis_matrix @ np.diag(np.exp(t*diag)) @ la.inv(basis_matrix)) @ init_state).T
+            j += <span style="color: #bd93f9; font-weight: bold;">1</span>
+        <span style="color: #ff79c6;">return</span> positions
+    <span style="color: #ff79c6;">else</span>:
+        <span style="color: #ff79c6;">print</span>(<span style="color: #f1fa8c;">'Matrix cannot be diagonalised'</span>)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">initial state of the system</span>
+init_state = np.array([[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>]]).T
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute positions with the above routine</span>
+t = np.linspace(<span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">2</span>, <span style="color: #bd93f9; font-weight: bold;">500</span>)
+gamma = positions(t, init_state, A)
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">tabulate the data points</span>
+df = pd.DataFrame(gamma, columns=[<span style="color: #f1fa8c;">'x'</span>, <span style="color: #f1fa8c;">'y'</span>, <span style="color: #f1fa8c;">'z'</span>])
+tabulate(df.head(<span style="color: #bd93f9; font-weight: bold;">10</span>), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-right">x</th>
+<th scope="col" class="org-right">y</th>
+<th scope="col" class="org-right">z</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">2</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">1.01214</td>
+<td class="org-right">1.00396</td>
+<td class="org-right">2.03635</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">1.0245</td>
+<td class="org-right">1.00782</td>
+<td class="org-right">2.07325</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-right">1.0371</td>
+<td class="org-right">1.01158</td>
+<td class="org-right">2.11071</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-right">1.04994</td>
+<td class="org-right">1.01522</td>
+<td class="org-right">2.14874</td>
+</tr>
+
+<tr>
+<td class="org-right">5</td>
+<td class="org-right">1.06302</td>
+<td class="org-right">1.01876</td>
+<td class="org-right">2.18736</td>
+</tr>
+
+<tr>
+<td class="org-right">6</td>
+<td class="org-right">1.07635</td>
+<td class="org-right">1.02219</td>
+<td class="org-right">2.22656</td>
+</tr>
+
+<tr>
+<td class="org-right">7</td>
+<td class="org-right">1.08994</td>
+<td class="org-right">1.0255</td>
+<td class="org-right">2.26635</td>
+</tr>
+
+<tr>
+<td class="org-right">8</td>
+<td class="org-right">1.10378</td>
+<td class="org-right">1.02868</td>
+<td class="org-right">2.30676</td>
+</tr>
+
+<tr>
+<td class="org-right">9</td>
+<td class="org-right">1.11788</td>
+<td class="org-right">1.03174</td>
+<td class="org-right">2.34777</td>
+</tr>
+</tbody>
+</table>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">Positions from dataframe</span>
+x = df.x
+y = df.y
+z = df.z
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Using gridspec to plot the data</span>
+fig = plt.figure(figsize=(<span style="color: #bd93f9; font-weight: bold;">10</span>,<span style="color: #bd93f9; font-weight: bold;">8</span>))
+gs = gridspec.GridSpec(nrows=<span style="color: #bd93f9; font-weight: bold;">2</span>, ncols=<span style="color: #bd93f9; font-weight: bold;">2</span>, height_ratios=[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>])
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Declare x graph</span>
+ax0 = fig.add_subplot(gs[<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">0</span>])
+ax0.plot(t, x, <span style="color: #f1fa8c;">'k-'</span>)
+ax0.set_xlabel(<span style="color: #f1fa8c;">'t'</span>)
+ax0.set_ylabel(<span style="color: #f1fa8c;">'x(t)'</span>)
+ax0.grid()
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Declare y graph</span>
+ax1 = fig.add_subplot(gs[<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>])
+ax1.plot(t, y, <span style="color: #f1fa8c;">'k-'</span>)
+ax1.set_xlabel(<span style="color: #f1fa8c;">'t'</span>)
+ax1.set_ylabel(<span style="color: #f1fa8c;">'y(t)'</span>)
+ax1.grid()
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Declare z graph</span>
+ax2 = fig.add_subplot(gs[<span style="color: #bd93f9; font-weight: bold;">1</span>:,<span style="color: #bd93f9; font-weight: bold;">0</span>])
+ax2.plot(t, z, <span style="color: #f1fa8c;">'k-'</span>)
+ax2.set_xlabel(<span style="color: #f1fa8c;">'t'</span>)
+ax2.set_ylabel(<span style="color: #f1fa8c;">'z(t)'</span>)
+ax2.grid()
+
+plt.tight_layout()
+plt.show()
+</pre>
+</div>
+
+
+<div id="orgf430b03" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/axvTkb.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+
+<p>
+Compare these plots with the ones obtained from the expanded equations:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">Positions from dataframe</span>
+_x = <span style="color: #bd93f9; font-weight: bold;">0.5</span>*( init_state[<span style="color: #bd93f9; font-weight: bold;">0</span>]*np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)*(<span style="color: #bd93f9; font-weight: bold;">1</span>+np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)-<span style="color: #bd93f9; font-weight: bold;">2</span>*t)
+           + init_state[<span style="color: #bd93f9; font-weight: bold;">1</span>]*(-<span style="color: #bd93f9; font-weight: bold;">2</span>)*t*np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)
+           + init_state[<span style="color: #bd93f9; font-weight: bold;">2</span>]*np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)*(-<span style="color: #bd93f9; font-weight: bold;">1</span>+np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)) )
+
+_y = <span style="color: #bd93f9; font-weight: bold;">0.5</span>*( init_state[<span style="color: #bd93f9; font-weight: bold;">0</span>]*(-np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t))*(-<span style="color: #bd93f9; font-weight: bold;">1</span>+np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)-<span style="color: #bd93f9; font-weight: bold;">2</span>*t)
+           + init_state[<span style="color: #bd93f9; font-weight: bold;">1</span>]*(-<span style="color: #bd93f9; font-weight: bold;">2</span>)*(t+<span style="color: #bd93f9; font-weight: bold;">1</span>)*np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)
+           + init_state[<span style="color: #bd93f9; font-weight: bold;">2</span>]*(-np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t))*(-<span style="color: #bd93f9; font-weight: bold;">1</span>+np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)) )
+
+_z = <span style="color: #bd93f9; font-weight: bold;">0.5</span>*( init_state[<span style="color: #bd93f9; font-weight: bold;">0</span>]*np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)*(-<span style="color: #bd93f9; font-weight: bold;">1</span>+np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)+<span style="color: #bd93f9; font-weight: bold;">2</span>*t)
+           + init_state[<span style="color: #bd93f9; font-weight: bold;">1</span>]*<span style="color: #bd93f9; font-weight: bold;">2</span>*t*np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)
+           + init_state[<span style="color: #bd93f9; font-weight: bold;">2</span>]*np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)*(<span style="color: #bd93f9; font-weight: bold;">1</span>+np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)) )
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Using gridspec to plot the data</span>
+fig = plt.figure(figsize=(<span style="color: #bd93f9; font-weight: bold;">10</span>,<span style="color: #bd93f9; font-weight: bold;">8</span>))
+gs = gridspec.GridSpec(nrows=<span style="color: #bd93f9; font-weight: bold;">2</span>, ncols=<span style="color: #bd93f9; font-weight: bold;">2</span>, height_ratios=[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>])
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Declare x graph</span>
+ax0 = fig.add_subplot(gs[<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">0</span>])
+ax0.plot(t, _x, <span style="color: #f1fa8c;">'k-'</span>)
+ax0.set_xlabel(<span style="color: #f1fa8c;">'t'</span>)
+ax0.set_ylabel(<span style="color: #f1fa8c;">'x(t)'</span>)
+ax0.grid()
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Declare y graph</span>
+ax1 = fig.add_subplot(gs[<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>])
+ax1.plot(t, _y, <span style="color: #f1fa8c;">'k-'</span>)
+ax1.set_xlabel(<span style="color: #f1fa8c;">'t'</span>)
+ax1.set_ylabel(<span style="color: #f1fa8c;">'y(t)'</span>)
+ax1.grid()
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Declare z graph</span>
+ax2 = fig.add_subplot(gs[<span style="color: #bd93f9; font-weight: bold;">1</span>:,<span style="color: #bd93f9; font-weight: bold;">0</span>])
+ax2.plot(t, _z, <span style="color: #f1fa8c;">'k-'</span>)
+ax2.set_xlabel(<span style="color: #f1fa8c;">'t'</span>)
+ax2.set_ylabel(<span style="color: #f1fa8c;">'z(t)'</span>)
+ax2.grid()
+
+plt.tight_layout()
+plt.show()
+</pre>
+</div>
+
+
+<div id="org861097c" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/e5OmT3.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org184c8c4" class="outline-2">
+<h2 id="org184c8c4"><span class="section-number-2">3</span> Encryption</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+A certain encryption process hinges upon the usage of a nonsingular integer
+<i>square</i> matrix, which we call the encryption matrix \(E \in \text{Mat\,}(n\times n)\). We assign a number to each
+letter of the alphabet, and a number to the blank space character. If one wishes
+to encrypt a message, so that it turns into a sequence of seemingly random
+integers, one can arrange the numbers corresponding to each letter of the
+message in writing-wise fashion on a matrix whose number of columns is the same
+as the dimension of the encryption matrix, we call this object the message
+matrix, \(M \in \text{Mat\,}(m\times n)\). We can multiply the message matrix by the encryption matrix to obtain
+the desired encrypted message:
+\[ \text{Encrypted message} = ME \in \text{Mat\,}(m\times n). \]
+</p>
+
+<p>
+Since the encription matrix is inverible, reversing the process is easy if we know it beforehand.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">decrypt</span>(crypt_msg, crypt_mat, abc, num):
+    crypt_msg = np.asarray(crypt_msg)
+    crypt_msg = np.reshape(crypt_msg, (<span style="color: #bd93f9; font-weight: bold;">4</span>, crypt_mat.shape[<span style="color: #bd93f9; font-weight: bold;">0</span>]))
+    msg = (crypt_msg @ la.inv(crypt_mat)).<span style="color: #ffb86c;">round</span>().astype(<span style="color: #ffb86c;">int</span>)
+    string = <span style="color: #f1fa8c;">''</span>
+    <span style="color: #ff79c6;">for</span> row <span style="color: #ff79c6;">in</span> msg:
+        <span style="color: #ff79c6;">for</span> n <span style="color: #ff79c6;">in</span> row:
+            char = <span style="color: #ffb86c;">dict</span>(<span style="color: #ffb86c;">zip</span>(num, abc))[<span style="color: #ffb86c;">str</span>(n)]
+            string += char
+    <span style="color: #ff79c6;">return</span> string
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-ipython">abc=[<span style="color: #f1fa8c;">'a'</span>,<span style="color: #f1fa8c;">'b'</span>,<span style="color: #f1fa8c;">'c'</span>,<span style="color: #f1fa8c;">'d'</span>,<span style="color: #f1fa8c;">'e'</span>,<span style="color: #f1fa8c;">'f'</span>,<span style="color: #f1fa8c;">'g'</span>,<span style="color: #f1fa8c;">'h'</span>,<span style="color: #f1fa8c;">'i'</span>,<span style="color: #f1fa8c;">'j'</span>, \
+     <span style="color: #f1fa8c;">'k'</span>,<span style="color: #f1fa8c;">'l'</span>,<span style="color: #f1fa8c;">'m'</span>,<span style="color: #f1fa8c;">'n'</span>,<span style="color: #f1fa8c;">'o'</span>,<span style="color: #f1fa8c;">'p'</span>,<span style="color: #f1fa8c;">'q'</span>,<span style="color: #f1fa8c;">'r'</span>,<span style="color: #f1fa8c;">'s'</span>,<span style="color: #f1fa8c;">'t'</span>, \
+     <span style="color: #f1fa8c;">'u'</span>,<span style="color: #f1fa8c;">'v'</span>,<span style="color: #f1fa8c;">'w'</span>,<span style="color: #f1fa8c;">'x'</span>,<span style="color: #f1fa8c;">'y'</span>,<span style="color: #f1fa8c;">'z'</span>,<span style="color: #f1fa8c;">' '</span>]
+
+num=[<span style="color: #f1fa8c;">'1'</span>,<span style="color: #f1fa8c;">'2'</span>,<span style="color: #f1fa8c;">'3'</span>,<span style="color: #f1fa8c;">'4'</span>,<span style="color: #f1fa8c;">'5'</span>,<span style="color: #f1fa8c;">'6'</span>,<span style="color: #f1fa8c;">'7'</span>,<span style="color: #f1fa8c;">'8'</span>,<span style="color: #f1fa8c;">'9'</span>,<span style="color: #f1fa8c;">'10'</span>, \
+     <span style="color: #f1fa8c;">'11'</span>,<span style="color: #f1fa8c;">'12'</span>,<span style="color: #f1fa8c;">'13'</span>,<span style="color: #f1fa8c;">'14'</span>,<span style="color: #f1fa8c;">'15'</span>,<span style="color: #f1fa8c;">'16'</span>,<span style="color: #f1fa8c;">'17'</span>,<span style="color: #f1fa8c;">'18'</span>, \
+     <span style="color: #f1fa8c;">'19'</span>,<span style="color: #f1fa8c;">'20'</span>,<span style="color: #f1fa8c;">'21'</span>,<span style="color: #f1fa8c;">'22'</span>,<span style="color: #f1fa8c;">'23'</span>,<span style="color: #f1fa8c;">'24'</span>,<span style="color: #f1fa8c;">'25'</span>,<span style="color: #f1fa8c;">'26'</span>,<span style="color: #f1fa8c;">'27'</span>]
+
+crypt_mat = np.array([[ <span style="color: #bd93f9; font-weight: bold;">1</span>,  <span style="color: #bd93f9; font-weight: bold;">2</span>, -<span style="color: #bd93f9; font-weight: bold;">3</span>,  <span style="color: #bd93f9; font-weight: bold;">4</span>,  <span style="color: #bd93f9; font-weight: bold;">5</span>],
+                      [-<span style="color: #bd93f9; font-weight: bold;">2</span>, -<span style="color: #bd93f9; font-weight: bold;">5</span>,  <span style="color: #bd93f9; font-weight: bold;">8</span>, -<span style="color: #bd93f9; font-weight: bold;">8</span>, -<span style="color: #bd93f9; font-weight: bold;">9</span>],
+                      [ <span style="color: #bd93f9; font-weight: bold;">1</span>,  <span style="color: #bd93f9; font-weight: bold;">2</span>, -<span style="color: #bd93f9; font-weight: bold;">2</span>,  <span style="color: #bd93f9; font-weight: bold;">7</span>,  <span style="color: #bd93f9; font-weight: bold;">9</span>],
+                      [ <span style="color: #bd93f9; font-weight: bold;">1</span>,  <span style="color: #bd93f9; font-weight: bold;">1</span>,  <span style="color: #bd93f9; font-weight: bold;">0</span>,  <span style="color: #bd93f9; font-weight: bold;">6</span>, <span style="color: #bd93f9; font-weight: bold;">12</span>],
+                      [ <span style="color: #bd93f9; font-weight: bold;">2</span>,  <span style="color: #bd93f9; font-weight: bold;">4</span>, -<span style="color: #bd93f9; font-weight: bold;">6</span>,  <span style="color: #bd93f9; font-weight: bold;">8</span>, <span style="color: #bd93f9; font-weight: bold;">11</span>]])
+crypt_msg = [<span style="color: #bd93f9; font-weight: bold;">47</span>,<span style="color: #bd93f9; font-weight: bold;">49</span>,-<span style="color: #bd93f9; font-weight: bold;">19</span>,<span style="color: #bd93f9; font-weight: bold;">257</span>,<span style="color: #bd93f9; font-weight: bold;">487</span>,<span style="color: #bd93f9; font-weight: bold;">10</span>,-<span style="color: #bd93f9; font-weight: bold;">9</span>,<span style="color: #bd93f9; font-weight: bold;">63</span>,<span style="color: #bd93f9; font-weight: bold;">137</span>,<span style="color: #bd93f9; font-weight: bold;">236</span>, <span style="color: #bd93f9; font-weight: bold;">79</span>,<span style="color: #bd93f9; font-weight: bold;">142</span>,-<span style="color: #bd93f9; font-weight: bold;">184</span>,<span style="color: #bd93f9; font-weight: bold;">372</span>,<span style="color: #bd93f9; font-weight: bold;">536</span>,<span style="color: #bd93f9; font-weight: bold;">59</span>,<span style="color: #bd93f9; font-weight: bold;">70</span>,-<span style="color: #bd93f9; font-weight: bold;">40</span>,<span style="color: #bd93f9; font-weight: bold;">332</span>,<span style="color: #bd93f9; font-weight: bold;">588</span>]
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-ipython">decrypt(crypt_msg, crypt_mat, abc, num)
+</pre>
+</div>
+
+<pre class="example">
+'are you having fun  '
+</pre>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Juan David Salcedo Hernández</p>
+<p class="date">Created: 2021-09-30 Thu 12:22</p>
+<p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,466 @@
+#+TITLE: Assignment08
+#+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
+
+Usual imports and configs
+#+begin_src ipython :session asession :results raw drawer
+%config InlineBackend.figure_format = 'svg'
+
+import numpy as np
+import pandas as pd
+import numpy.linalg as la
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+from tabulate import tabulate
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[166]:
+:end:
+#+NAME: test_org_post_clean
+#+BEGIN_SRC sh :results verbatim :var data="" :results output
+echo "$data" | sed s/\^:\ \//g | grep -v "^$" | sed s/\'//g
+#+END_SRC
+
+#+RESULTS: test_org_post_clean
+
+* Insightful routines for matrix operations in python
+As is known, every operator on a vector space has a basis with respect to which
+its matrix is lower triangular. We can find this tirangular form with Gaussian
+elimination. The aforementioned process greatly simplifies the computations for
+finding the determinant of an operator.
+
+In the ~determinant~ routine, we resort to the device of row-reducing the
+matrix, so that the process then reduces to multiplyng the resulting diagonal
+entries.
+#+begin_src ipython :session asession :results raw drawer
+def determinant(A):
+    # Define the dimension and the matrix
+    dimension = len(A)
+    # it turns out to be crucial that the elements of the array be floats
+    M = A.copy().astype(float)
+
+    # Fast row-wise operations
+    for i in range(dimension-1,-1,-1):
+        if M[i,i] != 0.0:
+            # Select the diagonal element
+            # diag_arg stands for diagonal argument
+            diag_arg = M[i,i]
+        else:
+            # Almost zero, good enough. Used to circumvent division by 0
+            diag_arg = 1.0e-18
+            M[i,i] = diag_arg
+        for j in range(i):
+            scalar = -M[j,i]/diag_arg
+            # M[j] += scalar*M[i]
+            for k in range(dimension):
+                M[j,k] += scalar*M[i,k]
+    # Compute the determinant
+    det = 1.0
+    for i in range(dimension):
+        det *= M[i,i]
+    return det
+
+def LUdecomposition(A):
+    # Define the dimension and the matrix
+    dimension = len(A)
+    M = A.copy().astype(float)
+    # Initialise L as the identity operator
+    L = np.eye(dimension, dtype=float)
+    # Initialise U as the original matrix
+    U = A.copy().astype(float)
+
+    # solve by inspection
+    for k in range(dimension):
+        if U[k,k] != 0.0:
+            # Select the diagonal element
+            # diag_arg stands for diagonal argument
+            diag_arg = U[k,k]
+        else:
+            # Almost zero, good enough. Used to circumvent division by 0
+            diag_arg = 1.0e-18
+        for j in range(k+1, dimension):
+            scalar = U[j,k]/diag_arg
+            L[j,k] = scalar
+            U[j] -= scalar*U[k]
+    return L, U
+
+def adjugate_matrix(A):
+    ''' Warning: this is a quite inefficient method '''
+    dimension = len(A)
+    M = A.copy().astype(float)
+    C = np.eye(dimension, dtype=float)
+
+    # Compute the determinants of minor matrices
+    for j in range(dimension):
+        for k in range(dimension):
+            # remove the k-th row and the j-th column
+            minor = np.delete(M, k, 0)
+            minor = np.delete(minor, j, 1)
+            # compute the cofactor matrix
+            C[j,k] = (-1)**(j+k) * determinant(minor)
+    return C
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[170]:
+:end:
+#+begin_src ipython :session asession :results raw drawer :exports both
+A = np.array([[1,2,3,4,1],
+              [8,5,6,7,2],
+              [9,12,10,11,3],
+              [13,14,16,15,4],
+              [10,8,0,4,2]])
+la.inv(A) * determinant(A)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[187]:
+#+BEGIN_EXAMPLE
+  array([[  60.,  -60.,  -30.,   30.,   15.],
+  [  32.,   18.,  -46.,   16.,    3.],
+  [ -10.,   60.,   80.,  -80.,  -15.],
+  [  92., -192., -226.,  196.,   93.],
+  [-612.,  612.,  786., -606., -348.]])
+#+END_EXAMPLE
+:end:
+
+#+begin_src ipython :session asession :results raw drawer :exports both
+adjugate_matrix(A)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[188]:
+#+BEGIN_EXAMPLE
+  array([[  60.,  -60.,  -30.,   30.,   15.],
+  [  32.,   18.,  -46.,   16.,    3.],
+  [ -10.,   60.,   80.,  -80.,  -15.],
+  [  92., -192., -226.,  196.,   93.],
+  [-612.,  612.,  786., -606., -348.]])
+#+END_EXAMPLE
+:end:
+Now, we may implement the famous matrix multiplication algorithm. I suppose we
+all know how matrix multiplication works, we require that the number of columns
+of the matrix on the left be the same as the number of rows of the matrix on the
+left; each enry of the resulting matrix is the "dot product" of the
+corresponding rows and columns in the left and right matrices, respectively.
+#+begin_src ipython :session asession :results raw drawer :exports both
+class matrix:
+    def __init__(self, M):
+        self.M = np.array(M)
+    def __mul__(self, other):
+        ''' Overload magic operator '''
+        rows = np.shape(self.M)[0]
+        cols = np.shape(other.M)[1]
+        C = np.zeros((rows, cols))
+        for j in range(rows):
+            for k in range(cols):
+                C[j,k] = sum(self.M[j]*other.M.T[k])
+        return C
+
+A = matrix([[1,2,3],
+            [4,5,6]])
+B = matrix([[1,2,3],
+            [4,5,6],
+            [7,8,9]])
+A*B
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[262]:
+#+BEGIN_EXAMPLE
+  array([[30., 36., 42.],
+  [66., 81., 96.]])
+#+END_EXAMPLE
+:end:
+
+To prove that this is correct, consider:
+#+begin_src ipython :session asession :results raw drawer :exports both
+A = np.array([[1,2,3],
+            [4,5,6]])
+B = np.array([[1,2,3],
+            [4,5,6],
+            [7,8,9]])
+A @ B
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[263]:
+#+BEGIN_EXAMPLE
+  array([[30, 36, 42],
+  [66, 81, 96]])
+#+END_EXAMPLE
+:end:
+
+* Linear algebra and differential equations
+Suppose that we have the following coupled /linear/ system of ordinary
+differential equations:
+\begin{align*}
+  x'(t) &= 2x(t) - y(t) + z(t) \\
+  y'(t) &= 3y(t) - z(t) \\
+  z'(t) &= 2x(t) + y(t) + 3z(t).
+\end{align*}
+where $x, y, z : \mathbb{R} \to \mathbb{R}$. This system may be represented in
+vector form as $\gamma'(t) = T\gamma(t)$, where $T$ is the operator whose matrix
+with respect to the standard basis for $\mathbb{R}^3$ is
+\[ \mathcal{M}(T, (e_1, e_3, e_3)) = \begin{pmatrix}
+2 & -1 & 1 \\
+0 & 3 & -1 \\
+2 & 1 & 3
+\end{pmatrix}. \]
+The analytical solution to this system of equations is given by the matrix
+exponential of $tT$, which is called the fundamental operator of the system. Thus
+$\gamma(t) = \exp(tT) \gamma(0)$ and we only need to know the value of $\gamma$
+at 0.
+
+Now, if $T$ is diagonalisable, then we can find some basis $(v_1, v_2, v_3)$ of
+$\mathbb{R}^3$ consisting of eigenvectors of $T$, with respect to which $T$ has
+a diagonal matrix. Indeed, using the change of basis formula, if we define $A :=
+\mathcal{M}(\text{Id}, (v_1, v_2, v_3), (e_1, e_2, e_3))$, then we have
+\[ \mathcal{M}(T, (v_1, v_2, v_3)) = A^{-1} \mathcal{M}(T, (e_1, e_3, e_3)) A, \]
+and so we can simply rewrite the original matrix as:
+\[ \mathcal{M}(T, (e_1, e_3, e_3)) = A \mathcal{M}(T, (v_1, v_2, v_3)) A^{-1}, \]
+where $A$ turns out to be the matrix $\begin{pmatrix} v_1 & v_2 & v_3
+\end{pmatrix}$, i.e., the matrix whose columns are the usual representation of
+each of the basis eigenvectors of $T$. Now, we are interested in the matrix
+exponential of $\mathcal{M}(T, (e_1, e_3, e_3))$, which satisfies:
+\[ \exp\left( \mathcal{M}(T, (e_1, e_3, e_3)) \right) = A \exp \underbrace{\left( \mathcal{M}(T, (v_1, v_2, v_3)) \right)}_{\text{diagonal matrix}} A^{-1} \].
+
+We apply all of this knowledge to the suggested problem, hoping that the matrix here is diagonalisable.
+
+Diagonalisation process:
+We consider diagonalisable matrices that lie "close" to non-diagonalisable ones as non-diagonalisable
+#+begin_src ipython :session asession :results raw drawer
+def is_diagonalizable(T):
+    # solve for eigenvalues and eigenvectors of T
+    eigvals, eigvecs = la.eig(T)
+    # if the condition number of the eigenvectors matrix big, then  it is close to non-diagonalisable, numerically speaking
+    cond = la.cond(eigvecs)
+    if cond >= 1e+10:
+        return False, False, False
+    else:
+        diag = eigvals
+        return True, diag, eigvecs
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[131]:
+:end:
+#+begin_src ipython :session asession :results raw drawer :exports both
+# This matrix is diagonalisable
+A = np.array([[2, -1, 1],
+              [0, 3, -1],
+              [2, 1, 3]])
+# This one is not
+B = np.array([[6, 3, -8],
+              [0, -2, 0],
+              [1, 0, -3]])
+is_diagonalizable(A)[0], is_diagonalizable(B)[0]
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[143]:
+: (True, False)
+:end:
+Thus we can proceed to compute the
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+def positions(time_domain, init_state, A):
+    is_diag, diag, basis_matrix = is_diagonalizable(A)
+    if is_diag:
+        positions = np.zeros((time_domain.shape[0], 3))
+        j = 0
+        for t in time_domain:
+            positions[j] = ((basis_matrix @ np.diag(np.exp(t*diag)) @ la.inv(basis_matrix)) @ init_state).T
+            j += 1
+        return positions
+    else:
+        print('Matrix cannot be diagonalised')
+
+# initial state of the system
+init_state = np.array([[1,1,2]]).T
+
+# compute positions with the above routine
+t = np.linspace(0, 2, 500)
+gamma = positions(t, init_state, A)
+
+# tabulate the data points
+df = pd.DataFrame(gamma, columns=['x', 'y', 'z'])
+tabulate(df.head(10), headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[160]:
+|    |       x |       y |       z |
+|----+---------+---------+---------|
+|  0 | 1       | 1       | 2       |
+|  1 | 1.01214 | 1.00396 | 2.03635 |
+|  2 | 1.0245  | 1.00782 | 2.07325 |
+|  3 | 1.0371  | 1.01158 | 2.11071 |
+|  4 | 1.04994 | 1.01522 | 2.14874 |
+|  5 | 1.06302 | 1.01876 | 2.18736 |
+|  6 | 1.07635 | 1.02219 | 2.22656 |
+|  7 | 1.08994 | 1.0255  | 2.26635 |
+|  8 | 1.10378 | 1.02868 | 2.30676 |
+|  9 | 1.11788 | 1.03174 | 2.34777 |
+:end:
+#+begin_src ipython :session asession :results raw drawer :exports both
+# Positions from dataframe
+x = df.x
+y = df.y
+z = df.z
+
+# Using gridspec to plot the data
+fig = plt.figure(figsize=(10,8))
+gs = gridspec.GridSpec(nrows=2, ncols=2, height_ratios=[1,1])
+
+# Declare x graph
+ax0 = fig.add_subplot(gs[0,0])
+ax0.plot(t, x, 'k-')
+ax0.set_xlabel('t')
+ax0.set_ylabel('x(t)')
+ax0.grid()
+
+# Declare y graph
+ax1 = fig.add_subplot(gs[0,1])
+ax1.plot(t, y, 'k-')
+ax1.set_xlabel('t')
+ax1.set_ylabel('y(t)')
+ax1.grid()
+
+# Declare z graph
+ax2 = fig.add_subplot(gs[1:,0])
+ax2.plot(t, z, 'k-')
+ax2.set_xlabel('t')
+ax2.set_ylabel('z(t)')
+ax2.grid()
+
+plt.tight_layout()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[186]:
+[[file:./obipy-resources/pDk1mF.svg]]
+:end:
+
+Compare these plots with the ones obtained from the expanded equations:
+#+begin_src ipython :session asession :results raw drawer :exports both
+# Positions from dataframe
+_x = 0.5*( init_state[0]*np.exp(2*t)*(1+np.exp(2*t)-2*t)
+           + init_state[1]*(-2)*t*np.exp(2*t)
+           + init_state[2]*np.exp(2*t)*(-1+np.exp(2*t)) )
+
+_y = 0.5*( init_state[0]*(-np.exp(2*t))*(-1+np.exp(2*t)-2*t)
+           + init_state[1]*(-2)*(t+1)*np.exp(2*t)
+           + init_state[2]*(-np.exp(2*t))*(-1+np.exp(2*t)) )
+
+_z = 0.5*( init_state[0]*np.exp(2*t)*(-1+np.exp(2*t)+2*t)
+           + init_state[1]*2*t*np.exp(2*t)
+           + init_state[2]*np.exp(2*t)*(1+np.exp(2*t)) )
+
+# Using gridspec to plot the data
+fig = plt.figure(figsize=(10,8))
+gs = gridspec.GridSpec(nrows=2, ncols=2, height_ratios=[1,1])
+
+# Declare x graph
+ax0 = fig.add_subplot(gs[0,0])
+ax0.plot(t, _x, 'k-')
+ax0.set_xlabel('t')
+ax0.set_ylabel('x(t)')
+ax0.grid()
+
+# Declare y graph
+ax1 = fig.add_subplot(gs[0,1])
+ax1.plot(t, _y, 'k-')
+ax1.set_xlabel('t')
+ax1.set_ylabel('y(t)')
+ax1.grid()
+
+# Declare z graph
+ax2 = fig.add_subplot(gs[1:,0])
+ax2.plot(t, _z, 'k-')
+ax2.set_xlabel('t')
+ax2.set_ylabel('z(t)')
+ax2.grid()
+
+plt.tight_layout()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[194]:
+[[file:./obipy-resources/5caW57.svg]]
+:end:
+
+* Encryption
+A certain encryption process hinges upon the usage of a nonsingular integer
+/square/ matrix, which we call the encryption matrix $E \in \text{Mat }(n\times
+n)$. We assign a number to each letter of the alphabet, and a number to the
+blank space character. If one wishes to encrypt a message, so that it turns into
+a sequence of seemingly random integers, one can arrange the numbers
+corresponding to each letter of the message in writing-wise fashion on a matrix
+whose number of columns is the same as the dimension of the encryption matrix,
+we call this object the message matrix, $M \in \text{Mat }(m\times n)$. We can
+multiply the message matrix by the encryption matrix to obtain the desired
+encrypted message:
+\[ \text{Encrypted message} = ME \in \text{Mat }(m\times n). \]
+
+Since the encription matrix is inverible, reversing the process is easy if we know it beforehand.
+#+begin_src ipython :session asession :results raw drawer
+def decrypt(crypt_msg, crypt_mat, abc, num):
+    crypt_msg = np.asarray(crypt_msg)
+    crypt_msg = np.reshape(crypt_msg, (4, crypt_mat.shape[0]))
+    msg = (crypt_msg @ la.inv(crypt_mat)).round().astype(int)
+    string = ''
+    for row in msg:
+        for n in row:
+            char = dict(zip(num, abc))[str(n)]
+            string += char
+    return string
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[236]:
+:end:
+
+#+begin_src ipython :session asession :results raw drawer :exports both
+abc=['a','b','c','d','e','f','g','h','i','j', \
+     'k','l','m','n','o','p','q','r','s','t', \
+     'u','v','w','x','y','z',' ']
+
+num=['1','2','3','4','5','6','7','8','9','10', \
+     '11','12','13','14','15','16','17','18', \
+     '19','20','21','22','23','24','25','26','27']
+
+crypt_mat = np.array([[ 1,  2, -3,  4,  5],
+                      [-2, -5,  8, -8, -9],
+                      [ 1,  2, -2,  7,  9],
+                      [ 1,  1,  0,  6, 12],
+                      [ 2,  4, -6,  8, 11]])
+crypt_msg = [47,49,-19,257,487,10,-9,63,137,236, 79,142,-184,372,536,59,70,-40,332,588]
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[240]:
+:end:
+#+begin_src ipython :session asession :results raw drawer :exports both
+decrypt(crypt_msg, crypt_mat, abc, num)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[242]:
+: 'are you having fun  '
+:end:

@@ -9,6 +9,8 @@
 - [[file:assignment05.org][Assignment05]]
 - [[file:assignment06.org][Assignment06]]
 - [[file:assignment07.org][Assignment07]]
+- [[file:assignment08.org][Assignment08]]
+- [[file:assignment09.org][Assignment09]]
 - [[file:index.org][Contents]]
 - [[file:game_of_life.org][John Conway's game of life.]]
 - [[file:review2.org][Review]]
