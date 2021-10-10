@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-09-29 Wed 15:37 -->
+<!-- 2021-10-10 Sun 08:30 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Assignment01</title>
@@ -260,8 +260,8 @@
 In order to run this code, the following packages will be necessesary:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
-<span style="color: #ff79c6;">import</span> matplotlib.pylab <span style="color: #ff79c6;">as</span> plt
+<pre class="src src-ipython"><span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
+<span class="org-keyword">import</span> matplotlib.pylab <span class="org-keyword">as</span> plt
 </pre>
 </div>
 
@@ -296,31 +296,31 @@ We only require one more input, which is the charge and the position of the sour
 Now the computation of the electric field at every point encoded in the two initial arrays, <code>_x</code> and <code>_y</code>, can be easily carried out by abstraction using numpy arrays. We define two square arrays of the same order as <code>_x</code> and <code>_y</code>, namely <code>E_x</code> and <code>E_y</code>; these arrays have initially zero values, for we are then going to sum over all the electrostatic fields produced by the different charges, tying in with the superposition principle. We use a while loop to iterate through all the values in the list of charges, x positions, and y positions, which correspond to the sources and then proceed to compute the distance components as <code>delta_pos_x</code> and <code>delta_pos_y</code>, the magnitude of the distance as <code>R</code>, and the components of the electrostatic field as the sum of its current value with the value given by Coulomb&rsquo;s law for each charge in the list of charges.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">sources = {<span style="color: #bd93f9; font-weight: bold;">1</span>: (-<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">0</span>), <span style="color: #bd93f9; font-weight: bold;">1.1</span>: (<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">0</span>), -<span style="color: #bd93f9; font-weight: bold;">1</span>: (<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>), -<span style="color: #bd93f9; font-weight: bold;">1.1</span>: (<span style="color: #bd93f9; font-weight: bold;">0</span>,-<span style="color: #bd93f9; font-weight: bold;">1</span>)}
+<pre class="src src-ipython"><span class="org-variable-name">sources</span> = {<span class="org-highlight-numbers-number">1</span>: (-<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">0</span>), <span class="org-highlight-numbers-number">1.1</span>: (<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">0</span>), -<span class="org-highlight-numbers-number">1</span>: (<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">1</span>), -<span class="org-highlight-numbers-number">1.1</span>: (<span class="org-highlight-numbers-number">0</span>,-<span class="org-highlight-numbers-number">1</span>)}
 
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">electrostatic_field</span>(_x, _y) :
-    l = <span style="color: #ffb86c;">list</span>(sources.items())
-    charges, source_x_positions_list, source_y_positions_list = [<span style="color: #bd93f9; font-weight: bold;">0</span>]*<span style="color: #ffb86c;">len</span>(l), [<span style="color: #bd93f9; font-weight: bold;">0</span>]*<span style="color: #ffb86c;">len</span>(l), [<span style="color: #bd93f9; font-weight: bold;">0</span>]*<span style="color: #ffb86c;">len</span>(l)
+<span class="org-keyword">def</span> <span class="org-function-name">electrostatic_field</span>(_x, _y) :
+    <span class="org-variable-name">l</span> = <span class="org-builtin">list</span>(sources.items())
+    <span class="org-variable-name">charges</span>, <span class="org-variable-name">source_x_positions_list</span>, <span class="org-variable-name">source_y_positions_list</span> = [<span class="org-highlight-numbers-number">0</span>]*<span class="org-builtin">len</span>(l), [<span class="org-highlight-numbers-number">0</span>]*<span class="org-builtin">len</span>(l), [<span class="org-highlight-numbers-number">0</span>]*<span class="org-builtin">len</span>(l)
 
-    i = <span style="color: #bd93f9; font-weight: bold;">0</span>
-    <span style="color: #ff79c6;">while</span> i &lt; <span style="color: #ffb86c;">len</span>(l) :
+    <span class="org-variable-name">i</span> = <span class="org-highlight-numbers-number">0</span>
+    <span class="org-keyword">while</span> i &lt; <span class="org-builtin">len</span>(l) :
         charges[i], (source_x_positions_list[i], source_y_positions_list[i]) = l[i]
-        i += <span style="color: #bd93f9; font-weight: bold;">1</span>
+        <span class="org-variable-name">i</span> += <span class="org-highlight-numbers-number">1</span>
 
-    n, m = np.shape(_y) <span style="color: #6272a4;"># </span><span style="color: #6272a4;">n and m are the same number, for _y is a square matrix, as is _x</span>
-    E_x, E_y = np.zeros((n,n)), np.zeros((n,n))
+    <span class="org-variable-name">n</span>, <span class="org-variable-name">m</span> = np.shape(_y) <span class="org-comment-delimiter"># </span><span class="org-comment">n and m are the same number, for _y is a square matrix, as is _x</span>
+    <span class="org-variable-name">E_x</span>, <span class="org-variable-name">E_y</span> = np.zeros((n,n)), np.zeros((n,n))
 
-    i = <span style="color: #bd93f9; font-weight: bold;">0</span>
-    <span style="color: #ff79c6;">while</span> i &lt; <span style="color: #ffb86c;">len</span>(charges) :
-        delta_pos_x = _x - source_x_positions_list[i]
-        delta_pos_y = _y - source_y_positions_list[i]
-        R = np.sqrt(delta_pos_x**<span style="color: #bd93f9; font-weight: bold;">2</span> + delta_pos_y**<span style="color: #bd93f9; font-weight: bold;">2</span>)
+    <span class="org-variable-name">i</span> = <span class="org-highlight-numbers-number">0</span>
+    <span class="org-keyword">while</span> i &lt; <span class="org-builtin">len</span>(charges) :
+        <span class="org-variable-name">delta_pos_x</span> = _x - source_x_positions_list[i]
+        <span class="org-variable-name">delta_pos_y</span> = _y - source_y_positions_list[i]
+        <span class="org-variable-name">R</span> = np.sqrt(delta_pos_x**<span class="org-highlight-numbers-number">2</span> + delta_pos_y**<span class="org-highlight-numbers-number">2</span>)
 
-        E_x += charges[i]*delta_pos_x/R**<span style="color: #bd93f9; font-weight: bold;">3</span>
-        E_y += charges[i]*delta_pos_y/R**<span style="color: #bd93f9; font-weight: bold;">3</span>
-        i += <span style="color: #bd93f9; font-weight: bold;">1</span>
+        <span class="org-variable-name">E_x</span> += charges[i]*delta_pos_x/R**<span class="org-highlight-numbers-number">3</span>
+        <span class="org-variable-name">E_y</span> += charges[i]*delta_pos_y/R**<span class="org-highlight-numbers-number">3</span>
+        <span class="org-variable-name">i</span> += <span class="org-highlight-numbers-number">1</span>
 
-    <span style="color: #ff79c6;">return</span> E_x, E_y
+    <span class="org-keyword">return</span> E_x, E_y
 </pre>
 </div>
 
@@ -332,29 +332,29 @@ The bulk of the <code>graph</code> routine is to create a two dimensional partit
 Now we only need to use the utilities of <code>matplotlib</code> to graph the electrostatic field of a configuration of source point charges.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
+<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
 
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">graph</span>(boxlength, num_partitions) : <span style="color: #6272a4;"># </span><span style="color: #6272a4;">boxlength represents half the length of the side</span>
-    x = [[i*<span style="color: #bd93f9; font-weight: bold;">2</span>*boxlength/(num_partitions-<span style="color: #bd93f9; font-weight: bold;">1</span>) - boxlength <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(num_partitions)] <span style="color: #ff79c6;">for</span> k <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(num_partitions)]
-    y = x[:]
-    x, y = np.array(x), np.array(y).T
-    E_x, E_y = electrostatic_field(x, y)
+<span class="org-keyword">def</span> <span class="org-function-name">graph</span>(boxlength, num_partitions) : <span class="org-comment-delimiter"># </span><span class="org-comment">boxlength represents half the length of the side</span>
+    <span class="org-variable-name">x</span> = [[i*<span class="org-highlight-numbers-number">2</span>*boxlength/(num_partitions-<span class="org-highlight-numbers-number">1</span>) - boxlength <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(num_partitions)] <span class="org-keyword">for</span> k <span class="org-keyword">in</span> <span class="org-builtin">range</span>(num_partitions)]
+    <span class="org-variable-name">y</span> = x[:]
+    <span class="org-variable-name">x</span>, <span class="org-variable-name">y</span> = np.array(x), np.array(y).T
+    <span class="org-variable-name">E_x</span>, <span class="org-variable-name">E_y</span> = electrostatic_field(x, y)
 
-    plt.gca().set_aspect(<span style="color: #f1fa8c;">'equal'</span>, adjustable=<span style="color: #f1fa8c;">'box'</span>)
-    plt.streamplot(x, y, E_x, E_y, color=<span style="color: #f1fa8c;">'k'</span>, arrowstyle =<span style="color: #f1fa8c;">'-&gt;'</span>)
-    plt.xlabel(<span style="color: #f1fa8c;">'$x$'</span>)
-    plt.ylabel(<span style="color: #f1fa8c;">'$y$'</span>)
+    plt.gca().set_aspect(<span class="org-string">'equal'</span>, adjustable=<span class="org-string">'box'</span>)
+    plt.streamplot(x, y, E_x, E_y, color=<span class="org-string">'k'</span>, arrowstyle =<span class="org-string">'-&gt;'</span>)
+    plt.xlabel(<span class="org-string">'$x$'</span>)
+    plt.ylabel(<span class="org-string">'$y$'</span>)
     plt.show()
 
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">execute the code</span>
-graph(boxlength = <span style="color: #bd93f9; font-weight: bold;">2</span>,
-      num_partitions = <span style="color: #bd93f9; font-weight: bold;">20</span>)
+<span class="org-comment-delimiter"># </span><span class="org-comment">execute the code</span>
+graph(boxlength = <span class="org-highlight-numbers-number">2</span>,
+      num_partitions = <span class="org-highlight-numbers-number">20</span>)
 </pre>
 </div>
 
 
-<div id="orgd888d2b" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/M6Ah9e.svg" class="org-svg">
+<div id="org0998a5a" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/DxKBC1.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -380,24 +380,24 @@ t = \frac{{v_y}_0 \pm \sqrt{{{v_y}_0}^2 - 2g(y - y_0)}}{g}
 We discard the negative branch of the square root, for it yields points on the ascending part of the trajectory. Basically, the above equation gives us the parameter \(t\) at which the projectile would reach the height of the basket, and then evaluates its horizontal position at such time. Note that there is a problem with the first part of the statement, for the trajectory does not necessarily reaches all heights; such a situation will yield a complex value for \(t\), and it shall also be interpreted as a failure in the condition. If the value of time is real, then we may proceed to evaluate whether or not the distance between the horizontal position and the centre of the line segment is between the radius of the latter.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">g = <span style="color: #bd93f9; font-weight: bold;">9.8</span>
+<pre class="src src-ipython"><span class="org-variable-name">g</span> = <span class="org-highlight-numbers-number">9.8</span>
 
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">get_horiz_position</span>(y_0, v_0, angle, y_ref) :
-    <span style="color: #ff79c6;">try</span> :
-        <span style="color: #ff79c6;">with</span> np.errstate(invalid=<span style="color: #f1fa8c;">'raise'</span>) :
-            t = (v_0*np.sin(angle) + np.sqrt((v_0*np.sin(angle))**<span style="color: #bd93f9; font-weight: bold;">2</span> - <span style="color: #bd93f9; font-weight: bold;">2</span>*g*(y_ref - y_0))) / g
-            _x = v_0*np.cos(angle)*t
-            <span style="color: #ff79c6;">return</span> _x
-    <span style="color: #ff79c6;">except</span> :
-        _x = <span style="color: #f1fa8c;">'nan'</span>
-        <span style="color: #ff79c6;">return</span> <span style="color: #8be9fd;">False</span>
+<span class="org-keyword">def</span> <span class="org-function-name">get_horiz_position</span>(y_0, v_0, angle, y_ref) :
+    <span class="org-keyword">try</span> :
+        <span class="org-keyword">with</span> np.errstate(invalid=<span class="org-string">'raise'</span>) :
+            <span class="org-variable-name">t</span> = (v_0*np.sin(angle) + np.sqrt((v_0*np.sin(angle))**<span class="org-highlight-numbers-number">2</span> - <span class="org-highlight-numbers-number">2</span>*g*(y_ref - y_0))) / g
+            <span class="org-variable-name">_x</span> = v_0*np.cos(angle)*t
+            <span class="org-keyword">return</span> _x
+    <span class="org-keyword">except</span> :
+        <span class="org-variable-name">_x</span> = <span class="org-string">'nan'</span>
+        <span class="org-keyword">return</span> <span class="org-constant">False</span>
 
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">score_check</span>(y_0, v_0, angle, x_basket, y_basket, radius) :
-    _x = get_horiz_position(y_0, v_0, angle, y_basket)
-    <span style="color: #ff79c6;">if</span> <span style="color: #ffb86c;">isinstance</span>(_x, <span style="color: #ffb86c;">float</span>) == <span style="color: #8be9fd;">True</span> :
-        <span style="color: #ff79c6;">return</span> <span style="color: #ffb86c;">bool</span>(np.<span style="color: #ffb86c;">abs</span>(_x - x_basket) &lt; radius)
-    <span style="color: #ff79c6;">else</span> :
-        <span style="color: #ff79c6;">return</span> <span style="color: #8be9fd;">False</span>
+<span class="org-keyword">def</span> <span class="org-function-name">score_check</span>(y_0, v_0, angle, x_basket, y_basket, radius) :
+    <span class="org-variable-name">_x</span> = get_horiz_position(y_0, v_0, angle, y_basket)
+    <span class="org-keyword">if</span> <span class="org-builtin">isinstance</span>(_x, <span class="org-builtin">float</span>) == <span class="org-constant">True</span> :
+        <span class="org-keyword">return</span> <span class="org-builtin">bool</span>(np.<span class="org-builtin">abs</span>(_x - x_basket) &lt; radius)
+    <span class="org-keyword">else</span> :
+        <span class="org-keyword">return</span> <span class="org-constant">False</span>
 </pre>
 </div>
 
@@ -405,43 +405,43 @@ We discard the negative branch of the square root, for it yields points on the a
 Now for visualisation purposes, we define the routine <code>get_vert_position</code> to calculate the vertical position of a set of points between 0 and the moment in which the horizontal position reaches the floor again. This allows us to graph the trajectory. This allows us to graph the trajectory.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">get_vert_position</span>(y_0, v_0, angle, x_ref) :
-    t = x_ref / (v_0*np.cos(angle))
-    _y = y_0 + v_0*np.sin(angle)*t - <span style="color: #bd93f9; font-weight: bold;">0.5</span>*g*t**<span style="color: #bd93f9; font-weight: bold;">2</span>
-    <span style="color: #ff79c6;">return</span> _y
+<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
+<span class="org-keyword">def</span> <span class="org-function-name">get_vert_position</span>(y_0, v_0, angle, x_ref) :
+    <span class="org-variable-name">t</span> = x_ref / (v_0*np.cos(angle))
+    <span class="org-variable-name">_y</span> = y_0 + v_0*np.sin(angle)*t - <span class="org-highlight-numbers-number">0.5</span>*g*t**<span class="org-highlight-numbers-number">2</span>
+    <span class="org-keyword">return</span> _y
 
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">plot</span>(y_0, v_0, angle, x_basket, y_basket, radius) :
-    _x = np.linspace(<span style="color: #bd93f9; font-weight: bold;">0</span>, get_horiz_position(y_0, v_0, angle, <span style="color: #bd93f9; font-weight: bold;">0</span>), <span style="color: #bd93f9; font-weight: bold;">40</span>)
-    _y = get_vert_position(y_0, v_0, angle, _x)
+<span class="org-keyword">def</span> <span class="org-function-name">plot</span>(y_0, v_0, angle, x_basket, y_basket, radius) :
+    <span class="org-variable-name">_x</span> = np.linspace(<span class="org-highlight-numbers-number">0</span>, get_horiz_position(y_0, v_0, angle, <span class="org-highlight-numbers-number">0</span>), <span class="org-highlight-numbers-number">40</span>)
+    <span class="org-variable-name">_y</span> = get_vert_position(y_0, v_0, angle, _x)
 
-    <span style="color: #ff79c6;">if</span> score_check(y_0, v_0, angle, x_basket, y_basket, radius) == <span style="color: #8be9fd;">True</span> :
-        plt.suptitle(<span style="color: #f1fa8c;">'It\'s a point!'</span>)
-    <span style="color: #ff79c6;">else</span> :
-        plt.suptitle(<span style="color: #f1fa8c;">'Bad luck!'</span>)
+    <span class="org-keyword">if</span> score_check(y_0, v_0, angle, x_basket, y_basket, radius) == <span class="org-constant">True</span> :
+        plt.suptitle(<span class="org-string">'It\'s a point!'</span>)
+    <span class="org-keyword">else</span> :
+        plt.suptitle(<span class="org-string">'Bad luck!'</span>)
 
-    plt.gca().set_aspect(<span style="color: #f1fa8c;">'equal'</span>, adjustable=<span style="color: #f1fa8c;">'box'</span>)
-    plt.xlabel(<span style="color: #f1fa8c;">'$x$'</span>)
-    plt.ylabel(<span style="color: #f1fa8c;">'$y$'</span>)
-    plt.title(<span style="color: #f1fa8c;">'Trajectory'</span>)
-    plt.grid(<span style="color: #8be9fd;">True</span>)
+    plt.gca().set_aspect(<span class="org-string">'equal'</span>, adjustable=<span class="org-string">'box'</span>)
+    plt.xlabel(<span class="org-string">'$x$'</span>)
+    plt.ylabel(<span class="org-string">'$y$'</span>)
+    plt.title(<span class="org-string">'Trajectory'</span>)
+    plt.grid(<span class="org-constant">True</span>)
     plt.plot(_x,_y)
     plt.plot((x_basket - radius, x_basket + radius),(y_basket, y_basket))
     plt.show()
 
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Execute the code</span>
-plot(y_0 = <span style="color: #bd93f9; font-weight: bold;">2</span>,
-     v_0 = <span style="color: #bd93f9; font-weight: bold;">8</span>,
-     angle = np.pi/<span style="color: #bd93f9; font-weight: bold;">3</span>,
-     x_basket = <span style="color: #bd93f9; font-weight: bold;">4</span>,
-     y_basket = <span style="color: #bd93f9; font-weight: bold;">4</span>,
-     radius = <span style="color: #bd93f9; font-weight: bold;">0.23</span>)
+<span class="org-comment-delimiter"># </span><span class="org-comment">Execute the code</span>
+plot(y_0 = <span class="org-highlight-numbers-number">2</span>,
+     v_0 = <span class="org-highlight-numbers-number">8</span>,
+     angle = np.pi/<span class="org-highlight-numbers-number">3</span>,
+     x_basket = <span class="org-highlight-numbers-number">4</span>,
+     y_basket = <span class="org-highlight-numbers-number">4</span>,
+     radius = <span class="org-highlight-numbers-number">0.23</span>)
 </pre>
 </div>
 
 
-<div id="org120267c" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/ZG6YnE.svg" class="org-svg">
+<div id="org4d8003c" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/FqZFH9.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -450,7 +450,7 @@ Sorry, your browser does not support SVG.</object>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-09-29 Wed 15:37</p>
+<p class="date">Created: 2021-10-10 Sun 08:30</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

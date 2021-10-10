@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-09-29 Wed 15:37 -->
+<!-- 2021-10-10 Sun 08:30 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Review3</title>
@@ -226,19 +226,19 @@
 <div id="content">
 <h1 class="title">Review3</h1>
 <div class="org-src-container">
-<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
+<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
 
-<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
-<span style="color: #ff79c6;">import</span> pandas <span style="color: #ff79c6;">as</span> pd
-<span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
-<span style="color: #ff79c6;">from</span> tabulate <span style="color: #ff79c6;">import</span> tabulate
-<span style="color: #ff79c6;">import</span> scipy.interpolate <span style="color: #ff79c6;">as</span> interpolate
-<span style="color: #ff79c6;">import</span> scipy.optimize <span style="color: #ff79c6;">as</span> optimize
+<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
+<span class="org-keyword">import</span> pandas <span class="org-keyword">as</span> pd
+<span class="org-keyword">import</span> matplotlib.pyplot <span class="org-keyword">as</span> plt
+<span class="org-keyword">from</span> tabulate <span class="org-keyword">import</span> tabulate
+<span class="org-keyword">import</span> scipy.interpolate <span class="org-keyword">as</span> interpolate
+<span class="org-keyword">import</span> scipy.optimize <span class="org-keyword">as</span> optimize
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-sh" id="org429fdd2"><span style="color: #bd93f9;">echo</span> <span style="color: #f1fa8c;">"</span><span style="color: #8be9fd;">$</span><span style="color: #f1fa8c;">data</span><span style="color: #f1fa8c;">"</span> | sed s/<span style="color: #f1fa8c;">\^</span>:<span style="color: #f1fa8c;">\ \/</span>/g | <span style="color: #bd93f9;">grep</span> -v <span style="color: #f1fa8c;">"^$"</span> | sed s/<span style="color: #f1fa8c;">\'</span>//g
+<pre class="src src-sh" id="org429fdd2"><span class="org-type">echo</span> <span class="org-string">"</span><span class="org-string"><span class="org-constant">$</span></span><span class="org-string"><span class="org-variable-name">data</span></span><span class="org-string">"</span> | sed s/<span class="org-string">\^</span>:<span class="org-string">\ \/</span>/g | <span class="org-type">grep</span> -v <span class="org-string">"^$"</span> | sed s/<span class="org-string">\'</span>//g
 </pre>
 </div>
 
@@ -246,12 +246,12 @@
 A particle of mass 0.2 kg moves for 0.4 s according to the physical trajectory described by the data over in the following dataframe:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">path = <span style="color: #f1fa8c;">'https://raw.githubusercontent.com/restrepo/ComputationalMethods/master/data/mvto.csv'</span>
-df = pd.read_csv(path)
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">add error column</span>
-df[<span style="color: #f1fa8c;">'xerror'</span>] = [1e-<span style="color: #bd93f9; font-weight: bold;">08</span>]*df.shape[<span style="color: #bd93f9; font-weight: bold;">0</span>]
+<pre class="src src-ipython"><span class="org-variable-name">path</span> = <span class="org-string">'https://raw.githubusercontent.com/restrepo/ComputationalMethods/master/data/mvto.csv'</span>
+<span class="org-variable-name">df</span> = pd.read_csv(path)
+<span class="org-comment-delimiter"># </span><span class="org-comment">add error column</span>
+<span class="org-variable-name">df</span>[<span class="org-string">'xerror'</span>] = [1e-<span class="org-highlight-numbers-number">08</span>]*df.shape[<span class="org-highlight-numbers-number">0</span>]
 
-tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
+tabulate(df.head(), headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
 </pre>
 </div>
 
@@ -319,46 +319,46 @@ motion. To do this we may fit the data to both models, and decide by means of
 the absolute error in each datapoint.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">compare_models</span>(functions, _t, _x, _xerror=<span style="color: #8be9fd;">None</span>):
-    <span style="color: #ff79c6;">if</span> _xerror <span style="color: #ff79c6;">is</span> <span style="color: #8be9fd;">None</span>:
-        _xerror = _x.shape[<span style="color: #bd93f9; font-weight: bold;">0</span>]
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">compare_models</span>(functions, _t, _x, _xerror=<span class="org-constant">None</span>):
+    <span class="org-keyword">if</span> _xerror <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-variable-name">_xerror</span> = _x.shape[<span class="org-highlight-numbers-number">0</span>]
 
-    func_names = np.empty(<span style="color: #ffb86c;">len</span>(functions), dtype=<span style="color: #f1fa8c;">'S10'</span>)
-    predictions = np.zeros([<span style="color: #ffb86c;">len</span>(functions), <span style="color: #ffb86c;">len</span>(_t)])
-    i = <span style="color: #bd93f9; font-weight: bold;">0</span>
-    <span style="color: #ff79c6;">for</span> function <span style="color: #ff79c6;">in</span> functions:
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">populate the array of function tags</span>
-        func_names[i] = function.<span style="color: #ffb86c;">__name__</span>
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">perform the optimisation process and populate the</span>
-        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">array of predictions</span>
-        popt, pcov = optimize.curve_fit(function, _t, _x, sigma=_xerror)
-        predictions[i,:] = function(_t, *popt)
-        i += <span style="color: #bd93f9; font-weight: bold;">1</span>
+    <span class="org-variable-name">func_names</span> = np.empty(<span class="org-builtin">len</span>(functions), dtype=<span class="org-string">'S10'</span>)
+    <span class="org-variable-name">predictions</span> = np.zeros([<span class="org-builtin">len</span>(functions), <span class="org-builtin">len</span>(_t)])
+    <span class="org-variable-name">i</span> = <span class="org-highlight-numbers-number">0</span>
+    <span class="org-keyword">for</span> function <span class="org-keyword">in</span> functions:
+        <span class="org-comment-delimiter"># </span><span class="org-comment">populate the array of function tags</span>
+        <span class="org-variable-name">func_names</span>[i] = function.<span class="org-builtin">__name__</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">perform the optimisation process and populate the</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">array of predictions</span>
+        <span class="org-variable-name">popt</span>, <span class="org-variable-name">pcov</span> = optimize.curve_fit(function, _t, _x, sigma=_xerror)
+        <span class="org-variable-name">predictions</span>[i,:] = function(_t, *popt)
+        <span class="org-variable-name">i</span> += <span class="org-highlight-numbers-number">1</span>
 
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">redefine the array of actual x values with the same shape</span>
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">as the array of predictions</span>
-    x_array = np.array([_x])
-    x_array = np.repeat(x_array, repeats=predictions.shape[<span style="color: #bd93f9; font-weight: bold;">0</span>], axis=<span style="color: #bd93f9; font-weight: bold;">0</span>)
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute absolute errors</span>
-    abs_err = np.<span style="color: #ffb86c;">abs</span>(x_array - predictions).<span style="color: #ffb86c;">sum</span>(axis=<span style="color: #bd93f9; font-weight: bold;">1</span>)
+    <span class="org-comment-delimiter"># </span><span class="org-comment">redefine the array of actual x values with the same shape</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">as the array of predictions</span>
+    <span class="org-variable-name">x_array</span> = np.array([_x])
+    <span class="org-variable-name">x_array</span> = np.repeat(x_array, repeats=predictions.shape[<span class="org-highlight-numbers-number">0</span>], axis=<span class="org-highlight-numbers-number">0</span>)
+    <span class="org-comment-delimiter"># </span><span class="org-comment">compute absolute errors</span>
+    <span class="org-variable-name">abs_err</span> = np.<span class="org-builtin">abs</span>(x_array - predictions).<span class="org-builtin">sum</span>(axis=<span class="org-highlight-numbers-number">1</span>)
 
-    <span style="color: #ff79c6;">return</span> {A: B <span style="color: #ff79c6;">for</span> A, B <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">zip</span>(func_names, abs_err)}
+    <span class="org-keyword">return</span> {A: B <span class="org-keyword">for</span> A, B <span class="org-keyword">in</span> <span class="org-builtin">zip</span>(func_names, abs_err)}
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">define our datapoints</span>
-_t = df[<span style="color: #f1fa8c;">'t'</span>]
-_x = df[<span style="color: #f1fa8c;">'x'</span>]
-_xerror = df[<span style="color: #f1fa8c;">'xerror'</span>]
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">define our model functions</span>
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">_harmonic</span>(t, A, ang_freq):
-    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">the simple harmonic motion equation is: x = A*sin(ang_freq*t)</span>
-    <span style="color: #ff79c6;">return</span> A*np.sin(ang_freq*t)
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">_free_fall</span>(t, x_ini, v_ini, g=<span style="color: #bd93f9; font-weight: bold;">9.8</span>):
-    <span style="color: #ff79c6;">return</span> x_ini + v_ini*t - <span style="color: #bd93f9; font-weight: bold;">0.5</span>*g*t**<span style="color: #bd93f9; font-weight: bold;">2</span>
+<pre class="src src-ipython"><span class="org-comment-delimiter"># </span><span class="org-comment">define our datapoints</span>
+<span class="org-variable-name">_t</span> = df[<span class="org-string">'t'</span>]
+<span class="org-variable-name">_x</span> = df[<span class="org-string">'x'</span>]
+<span class="org-variable-name">_xerror</span> = df[<span class="org-string">'xerror'</span>]
+<span class="org-comment-delimiter"># </span><span class="org-comment">define our model functions</span>
+<span class="org-keyword">def</span> <span class="org-function-name">_harmonic</span>(t, A, ang_freq):
+    <span class="org-comment-delimiter"># </span><span class="org-comment">the simple harmonic motion equation is: x = A*sin(ang_freq*t)</span>
+    <span class="org-keyword">return</span> A*np.sin(ang_freq*t)
+<span class="org-keyword">def</span> <span class="org-function-name">_free_fall</span>(t, x_ini, v_ini, g=<span class="org-highlight-numbers-number">9.8</span>):
+    <span class="org-keyword">return</span> x_ini + v_ini*t - <span class="org-highlight-numbers-number">0.5</span>*g*t**<span class="org-highlight-numbers-number">2</span>
 
-functions = [_harmonic, _free_fall]
+<span class="org-variable-name">functions</span> = [_harmonic, _free_fall]
 
 compare_models(functions, _t, _x, _xerror=_xerror)
 </pre>
@@ -370,7 +370,7 @@ compare_models(functions, _t, _x, _xerror=_xerror)
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-09-29 Wed 15:37</p>
+<p class="date">Created: 2021-10-10 Sun 08:30</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

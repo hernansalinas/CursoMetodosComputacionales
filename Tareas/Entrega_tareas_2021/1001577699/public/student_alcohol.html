@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-09-29 Wed 15:37 -->
+<!-- 2021-10-10 Sun 08:30 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Student Alcohol Consumption</title>
@@ -244,14 +244,14 @@
 We first import the necessary libraries. Moreover, we add a <code>sed</code> command to properly format our dataframes in emacs:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">import</span> pandas <span style="color: #ff79c6;">as</span> pd
-<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
-<span style="color: #ff79c6;">from</span> tabulate <span style="color: #ff79c6;">import</span> tabulate
+<pre class="src src-ipython"><span class="org-keyword">import</span> pandas <span class="org-keyword">as</span> pd
+<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
+<span class="org-keyword">from</span> tabulate <span class="org-keyword">import</span> tabulate
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-sh" id="org670754e"><span style="color: #bd93f9;">echo</span> <span style="color: #f1fa8c;">"</span><span style="color: #8be9fd;">$</span><span style="color: #f1fa8c;">data</span><span style="color: #f1fa8c;">"</span> | sed s/<span style="color: #f1fa8c;">\^</span>:<span style="color: #f1fa8c;">\ \/</span>/g | <span style="color: #bd93f9;">grep</span> -v <span style="color: #f1fa8c;">"^$"</span> | sed s/<span style="color: #f1fa8c;">\'</span>//g
+<pre class="src src-sh" id="org670754e"><span class="org-type">echo</span> <span class="org-string">"</span><span class="org-string"><span class="org-constant">$</span></span><span class="org-string"><span class="org-variable-name">data</span></span><span class="org-string">"</span> | sed s/<span class="org-string">\^</span>:<span class="org-string">\ \/</span>/g | <span class="org-type">grep</span> -v <span class="org-string">"^$"</span> | sed s/<span class="org-string">\'</span>//g
 </pre>
 </div>
 </div>
@@ -261,8 +261,8 @@ We first import the necessary libraries. Moreover, we add a <code>sed</code> com
 <h2 id="orge379fc2"><span class="section-number-2">2</span> Interesting puzzle</h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
-<pre class="src src-ipython">array = np.array([<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>])
-array[np.array([<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>])]
+<pre class="src src-ipython"><span class="org-variable-name">array</span> = np.array([<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">3</span>])
+array[np.array([<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>])]
 </pre>
 </div>
 
@@ -271,21 +271,21 @@ array([2, 2, 2])
 </p>
 
 <div class="org-src-container">
-<pre class="src src-ipython">df = pd.DataFrame({<span style="color: #f1fa8c;">'X'</span>: [<span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">7</span>, <span style="color: #bd93f9; font-weight: bold;">2</span>, <span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">3</span>, <span style="color: #bd93f9; font-weight: bold;">4</span>, <span style="color: #bd93f9; font-weight: bold;">2</span>, <span style="color: #bd93f9; font-weight: bold;">5</span>, <span style="color: #bd93f9; font-weight: bold;">6</span>, <span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">3</span>, <span style="color: #bd93f9; font-weight: bold;">4</span>, <span style="color: #bd93f9; font-weight: bold;">0</span>]})
+<pre class="src src-ipython"><span class="org-variable-name">df</span> = pd.DataFrame({<span class="org-string">'X'</span>: [<span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">7</span>, <span class="org-highlight-numbers-number">2</span>, <span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">3</span>, <span class="org-highlight-numbers-number">4</span>, <span class="org-highlight-numbers-number">2</span>, <span class="org-highlight-numbers-number">5</span>, <span class="org-highlight-numbers-number">6</span>, <span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">3</span>, <span class="org-highlight-numbers-number">4</span>, <span class="org-highlight-numbers-number">0</span>]})
 
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">get the indices of all zeros, add padding to the first entry</span>
-zero_indices = [-<span style="color: #bd93f9; font-weight: bold;">1</span>] + <span style="color: #ffb86c;">list</span>( df.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> row : <span style="color: #ffb86c;">int</span>(row.name) <span style="color: #ff79c6;">if</span> row.get(<span style="color: #f1fa8c;">'X'</span>) == <span style="color: #bd93f9; font-weight: bold;">0</span> <span style="color: #ff79c6;">else</span> <span style="color: #8be9fd;">None</span>,
-                                     axis=<span style="color: #f1fa8c;">'columns'</span>).dropna() )
+<span class="org-comment-delimiter"># </span><span class="org-comment">get the indices of all zeros, add padding to the first entry</span>
+<span class="org-variable-name">zero_indices</span> = [-<span class="org-highlight-numbers-number">1</span>] + <span class="org-builtin">list</span>( df.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> row : <span class="org-builtin">int</span>(row.name) <span class="org-keyword">if</span> row.get(<span class="org-string">'X'</span>) == <span class="org-highlight-numbers-number">0</span> <span class="org-keyword">else</span> <span class="org-constant">None</span>,
+                                     axis=<span class="org-string">'columns'</span>).dropna() )
 
-zero_indices = np.array(zero_indices)
+<span class="org-variable-name">zero_indices</span> = np.array(zero_indices)
 
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">function to be applied</span>
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">distance to the previous zero or the start of the list</span>
-indices = df.index
-df[<span style="color: #f1fa8c;">'Y'</span>] = indices - zero_indices[np.searchsorted(zero_indices - <span style="color: #bd93f9; font-weight: bold;">1</span>, indices) - <span style="color: #bd93f9; font-weight: bold;">1</span>]
+<span class="org-comment-delimiter"># </span><span class="org-comment">function to be applied</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">distance to the previous zero or the start of the list</span>
+<span class="org-variable-name">indices</span> = df.index
+<span class="org-variable-name">df</span>[<span class="org-string">'Y'</span>] = indices - zero_indices[np.searchsorted(zero_indices - <span class="org-highlight-numbers-number">1</span>, indices) - <span class="org-highlight-numbers-number">1</span>]
 
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">print(zero_indices[np.searchsorted(zero_indices - 1, indices) - 1])</span>
-tabulate(df, headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
+<span class="org-comment-delimiter"># </span><span class="org-comment">print(zero_indices[np.searchsorted(zero_indices - 1, indices) - 1])</span>
+tabulate(df, headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
 </pre>
 </div>
 
@@ -396,10 +396,10 @@ tabulate(df, headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span
 Now we import the dataset from a spceific web address and assign it to a dataframe.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">path = <span style="color: #f1fa8c;">'https://raw.githubusercontent.com/guipsamora/pandas_exercises/master/04_Apply/Students_Alcohol_Consumption/student-mat.csv'</span>
-df = pd.read_csv(path)
+<pre class="src src-ipython"><span class="org-variable-name">path</span> = <span class="org-string">'https://raw.githubusercontent.com/guipsamora/pandas_exercises/master/04_Apply/Students_Alcohol_Consumption/student-mat.csv'</span>
+<span class="org-variable-name">df</span> = pd.read_csv(path)
 
-tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
+tabulate(df.head(), headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
 </pre>
 </div>
 
@@ -705,8 +705,8 @@ tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefm
 We wish to clean the dataframe by slicing it from the school until the guardian column.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">df = df.loc[:, <span style="color: #f1fa8c;">'school'</span>:<span style="color: #f1fa8c;">'guardian'</span>]
-tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
+<pre class="src src-ipython"><span class="org-variable-name">df</span> = df.loc[:, <span class="org-string">'school'</span>:<span class="org-string">'guardian'</span>]
+tabulate(df.head(), headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
 </pre>
 </div>
 
@@ -844,11 +844,11 @@ tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefm
 Capitalise strings from the Mjob and Fjob columns
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">capitaliser = <span style="color: #ff79c6;">lambda</span> x : <span style="color: #ffb86c;">str</span>(x).capitalize()
-df[<span style="color: #f1fa8c;">'Mjob'</span>] = df[<span style="color: #f1fa8c;">'Mjob'</span>].<span style="color: #ffb86c;">apply</span>(capitaliser)
-df[<span style="color: #f1fa8c;">'Fjob'</span>] = df[<span style="color: #f1fa8c;">'Fjob'</span>].<span style="color: #ffb86c;">apply</span>(capitaliser)
+<pre class="src src-ipython"><span class="org-variable-name">capitaliser</span> = <span class="org-keyword">lambda</span> x : <span class="org-builtin">str</span>(x).capitalize()
+<span class="org-variable-name">df</span>[<span class="org-string">'Mjob'</span>] = df[<span class="org-string">'Mjob'</span>].<span class="org-builtin">apply</span>(capitaliser)
+<span class="org-variable-name">df</span>[<span class="org-string">'Fjob'</span>] = df[<span class="org-string">'Fjob'</span>].<span class="org-builtin">apply</span>(capitaliser)
 
-tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
+tabulate(df.head(), headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
 </pre>
 </div>
 
@@ -986,9 +986,9 @@ tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefm
 Printing the last elements of the dataset
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">last_ones = df.iloc[[-<span style="color: #bd93f9; font-weight: bold;">1</span>]]
+<pre class="src src-ipython"><span class="org-variable-name">last_ones</span> = df.iloc[[-<span class="org-highlight-numbers-number">1</span>]]
 
-tabulate(last_ones, headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
+tabulate(last_ones, headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
 </pre>
 </div>
 
@@ -1062,12 +1062,12 @@ tabulate(last_ones, headers=<span style="color: #f1fa8c;">'keys'</span>, tablefm
 Adding new column conforming to some boolean value and multipying each numerical value by 10
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">one possiblity</span>
-df[<span style="color: #f1fa8c;">'legal_drinker'</span>] = df.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> row :
-                               <span style="color: #ffb86c;">bool</span>(row.get(<span style="color: #f1fa8c;">'age'</span>) &gt; <span style="color: #bd93f9; font-weight: bold;">17</span>),
-                               axis = <span style="color: #f1fa8c;">'columns'</span>)
+<pre class="src src-ipython"><span class="org-comment-delimiter"># </span><span class="org-comment">one possiblity</span>
+<span class="org-variable-name">df</span>[<span class="org-string">'legal_drinker'</span>] = df.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> row :
+                               <span class="org-builtin">bool</span>(row.get(<span class="org-string">'age'</span>) &gt; <span class="org-highlight-numbers-number">17</span>),
+                               axis = <span class="org-string">'columns'</span>)
 
-tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
+tabulate(df.head(), headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
 </pre>
 </div>
 
@@ -1210,9 +1210,9 @@ tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefm
 </table>
 
 <div class="org-src-container">
-<pre class="src src-ipython">df = df.applymap(<span style="color: #ff79c6;">lambda</span> instance :
-                 instance*<span style="color: #bd93f9; font-weight: bold;">10</span> <span style="color: #ff79c6;">if</span> <span style="color: #ffb86c;">type</span>(instance) == <span style="color: #ffb86c;">int</span> <span style="color: #ff79c6;">else</span> instance)
-tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
+<pre class="src src-ipython"><span class="org-variable-name">df</span> = df.applymap(<span class="org-keyword">lambda</span> instance :
+                 instance*<span class="org-highlight-numbers-number">10</span> <span class="org-keyword">if</span> <span class="org-builtin">type</span>(instance) == <span class="org-builtin">int</span> <span class="org-keyword">else</span> instance)
+tabulate(df.head(), headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
 </pre>
 </div>
 
@@ -1363,22 +1363,22 @@ tabulate(df.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefm
 We read some random dataframe from a JSON file
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">path = <span style="color: #f1fa8c;">'https://api.crossref.org/journals/1029-8479/works?rows=100'</span>
+<pre class="src src-ipython"><span class="org-variable-name">path</span> = <span class="org-string">'https://api.crossref.org/journals/1029-8479/works?rows=100'</span>
 
-df = pd.read_json(path).loc[<span style="color: #f1fa8c;">'items'</span>,<span style="color: #f1fa8c;">'message'</span>]
-df = pd.DataFrame(df)
+<span class="org-variable-name">df</span> = pd.read_json(path).loc[<span class="org-string">'items'</span>,<span class="org-string">'message'</span>]
+<span class="org-variable-name">df</span> = pd.DataFrame(df)
 
-df[<span style="color: #f1fa8c;">'author'</span>][<span style="color: #bd93f9; font-weight: bold;">2</span>]
+df[<span class="org-string">'author'</span>][<span class="org-highlight-numbers-number">2</span>]
 </pre>
 </div>
 
-<pre class="example" id="org6775df8">
-  [{given: Tatsuo,
-  family: Kobayashi,
+<pre class="example" id="orgf007a39">
+  [{given: Xavier,
+  family: Amador,
   sequence: first,
   affiliation: []},
-  {given: Koichi,
-  family: Yoshioka,
+  {given: Elena,
+  family: Caceres,
   sequence: additional,
   affiliation: []}]
 </pre>
@@ -1387,29 +1387,29 @@ df[<span style="color: #f1fa8c;">'author'</span>][<span style="color: #bd93f9; f
 In just one apply, we need to extract the Dois of Davide Gaiotto&rsquo;s articles:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">get_author</span>(row):
-    <span style="color: #ff79c6;">try</span>:
-        <span style="color: #ff79c6;">if</span> <span style="color: #ffb86c;">any</span>([ row.get(<span style="color: #f1fa8c;">'author'</span>)[i][<span style="color: #f1fa8c;">'given'</span>] == <span style="color: #f1fa8c;">'Tatsuo'</span> <span style="color: #ff79c6;">and</span>
-                  row.get(<span style="color: #f1fa8c;">'author'</span>)[i][<span style="color: #f1fa8c;">'family'</span>] == <span style="color: #f1fa8c;">'Kobayashi'</span>
-                  <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #ffb86c;">len</span>(row.get(<span style="color: #f1fa8c;">'author'</span>))) ]):
-             <span style="color: #ff79c6;">return</span> row.get(<span style="color: #f1fa8c;">'DOI'</span>)
-        <span style="color: #ff79c6;">else</span>:
-             <span style="color: #ff79c6;">return</span> <span style="color: #8be9fd;">None</span>
-    <span style="color: #ff79c6;">except</span> <span style="color: #bd93f9;">KeyError</span>:
-        <span style="color: #ff79c6;">return</span> <span style="color: #8be9fd;">None</span>
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">get_author</span>(row):
+    <span class="org-keyword">try</span>:
+        <span class="org-keyword">if</span> <span class="org-builtin">any</span>([ row.get(<span class="org-string">'author'</span>)[i][<span class="org-string">'given'</span>] == <span class="org-string">'Tatsuo'</span> <span class="org-keyword">and</span>
+                  row.get(<span class="org-string">'author'</span>)[i][<span class="org-string">'family'</span>] == <span class="org-string">'Kobayashi'</span>
+                  <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(row.get(<span class="org-string">'author'</span>))) ]):
+             <span class="org-keyword">return</span> row.get(<span class="org-string">'DOI'</span>)
+        <span class="org-keyword">else</span>:
+             <span class="org-keyword">return</span> <span class="org-constant">None</span>
+    <span class="org-keyword">except</span> <span class="org-type">KeyError</span>:
+        <span class="org-keyword">return</span> <span class="org-constant">None</span>
 
-<span style="color: #6272a4;">#</span><span style="color: #6272a4;">df = df.apply(lambda row :</span>
-<span style="color: #6272a4;">#         </span><span style="color: #6272a4;">row.get('DOI') if any(</span>
-<span style="color: #6272a4;">#             </span><span style="color: #6272a4;">[ row.get('author')[i]['given'] == 'Davide' and row.get('author')[i]['family'] == 'Gaiotto' for i in range( len(row.get('author')) ) ] )</span>
-<span style="color: #6272a4;">#         </span><span style="color: #6272a4;">else None, axis = 'columns').dropna()</span>
-df = df.<span style="color: #ffb86c;">apply</span>(get_author, axis=<span style="color: #f1fa8c;">'columns'</span>).dropna()
+<span class="org-comment-delimiter">#</span><span class="org-comment">df = df.apply(lambda row :</span>
+<span class="org-comment-delimiter">#         </span><span class="org-comment">row.get('DOI') if any(</span>
+<span class="org-comment-delimiter">#             </span><span class="org-comment">[ row.get('author')[i]['given'] == 'Davide' and row.get('author')[i]['family'] == 'Gaiotto' for i in range( len(row.get('author')) ) ] )</span>
+<span class="org-comment-delimiter">#         </span><span class="org-comment">else None, axis = 'columns').dropna()</span>
+<span class="org-variable-name">df</span> = df.<span class="org-builtin">apply</span>(get_author, axis=<span class="org-string">'columns'</span>).dropna()
 df
 </pre>
 </div>
 
-<pre class="example" id="orgf88dac1">
-  2     10.1088/1126-6708/2004/11/024
-  76    10.1088/1126-6708/2006/01/044
+<pre class="example" id="orga58eceb">
+  1     10.1088/1126-6708/2004/11/024
+  75    10.1088/1126-6708/2006/01/044
   dtype: object
 </pre>
 </div>
@@ -1417,7 +1417,7 @@ df
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-09-29 Wed 15:37</p>
+<p class="date">Created: 2021-10-10 Sun 08:30</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

@@ -15,7 +15,7 @@ from tabulate import tabulate
 
 #+RESULTS:
 :results:
-# Out[166]:
+# Out[2]:
 :end:
 #+NAME: test_org_post_clean
 #+BEGIN_SRC sh :results verbatim :var data="" :results output
@@ -229,7 +229,7 @@ where $A$ turns out to be the matrix $\begin{pmatrix} v_1 & v_2 & v_3
 \end{pmatrix}$, i.e., the matrix whose columns are the usual representation of
 each of the basis eigenvectors of $T$. Now, we are interested in the matrix
 exponential of $\mathcal{M}(T, (e_1, e_3, e_3))$, which satisfies:
-\[ \exp\left( \mathcal{M}(T, (e_1, e_3, e_3)) \right) = A \exp \underbrace{\left( \mathcal{M}(T, (v_1, v_2, v_3)) \right)}_{\text{diagonal matrix}} A^{-1} \].
+\[ \exp\left( \mathcal{M}(T, (e_1, e_3, e_3)) \right) = A \exp \underbrace{\left( \mathcal{M}(T, (v_1, v_2, v_3)) \right)}_{\text{diagonal matrix}} A^{-1}. \]
 
 We apply all of this knowledge to the suggested problem, hoping that the matrix here is diagonalisable.
 
@@ -250,7 +250,7 @@ def is_diagonalizable(T):
 
 #+RESULTS:
 :results:
-# Out[131]:
+# Out[29]:
 :end:
 #+begin_src ipython :session asession :results raw drawer :exports both
 # This matrix is diagonalisable
@@ -266,7 +266,7 @@ is_diagonalizable(A)[0], is_diagonalizable(B)[0]
 
 #+RESULTS:
 :results:
-# Out[143]:
+# Out[30]:
 : (True, False)
 :end:
 Thus we can proceed to compute the
@@ -297,7 +297,7 @@ tabulate(df.head(10), headers='keys', tablefmt='orgtbl', showindex='always')
 
 #+RESULTS:
 :results:
-# Out[160]:
+# Out[31]:
 |    |       x |       y |       z |
 |----+---------+---------+---------|
 |  0 | 1       | 1       | 2       |
@@ -348,8 +348,8 @@ plt.show()
 
 #+RESULTS:
 :results:
-# Out[186]:
-[[file:./obipy-resources/pDk1mF.svg]]
+# Out[33]:
+[[file:./obipy-resources/3kkGzj.svg]]
 :end:
 
 Compare these plots with the ones obtained from the expanded equations:
@@ -360,7 +360,7 @@ _x = 0.5*( init_state[0]*np.exp(2*t)*(1+np.exp(2*t)-2*t)
            + init_state[2]*np.exp(2*t)*(-1+np.exp(2*t)) )
 
 _y = 0.5*( init_state[0]*(-np.exp(2*t))*(-1+np.exp(2*t)-2*t)
-           + init_state[1]*(-2)*(t+1)*np.exp(2*t)
+           + init_state[1]*2*(t+1)*np.exp(2*t)
            + init_state[2]*(-np.exp(2*t))*(-1+np.exp(2*t)) )
 
 _z = 0.5*( init_state[0]*np.exp(2*t)*(-1+np.exp(2*t)+2*t)
@@ -374,6 +374,7 @@ gs = gridspec.GridSpec(nrows=2, ncols=2, height_ratios=[1,1])
 # Declare x graph
 ax0 = fig.add_subplot(gs[0,0])
 ax0.plot(t, _x, 'k-')
+ax0.plot(t, x, 'b--')
 ax0.set_xlabel('t')
 ax0.set_ylabel('x(t)')
 ax0.grid()
@@ -381,6 +382,7 @@ ax0.grid()
 # Declare y graph
 ax1 = fig.add_subplot(gs[0,1])
 ax1.plot(t, _y, 'k-')
+ax1.plot(t, y, 'b--')
 ax1.set_xlabel('t')
 ax1.set_ylabel('y(t)')
 ax1.grid()
@@ -388,6 +390,7 @@ ax1.grid()
 # Declare z graph
 ax2 = fig.add_subplot(gs[1:,0])
 ax2.plot(t, _z, 'k-')
+ax2.plot(t, z, 'b--')
 ax2.set_xlabel('t')
 ax2.set_ylabel('z(t)')
 ax2.grid()
@@ -398,8 +401,8 @@ plt.show()
 
 #+RESULTS:
 :results:
-# Out[194]:
-[[file:./obipy-resources/5caW57.svg]]
+# Out[37]:
+[[file:./obipy-resources/yGcLt1.svg]]
 :end:
 
 * Encryption

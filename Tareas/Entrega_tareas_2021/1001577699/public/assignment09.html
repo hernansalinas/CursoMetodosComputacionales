@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-09-29 Wed 15:37 -->
+<!-- 2021-10-10 Sun 08:30 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Assignment09</title>
@@ -252,6 +252,7 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#org1a4f8cf">1. Numerical evaluation of ODEs in python</a></li>
+<li><a href="#org52cb2ae">2. Coupled harmonic oscillators</a></li>
 </ul>
 </div>
 </div>
@@ -259,10 +260,11 @@
 Usual imports and configs
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
-<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
-<span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
-<span style="color: #ff79c6;">import</span> scipy.integrate <span style="color: #ff79c6;">as</span> integrate
+<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
+<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
+<span class="org-keyword">import</span> matplotlib.pyplot <span class="org-keyword">as</span> plt
+<span class="org-keyword">import</span> scipy.integrate <span class="org-keyword">as</span> integrate
+<span class="org-keyword">import</span> numpy.linalg <span class="org-keyword">as</span> la
 </pre>
 </div>
 
@@ -270,55 +272,318 @@ Usual imports and configs
 <h2 id="org1a4f8cf"><span class="section-number-2">1</span> Numerical evaluation of ODEs in python</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-The ODE we want to assess first is the following one: Let \(y\) be the horizontal position of some free-falling body.
+The ODE we want to assess first is the following one:
 \[ y''(t) + \frac{b}{m} y'(t) - g = 0 \]
-Of course, we are provided with some initital conditions on \(r(0)\).
+Of course, we are provided with some initital conditions on \(y(0)\).
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">height</span>(r, t, params):
-    <span style="color: #8995ba;">''' Height of the projectile depending on past</span>
-<span style="color: #8995ba;">    values of height and velocity '''</span>
-    pos, vel = r
-    m, b, g = params
-    drvtvs = [vel, g - (b/m)*vel]
-    <span style="color: #ff79c6;">return</span> drvtvs
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">derivatives</span>(generalized_coordinates, time, params):
+    <span class="org-doc">''' Returns a list of the form [y'(t), y''(t)], the derivative of the</span>
+<span class="org-doc">    generalized coordinate tuple [y(t), y'(t)]'''</span>
+    <span class="org-variable-name">position</span>, <span class="org-variable-name">velocity</span> = generalized_coordinates <span class="org-comment-delimiter"># </span><span class="org-comment">these implicitly depend on time</span>
+
+    <span class="org-variable-name">m</span>, <span class="org-variable-name">b</span>, <span class="org-variable-name">g</span> = params
+    <span class="org-variable-name">derivatives</span> = [velocity, g - (b/m)*velocity]
+    <span class="org-keyword">return</span> derivatives
 </pre>
 </div>
 <p>
 We define the initial conditions:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">initial conditions</span>
-y_0 = <span style="color: #bd93f9; font-weight: bold;">4000</span>
-v_0 = <span style="color: #bd93f9; font-weight: bold;">0</span>
-r_0 = np.array([y_0, v_0])
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">parameters</span>
-m = <span style="color: #bd93f9; font-weight: bold;">10</span>
-b = <span style="color: #bd93f9; font-weight: bold;">0.5</span>
-g = <span style="color: #bd93f9; font-weight: bold;">9.8</span>
-params = (m, b, g)
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">time domain</span>
-t = np.linspace(<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">100</span>,<span style="color: #bd93f9; font-weight: bold;">10000</span>)
+<pre class="src src-ipython"><span class="org-comment-delimiter"># </span><span class="org-comment">initial conditions</span>
+<span class="org-variable-name">init_height</span> = <span class="org-highlight-numbers-number">0</span>
+<span class="org-variable-name">init_velocity</span> = <span class="org-highlight-numbers-number">0</span>
+<span class="org-variable-name">init_coords</span> = [init_height, init_velocity]
+<span class="org-comment-delimiter"># </span><span class="org-comment">parameters</span>
+<span class="org-variable-name">m</span> = <span class="org-highlight-numbers-number">10</span>
+<span class="org-variable-name">b</span> = <span class="org-highlight-numbers-number">4</span>
+<span class="org-variable-name">g</span> = <span class="org-highlight-numbers-number">9.8</span>
+<span class="org-variable-name">params</span> = (m, b, g)
+<span class="org-comment-delimiter"># </span><span class="org-comment">time domain</span>
+<span class="org-variable-name">t</span> = np.linspace(<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">20</span>,<span class="org-highlight-numbers-number">10000</span>)
 </pre>
 </div>
 <div class="org-src-container">
-<pre class="src src-ipython">y = integrate.odeint(height, r_0, t, args=(params,))
+<pre class="src src-ipython"><span class="org-variable-name">generalized_coordinates</span> = integrate.odeint(derivatives, init_coords, t, args=(params,))
 
-fig = plt.figure(figsize=(<span style="color: #bd93f9; font-weight: bold;">10</span>,<span style="color: #bd93f9; font-weight: bold;">8</span>))
+<span class="org-variable-name">fig</span> = plt.figure(figsize=(<span class="org-highlight-numbers-number">10</span>,<span class="org-highlight-numbers-number">8</span>))
 
-plt.subplot(<span style="color: #bd93f9; font-weight: bold;">211</span>)
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">plot the postitions</span>
-plt.plot(t, y[:,<span style="color: #bd93f9; font-weight: bold;">0</span>], <span style="color: #f1fa8c;">'k-'</span>)
-plt.ylabel(<span style="color: #f1fa8c;">'Position'</span>)
+plt.subplot(<span class="org-highlight-numbers-number">211</span>)
+<span class="org-comment-delimiter"># </span><span class="org-comment">plot the postitions</span>
+plt.plot(t, <span class="org-highlight-numbers-number">4000</span> - generalized_coordinates[:,<span class="org-highlight-numbers-number">0</span>], <span class="org-string">'k-'</span>)
+plt.ylabel(<span class="org-string">'Position'</span>)
 plt.grid()
 
-plt.subplot(<span style="color: #bd93f9; font-weight: bold;">212</span>)
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">plot the velocities</span>
-plt.plot(t, y[:,<span style="color: #bd93f9; font-weight: bold;">1</span>], <span style="color: #f1fa8c;">'b-'</span>)
-plt.ylabel(<span style="color: #f1fa8c;">'Velocity'</span>)
+plt.subplot(<span class="org-highlight-numbers-number">212</span>)
+<span class="org-comment-delimiter"># </span><span class="org-comment">plot the velocities</span>
+plt.plot(t, generalized_coordinates[:,<span class="org-highlight-numbers-number">1</span>], <span class="org-string">'b-'</span>)
+plt.ylabel(<span class="org-string">'Velocity'</span>)
+plt.xlabel(<span class="org-string">'Time'</span>)
 plt.grid()
 
 plt.show()
+</pre>
+</div>
+
+<pre class="example">
+array(5)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org52cb2ae" class="outline-2">
+<h2 id="org52cb2ae"><span class="section-number-2">2</span> Coupled harmonic oscillators</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+The equations of motion for a system consisting of two masses attached by
+springs as shown in the figure are:
+</p>
+\begin{gather*}
+ m_1 {x_1}''(t) = -k_1 x_1 + k_2(x_2 - x_1), \\
+ m_2 {x_2}''(t) = -k_3 x_2 - k_2(x_2 - x_1).
+\end{gather*}
+<p>
+These equations are a set of linear ODEs that can be written in vector form,
+<i>assuming that the bobs have the same mass</i>, as follows:
+\[ m \begin{pmatrix} {x_1}''(t) \\ {x_2}''(t) \end{pmatrix} = -\begin{pmatrix} k_1 + k_2 & -k_2 \\ -k_2 & k_2 + k_3 \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \end{pmatrix}. \]
+This equation can be summarized as:
+\[ m \gamma''(t) = -T \gamma(t), \]
+where \(T\) is obsiously self-adjoint (since its matrix is symmetric), and thus by
+the spectral theorem diagonalisable. The spectral theorem also guarantees the
+existence of a basis of eigenvectors of \(T\) with respect to which its matrix is
+diagonal.
+</p>
+
+<p>
+Let \(\lambda_1, \lambda_2\) be the eigenvalues of \(T\) with
+corresponding eigenvectors \(v_1, v_2, v_3\); define \(A = \begin{pmatrix} v_1 &
+v_2 \end{pmatrix}\). Furthermore, let \(\eta := A \gamma\). Then we can use
+this matrix to write:
+</p>
+\begin{gather*}
+m A \gamma'' = -A T \gamma, \\
+m \eta'' = -A T (A^{-1} A) \gamma, \\
+m \eta'' = -(A T A^{-1}) \eta. \\
+\end{gather*}
+<p>
+Now, using the chaneg of basis formula, we get:
+</p>
+\begin{gather*}
+m \eta'' = -T_{\text{diag}} \eta, \\
+m \begin{pmatrix} {\eta_1}'' \\ {\eta_2}'' \end{pmatrix} = -\begin{pmatrix} \lambda_1 & 0 \\ 0 & \lambda_2 \end{pmatrix} \begin{pmatrix} \eta_1 \\ \eta_2 \end{pmatrix}.
+\end{gather*}
+<p>
+Hence it is easy to see that we can solve the simpler problem:
+</p>
+\begin{gather*}
+{\eta_1}''(t) + \frac{\lambda_1}{m}\eta_1 = 0, \\
+{\eta_2}''(t) + \frac{\lambda_2}{m}\eta_1 = 0
+\end{gather*}
+<p>
+As is customary in physics, we denote the quantities \(\lambda_i/m\) by
+\(\omega_i\), and refer to them as the natural frequencies of the oscillator.
+</p>
+
+<p>
+Once we come up with a solution for the new set of equations, we can obtain our
+curve \(\gamma(t) = A^{-1} \eta(t)\)
+</p>
+
+<p>
+To begin with, we create a wrapper function so that we can read further code
+more easily.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">ODEsolve</span>(state_derivative, init_state,
+             time_domain, static_params,
+             *args, **kwargs):
+   <span class="org-comment-delimiter"># </span><span class="org-comment">define an array of generalized coordinates, which describe the state of the system with respect to a time parameter</span>
+   <span class="org-variable-name">generalized_coordinates</span> = integrate.odeint(state_derivative, init_state,
+                                              time_domain, args=(static_params,),
+                                              *args, **kwargs)
+   <span class="org-keyword">return</span> generalized_coordinates
+
+ODEsolve(derivatives, init_coords, t, params)
+</pre>
+</div>
+
+<p>
+Now, I define the <code>TwoCoupledOscillators</code> class, amongst whose methods,
+<code>solve()</code> can be found. This particualr function solves the previously described
+eigensystem and thus integrates the corresponding ODEs, which are defined within
+the routine.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">class</span> <span class="org-type">TwoCoupledOscillators</span>:
+    <span class="org-keyword">def</span> <span class="org-function-name">__init__</span>(<span class="org-keyword">self</span>, elastic_const1, elastic_const2, elastic_const3, mass):
+        <span class="org-keyword">self</span>.k1 = elastic_const1
+        <span class="org-keyword">self</span>.k2 = elastic_const2
+        <span class="org-keyword">self</span>.k3 = elastic_const3
+        <span class="org-keyword">self</span>.mass = mass
+
+    <span class="org-keyword">def</span> <span class="org-function-name">diagonalize</span>(<span class="org-keyword">self</span>):
+        <span class="org-variable-name">T</span> = np.array([[<span class="org-keyword">self</span>.k1 + <span class="org-keyword">self</span>.k2, -<span class="org-keyword">self</span>.k2],
+                     [-<span class="org-keyword">self</span>.k2, <span class="org-keyword">self</span>.k2 + <span class="org-keyword">self</span>.k3]],
+                     dtype=<span class="org-builtin">float</span>)
+        <span class="org-variable-name">eigvals</span>, <span class="org-variable-name">eigvecs</span> = la.eig(T)
+        <span class="org-keyword">return</span> eigvals, eigvecs
+
+    <span class="org-keyword">def</span> <span class="org-function-name">solve</span>(<span class="org-keyword">self</span>, init_state, time_domain):
+        <span class="org-doc">'''</span>
+<span class="org-doc">        init_state = [init_pos1, init_pos2, init_vel1, init_vel2]</span>
+<span class="org-doc">        '''</span>
+        <span class="org-variable-name">eigvals</span>, <span class="org-variable-name">eigvecs</span> = <span class="org-keyword">self</span>.diagonalize()
+        <span class="org-keyword">def</span> <span class="org-function-name">derivative</span>(transformed_coordinates, time, params):
+            <span class="org-variable-name">nu1</span>, <span class="org-variable-name">nu2</span>, <span class="org-variable-name">derivative_nu1</span>, <span class="org-variable-name">derivative_nu2</span> = transformed_coordinates
+            <span class="org-comment-delimiter"># </span><span class="org-comment">derivative of generalized coordinates</span>
+            <span class="org-variable-name">derivatives</span> = [derivative_nu1, derivative_nu2, -eigvals[<span class="org-highlight-numbers-number">0</span>]*nu1, -eigvals[<span class="org-highlight-numbers-number">1</span>]*nu2]
+            <span class="org-keyword">return</span> derivatives
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">initial conditions as column vectors</span>
+        <span class="org-variable-name">init_positions</span> = init_state[:<span class="org-highlight-numbers-number">2</span>].reshape(<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span>)
+        <span class="org-variable-name">init_velocities</span> = init_state[<span class="org-highlight-numbers-number">2</span>:<span class="org-highlight-numbers-number">4</span>].reshape(<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">1</span>)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">transform the initial conditions with the eigenvectors matrix</span>
+        <span class="org-variable-name">transformed_init_positions</span> = eigvecs @ init_positions
+        <span class="org-variable-name">transformed_init_velocities</span> = eigvecs @ init_velocities
+        <span class="org-variable-name">transformed_init_state</span> = np.r_[transformed_init_positions, transformed_init_velocities].T[<span class="org-highlight-numbers-number">0</span>]
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">get the time evolution of both positions in the transformed coordinate system</span>
+        <span class="org-variable-name">transformed_coordinates</span> = ODEsolve(derivative, transformed_init_state, time_domain, <span class="org-constant">None</span>)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">we make a column matrix of the form [ nu1's nu2's ]</span>
+        <span class="org-variable-name">transformed_positions</span> = np.stack((transformed_coordinates[:,<span class="org-highlight-numbers-number">0</span>], transformed_coordinates[:,<span class="org-highlight-numbers-number">1</span>]), axis=<span class="org-highlight-numbers-number">1</span>)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">generalized coordinates will have the same shape as transformed coordinates</span>
+        <span class="org-variable-name">generalized_coordinates</span> = np.zeros(np.shape(transformed_positions))
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">turn the coordinates back into the usual framework</span>
+        <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(transformed_positions)):
+             <span class="org-variable-name">generalized_coordinates</span>[i] = la.inv(eigvecs) @ transformed_positions[i].T
+
+        <span class="org-keyword">return</span> generalized_coordinates
+</pre>
+</div>
+
+<p>
+As a proof-of-concept, we can visualise three interesting modes, namely, the
+symmetric, the antysimmetric, and the weakly coupled ones.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-variable-name">time</span> = np.linspace(<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">20</span>,<span class="org-highlight-numbers-number">1000</span>)
+<span class="org-variable-name">init_state</span> = np.array([1e-<span class="org-highlight-numbers-number">3</span>, -1e-<span class="org-highlight-numbers-number">3</span>, 1e-<span class="org-highlight-numbers-number">10</span>, 1e-<span class="org-highlight-numbers-number">10</span>])
+
+<span class="org-variable-name">system</span> = TwoCoupledOscillators(<span class="org-highlight-numbers-number">2.5</span>, <span class="org-highlight-numbers-number">2.5</span>, <span class="org-highlight-numbers-number">2.5</span>, <span class="org-highlight-numbers-number">0.01</span>)
+
+<span class="org-variable-name">x1</span> = system.solve(init_state, time)[:,<span class="org-highlight-numbers-number">0</span>]
+<span class="org-variable-name">x2</span> = system.solve(init_state, time)[:,<span class="org-highlight-numbers-number">1</span>]
+
+plt.plot(time, x1, <span class="org-string">'k-'</span>)
+plt.plot(time, x2, <span class="org-string">'b-'</span>)
+plt.title(<span class="org-string">'Antisymmetric Mode'</span>)
+plt.grid()
+plt.show()
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-variable-name">time</span> = np.linspace(<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">20</span>,<span class="org-highlight-numbers-number">1000</span>)
+<span class="org-variable-name">init_state</span> = np.array([1e-<span class="org-highlight-numbers-number">3</span>, 1e-<span class="org-highlight-numbers-number">3</span>, 1e-<span class="org-highlight-numbers-number">10</span>, 1e-<span class="org-highlight-numbers-number">10</span>])
+
+<span class="org-variable-name">system</span> = TwoCoupledOscillators(<span class="org-highlight-numbers-number">2.5</span>, <span class="org-highlight-numbers-number">2.5</span>, <span class="org-highlight-numbers-number">2.5</span>, <span class="org-highlight-numbers-number">0.01</span>)
+
+<span class="org-variable-name">x1</span> = system.solve(init_state, time)[:,<span class="org-highlight-numbers-number">0</span>]
+<span class="org-variable-name">x2</span> = system.solve(init_state, time)[:,<span class="org-highlight-numbers-number">1</span>]
+
+plt.plot(time, x1, <span class="org-string">'k-'</span>)
+plt.plot(time, x2, <span class="org-string">'b-'</span>)
+plt.title(<span class="org-string">'Symmetric Mode'</span>)
+plt.grid()
+plt.show()
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-variable-name">time</span> = np.linspace(<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">60</span>,<span class="org-highlight-numbers-number">1000</span>)
+<span class="org-variable-name">init_state</span> = np.array([-<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">0</span>])
+
+<span class="org-variable-name">system</span> = TwoCoupledOscillators(<span class="org-highlight-numbers-number">5</span>, <span class="org-highlight-numbers-number">0.5</span>, <span class="org-highlight-numbers-number">5</span>, <span class="org-highlight-numbers-number">0.01</span>)
+
+<span class="org-variable-name">x1</span> = system.solve(init_state, time)[:,<span class="org-highlight-numbers-number">0</span>]
+<span class="org-variable-name">x2</span> = system.solve(init_state, time)[:,<span class="org-highlight-numbers-number">1</span>]
+
+plt.plot(time, x1, <span class="org-string">'k-'</span>)
+plt.plot(time, x2, <span class="org-string">'b-'</span>)
+plt.title(<span class="org-string">'Weak coupling'</span>)
+plt.grid()
+plt.show()
+</pre>
+</div>
+
+<p>
+Since we can now predict the oscillator&rsquo;s motion provided some initial
+conditions, an interesting application is in order: A simple animation.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">from</span> matplotlib <span class="org-keyword">import</span> animation
+<span class="org-keyword">from</span> IPython <span class="org-keyword">import</span> display
+
+<span class="org-variable-name">N</span> = <span class="org-builtin">len</span>(time)
+<span class="org-variable-name">dt</span> = time[<span class="org-highlight-numbers-number">1</span>] - time[<span class="org-highlight-numbers-number">0</span>]
+
+fig, (ax1, ax2, ax3) = plt.subplots(<span class="org-highlight-numbers-number">3</span>,<span class="org-highlight-numbers-number">1</span>, figsize=(<span class="org-highlight-numbers-number">8</span>,<span class="org-highlight-numbers-number">12</span>))
+oscil1, = ax1.plot([], [], lw=<span class="org-highlight-numbers-number">10</span>, c=<span class="org-string">"blue"</span>, ls=<span class="org-string">'-'</span>, ms=<span class="org-highlight-numbers-number">20</span>, marker=<span class="org-string">'s'</span>, mfc=<span class="org-string">'gray'</span>, fillstyle=<span class="org-string">'none'</span>, mec=<span class="org-string">'black'</span>, markevery=<span class="org-highlight-numbers-number">2</span>)
+oscil2, = ax1.plot([], [], lw=<span class="org-highlight-numbers-number">10</span>, c=<span class="org-string">"red"</span>, ls=<span class="org-string">'-'</span>, ms=<span class="org-highlight-numbers-number">20</span>, marker=<span class="org-string">'s'</span>, mfc=<span class="org-string">'gray'</span>, fillstyle=<span class="org-string">'none'</span>, mec=<span class="org-string">'black'</span>, markevery=<span class="org-highlight-numbers-number">2</span>)
+line1, = ax2.plot([], [], lw=<span class="org-highlight-numbers-number">1</span>, color=<span class="org-string">'b'</span>)
+line2, = ax3.plot([], [], lw=<span class="org-highlight-numbers-number">1</span>, color=<span class="org-string">'r'</span>)
+<span class="org-variable-name">timer_template</span> = <span class="org-string">'\nTime = %.1fs'</span>
+<span class="org-variable-name">timer_text</span> = ax1.text(<span class="org-highlight-numbers-number">0.1</span>, <span class="org-highlight-numbers-number">0.9</span>, <span class="org-string">''</span>, transform=ax1.transAxes)
+
+ax1.set_xlim(-<span class="org-highlight-numbers-number">2</span>, <span class="org-highlight-numbers-number">8</span>)
+ax1.set_xlabel(<span class="org-string">'x'</span>)
+ax1.set_ylabel(<span class="org-string">'y'</span>)
+
+ax2.set_ylim(-<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">1</span>)
+ax2.set_xlim(<span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">60</span>)
+ax2.set_xlabel(<span class="org-string">'t'</span>)
+ax2.set_ylabel(<span class="org-string">'x1'</span>)
+
+ax3.set_xlim(<span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">60</span>)
+ax3.set_ylim(-<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">1</span>)
+ax3.set_xlabel(<span class="org-string">'t'</span>)
+ax3.set_ylabel(<span class="org-string">'x2'</span>)
+
+<span class="org-keyword">def</span> <span class="org-function-name">init_animation</span>():
+       <span class="org-doc">''' Initialise the animation as an empty object '''</span>
+       oscil1.set_data([], [])
+       oscil2.set_data([], [])
+       line1.set_data([], [])
+       line2.set_data([], [])
+       timer_text.set_text(<span class="org-string">''</span>)
+       <span class="org-keyword">return</span> oscil1, oscil2, line1, line2, timer_text
+<span class="org-keyword">def</span> <span class="org-function-name">animate</span>(i):
+       oscil1.set_data([x1[i],<span class="org-highlight-numbers-number">0</span>], [<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">0</span>])
+       oscil2.set_data([<span class="org-highlight-numbers-number">5</span>+x2[i],<span class="org-highlight-numbers-number">5</span>], [<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">0</span>])
+       line1.set_data(time[:i], x1[:i])
+       line2.set_data(time[:i], x2[:i])
+       timer_text.set_text(timer_template % (i*dt))
+       <span class="org-keyword">return</span> oscil1, oscil2, line1, line2, timer_text
+
+<span class="org-variable-name">ani</span> = animation.FuncAnimation(fig, animate, np.arange(<span class="org-highlight-numbers-number">1</span>, N),
+                              interval=<span class="org-highlight-numbers-number">50</span>, blit=<span class="org-constant">True</span>, init_func=init_animation,repeat=<span class="org-constant">False</span>)
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">saving to m4 using ffmpeg writer</span>
+<span class="org-variable-name">writervideo</span> = animation.FFMpegWriter(fps=<span class="org-highlight-numbers-number">60</span>)
+ani.save(<span class="org-string">'anim.mp4'</span>, writer=writervideo)
+plt.close()
+<span class="org-comment-delimiter"># </span><span class="org-comment">video = ani.to_html5_video()</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment"># embedding for the video</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">html = display.HTML(video)</span>
+
+<span class="org-comment-delimiter"># </span><span class="org-comment"># draw the animation</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">display.display(html)</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">plt.close()</span>
 </pre>
 </div>
 </div>
@@ -326,7 +591,7 @@ plt.show()
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-09-29 Wed 15:37</p>
+<p class="date">Created: 2021-10-10 Sun 08:30</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

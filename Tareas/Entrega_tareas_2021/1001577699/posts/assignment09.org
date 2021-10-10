@@ -7,65 +7,68 @@ Usual imports and configs
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.integrate as integrate
+import numpy.linalg as la
 #+end_src
 
 #+RESULTS:
 :results:
-# Out[20]:
+# Out[26]:
 :end:
 
 * Numerical evaluation of ODEs in python
-The ODE we want to assess first is the following one: Let $y$ be the horizontal position of some free-falling body.
+The ODE we want to assess first is the following one:
 \[ y''(t) + \frac{b}{m} y'(t) - g = 0 \]
-Of course, we are provided with some initital conditions on $r(0)$.
+Of course, we are provided with some initital conditions on $y(0)$.
 #+begin_src ipython :session asession :results raw drawer
-def height(r, t, params):
-    ''' Height of the projectile depending on past
-    values of height and velocity '''
-    pos, vel = r
+def derivatives(generalized_coordinates, time, params):
+    ''' Returns a list of the form [y'(t), y''(t)], the derivative of the
+    generalized coordinate tuple [y(t), y'(t)]'''
+    position, velocity = generalized_coordinates # these implicitly depend on time
+
     m, b, g = params
-    drvtvs = [vel, g - (b/m)*vel]
-    return drvtvs
+    derivatives = [velocity, g - (b/m)*velocity]
+    return derivatives
 #+end_src
 
 #+RESULTS:
 :results:
-# Out[24]:
+# Out[3]:
 :end:
 We define the initial conditions:
 #+begin_src ipython :session asession :results raw drawer
 # initial conditions
-y_0 = 4000
-v_0 = 0
-r_0 = np.array([y_0, v_0])
+init_height = 0
+init_velocity = 0
+init_coords = [init_height, init_velocity]
 # parameters
 m = 10
-b = 0.5
+b = 4
 g = 9.8
 params = (m, b, g)
 # time domain
-t = np.linspace(0,100,10000)
+t = np.linspace(0,20,10000)
 #+end_src
 
 #+RESULTS:
 :results:
-# Out[30]:
+# Out[5]:
 :end:
 #+begin_src ipython :session asession :results raw drawer
-y = integrate.odeint(height, r_0, t, args=(params,))
+generalized_coordinates = integrate.odeint(derivatives, init_coords, t, args=(params,))
 
 fig = plt.figure(figsize=(10,8))
 
 plt.subplot(211)
 # plot the postitions
-plt.plot(t, y[:,0], 'k-')
+plt.plot(t, 4000 - generalized_coordinates[:,0], 'k-')
 plt.ylabel('Position')
 plt.grid()
 
 plt.subplot(212)
 # plot the velocities
-plt.plot(t, y[:,1], 'b-')
+plt.plot(t, generalized_coordinates[:,1], 'b-')
 plt.ylabel('Velocity')
+plt.xlabel('Time')
 plt.grid()
 
 plt.show()
@@ -73,6 +76,279 @@ plt.show()
 
 #+RESULTS:
 :results:
-# Out[35]:
-[[file:./obipy-resources/W11Cv5.svg]]
+# Out[6]:
+[[file:./obipy-resources/nYuTnk.svg]]
+:end:
+
+#+RESULTS:
+:results:
+# Out[16]:
+: array(5)
+:end:
+
+* Coupled harmonic oscillators
+The equations of motion for a system consisting of two masses attached by
+springs as shown in the figure are:
+\begin{gather*}
+ m_1 {x_1}''(t) = -k_1 x_1 + k_2(x_2 - x_1), \\
+ m_2 {x_2}''(t) = -k_3 x_2 - k_2(x_2 - x_1).
+\end{gather*}
+These equations are a set of linear ODEs that can be written in vector form,
+/assuming that the bobs have the same mass/, as follows:
+\[ m \begin{pmatrix} {x_1}''(t) \\ {x_2}''(t) \end{pmatrix} = -\begin{pmatrix} k_1 + k_2 & -k_2 \\ -k_2 & k_2 + k_3 \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \end{pmatrix}. \]
+This equation can be summarized as:
+\[ m \gamma''(t) = -T \gamma(t), \]
+where $T$ is obsiously self-adjoint (since its matrix is symmetric), and thus by
+the spectral theorem diagonalisable. The spectral theorem also guarantees the
+existence of a basis of eigenvectors of $T$ with respect to which its matrix is
+diagonal.
+
+Let $\lambda_1, \lambda_2$ be the eigenvalues of $T$ with
+corresponding eigenvectors $v_1, v_2, v_3$; define $A = \begin{pmatrix} v_1 &
+v_2 \end{pmatrix}$. Furthermore, let $\eta := A \gamma$. Then we can use
+this matrix to write:
+\begin{gather*}
+m A \gamma'' = -A T \gamma, \\
+m \eta'' = -A T (A^{-1} A) \gamma, \\
+m \eta'' = -(A T A^{-1}) \eta. \\
+\end{gather*}
+Now, using the chaneg of basis formula, we get:
+\begin{gather*}
+m \eta'' = -T_{\text{diag}} \eta, \\
+m \begin{pmatrix} {\eta_1}'' \\ {\eta_2}'' \end{pmatrix} = -\begin{pmatrix} \lambda_1 & 0 \\ 0 & \lambda_2 \end{pmatrix} \begin{pmatrix} \eta_1 \\ \eta_2 \end{pmatrix}.
+\end{gather*}
+Hence it is easy to see that we can solve the simpler problem:
+\begin{gather*}
+{\eta_1}''(t) + \frac{\lambda_1}{m}\eta_1 = 0, \\
+{\eta_2}''(t) + \frac{\lambda_2}{m}\eta_1 = 0
+\end{gather*}
+As is customary in physics, we denote the quantities $\lambda_i/m$ by
+$\omega_i$, and refer to them as the natural frequencies of the oscillator.
+
+Once we come up with a solution for the new set of equations, we can obtain our
+curve $\gamma(t) = A^{-1} \eta(t)$
+
+To begin with, we create a wrapper function so that we can read further code
+more easily.
+#+begin_src ipython :session asession :results raw drawer
+def ODEsolve(state_derivative, init_state,
+             time_domain, static_params,
+             ,*args, **kwargs):
+   # define an array of generalized coordinates, which describe the state of the system with respect to a time parameter
+   generalized_coordinates = integrate.odeint(state_derivative, init_state,
+                                              time_domain, args=(static_params,),
+                                              *args, **kwargs)
+   return generalized_coordinates
+
+ODEsolve(derivatives, init_coords, t, params)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[7]:
+#+BEGIN_EXAMPLE
+  array([[0.00000000e+00, 0.00000000e+00],
+  [1.95943553e-05, 1.95941225e-02],
+  [7.83657965e-05, 3.91725741e-02],
+  ...,
+  [4.28672570e+02, 2.44917680e+01],
+  [4.28721559e+02, 2.44917746e+01],
+  [4.28770547e+02, 2.44917812e+01]])
+#+END_EXAMPLE
+:end:
+
+Now, I define the ~TwoCoupledOscillators~ class, amongst whose methods,
+~solve()~ can be found. This particualr function solves the previously described
+eigensystem and thus integrates the corresponding ODEs, which are defined within
+the routine.
+#+begin_src ipython :session asession :results raw drawer
+class TwoCoupledOscillators:
+    def __init__(self, elastic_const1, elastic_const2, elastic_const3, mass):
+        self.k1 = elastic_const1
+        self.k2 = elastic_const2
+        self.k3 = elastic_const3
+        self.mass = mass
+
+    def diagonalize(self):
+        T = np.array([[self.k1 + self.k2, -self.k2],
+                     [-self.k2, self.k2 + self.k3]],
+                     dtype=float)
+        eigvals, eigvecs = la.eig(T)
+        return eigvals, eigvecs
+
+    def solve(self, init_state, time_domain):
+        '''
+        init_state = [init_pos1, init_pos2, init_vel1, init_vel2]
+        '''
+        eigvals, eigvecs = self.diagonalize()
+        def derivative(transformed_coordinates, time, params):
+            nu1, nu2, derivative_nu1, derivative_nu2 = transformed_coordinates
+            # derivative of generalized coordinates
+            derivatives = [derivative_nu1, derivative_nu2, -eigvals[0]*nu1, -eigvals[1]*nu2]
+            return derivatives
+
+        # initial conditions as column vectors
+        init_positions = init_state[:2].reshape(2,1)
+        init_velocities = init_state[2:4].reshape(2,1)
+
+        # transform the initial conditions with the eigenvectors matrix
+        transformed_init_positions = eigvecs @ init_positions
+        transformed_init_velocities = eigvecs @ init_velocities
+        transformed_init_state = np.r_[transformed_init_positions, transformed_init_velocities].T[0]
+
+        # get the time evolution of both positions in the transformed coordinate system
+        transformed_coordinates = ODEsolve(derivative, transformed_init_state, time_domain, None)
+
+        # we make a column matrix of the form [ nu1's nu2's ]
+        transformed_positions = np.stack((transformed_coordinates[:,0], transformed_coordinates[:,1]), axis=1)
+
+        # generalized coordinates will have the same shape as transformed coordinates
+        generalized_coordinates = np.zeros(np.shape(transformed_positions))
+
+        # turn the coordinates back into the usual framework
+        for i in range(len(transformed_positions)):
+             generalized_coordinates[i] = la.inv(eigvecs) @ transformed_positions[i].T
+
+        return generalized_coordinates
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[8]:
+:end:
+
+As a proof-of-concept, we can visualise three interesting modes, namely, the
+symmetric, the antysimmetric, and the weakly coupled ones.
+#+begin_src ipython :session asession :results raw drawer
+time = np.linspace(0,20,1000)
+init_state = np.array([1e-3, -1e-3, 1e-10, 1e-10])
+
+system = TwoCoupledOscillators(2.5, 2.5, 2.5, 0.01)
+
+x1 = system.solve(init_state, time)[:,0]
+x2 = system.solve(init_state, time)[:,1]
+
+plt.plot(time, x1, 'k-')
+plt.plot(time, x2, 'b-')
+plt.title('Antisymmetric Mode')
+plt.grid()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[151]:
+[[file:./obipy-resources/Kau91X.svg]]
+:end:
+
+#+begin_src ipython :session asession :results raw drawer
+time = np.linspace(0,20,1000)
+init_state = np.array([1e-3, 1e-3, 1e-10, 1e-10])
+
+system = TwoCoupledOscillators(2.5, 2.5, 2.5, 0.01)
+
+x1 = system.solve(init_state, time)[:,0]
+x2 = system.solve(init_state, time)[:,1]
+
+plt.plot(time, x1, 'k-')
+plt.plot(time, x2, 'b-')
+plt.title('Symmetric Mode')
+plt.grid()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[152]:
+[[file:./obipy-resources/Gr2OLr.svg]]
+:end:
+
+#+begin_src ipython :session asession :results raw drawer
+time = np.linspace(0,60,1000)
+init_state = np.array([-1, 0, 0, 0])
+
+system = TwoCoupledOscillators(5, 0.5, 5, 0.01)
+
+x1 = system.solve(init_state, time)[:,0]
+x2 = system.solve(init_state, time)[:,1]
+
+plt.plot(time, x1, 'k-')
+plt.plot(time, x2, 'b-')
+plt.title('Weak coupling')
+plt.grid()
+plt.show()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[32]:
+[[file:./obipy-resources/y0ZqQZ.svg]]
+:end:
+
+Since we can now predict the oscillator's motion provided some initial
+conditions, an interesting application is in order: A simple animation.
+#+begin_src ipython :session asession :results raw drawer
+from matplotlib import animation
+from IPython import display
+
+N = len(time)
+dt = time[1] - time[0]
+
+fig, (ax1, ax2, ax3) = plt.subplots(3,1, figsize=(8,12))
+oscil1, = ax1.plot([], [], lw=10, c="blue", ls='-', ms=20, marker='s', mfc='gray', fillstyle='none', mec='black', markevery=2)
+oscil2, = ax1.plot([], [], lw=10, c="red", ls='-', ms=20, marker='s', mfc='gray', fillstyle='none', mec='black', markevery=2)
+line1, = ax2.plot([], [], lw=1, color='b')
+line2, = ax3.plot([], [], lw=1, color='r')
+timer_template = '\nTime = %.1fs'
+timer_text = ax1.text(0.1, 0.9, '', transform=ax1.transAxes)
+
+ax1.set_xlim(-2, 8)
+ax1.set_xlabel('x')
+ax1.set_ylabel('y')
+
+ax2.set_ylim(-1, 1, 1)
+ax2.set_xlim(0, 60)
+ax2.set_xlabel('t')
+ax2.set_ylabel('x1')
+
+ax3.set_xlim(0, 60)
+ax3.set_ylim(-1, 1, 1)
+ax3.set_xlabel('t')
+ax3.set_ylabel('x2')
+
+def init_animation():
+       ''' Initialise the animation as an empty object '''
+       oscil1.set_data([], [])
+       oscil2.set_data([], [])
+       line1.set_data([], [])
+       line2.set_data([], [])
+       timer_text.set_text('')
+       return oscil1, oscil2, line1, line2, timer_text
+def animate(i):
+       oscil1.set_data([x1[i],0], [0,0])
+       oscil2.set_data([5+x2[i],5], [0,0])
+       line1.set_data(time[:i], x1[:i])
+       line2.set_data(time[:i], x2[:i])
+       timer_text.set_text(timer_template % (i*dt))
+       return oscil1, oscil2, line1, line2, timer_text
+
+ani = animation.FuncAnimation(fig, animate, np.arange(1, N),
+                              interval=50, blit=True, init_func=init_animation,repeat=False)
+
+# saving to m4 using ffmpeg writer
+writervideo = animation.FFMpegWriter(fps=60)
+ani.save('anim.mp4', writer=writervideo)
+plt.close()
+# video = ani.to_html5_video()
+# # embedding for the video
+# html = display.HTML(video)
+
+# # draw the animation
+# display.display(html)
+# plt.close()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[58]:
 :end:
