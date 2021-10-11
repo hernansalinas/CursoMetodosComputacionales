@@ -1,0 +1,282 @@
+#+TITLE: Assignment02
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+#+HTML_HEAD: <style>pre.src{background:#343131;color:white;} </style>
+
+#+NAME: test_org_post_clean
+#+BEGIN_SRC sh :results verbatim :var data="" :results output
+echo "$data" | sed s/\^:\ \//g | grep -v "^$" | sed s/\'//g
+#+END_SRC
+
+#+RESULTS: test_org_post_clean
+
+We first import the necessary packages. Since we will plot some statistical data, the ~seaborn~ module will ease some steps.
+#+begin_src ipython :session mysession :exports both :results raw drawer
+%config InlineBackend.figure_format = 'svg'
+
+import pandas as pd
+from tabulate import tabulate
+import matplotlib.pyplot as plt
+import seaborn as sns
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[238]:
+:end:
+
+* First activity
+Firstly, we import the dataset and read it with Pandas.
+#+RESULTS:
+:results:
+# Out[1]:
+:end:
+#+begin_src ipython :session mysession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+PATH_1 = '~/Downloads/PS4_1.csv'
+dataFrame_1 = pd.read_csv(PATH_1)
+tabulate(dataFrame_1.head(), headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[281]:
+|    | Date       | Unnamed: 1   |   Berri1 |   Maisonneuve_1 |   Maisonneuve_2 |   Brebeuf |
+|----+------------+--------------+----------+-----------------+-----------------+-----------|
+|  0 | 01/01/2009 | 0:00         |       29 |              20 |              35 |       nan |
+|  1 | 02/01/2009 | 0:00         |       19 |               3 |              22 |       nan |
+|  2 | 03/01/2009 | 0:00         |       24 |              12 |              22 |       nan |
+|  3 | 04/01/2009 | 0:00         |       24 |               8 |              15 |       nan |
+|  4 | 05/01/2009 | 0:00         |      120 |             111 |             141 |       nan |
+:end:
+
+Notice that both 'Date' and 'Unnamed: 1' series can be disregarded, for there is no use case for them in what follows. To discard such values, we can use the method ~.drop()~, on the data frame; we only need specify the keys of the columns that we wish to delete from the object by writing, in this particular case, the argument ~columns=['Unnamed: 1', 'Date']~.
+#+begin_src ipython :session mysession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+dataFrame_1 = dataFrame_1.drop(columns=['Unnamed: 1', 'Date'])
+df = dataFrame_1.fillna(value='None')
+tabulate(df.head(), headers='keys', tablefmt='orgtbl', showindex='always')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[282]:
+|    |   Berri1 |   Maisonneuve_1 |   Maisonneuve_2 | Brebeuf   |
+|----+----------+-----------------+-----------------+-----------|
+|  0 |       29 |              20 |              35 | None      |
+|  1 |       19 |               3 |              22 | None      |
+|  2 |       24 |              12 |              22 | None      |
+|  3 |       24 |               8 |              15 | None      |
+|  4 |      120 |             111 |             141 | None      |
+:end:
+
+Now we wish to print out, on a dictionary, the following items:
+- Number of columns (otherwise known as 'series')
+- Name of each column
+- Nonempty registers per column
+- Memory usage for each column
+- Basic statistics for each column; mean, standard deviation, and maximum
+
+The above is actually fairly straightforward on the account that Pandas provides us with tools for extracting such information. Indeed, the ~.describe()~ method yields a new data frame with, unsurprisingly, a set of values tying in with the descriptive statistics of the values on the original data frame; we thus need only extract some information from the ~info~ data frame, which we define to be the aforementioned set of statistical values. The number of columns is easily derived from the attribute ~.columns~, whereas the memory usage can be queried by using the ~.memory_usage()~ method, which returns an object that we can then turn into a dictionary whose keys are the names of the columns in the first data set, and whose values are the memory spaces used by each series.
+
+The remaining steps amount to basic manipulations of lists and dictionaries; there is nevertheless something that ought to be stated with clarity, and that is the usage of the ~.loc[]~ utility on the ~info~ data frame; its syntax is typically ~.loc[num_row, key]~, in this case we do not use ~num_row~, but rather an /index name/, which is the value we are looking for in the dataset: mean, std, etc.
+#+begin_src ipython :session mysession :exports both :results raw drawer
+def build_dict(df) :
+    # Variables and other dataframes to be recurrently used
+    info = df.describe()
+    columns = df.columns
+    memory = dict(df.memory_usage())
+
+    # Assign values to be printed out on the dictionary
+    num_columns = len(columns)
+    names = list(df.keys())
+    nonempty_registers = {name: info.loc['count', name]
+                          for name in columns}
+    memory_usage = {name: memory[name]
+                    for name in columns}
+    stats = {name: {'mean': info.loc['mean', name], 'std': info.loc['std', name], 'max': info.loc['max', name]}
+             for name in columns}
+
+    # we finally define a dictionary with the corresponding values
+    dictionary = {'cols': num_columns, 'keys': names, 'nonempty_registers': nonempty_registers, 'memory': memory_usage, 'stats': stats}
+    return dictionary
+
+build_dict(dataFrame_1)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[249]:
+#+BEGIN_EXAMPLE
+  {'cols': 4,
+  'keys': ['Berri1', 'Maisonneuve_1', 'Maisonneuve_2', 'Brebeuf'],
+  'nonempty_registers': {'Berri1': 365.0,
+  'Maisonneuve_1': 365.0,
+  'Maisonneuve_2': 365.0,
+  'Brebeuf': 178.0},
+  'memory': {'Berri1': 2920,
+  'Maisonneuve_1': 2920,
+  'Maisonneuve_2': 2920,
+  'Brebeuf': 2920},
+  'stats': {'Berri1': {'mean': 2032.2,
+  'std': 1878.8797986572208,
+  'max': 6626.0},
+  'Maisonneuve_1': {'mean': 1060.2520547945205,
+  'std': 1079.5330858971347,
+  'max': 4242.0},
+  'Maisonneuve_2': {'mean': 2093.1698630136984,
+  'std': 1854.3685230878293,
+  'max': 6587.0},
+  'Brebeuf': {'mean': 2576.3595505617977,
+  'std': 2484.0047433344985,
+  'max': 7575.0}}}
+#+END_EXAMPLE
+:end:
+
+* Second activity
+We obviously need to read the ~.csv~ file with pandas.
+#+begin_src ipython :session mysession :exports both :results raw drawer
+# read the .csv file
+PATH_2 = '~/Downloads/Crimes_-_2019.csv'
+dataFrame_2 = pd.read_csv(PATH_2)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[131]:
+:end:
+
+We can now clean the data set and proceed to plot it. The cleaning process defined in the ~clean_1~ routine is, essentially, not different from what we have done before: We disregard some series on our data set. In this case, however, what we need to ignore is but the majority of the series on the data frame; as such, the approach we take is to '/select/ rather than discard. And to select specific series, of course, there is a utility built-in to Pandas, namely the command ~.loc[:, df.columns.intersection(['Date','Primary Type'])]~; this rather lengthy command can be translated into the following: localise all elements whose key is either ~'Date'~ or ~'Primary Type'~, the row number does not matter. Finally, we select the ~'Date'~ seies, and format its contents with the command ~pd.to_datetime()~, this command takes the series itself and some date format as an argument, and simply performs the conversion.
+
+The ~graph~ routine requires some more work: we need to find a way of summing together every instance of the same crime: Namely, we use the ~.groupby()~ method on the original dataframe to perform a count over the ~'Date'~ series, that is, to find out how many times can we count a date which corresponds to a crime of some specific sort. There can be, for instance 10 dates associated with the crime 'Theft', and so the resulting data frame will have a row of the form | 'Theft' | 10 |. This is precisely what it means for us to apply ~.count()~ over the series ~'Date'~, grouping by ~'Primary Type'~; we can then sort this data frame in descending order.
+
+To finnish it all, we rename the columns and proceed to use seaborn to plot the information, as seen.
+#+begin_src ipython :session mysession :exports both :results raw drawer
+def clean_2(df) :
+    # eliminate the columns in which we are not interested
+    df = df.loc[:, df.columns.intersection(['Date', 'Primary Type'])]
+    # properly format the dates
+    df['Date'] = pd.to_datetime(df['Date'], format='%m/%d/%Y %I:%M:%S %p')
+
+    return df
+
+def graph(df) :
+    # group total crimes of the same sort
+    crimes_info = pd.DataFrame(df.groupby(by='Primary Type', as_index=False)['Date'].count().sort_values(by='Date',ascending=False))
+    # rename keys
+    crimes_info = crimes_info.rename(columns={'Primary Type':'Crime', 'Date':'Count'})
+
+    plt.figure()
+    chart = sns.barplot(x ='Count', y='Crime', data=crimes_info, palette='Set1')
+    chart.set_yticklabels(chart.get_yticklabels(), fontsize=8)
+    plt.show()
+
+crimes = clean_2(dataFrame_2)
+graph(crimes)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[261]:
+[[file:./obipy-resources/4433Hp.svg]]
+:end:
+
+* Third activity
+DEADLINE: <2021-04-12 Mon>
+
+Here we wish to analise some data about the Covid-19 pandemic in Latin America.
+#+begin_src ipython :session mysession :exports both :results raw drawer
+PATH_3 = '~/Downloads/country_vaccinations.csv'
+dataFrame_3 = pd.read_csv(PATH_3)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[117]:
+:end:
+
+To begin having a sense for what the data frame is, we can filter its contents in the sought of finding information about Colombia, which we can then import to a ~.csv~ file.
+#+begin_src ipython :session mysession :exports both :results raw drawer
+def filter_colombia(df) :
+    colombia_mask = df['country'] == 'Colombia'
+    df = df[colombia_mask]
+    df.to_csv('covid_colombia.csv', index=False)
+
+filter_colombia(dataFrame_3)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[120]:
+:end:
+
+We can define a list of latin-american countries, then we can search for instances of each country on the data frame.
+#+begin_src ipython :session mysession :exports both :results raw drawer
+Latam = ['Argentina', 'Bolivia', 'Brazil', 'Chile', 'Colombia', 'Costa rica', 'Cuba', 'Dominican Republic', 'Ecuador', 'El Salvador', 'Guatemala', 'Haiti', 'Honduras', 'Mexico', 'Nicaragua', 'Panama', 'Paraguay', 'Peru', 'Uruguay', 'Venezuela']
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[114]:
+:end:
+
+Now we define a routine to make the comparison. To begin with, we filter information about counties appearing on the above list with the ~filter_latam~ routine. We can define a mask, here called ~latam_mask~ to yield a sub-set of the data set whose information corresponds to that of the latin american counties; the syntax is as follows: ~df['country'].isin(Latam)~, which can be translated to the very simple condition 'return only the rows whose key value ~country~ is the name of some latin american country.' All that is left is te effectively apply the mask on the data frame, select only the rows of our interest, and give it some format.
+
+We perform the comparison in two different ways: First, by vaccinations per day; and second, by total amount of vaccinated people. As for the latter, we can explicitly define a new data frame with the ~.groupby()~ method. This time we are interested in grouping by country over the series ~'total_vaccinations'~, from which we only need the maximum value (that is why we apply the ~.max()~ method); we sort the countries in descending order. With regards to to the first comparison task, it is far more easy to carry out, since the original data frame already provides us with the information we need, we just plot the value of ~'total_vaccinations'~ for each country in any given date.
+#+begin_src ipython :session mysession :exports both :results raw drawer
+def filter_latam(df) :
+    latam_mask = df['country'].isin(Latam)
+
+    df = df[latam_mask]
+    df = df.loc[:, df.columns.intersection(['country', 'date', 'total_vaccinations'])]
+    df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
+
+    return df
+
+def comparative(df) :
+    vaccinations = pd.DataFrame(df.groupby(by='country', as_index=False)['total_vaccinations'].max().sort_values(by='total_vaccinations', ascending=False))
+
+    fig, ax = plt.subplots(2, figsize=(15,12))
+    # Vaccinations per day
+    sns.scatterplot(ax=ax[0], x='date', y='total_vaccinations', hue='country', data=df, palette='Set1')
+    ax[0].set_title('Vaccinations per day')
+    ax[0].grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.3)
+
+    # Total vaccinations
+    g = sns.barplot(ax=ax[1], x ='country', y='total_vaccinations', data=vaccinations, palette='Set1')
+    g.set_xticklabels(g.get_xticklabels(),rotation=30)
+    ax[1].set_title('Total vaccinations')
+    ax[1].grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.3)
+    plt.show()
+
+# Driver code
+covid_in_latam = filter_latam(dataFrame_3)
+comparative(covid_in_latam)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[265]:
+[[file:./obipy-resources/cbFQW4.svg]]
+:end:
+
+Finally, we can print a list of latin american countries which have vaccinated more than 2 million people:
+#+begin_src ipython :session mysession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+def eval_interval(df) :
+    df = pd.DataFrame(df.groupby(by='country', as_index=False)['total_vaccinations'].max().sort_values(by='total_vaccinations', ascending=False))
+
+    interval_mask = df['total_vaccinations'].apply(lambda x : 2.0E6 <= x)
+    countries = pd.DataFrame(df[interval_mask])
+    return tabulate(countries, headers='keys', tablefmt='orgtbl', showindex='always')
+
+eval_interval(covid_in_latam)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[295]:
+|    | country   |   total_vaccinations |
+|----+-----------+----------------------|
+|  2 | Brazil    |          2.09568e+07 |
+|  3 | Chile     |          1.07849e+07 |
+| 10 | Mexico    |          8.98719e+06 |
+|  0 | Argentina |          4.1789e+06  |
+|  4 | Colombia  |          2.33614e+06 |
+:end:
