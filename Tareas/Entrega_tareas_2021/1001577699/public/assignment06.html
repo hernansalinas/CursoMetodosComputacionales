@@ -1,0 +1,1054 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-10-10 Sun 08:28 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Assignment08</title>
+<meta name="author" content="Juan David Salcedo Hernández" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/readtheorg.css"/>
+<script type="text/javascript" src="src/lib/js/jquery.min.js"></script>
+<script type="text/javascript" src="src/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="src/readtheorg_theme/js/readtheorg.js"></script>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Assignment08</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orge9370b5">1. Differentiation: Lucy&rsquo;s quartic kernel</a></li>
+<li><a href="#org18c9141">2. Integration</a>
+<ul>
+<li><a href="#org41bca72">2.1. Trapezoid method</a></li>
+<li><a href="#org1e8b43a">2.2. Simpson&rsquo;s rule</a></li>
+<li><a href="#org81fc49c">2.3. Gaussian quadrature</a></li>
+<li><a href="#org459c851">2.4. Symbolic-numerical implementation</a></li>
+<li><a href="#org1e47864">2.5. Proof of concept</a></li>
+<li><a href="#orgfd0e886">2.6. Application: Escape velocity</a></li>
+<li><a href="#org0397a32">2.7. Error analysis</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+Usual imports and graphics configurations:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
+
+<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
+<span class="org-keyword">import</span> scipy.integrate <span class="org-keyword">as</span> integrate
+<span class="org-keyword">from</span> scipy.special <span class="org-keyword">import</span> roots_legendre
+<span class="org-keyword">from</span> scipy.misc <span class="org-keyword">import</span> derivative
+<span class="org-keyword">import</span> sympy <span class="org-keyword">as</span> sp
+<span class="org-keyword">import</span> matplotlib.pyplot <span class="org-keyword">as</span> plt
+</pre>
+</div>
+
+<div id="outline-container-orge9370b5" class="outline-2">
+<h2 id="orge9370b5"><span class="section-number-2">1</span> Differentiation: Lucy&rsquo;s quartic kernel</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+A certain model in smoothed particle hydrodynamics (SPH) is given by a function
+\(W : \mathbb{R}^2 \to \mathbb{R}\), which is in turn described by
+\[ W(r,h) = \begin{cases}
+\alpha_D (1 + 3q)(1 - q)^3, & 0 \le q < h\\
+                         0, & \text{otherwise}.
+\end{cases} \]
+Here we have:
+\[ q = \frac{\rVert r - r' \rVert}{h}, \]
+and
+\[ \alpha_D = \frac{5}{\pi h^2}. \]
+</p>
+
+<p>
+We can for instance consider the restriction function \(\left. W \right|_{h=1}\),
+with \(r' = 0\); considering that we want to study this funciton&rsquo;s derivative both
+numerically and symbolically, we can make use of the following numerical
+approach to derivatives:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">diff</span>(func, x0, **kwargs) :
+    <span class="org-doc">''' numerical derivative, computes the finite differences '''</span>
+    <span class="org-keyword">try</span> :
+        <span class="org-comment-delimiter"># </span><span class="org-comment">force IndexError in case of evaluation at a single point</span>
+        <span class="org-variable-name">n_</span> = np.asarray(x0).shape[<span class="org-highlight-numbers-number">0</span>]
+        <span class="org-variable-name">derivate</span> = np.vectorize(derivative)
+    <span class="org-keyword">except</span> <span class="org-type">IndexError</span> :
+        <span class="org-variable-name">derivate</span> = derivative
+
+    <span class="org-keyword">return</span> derivate(func, x0, **kwargs)
+</pre>
+</div>
+
+<p>
+Here we are just vectorising the <code>derivative</code> operation that is available on the
+<code>scipy</code> module. In fact, we use the <code>derivative</code> operation itself if we are
+trying to evaluate a single point, and use the vectorised operation otherwise.
+</p>
+
+<p>
+Now we can proceed by making the desired graph. A few remarks:
+</p>
+<ul class="org-ul">
+<li>The symbolic derivative, which I have denoted <code>Sw()</code> is computed only for numbers satisfying the &rsquo;&rsquo;interesting&rsquo;&rsquo; condition. Later on, in the <code>graph()</code> routine, I define a wrapper function <code>sw()</code> that evaluates <code>Sw()</code> at some point, provided it satisfies the stipulated conditions.</li>
+<li>The <code>w()</code> function has a corresponding wrapper <code>_w()</code> in the <code>graph()</code> routine, which returns another function depending solely on the numerical parameter <code>r</code>; we can differentiate this function to obtain a new function <code>Dw()</code>.</li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">symbolic_kernel</span>(h, r_src) :
+    <span class="org-doc">''' symbolic derivative of the function in the interesting case '''</span>
+    <span class="org-variable-name">r</span> = sp.Symbol(<span class="org-string">'r'</span>)
+
+    <span class="org-variable-name">q</span> = sp.sqrt((r - r_src)**<span class="org-highlight-numbers-number">2</span>)/h
+    <span class="org-variable-name">alpha</span> = <span class="org-highlight-numbers-number">5</span>/(sp.pi*h**<span class="org-highlight-numbers-number">2</span>)
+
+    <span class="org-variable-name">kernel</span> = alpha*(<span class="org-highlight-numbers-number">1</span> + <span class="org-highlight-numbers-number">3</span>*q)*(<span class="org-highlight-numbers-number">1</span> - q)**<span class="org-highlight-numbers-number">3</span>
+    <span class="org-variable-name">kernel_derivative</span> = sp.diff(kernel, r)
+
+    <span class="org-variable-name">kernel_derivative</span> = sp.lambdify(r, kernel_derivative, <span class="org-string">'numpy'</span>)
+    <span class="org-keyword">return</span> kernel_derivative
+
+<span class="org-keyword">def</span> <span class="org-function-name">kernel</span>(r, h, r_src) :
+    <span class="org-doc">''' two-dimensional implementation of Lucy's quintic kernel '''</span>
+    <span class="org-variable-name">q</span> = np.<span class="org-builtin">abs</span>(r - r_src)/h
+    <span class="org-variable-name">alpha</span> = <span class="org-highlight-numbers-number">5</span>/(np.pi*h**<span class="org-highlight-numbers-number">2</span>)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">define the cases for input elements</span>
+    <span class="org-variable-name">conditions</span> = [ np.logical_and(<span class="org-highlight-numbers-number">0</span> &lt;= q, q &lt; <span class="org-highlight-numbers-number">1</span>), np.logical_or(<span class="org-highlight-numbers-number">0</span> &gt; q, q &gt;= <span class="org-highlight-numbers-number">1</span>) ]
+    <span class="org-comment-delimiter"># </span><span class="org-comment">define the output depending on the case</span>
+    <span class="org-variable-name">output</span> = [ alpha*(<span class="org-highlight-numbers-number">1</span> + <span class="org-highlight-numbers-number">3</span>*q)*(<span class="org-highlight-numbers-number">1</span> - q)**<span class="org-highlight-numbers-number">3</span>, <span class="org-highlight-numbers-number">0</span> ]
+
+    <span class="org-keyword">return</span> np.select(conditions, output)
+
+<span class="org-keyword">def</span> <span class="org-function-name">graph</span>(h, r_src, r0=-<span class="org-highlight-numbers-number">1.5</span>, rf=<span class="org-highlight-numbers-number">1.5</span>) :
+    <span class="org-doc">''' routine to plot the graphs of the function and its derivative '''</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">define the domain</span>
+    <span class="org-variable-name">_r</span> = np.linspace(r0, rf, <span class="org-highlight-numbers-number">1000</span>)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">wrapper function define the graph of the kernel with its corresponding parameters</span>
+    <span class="org-variable-name">_w</span> = <span class="org-keyword">lambda</span> r : kernel(r, h, r_src)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">wrapper functions to define numerical and symbolic derivatives</span>
+    <span class="org-variable-name">Dw</span> = <span class="org-keyword">lambda</span> r : diff(_w, r, dx=1E-<span class="org-highlight-numbers-number">7</span>)
+    <span class="org-keyword">def</span> <span class="org-function-name">sw</span>(r, h=h, r_src=r_src) :
+        <span class="org-variable-name">q</span> = np.<span class="org-builtin">abs</span>(r - r_src)/h
+        <span class="org-keyword">if</span> (<span class="org-highlight-numbers-number">0</span> &lt;= q) <span class="org-keyword">and</span> (q &lt; <span class="org-highlight-numbers-number">1</span>) :
+            <span class="org-keyword">return</span> symbolic_kernel(h, r_src)(r)
+        <span class="org-keyword">else</span> :
+            <span class="org-keyword">return</span> <span class="org-highlight-numbers-number">0.0</span>
+
+    plt.plot(_r, _w(_r), <span class="org-string">'k-'</span>, label=<span class="org-string">'Kernel'</span>)
+    plt.plot(_r, Dw(_r), <span class="org-string">'r-'</span>, label=<span class="org-string">'Numerical derivative'</span>)
+    plt.plot(_r, [ sw(r) <span class="org-keyword">for</span> r <span class="org-keyword">in</span> _r ], <span class="org-string">'b--'</span>, label=<span class="org-string">'Analytic derivative'</span>)
+
+    plt.ylim(-<span class="org-highlight-numbers-number">5</span>, <span class="org-highlight-numbers-number">5</span>)
+    plt.grid()
+    plt.legend()
+    plt.show()
+</pre>
+</div>
+<div class="org-src-container">
+<pre class="src src-ipython">graph(h=<span class="org-highlight-numbers-number">1</span>, r_src=<span class="org-highlight-numbers-number">0</span>)
+</pre>
+</div>
+
+
+<div id="orgcd65f17" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/IiWwev.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org18c9141" class="outline-2">
+<h2 id="org18c9141"><span class="section-number-2">2</span> Integration</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+We may proceed by describing what it takes to appropriately compute
+an approximation to the integral and its bounding error.
+</p>
+</div>
+
+<div id="outline-container-org41bca72" class="outline-3">
+<h3 id="org41bca72"><span class="section-number-3">2.1</span> Trapezoid method</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Let \(f : \mathbb{R} \to \mathbb{R}\) be an integrable function, we want to
+approximate the integral of \(f\) on a closed interval \([a,b]\). For that purpose,
+we may start with the trapezoids&rsquo; approach, which we describe below.
+</p>
+
+<p>
+The fact that the area under a sufficiently nice curve is approximately equal to
+the area under the straight line segment joining the interval&rsquo;s boundary points
+seems perfectly reasonable, and in fact can be more accurately stated in terms
+of the first order Lagrange polynomial of those boundary points.
+</p>
+
+<p>
+In pinning down our discussion, we shall turn to the fact that, if
+\(f\) is a \(C^\infty\) function and \((x_0,\ldots,x_n)\) is a sequence of points in
+the domain of \(f\), then the following equality holds for all \(x\) in the domain:
+\[ f(x) = \underbrace{\sum_{i=0}^n f(x_i) \cdot \mathcal{L}_i(x)}_{\mathcal{L}(x)} + \frac{f^{(n+1)}(\xi(x))}{(n+1)!}(x - x_0)(x - x_1)\cdots(x - x_n);\]
+here \(\mathcal{L}\) denotes the Lagrange polynomial for the points \(f(x_0),
+\ldots, f(x_n)\), and \(\xi(x)\) is an unknown number in the domain of \(f\) that
+depends on the input value \(x\).
+</p>
+
+<p>
+In particular, if we take the first degree Lagrange polynomial of \(f(a), f(b)\)
+we will find an equation for the straight line through the boundary points that
+we mentioned earlier; thus our integral becomes:
+\[ \int_a^b f = \int_a^b \left( \frac{x - b}{a - b}f(a) + \frac{x - a}{a - b}f(b) \right) dx + \frac{1}{2}\int_a^b f''(\xi(x))(x - a)(x - b) dx. \]
+</p>
+
+<p>
+The first term on the right side must be the trapezoidal area we require for the
+approximation, which is straightforward to compute, and can even be regarded
+from a geometrical viewpoint. Its value is
+\[ f(a)(b - a) + \frac{(b - a)(f(b) - f(a))}{2} = \frac{b - a}{2}(f(a) + f(b)). \]
+</p>
+
+<p>
+On the other hand, the second term on the right amounts to the approximation
+error. The expression \((x - a)(x - b)\) is obviously nonnegative over the
+interval \([a,b]\), and so provided \(f\) has continuous derivatives of all orders
+we can use the Mean Value Theorem for Integrals, i.e., we can assure that there
+exists some number \(\xi \in [a,b]\) such that the integral equals
+\[ f''(\xi) \int_a^b (x - a)(x - b) dx = -\frac{(b - a)^3}{12} f''(\xi). \]
+</p>
+
+<p>
+We thus conclude that
+\[ \int_a^b f = \frac{b - a}{2}(f(a) + f(b)) - \frac{(b - a)^3}{12} f''(\xi). \]
+</p>
+
+<p>
+Furthermore, by definition of integral, it is easy to see that if we have some
+partition \((t_1,\ldots,t_n)\) of the interval \([a,b]\), then
+\[ \int_a^b f = \int_{t_0}^{t_1} f + \cdots + \int_{t_{n-1}}^{t_n} f; \]
+this fact readily allows us to improve the precision of the trapezoidal method,
+by increasing the number of elements our partition has.
+</p>
+
+<p>
+In general, if the partition we regard is evenly spaced (i.e., \(t_{i} - t_{i-1}
+= h = (b - a)/n\)), we can write
+</p>
+\begin{align*}
+  \int_a^b f &= \int_{t_0}^{t_1} f + \cdots + \int_{t_{n-1}}^{t_n} f, \\
+             &\approx \frac{t_1 - t_0}{2}(f(t_0) + f(t_1)) + \cdots + \frac{t_n - t_{n-1}}{2}(f(t_{n-1}) + f(t_n)), \\
+             &= \frac{h}{2}(f(t_0) + 2f(t_1) + \cdots + 2f(t_{n-1}) + f(t_n)), \\
+             &= h\left( \frac12 f(a) + \sum_{i=1}^{n-1} f(t_i) + \frac12 f(b) \right).
+\end{align*}
+<p>
+This expression has a bounding error which can be written as:
+\[ -\frac{n h^3}{12}f''(\xi) = -\frac{(b - a)h^2}{12}f''(\xi). \]
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1e8b43a" class="outline-3">
+<h3 id="org1e8b43a"><span class="section-number-3">2.2</span> Simpson&rsquo;s rule</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+A similar reasoning leads to the so-called Simpson&rsquo;s rule, if we take the second order Lagrange polynomial interpolating three values \((f(t_i), f(t_{i+1}), f(t_{i+2}))\) of an evenly spaced partition \((t_0, \ldots, t_n)\).
+</p>
+
+<p>
+The formula for the composite Simpson&rsquo;s rule can be written as
+\[ \int_a^b f = \frac{h}{3}\left( f(a) + 2 \sum_{i=1}^{(n/2)-1} f(x_{2i}) + 4 \sum_{i=1}^{n/2} f(x_{2i-1}) + f(b) \right), \]
+with an error term of
+\[ -\frac{(b - a)h^4}{180} f^{(4)}(\xi) \]
+</p>
+</div>
+</div>
+
+<div id="outline-container-org81fc49c" class="outline-3">
+<h3 id="org81fc49c"><span class="section-number-3">2.3</span> Gaussian quadrature</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+Both the trapezoid and Simpson&rsquo;s methods make use of evenly spaced intervals to
+compute the integral of a function \(f\) over a closed interval. The Gaussian
+quadrature method gets rid of this condition, so we can choose the partition in
+a more optimal manner. The collection \(t_0, \ldots, t_n\) that composes a
+partition of the interval \([-1,1]\) is chosen, along with a set of coefficients
+\(c_0,\ldots, c_n\), to minimize the error bound to the following approximation:
+\[ \int_a^b f \approx \frac{b - a}{2} \sum_{i=0}^n c_i f\left( \frac{b - a}{2}t_i + \frac{a + b}{2} \right) \]
+</p>
+
+<p>
+As it turns out, the points \(t_i\) needed to approximate the function&rsquo;s integral
+are the roots of the $n$-th degree Legenrde Polynomial, and the weighing
+coefficients are also determined by dint of these roots.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org459c851" class="outline-3">
+<h3 id="org459c851"><span class="section-number-3">2.4</span> Symbolic-numerical implementation</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+As a remark, it should be acknowledged that the following is not an effective
+approach to numerical integration, insomuch as it encompasses a symbolic
+implementation of the Simpson&rsquo;s method algorithm, which hinges upon the explicit
+computation of a formula for the fourth derivative of the used expression to
+estimate an upper bound for the error.
+</p>
+
+<p>
+For the implementation we must find an upper bound for the error term in each
+method. Which is to say we must come up with a routine to find the maximum value
+of a single-variable function on a closed interval, assuming the given function
+is continuous. To find these values, we must find the critical points, in which
+the derivative of the function is zero, and compare them against the upper and
+lower bounds of the interval under consideration, these manipulations can be
+preformed symbolically if the input function is sufficiently  (it must be
+continuously differentiable).
+</p>
+
+<p>
+Then, to find out the number of elements our partitions must have, we make use
+of the mathematical relations we have seen above.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">closed_set_max</span>(func, variable, lower_bound, upper_bound) :
+    <span class="org-doc">''' Find the maximum of a smooth function on an open interval '''</span>
+    <span class="org-variable-name">d_func</span> = sp.diff(func, variable, <span class="org-highlight-numbers-number">1</span>)
+    <span class="org-variable-name">critical</span> = sp.solveset(d_func, variable,
+                           domain=sp.Interval(lower_bound, upper_bound))
+    <span class="org-keyword">try</span> :
+        <span class="org-variable-name">maximum</span> = sp.Max(func.subs(variable, lower_bound),
+                         func.subs(variable, upper_bound),
+                         *[func.subs(variable, i) <span class="org-keyword">for</span> i <span class="org-keyword">in</span> critical])
+    <span class="org-keyword">except</span> :
+        <span class="org-comment-delimiter"># </span><span class="org-comment">if this fails, then the set of critical points is not iterable</span>
+        <span class="org-variable-name">maximum</span> = sp.Max(func.subs(variable, lower_bound),
+                         func.subs(variable, upper_bound))
+    <span class="org-keyword">return</span> <span class="org-builtin">float</span>(maximum)
+
+<span class="org-keyword">class</span> <span class="org-type">Function</span> :
+    <span class="org-doc">''' Properties of a smooth function. Class for integration. '''</span>
+    <span class="org-keyword">def</span> <span class="org-function-name">__init__</span>(<span class="org-keyword">self</span>, expression, variable, a=<span class="org-highlight-numbers-number">0</span>, b=<span class="org-highlight-numbers-number">1</span>) :
+        <span class="org-doc">''' the mathematical expression must be a sympy object '''</span>
+        <span class="org-keyword">self</span>.numerical = sp.lambdify(variable, expression, <span class="org-string">'numpy'</span>)
+        <span class="org-keyword">self</span>.symbol = variable
+        <span class="org-keyword">self</span>.symbolic = expression
+        <span class="org-keyword">self</span>.a, <span class="org-keyword">self</span>.b = a, b
+
+    <span class="org-keyword">def</span> <span class="org-function-name">simpson_partition</span>(<span class="org-keyword">self</span>, epsilon=<span class="org-highlight-numbers-number">0.001</span>) :
+        <span class="org-comment-delimiter"># </span><span class="org-comment">compute the fourth derivative with sympy</span>
+        <span class="org-variable-name">fourth_deriv</span> = sp.diff(<span class="org-keyword">self</span>.symbolic, <span class="org-keyword">self</span>.symbol, <span class="org-highlight-numbers-number">4</span>)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">find an absolute maximum for the fourth derivative on the given domain</span>
+        <span class="org-variable-name">maximum</span> = np.<span class="org-builtin">abs</span>( closed_set_max(fourth_deriv, <span class="org-keyword">self</span>.symbol, <span class="org-keyword">self</span>.a, <span class="org-keyword">self</span>.b) )
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">compute the number of required intervals</span>
+        <span class="org-keyword">return</span> np.ceil( ((maximum*(<span class="org-keyword">self</span>.b - <span class="org-keyword">self</span>.a)**<span class="org-highlight-numbers-number">5</span>)/(epsilon*<span class="org-highlight-numbers-number">180</span>*<span class="org-highlight-numbers-number">2</span>**<span class="org-highlight-numbers-number">4</span>))**<span class="org-highlight-numbers-number">0.25</span> )
+
+    <span class="org-keyword">def</span> <span class="org-function-name">trapezoid_partition</span>(<span class="org-keyword">self</span>, epsilon=<span class="org-highlight-numbers-number">0.001</span>) :
+        <span class="org-comment-delimiter"># </span><span class="org-comment">compute the second derivative with sympy</span>
+        <span class="org-variable-name">second_deriv</span> = sp.diff(<span class="org-keyword">self</span>.symbolic, <span class="org-keyword">self</span>.symbol, <span class="org-highlight-numbers-number">2</span>)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">find an absolute maximum for the fourth derivative on the given domain</span>
+        <span class="org-variable-name">maximum</span> = np.<span class="org-builtin">abs</span>( closed_set_max(second_deriv, <span class="org-keyword">self</span>.symbol, <span class="org-keyword">self</span>.a, <span class="org-keyword">self</span>.b) )
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">compute the number of required intervals</span>
+        <span class="org-keyword">return</span> np.ceil( ((maximum*(<span class="org-keyword">self</span>.b - <span class="org-keyword">self</span>.a)**<span class="org-highlight-numbers-number">3</span>)/(epsilon*<span class="org-highlight-numbers-number">12</span>))**<span class="org-highlight-numbers-number">0.5</span> )
+
+    <span class="org-keyword">def</span> <span class="org-function-name">simpson</span>(<span class="org-keyword">self</span>, epsilon=<span class="org-highlight-numbers-number">0.001</span>) :
+        <span class="org-comment-delimiter"># </span><span class="org-comment">get the size of the partition from the required uncertainty level</span>
+        <span class="org-variable-name">n</span> = <span class="org-builtin">int</span>( <span class="org-keyword">self</span>.simpson_partition(epsilon) )
+        <span class="org-variable-name">n_nodes</span> = <span class="org-highlight-numbers-number">2</span>*n + <span class="org-highlight-numbers-number">1</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">partition the interval</span>
+        <span class="org-variable-name">partition</span> = np.linspace(<span class="org-keyword">self</span>.a, <span class="org-keyword">self</span>.b, n_nodes)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">odd-indexed nodes</span>
+        <span class="org-variable-name">t_odd</span> = partition[<span class="org-highlight-numbers-number">1</span>::<span class="org-highlight-numbers-number">2</span>]
+        <span class="org-comment-delimiter"># </span><span class="org-comment">even-indexed nodes</span>
+        <span class="org-variable-name">t_even</span> = partition[<span class="org-highlight-numbers-number">2</span>:n_nodes-<span class="org-highlight-numbers-number">1</span>:<span class="org-highlight-numbers-number">2</span>]
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">distance between two nodes</span>
+        <span class="org-variable-name">h</span> = (<span class="org-keyword">self</span>.b - <span class="org-keyword">self</span>.a)/(<span class="org-highlight-numbers-number">2</span>*n)
+        <span class="org-variable-name">integral</span> = h/<span class="org-highlight-numbers-number">3</span>*(<span class="org-keyword">self</span>.numerical(<span class="org-keyword">self</span>.a) + <span class="org-highlight-numbers-number">2</span>*<span class="org-builtin">sum</span>(<span class="org-keyword">self</span>.numerical(t_even)) + <span class="org-highlight-numbers-number">4</span>*<span class="org-builtin">sum</span>(<span class="org-keyword">self</span>.numerical(t_odd)) + <span class="org-keyword">self</span>.numerical(<span class="org-keyword">self</span>.b))
+        <span class="org-keyword">return</span> integral
+
+    <span class="org-keyword">def</span> <span class="org-function-name">trapezoid</span>(<span class="org-keyword">self</span>, epsilon=<span class="org-highlight-numbers-number">0.001</span>) :
+        <span class="org-comment-delimiter"># </span><span class="org-comment">get the size of the partition from the required uncertainty level</span>
+        <span class="org-variable-name">n</span> = <span class="org-builtin">int</span>( <span class="org-keyword">self</span>.trapezoid_partition(epsilon) )
+        <span class="org-variable-name">n_nodes</span> = <span class="org-highlight-numbers-number">2</span>*n + <span class="org-highlight-numbers-number">1</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">partition the interval</span>
+        <span class="org-variable-name">partition</span> = np.linspace(<span class="org-keyword">self</span>.a, <span class="org-keyword">self</span>.b, n_nodes)
+        <span class="org-comment-delimiter"># </span><span class="org-comment">intermediate nodes</span>
+        <span class="org-variable-name">nodes</span> = partition[<span class="org-highlight-numbers-number">1</span>:n_nodes-<span class="org-highlight-numbers-number">1</span>]
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">distance between two nodes</span>
+        <span class="org-variable-name">h</span> = (<span class="org-keyword">self</span>.b - <span class="org-keyword">self</span>.a)/(<span class="org-highlight-numbers-number">2</span>*n)
+
+        <span class="org-variable-name">integral</span> = h*(<span class="org-highlight-numbers-number">0.5</span>*<span class="org-keyword">self</span>.numerical(<span class="org-keyword">self</span>.a) + <span class="org-builtin">sum</span>(<span class="org-keyword">self</span>.numerical(nodes)) + <span class="org-highlight-numbers-number">0.5</span>*<span class="org-keyword">self</span>.numerical(<span class="org-keyword">self</span>.b))
+        <span class="org-keyword">return</span> integral
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org1e47864" class="outline-3">
+<h3 id="org1e47864"><span class="section-number-3">2.5</span> Proof of concept</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+We can, for instance find the following integral:
+\[ \int_1^{12} x^5 dx. \]
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-variable-name">x</span> = sp.Symbol(<span class="org-string">'x'</span>)
+<span class="org-variable-name">g</span> = Function(x**<span class="org-highlight-numbers-number">5</span>, x, a=<span class="org-highlight-numbers-number">1</span>, b=<span class="org-highlight-numbers-number">12</span>)
+g.trapezoid(epsilon=1e-<span class="org-highlight-numbers-number">5</span>), g.simpson(epsilon=1e-<span class="org-highlight-numbers-number">5</span>)
+</pre>
+</div>
+
+<pre class="example">
+(497663.83333400625, 497663.8333387183)
+</pre>
+
+<p>
+If we wish to compute
+\[ \int_0^1 e^{1 - x^2} dx, \]
+we can use the different methods we have defined:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-variable-name">f</span> = Function(sp.exp(<span class="org-highlight-numbers-number">1</span> - x**<span class="org-highlight-numbers-number">2</span>), x, a=<span class="org-highlight-numbers-number">0</span>, b=<span class="org-highlight-numbers-number">1</span>)
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">tuple with integral values: trapezoid, simpson, quadrature (reference value)</span>
+<span class="org-variable-name">trap</span>, <span class="org-variable-name">simp</span>, <span class="org-variable-name">quad</span>, <span class="org-variable-name">err_quad</span> = f.trapezoid(epsilon=1e-<span class="org-highlight-numbers-number">5</span>), f.simpson(epsilon=1e-<span class="org-highlight-numbers-number">5</span>), *integrate.quad(f.numerical, <span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">1</span>)
+trap, simp, quad
+</pre>
+</div>
+
+<pre class="example">
+(2.0300760037942545, 2.030079539104097, 2.030078469278705)
+</pre>
+
+<p>
+For the integral
+\[ \int_e^{2e} \frac{1}{\log x} dx, \]
+we have:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-variable-name">h</span> = Function(<span class="org-highlight-numbers-number">1</span>/sp.log(x), x, np.e, <span class="org-highlight-numbers-number">2</span>*np.e)
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">tuple with integral values: trapezoid, simpson, quadrature (reference value)</span>
+<span class="org-variable-name">trap</span>, <span class="org-variable-name">simp</span>, <span class="org-variable-name">quad</span>, <span class="org-variable-name">err_quad</span> = h.trapezoid(epsilon=1e-<span class="org-highlight-numbers-number">5</span>), h.simpson(epsilon=1e-<span class="org-highlight-numbers-number">5</span>), *integrate.quad(h.numerical, np.e, <span class="org-highlight-numbers-number">2</span>*np.e)
+trap, simp, quad
+</pre>
+</div>
+
+<pre class="example">
+(2.00381124795606, 2.0038118326682275, 2.0038105616240243)
+</pre>
+
+<p>
+To compute the improper integral
+\[ \int_{-\infty}^{\infty} \frac{1}{1 + x^2} dx = \int_{-\infty}^0 \frac{1}{1 + x^2} dx + \int_0^{\infty} \frac{1}{1 + x^2} dx, \]
+we shall use a substitution on left hand side integrals:
+</p>
+
+<ul class="org-ul">
+<li><p>
+\(\int_{-\infty}^0 1/(1 + x^2) dx\).
+</p>
+
+<p>
+Let
+\[ x = \frac{t}{1 + t}, \quad dx = \frac{1}{(1 + t)^2}, \]
+so that \(x \to -\infty\) as \(t \to -1\), and the integral becomes
+\[ \int_{-\infty}^0 \frac{1}{1 + x^2} dx = \int_{-1}^0 \frac{1}{2t^2 + 2t + 1} dt \]
+</p></li>
+
+<li><p>
+\(\int_0^{\infty} 1/(1 + x^2) dx\).
+</p>
+
+<p>
+Let
+\[ x = \frac{t}{1 - t}, \quad dx = \frac{1}{(1 - t)^2}, \]
+so that \(x \to \infty\) as \(t \to 1\), and the integral becomes
+\[ \int_0^{\infty} \frac{1}{1 + x^2} dx = \int_0^1 \frac{1}{2t^2 - 2t + 1} dt \]
+</p></li>
+</ul>
+
+<p>
+With these considerations, we have:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-variable-name">phi1</span> = Function(<span class="org-highlight-numbers-number">1</span>/(<span class="org-highlight-numbers-number">2</span>*x**<span class="org-highlight-numbers-number">2</span> - <span class="org-highlight-numbers-number">2</span>*x + <span class="org-highlight-numbers-number">1</span>), x, <span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">1</span>)
+<span class="org-variable-name">phi2</span> = Function(<span class="org-highlight-numbers-number">1</span>/(<span class="org-highlight-numbers-number">2</span>*x**<span class="org-highlight-numbers-number">2</span> + <span class="org-highlight-numbers-number">2</span>*x + <span class="org-highlight-numbers-number">1</span>), x, -<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">0</span>)
+
+<span class="org-variable-name">trap</span> = phi1.trapezoid(epsilon=1e-<span class="org-highlight-numbers-number">5</span>) + phi2.trapezoid(epsilon=1e-<span class="org-highlight-numbers-number">5</span>)
+<span class="org-variable-name">simp</span> = phi1.simpson(epsilon=1e-<span class="org-highlight-numbers-number">5</span>) + phi2.simpson(epsilon=1e-<span class="org-highlight-numbers-number">5</span>)
+<span class="org-variable-name">quad</span>, <span class="org-variable-name">err_quad</span> = integrate.quad(<span class="org-keyword">lambda</span> x : <span class="org-highlight-numbers-number">1</span>/(<span class="org-highlight-numbers-number">1</span> + x**<span class="org-highlight-numbers-number">2</span>), -np.inf, np.inf)
+trap, simp, quad
+</pre>
+</div>
+
+<pre class="example">
+(3.141587676831256, 3.1415926453708467, 3.141592653589793)
+</pre>
+
+<p>
+Numerical iterated integrals: Consider the integral
+\[ I = \int_0^{\pi/4} \int_{\sin x}^{\cos x} (2y \sin x + \cos^2 x) dy dx. \]
+</p>
+
+<p>
+This problem can be simplified by symbolically manipulating the inner integral,
+by means of which we have:
+</p>
+\begin{align*}
+ I &= \int_0^{\pi/4} \left\{ 2 \sin x \int_{\sin x}^{\cos x} y dy + \cos^2 x \int_{\sin x}^{\cos x} dy \right\} dx, \\
+   &= \int_0^{\pi/4} \left\{ \sin x (\cos^2 x - \sin^2 x) + \cos^2 x (\cos x - \sin x) \right\} dx, \\
+   &= \int_0^{\pi/4} (\cos^3 x - \sin^3 x) dx.
+\end{align*}
+<p>
+Therefore our problem amounts to computing this last integral.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-variable-name">phi</span> = Function(sp.cos(x)**<span class="org-highlight-numbers-number">3</span> - sp.sin(x)**<span class="org-highlight-numbers-number">3</span>, x, a=<span class="org-highlight-numbers-number">0</span>, b=np.pi/<span class="org-highlight-numbers-number">4</span>)
+<span class="org-variable-name">trap</span>, <span class="org-variable-name">simp</span>, <span class="org-variable-name">quad</span>, <span class="org-variable-name">err_quad</span> = phi.trapezoid(epsilon=1e-<span class="org-highlight-numbers-number">5</span>), phi.simpson(epsilon=1e-<span class="org-highlight-numbers-number">5</span>), *integrate.quad(phi.numerical, <span class="org-highlight-numbers-number">0</span>, np.pi/<span class="org-highlight-numbers-number">4</span>)
+trap, simp, quad
+</pre>
+</div>
+
+<pre class="example">
+(0.4840164686312476, 0.5118481687502379, 0.5118446353109126)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgfd0e886" class="outline-3">
+<h3 id="orgfd0e886"><span class="section-number-3">2.6</span> Application: Escape velocity</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+Suppose that a body of mass \(m\) is travelling vertically upward, starting at the surface
+of the earth. If all resistance is neglected, the escape velocity \(v\) (i.e. the
+minimum velocity the body must acquire to escape the earth&rsquo;s gravitational
+field) is given by:
+\[ v = \sqrt{2gR \int_1^{\infty} \frac{1}{z^2} dz}, \]
+where \(R\) is the radius of the earth and \(z = x/R\).
+</p>
+
+<p>
+With these conditions, it is fairly straightforward to see that
+\[ \int_1^{\infty} \frac{1}{z^2} dz = R^2 \int_1^{\infty} \frac{1}{x^2} dx, \]
+so that
+\[ v = \sqrt{2gR^3 \int_1^{\infty} \frac{1}{x^2} dx}. \]
+</p>
+
+<p>
+The value of this integral is clearly one, but we can still inegrate it numerically:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-comment-delimiter"># </span><span class="org-comment">compute the integral</span>
+<span class="org-variable-name">quad</span>, <span class="org-variable-name">err_quad</span> = integrate.quad(<span class="org-keyword">lambda</span> x : <span class="org-highlight-numbers-number">1</span>/x**<span class="org-highlight-numbers-number">2</span>, <span class="org-highlight-numbers-number">1</span>, np.inf)
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">define the other parameters</span>
+<span class="org-variable-name">g</span>, <span class="org-variable-name">R</span> = <span class="org-highlight-numbers-number">9.8</span>, <span class="org-highlight-numbers-number">6</span>.3e6
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">compute the escape velocity</span>
+<span class="org-variable-name">v</span> = np.sqrt(<span class="org-highlight-numbers-number">2</span>*g*R**<span class="org-highlight-numbers-number">3</span>*quad)
+v
+</pre>
+</div>
+
+<pre class="example">
+70006579690.76907
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org0397a32" class="outline-3">
+<h3 id="org0397a32"><span class="section-number-3">2.7</span> Error analysis</h3>
+<div class="outline-text-3" id="text-2-7">
+<p>
+The <code>Function</code> class I wrote above already provides implementations for both
+the trapezoid and Simpson&rsquo;s methods; however, they cannot directly parse a
+number of partitions \(n\). We may easily rewrite them as:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">trapezoid</span>(function, n, a=<span class="org-highlight-numbers-number">0</span>, b=<span class="org-highlight-numbers-number">1</span>) :
+    <span class="org-variable-name">n_nodes</span> = <span class="org-highlight-numbers-number">2</span>*n + <span class="org-highlight-numbers-number">1</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">partition the interval</span>
+    <span class="org-variable-name">partition</span> = np.linspace(a, b, n_nodes)
+    <span class="org-comment-delimiter"># </span><span class="org-comment">intermediate nodes</span>
+    <span class="org-variable-name">nodes</span> = partition[<span class="org-highlight-numbers-number">1</span>:n_nodes-<span class="org-highlight-numbers-number">1</span>]
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">distance between two nodes</span>
+    <span class="org-variable-name">h</span> = (b - a)/(<span class="org-highlight-numbers-number">2</span>*n)
+
+    <span class="org-variable-name">integral</span> = h*(<span class="org-highlight-numbers-number">0.5</span>*function(a) + <span class="org-builtin">sum</span>(function(nodes)) + <span class="org-highlight-numbers-number">0.5</span>*function(b))
+    <span class="org-keyword">return</span> integral
+
+<span class="org-keyword">def</span> <span class="org-function-name">simpson</span>(function, n, a=<span class="org-highlight-numbers-number">0</span>, b=<span class="org-highlight-numbers-number">1</span>) :
+    <span class="org-variable-name">n_nodes</span> = <span class="org-highlight-numbers-number">2</span>*n + <span class="org-highlight-numbers-number">1</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">partition the interval</span>
+    <span class="org-variable-name">partition</span> = np.linspace(a, b, n_nodes)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">odd-indexed nodes</span>
+    <span class="org-variable-name">t_odd</span> = partition[<span class="org-highlight-numbers-number">1</span>::<span class="org-highlight-numbers-number">2</span>]
+    <span class="org-comment-delimiter"># </span><span class="org-comment">even-indexed nodes</span>
+    <span class="org-variable-name">t_even</span> = partition[<span class="org-highlight-numbers-number">2</span>:n_nodes-<span class="org-highlight-numbers-number">1</span>:<span class="org-highlight-numbers-number">2</span>]
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">distance between two nodes</span>
+    <span class="org-variable-name">h</span> = (b - a)/(<span class="org-highlight-numbers-number">2</span>*n)
+    <span class="org-variable-name">integral</span> = h/<span class="org-highlight-numbers-number">3</span>*(function(a) + <span class="org-highlight-numbers-number">2</span>*<span class="org-builtin">sum</span>(function(t_even)) + <span class="org-highlight-numbers-number">4</span>*<span class="org-builtin">sum</span>(function(t_odd)) + function(b))
+    <span class="org-keyword">return</span> integral
+</pre>
+</div>
+<p>
+Also, we can come up with a fairly uncomplicated implementation of the Gaussian
+quadrature approximation:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">quadrature</span>(function, n, a=<span class="org-highlight-numbers-number">0</span>, b=<span class="org-highlight-numbers-number">1</span>) :
+    <span class="org-variable-name">partition</span>, <span class="org-variable-name">coeff</span> = roots_legendre(n + <span class="org-highlight-numbers-number">1</span>)
+    <span class="org-variable-name">integral</span> = <span class="org-highlight-numbers-number">0.5</span>*(b - a)*<span class="org-builtin">sum</span>(coeff*function(<span class="org-highlight-numbers-number">0.5</span>*(b - a)*partition + <span class="org-highlight-numbers-number">0.5</span>*(b + a)))
+    <span class="org-keyword">return</span> integral
+</pre>
+</div>
+
+<p>
+Suppose that we want to analyse the error in computing the integrals we&rsquo;ve seen
+so far for different values of \(n\).
+</p>
+
+<p>
+We are going to be using dataframes, so the following command comes in handy for
+appropriate formatting in emacs:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh" id="orgf3cd87d"><span class="org-type">echo</span> <span class="org-string">"</span><span class="org-string"><span class="org-constant">$</span></span><span class="org-string"><span class="org-variable-name">data</span></span><span class="org-string">"</span> | sed s/<span class="org-string">\^</span>:<span class="org-string">\ \/</span>/g | <span class="org-type">grep</span> -v <span class="org-string">"^$"</span> | sed s/<span class="org-string">\'</span>//g
+</pre>
+</div>
+
+<p>
+We need to initialise a dataframe with the size of the partition in each case
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">import</span> pandas <span class="org-keyword">as</span> pd
+<span class="org-keyword">from</span> tabulate <span class="org-keyword">import</span> tabulate
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">dataframe initialisation</span>
+<span class="org-variable-name">indexes</span> = { <span class="org-string">'n'</span> : [<span class="org-highlight-numbers-number">2</span>, <span class="org-highlight-numbers-number">10</span>, <span class="org-highlight-numbers-number">20</span> , <span class="org-highlight-numbers-number">40</span> , <span class="org-highlight-numbers-number">80</span>, <span class="org-highlight-numbers-number">160</span>] }
+<span class="org-variable-name">df</span> = pd.DataFrame(indexes)
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">define the function we are analysing along with the exact value for its integral</span>
+<span class="org-variable-name">f</span> = <span class="org-keyword">lambda</span> x : np.exp(-x)
+<span class="org-variable-name">exact</span> = <span class="org-highlight-numbers-number">1</span> - <span class="org-highlight-numbers-number">1</span>/np.e
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">vectorise the numerical procedures</span>
+<span class="org-variable-name">_trapezoid</span> = np.vectorize(trapezoid)
+<span class="org-variable-name">_simpson</span> = np.vectorize(simpson)
+<span class="org-variable-name">_quadrature</span> = np.vectorize(quadrature)
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">compute numerical estimates</span>
+<span class="org-variable-name">df</span>[<span class="org-string">'trap'</span>] = _trapezoid(f, df[<span class="org-string">'n'</span>])
+<span class="org-variable-name">df</span>[<span class="org-string">'simp'</span>] = _simpson(f, df[<span class="org-string">'n'</span>])
+<span class="org-variable-name">df</span>[<span class="org-string">'quad'</span>] = _quadrature(f, df[<span class="org-string">'n'</span>])
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">compute relative errors</span>
+<span class="org-variable-name">df</span>[<span class="org-string">'eps_trap'</span>] = df.trap.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> item:
+                               <span class="org-builtin">abs</span>(item - exact)/exact)
+<span class="org-variable-name">df</span>[<span class="org-string">'eps_simp'</span>] = df.simp.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> item:
+                               <span class="org-builtin">abs</span>(item - exact)/exact)
+<span class="org-variable-name">df</span>[<span class="org-string">'eps_quad'</span>] = df.quad.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> item:
+                               <span class="org-builtin">abs</span>(item - exact)/exact)
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">clean the data</span>
+<span class="org-keyword">del</span> df[<span class="org-string">'trap'</span>]; <span class="org-keyword">del</span> df[<span class="org-string">'simp'</span>]; <span class="org-keyword">del</span> df[<span class="org-string">'quad'</span>]
+
+tabulate(df, headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-right">n</th>
+<th scope="col" class="org-right">eps<sub>trap</sub></th>
+<th scope="col" class="org-right">eps<sub>simp</sub></th>
+<th scope="col" class="org-right">eps<sub>quad</sub></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">2</td>
+<td class="org-right">0.00520292</td>
+<td class="org-right">2.1541e-05</td>
+<td class="org-right">4.79599e-07</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">10</td>
+<td class="org-right">0.000208325</td>
+<td class="org-right">3.47119e-08</td>
+<td class="org-right">1.75635e-16</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">20</td>
+<td class="org-right">5.20828e-05</td>
+<td class="org-right">2.16998e-09</td>
+<td class="org-right">1.75635e-16</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-right">40</td>
+<td class="org-right">1.30208e-05</td>
+<td class="org-right">1.35631e-10</td>
+<td class="org-right">3.51269e-16</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-right">80</td>
+<td class="org-right">3.25521e-06</td>
+<td class="org-right">8.47683e-12</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">5</td>
+<td class="org-right">160</td>
+<td class="org-right">8.13802e-07</td>
+<td class="org-right">5.30241e-13</td>
+<td class="org-right">3.51269e-16</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+We can draw up the required plot:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">plt.loglog(df.n, df.eps_trap, <span class="org-string">'bo'</span>, label=<span class="org-string">'trap'</span>)
+plt.loglog(df.n, df.eps_simp, <span class="org-string">'ro'</span>, label=<span class="org-string">'simp'</span>)
+plt.loglog(df.n, df.eps_quad, <span class="org-string">'ko'</span>, label=<span class="org-string">'quad'</span>)
+
+plt.xlabel(<span class="org-string">'n'</span>)
+plt.ylabel(<span class="org-string">'eps'</span>)
+
+plt.legend()
+plt.grid()
+plt.show()
+</pre>
+</div>
+
+
+<div id="org184c305" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/M6BLtf.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+<p>
+The trapezoid and Simpson errors are apparently a straight line, we can find an equation for them as follows:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">from</span> scipy.optimize <span class="org-keyword">import</span> curve_fit
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">n = np.log10(df.n)</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">trap_ = np.log10(df.eps_trap)</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">simp_ = np.log10(df.eps_simp)</span>
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">fit a straight line</span>
+<span class="org-variable-name">f</span> = <span class="org-keyword">lambda</span> n, alpha, c : c*n**alpha
+<span class="org-variable-name">opt_trap</span>, <span class="org-variable-name">cov_trap</span> = curve_fit(f, df.n, df.eps_trap)
+<span class="org-variable-name">opt_simp</span>, <span class="org-variable-name">cov_simp</span> = curve_fit(f, df.n, df.eps_simp)
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">actual points</span>
+plt.loglog(df.n, df.eps_trap, <span class="org-string">'bo'</span>, label=<span class="org-string">'trap'</span>)
+plt.loglog(df.n, df.eps_simp, <span class="org-string">'ro'</span>, label=<span class="org-string">'simp'</span>)
+plt.loglog(df.n, df.eps_quad, <span class="org-string">'ko'</span>, label=<span class="org-string">'quad'</span>)
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">trend lines</span>
+plt.plot(df.n, f(df.n, *opt_trap), <span class="org-string">'b-'</span>, label=<span class="org-string">'trap fit'</span>)
+plt.plot(df.n, f(df.n, *opt_simp), <span class="org-string">'r-'</span>, label=<span class="org-string">'simp fit'</span>)
+
+plt.xlabel(<span class="org-string">'n'</span>)
+plt.ylabel(<span class="org-string">'eps'</span>)
+
+plt.legend()
+plt.grid()
+plt.show()
+</pre>
+</div>
+
+
+<div id="org5152ab0" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/0LEcOq.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Juan David Salcedo Hernández</p>
+<p class="date">Created: 2021-10-10 Sun 08:28</p>
+<p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
+</div>
+</body>
+</html>

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-04-12 Mon 19:06 -->
+<!-- 2021-10-10 Sun 08:31 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Assignment03</title>
@@ -193,6 +193,12 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/readtheorg.css"/>
+<script type="text/javascript" src="src/lib/js/jquery.min.js"></script>
+<script type="text/javascript" src="src/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="src/readtheorg_theme/js/readtheorg.js"></script>
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
@@ -215,42 +221,424 @@
     /*]]>*///-->
 // @license-end
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="content">
 <h1 class="title">Assignment03</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org8d5f8a2">1. Alternating exponential function</a></li>
+<li><a href="#org0f7e3aa">2. Subtractive cancellation</a></li>
+<li><a href="#orgeadf310">3. Roundoff errors in a logistic mapping</a></li>
+</ul>
+</div>
+</div>
 <div class="org-src-container">
-<pre class="src src-ipython"><span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
-<span style="color: #ff79c6;">import</span> math
+<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
 
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">exp</span>(x, pol_terms=<span style="color: #bd93f9; font-weight: bold;">21</span>) :
-    exponent = np.arange(<span style="color: #bd93f9; font-weight: bold;">0</span>, pol_terms)
-    factorial_list = [<span style="color: #bd93f9; font-weight: bold;">1</span>]
-
-    <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, pol_terms) :
-        factorial_list.append(factorial_list[i-<span style="color: #bd93f9; font-weight: bold;">1</span>]*i)
-
-    denominator = np.array(factorial_list)
-    terms = (x**exponent) / denominator
-    <span style="color: #ff79c6;">return</span> np.<span style="color: #ffb86c;">sum</span>(terms)
-<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">myexp</span>(x):
-    e=<span style="color: #bd93f9; font-weight: bold;">0</span>
-    pres=<span style="color: #bd93f9; font-weight: bold;">0.0001</span>
-    s=<span style="color: #bd93f9; font-weight: bold;">1</span>
-    i=<span style="color: #bd93f9; font-weight: bold;">1</span>
-    <span style="color: #ff79c6;">while</span> s&gt;pres:
-        e=e+s
-        s=(x**i)/math.factorial(i)
-        i=i+<span style="color: #bd93f9; font-weight: bold;">1</span>
-    <span style="color: #ff79c6;">return</span> e
-<span style="color: #bd93f9; font-weight: bold;">1</span>/myexp(<span style="color: #bd93f9; font-weight: bold;">10</span>), np.exp(-<span style="color: #bd93f9; font-weight: bold;">10</span>)
-<span style="color: #6272a4;"># </span><span style="color: #6272a4;">1/exp(10), np.exp(-10)</span>
+<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
+<span class="org-keyword">import</span> math <span class="org-keyword">as</span> mt
+<span class="org-keyword">import</span> matplotlib.pylab <span class="org-keyword">as</span> plt
 </pre>
+</div>
+
+<div id="outline-container-org8d5f8a2" class="outline-2">
+<h2 id="org8d5f8a2"><span class="section-number-2">1</span> Alternating exponential function</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+On the account of the convergence of the power series for the exponential function, it is possible to approximate its values via algebraic operations that can be carried out with a certain    amount of precision by the computer. Recall that the power series for such a function is given on all \(\mathbb{R}\) by:
+\[
+\sum_{n=1}^{\infty} \frac{x^{n}}{n!}
+\]
+</p>
+
+<p>
+A simple implementation of this formula is presented below; notice that the terms of the sequence which we are summing up have been truncated up to the 80-th one, and a tolerance has been added as to provide a criterion under which te sequence is considered to have numerically converged. We may compare the obtained value for something like \(\exp(-0.5)\) with the one provided by the built-in function <code>numpy.exp()</code>.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">exp</span>(x, terms=<span class="org-highlight-numbers-number">80</span>, tolerance=1E-<span class="org-highlight-numbers-number">7</span>) :
+    <span class="org-variable-name">exponent</span> = <span class="org-highlight-numbers-number">0</span>
+    <span class="org-variable-name">sequence_sum</span> = <span class="org-highlight-numbers-number">0</span>
+    <span class="org-keyword">while</span> ( exponent &lt; terms ) :
+        <span class="org-variable-name">sequence_sum</span> += (x**exponent) / mt.factorial(exponent)
+        <span class="org-variable-name">exponent</span> = exponent + <span class="org-highlight-numbers-number">1</span>
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Convergence criterion</span>
+        <span class="org-variable-name">nth_plus</span> = (x**(exponent + <span class="org-highlight-numbers-number">1</span>)) / mt.factorial(exponent + <span class="org-highlight-numbers-number">1</span>)
+        <span class="org-keyword">if</span> ( <span class="org-builtin">abs</span>(nth_plus) &lt;= tolerance*<span class="org-builtin">abs</span>(sequence_sum) ) :
+            <span class="org-keyword">break</span>
+
+    <span class="org-keyword">return</span> sequence_sum
+
+exp(-<span class="org-highlight-numbers-number">0.5</span>, tolerance=1E-<span class="org-highlight-numbers-number">16</span>), <span class="org-highlight-numbers-number">1</span>/exp(<span class="org-highlight-numbers-number">0.5</span>, tolerance=1E-<span class="org-highlight-numbers-number">16</span>), np.exp(-<span class="org-highlight-numbers-number">0.5</span>)
+</pre>
+</div>
+
+<p>
+As to visualize the subtractive cancellations that occur during the application of this algorithm, we can use matplotlib:
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">view_cancellations</span>(x_tuple) :
+    <span class="org-variable-name">x</span> = <span class="org-builtin">list</span>(x_tuple)
+    <span class="org-variable-name">N</span> = np.arange(<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">80</span>)
+
+    <span class="org-variable-name">exp_list_1</span> = np.zeros(<span class="org-builtin">len</span>(N))
+    <span class="org-variable-name">exp_list_2</span> = np.zeros(<span class="org-builtin">len</span>(N))
+
+    <span class="org-variable-name">fig</span>, <span class="org-variable-name">ax</span> = plt.subplots(<span class="org-builtin">len</span>(x), figsize=(<span class="org-highlight-numbers-number">15</span>,<span class="org-highlight-numbers-number">12</span>), sharex=<span class="org-constant">True</span>)
+
+    <span class="org-keyword">for</span> n <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(x)):
+        <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(N)):
+            <span class="org-variable-name">exp_list_1</span>[i] = exp(x[n], terms=i, tolerance=1E-<span class="org-highlight-numbers-number">16</span>)
+            <span class="org-variable-name">exp_list_2</span>[i] = <span class="org-highlight-numbers-number">1</span>/exp(-x[n], terms=i+<span class="org-highlight-numbers-number">1</span>, tolerance=1E-<span class="org-highlight-numbers-number">16</span>)
+
+        ax[n].grid(b=<span class="org-constant">True</span>, which=<span class="org-string">'major'</span>, color=<span class="org-string">'#666666'</span>, linestyle=<span class="org-string">'-'</span>, alpha=<span class="org-highlight-numbers-number">0.3</span>)
+        ax[n].plot(N,exp_list_1, label=<span class="org-string">"Partial sum values for method with differences"</span>)
+        ax[n].plot(N,exp_list_2, label=<span class="org-string">'Second method'</span>)
+        ax[n].legend()
+
+view_cancellations((-<span class="org-highlight-numbers-number">0.5</span>,-<span class="org-highlight-numbers-number">1</span>,-<span class="org-highlight-numbers-number">10</span>,-<span class="org-highlight-numbers-number">20</span>, -<span class="org-highlight-numbers-number">50</span>, -<span class="org-highlight-numbers-number">80</span>))
+</pre>
+</div>
+
+
+<div id="org621aa33" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/hH9z4Z.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+
+<p>
+Note that the first method exhibits a remarkable oscillatory behaviour that eventually converges to a single value, provided that the number of iterations is enough to cancel out the large numbers yielded by certain partial sums. However, notice that convergence fails for numbers whose absolute value is near the number of iterations.
+</p>
+
+<p>
+Now we define a new routine to view the errors
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">error_vs_n</span>(x_tuple) :
+    <span class="org-variable-name">x</span> = <span class="org-builtin">list</span>(x_tuple)
+    <span class="org-variable-name">N</span> = np.arange(<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">80</span>)
+
+    <span class="org-variable-name">exp_error</span> = np.zeros(<span class="org-builtin">len</span>(N))
+
+    <span class="org-variable-name">fig</span>, <span class="org-variable-name">ax</span> = plt.subplots(<span class="org-builtin">len</span>(x), figsize=(<span class="org-highlight-numbers-number">15</span>,<span class="org-highlight-numbers-number">12</span>), sharex=<span class="org-constant">True</span>)
+
+    <span class="org-keyword">for</span> n <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(x)):
+        <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(N)):
+            <span class="org-variable-name">exp_error</span>[i] = <span class="org-builtin">abs</span>( exp(x[n], terms=i, tolerance=1E-<span class="org-highlight-numbers-number">16</span>) - np.exp(x[n]) )
+
+        ax[n].grid(b=<span class="org-constant">True</span>, which=<span class="org-string">'major'</span>, color=<span class="org-string">'#666666'</span>, linestyle=<span class="org-string">'-'</span>, alpha=<span class="org-highlight-numbers-number">0.3</span>)
+        ax[n].plot(N,exp_error, <span class="org-string">'k-'</span>, label=<span class="org-string">"Absolute error for partial sums"</span>)
+        ax[n].legend()
+
+error_vs_n((-<span class="org-highlight-numbers-number">0.5</span>, -<span class="org-highlight-numbers-number">1</span>, -<span class="org-highlight-numbers-number">10</span>, -<span class="org-highlight-numbers-number">20</span>, -<span class="org-highlight-numbers-number">50</span>, -<span class="org-highlight-numbers-number">80</span>))
+</pre>
+</div>
+
+
+<div id="orgb86bd3e" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/L7KmqN.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+
+<p>
+Tying in with what has been noted thus far, we see that the absolute error (with respect to the value that arises from the <code>numpy</code> library) rises for partial sums around a number that is close to the absolute of the argument.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0f7e3aa" class="outline-2">
+<h2 id="org0f7e3aa"><span class="section-number-2">2</span> Subtractive cancellation</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+We are now interested in the finite series
+\[
+\mathrm{S}_N^{(1)} = \sum_{n = 1}^{2N} (-1)^n \frac{n}{n+1},
+\]
+which can be otherwise written as two different sums, one with even numbers, and the other one with odd numbers
+\[
+\mathrm{S}_N^{(2)} = -\sum_{n = 1}^{N}\frac{2n-1}{2n} + \sum_{n=1}^{N} \frac{2n}{2n+1}.
+\]
+Analitically, this can be then written as
+\[
+\mathrm{S}_N^{(3)} = \sum_{n = 1}^{N}\frac{1}{2n(2n+1)}
+\]
+</p>
+
+<p>
+To begin with, we implement the algorithms to calculate each form of this summation.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">s_1</span>(N) :
+    <span class="org-variable-name">n</span> = <span class="org-highlight-numbers-number">1</span>
+    <span class="org-variable-name">sequence_sum</span> = <span class="org-highlight-numbers-number">0</span>
+
+    <span class="org-keyword">while</span> ( n &lt;= <span class="org-highlight-numbers-number">2</span>*N ) :
+        <span class="org-variable-name">sequence_sum</span> += (-<span class="org-highlight-numbers-number">1</span>)**n * n/(n + <span class="org-highlight-numbers-number">1</span>)
+        <span class="org-variable-name">n</span> += <span class="org-highlight-numbers-number">1</span>
+
+    <span class="org-keyword">return</span> sequence_sum
+
+<span class="org-keyword">def</span> <span class="org-function-name">s_2</span>(N) :
+    <span class="org-variable-name">n</span> = <span class="org-highlight-numbers-number">1</span>
+    <span class="org-variable-name">sequence_sum_1</span> = <span class="org-highlight-numbers-number">0</span>
+    <span class="org-variable-name">sequence_sum_2</span> = <span class="org-highlight-numbers-number">0</span>
+
+    <span class="org-keyword">while</span> ( n &lt;= N ) :
+        <span class="org-variable-name">sequence_sum_1</span> += <span class="org-highlight-numbers-number">2</span>*n/(<span class="org-highlight-numbers-number">2</span>*n + <span class="org-highlight-numbers-number">1</span>)
+        <span class="org-variable-name">sequence_sum_2</span> += (<span class="org-highlight-numbers-number">2</span>*n - <span class="org-highlight-numbers-number">1</span>)/(<span class="org-highlight-numbers-number">2</span>*n)
+        <span class="org-variable-name">n</span> += <span class="org-highlight-numbers-number">1</span>
+
+    <span class="org-keyword">return</span> sequence_sum_1 - sequence_sum_2
+
+<span class="org-keyword">def</span> <span class="org-function-name">s_3</span>(N) :
+    <span class="org-variable-name">n</span> = <span class="org-highlight-numbers-number">1</span>
+    <span class="org-variable-name">sequence_sum</span> = <span class="org-highlight-numbers-number">0</span>
+
+    <span class="org-keyword">while</span> ( n &lt;= N ) :
+        <span class="org-variable-name">sequence_sum</span> += <span class="org-highlight-numbers-number">1</span>/(<span class="org-highlight-numbers-number">2</span>*n*(<span class="org-highlight-numbers-number">2</span>*n + <span class="org-highlight-numbers-number">1</span>))
+        <span class="org-variable-name">n</span> += <span class="org-highlight-numbers-number">1</span>
+
+    <span class="org-keyword">return</span> sequence_sum
+
+<span class="org-keyword">print</span>( <span class="org-builtin">abs</span>(<span class="org-highlight-numbers-number">1</span> - s_1(<span class="org-highlight-numbers-number">1583</span>)/s_3(<span class="org-highlight-numbers-number">1583</span>)), <span class="org-builtin">abs</span>(<span class="org-highlight-numbers-number">1</span> - s_2(<span class="org-highlight-numbers-number">1583</span>)/s_3(<span class="org-highlight-numbers-number">1583</span>)) )
+</pre>
+</div>
+
+<p>
+Then we may analise what happens to these results as we increase the number of iterations. The <code>visualize_convergence</code> routine establishes a sway of viewing some partial sums for this series as we increase the values of \(N\), that is, the number of terms.
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">visualize_convergence</span>() :
+    <span class="org-variable-name">num_terms</span> = np.arange(<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">1600</span>)
+    <span class="org-variable-name">s_list</span> = [np.zeros(<span class="org-builtin">len</span>(num_terms)), np.zeros(<span class="org-builtin">len</span>(num_terms)), np.zeros(<span class="org-builtin">len</span>(num_terms))]
+
+    <span class="org-variable-name">i</span> = <span class="org-highlight-numbers-number">1</span>
+    <span class="org-keyword">while</span> (i &lt; <span class="org-builtin">len</span>(num_terms)) :
+        s_list[<span class="org-highlight-numbers-number">0</span>][i] = s_1(i)
+        s_list[<span class="org-highlight-numbers-number">1</span>][i] = s_2(i)
+        s_list[<span class="org-highlight-numbers-number">2</span>][i] = s_3(i)
+        <span class="org-variable-name">i</span> += <span class="org-highlight-numbers-number">1</span>
+
+    <span class="org-variable-name">fig</span>, <span class="org-variable-name">ax</span> = plt.subplots(<span class="org-highlight-numbers-number">1</span>, figsize=(<span class="org-highlight-numbers-number">15</span>,<span class="org-highlight-numbers-number">6</span>))
+
+    plt.rcParams.update({
+        <span class="org-string">"text.usetex"</span> : <span class="org-constant">True</span>,
+        <span class="org-string">"font.family"</span> : <span class="org-string">'serif'</span>,
+        <span class="org-string">"font.serif"</span> :  [<span class="org-string">"Times"</span>],
+        <span class="org-string">"font.size"</span> : <span class="org-highlight-numbers-number">12</span>
+    })
+
+    <span class="org-variable-name">option</span> = [[<span class="org-string">'b-'</span>,r<span class="org-string">'$S_N^{(1)}$'</span>],
+              [<span class="org-string">'g-'</span>,r<span class="org-string">'$S_N^{(2)}$'</span>],
+              [<span class="org-string">'k-'</span>,r<span class="org-string">'$S_N^{(3)}$'</span>]]
+
+    <span class="org-keyword">for</span> n <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-highlight-numbers-number">3</span>) :
+        ax.grid(b=<span class="org-constant">True</span>, which=<span class="org-string">'major'</span>, color=<span class="org-string">'#666666'</span>, linestyle=<span class="org-string">'-'</span>, alpha=<span class="org-highlight-numbers-number">0.3</span>)
+        ax.<span class="org-builtin">set</span>(xlabel=<span class="org-string">'Number of terms in the sum'</span>, ylabel=<span class="org-string">'Value of the sum'</span>)
+        ax.plot(num_terms,s_list[n], option[n][<span class="org-highlight-numbers-number">0</span>], markersize=<span class="org-highlight-numbers-number">1</span>, label=option[n][<span class="org-highlight-numbers-number">1</span>])
+        plt.legend()
+
+    plt.show()
+
+visualize_convergence()
+</pre>
+</div>
+
+
+<div id="org87dbddf" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/XVWmLb.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+
+<p>
+Notice that our three methods guarantee the convergence of the sum to a value which is slightly greater than 0.30.
+</p>
+
+<p>
+Now we must write a routine to visualise the evolution of the relative error of <code>s_1</code> and <code>s_2</code> with respect to <code>s_3</code>. The error regarded herein is the relative one, which amounts to
+\[
+\left| 1 - \frac{s_\text{approximate}}{s_\text{exact}} \right|;
+\]
+moreover, we suppose that the exact value is given by the sum \(\mathrm{S}_N^{(3)}\).
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">visualize_error</span>() :
+    <span class="org-variable-name">num_terms</span> = np.arange(<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">1600</span>)
+    <span class="org-variable-name">error_list</span> = [np.zeros(<span class="org-builtin">len</span>(num_terms)), np.zeros(<span class="org-builtin">len</span>(num_terms))]
+
+    <span class="org-variable-name">i</span> = <span class="org-highlight-numbers-number">1</span>
+    <span class="org-keyword">while</span> (i &lt; <span class="org-builtin">len</span>(num_terms)) :
+        error_list[<span class="org-highlight-numbers-number">0</span>][i] = <span class="org-builtin">abs</span>( <span class="org-highlight-numbers-number">1</span> - s_1(i)/s_3(i) )
+        error_list[<span class="org-highlight-numbers-number">1</span>][i] = <span class="org-builtin">abs</span>( <span class="org-highlight-numbers-number">1</span> - s_2(i)/s_3(i) )
+        <span class="org-variable-name">i</span> += <span class="org-highlight-numbers-number">1</span>
+
+    <span class="org-variable-name">fig</span>, <span class="org-variable-name">ax</span> = plt.subplots(<span class="org-highlight-numbers-number">1</span>, figsize=(<span class="org-highlight-numbers-number">15</span>,<span class="org-highlight-numbers-number">6</span>))
+    plt.rcParams.update({
+        <span class="org-string">"text.usetex"</span> : <span class="org-constant">True</span>,
+        <span class="org-string">"font.family"</span> : <span class="org-string">'serif'</span>,
+        <span class="org-string">"font.serif"</span> :  [<span class="org-string">"Times"</span>],
+        <span class="org-string">"font.size"</span> : <span class="org-highlight-numbers-number">12</span>
+    })
+
+    <span class="org-variable-name">option</span> = [[<span class="org-string">'b-'</span>, r<span class="org-string">'Error in $S_N^{(1)}$'</span>],
+              [<span class="org-string">'g-'</span>, r<span class="org-string">'Error in $S_N^{(2)}$'</span>]]
+
+    <span class="org-keyword">for</span> n <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-highlight-numbers-number">2</span>) :
+        ax.grid(b=<span class="org-constant">True</span>, which=<span class="org-string">'major'</span>, color=<span class="org-string">'#666666'</span>, linestyle=<span class="org-string">'-'</span>, alpha=<span class="org-highlight-numbers-number">0.3</span>)
+        ax.<span class="org-builtin">set</span>(xlabel=<span class="org-string">'Number of terms in the sum'</span>, ylabel=r<span class="org-string">'Relative error with respect to $S_N^{(3)}$'</span>)
+        ax.loglog(num_terms, error_list[n], option[n][<span class="org-highlight-numbers-number">0</span>], label=option[n][<span class="org-highlight-numbers-number">1</span>])
+        ax.legend()
+
+    plt.show()
+
+visualize_error()
+</pre>
+</div>
+
+
+<div id="orgc01cdc0" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/Eo6IPd.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+
+<p>
+As expected, the error rises as more and more terms are added to these sequences; although they do so quite erratically. This is of course, due to the fact that the operations whereby the summation is computed implicitly involve an error that build up as the values get larger.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgeadf310" class="outline-2">
+<h2 id="orgeadf310"><span class="section-number-2">3</span> Roundoff errors in a logistic mapping</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+We define a logistic mapping recursively as a function of the form
+\[
+x_{n+1} = r x_n (1 - x_n)
+\]
+where \(x \in (0,1)\) and \(r \in (0,4)\). We may as well write this equation three different ways, whereby we can have a look at how do they differ numerically, even when they are mathematically the same recursion. Notice that:
+</p>
+\begin{align*}
+x_n &= r x_{n-1} (1 - x_{n-1}) \\
+    &= r (x_{n-1} - x_{n-1}^2) \\
+    &= r {x_{n-1}}^2 \left(\frac{1}{x_{n-1}} - 1\right).
+\end{align*}
+
+<p>
+We then establish a Class in python to describe the initial conditions of our sytem, alongside the form of the recursion we are going to use for a particular implementation of the logistic mapping.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">class</span> <span class="org-type">InitialConditions</span> :
+    <span class="org-keyword">def</span> <span class="org-function-name">__init__</span>(<span class="org-keyword">self</span>, x_init, r_value, iterations, mapping_func):
+        <span class="org-keyword">self</span>.x_init = x_init
+        <span class="org-keyword">self</span>.r_value = r_value
+        <span class="org-keyword">self</span>.iterations = iterations
+        <span class="org-variable-name">functions_list</span> = [<span class="org-keyword">lambda</span> x,r : r*x*(<span class="org-highlight-numbers-number">1</span> - x), <span class="org-keyword">lambda</span> x,r : r*(x - x**<span class="org-highlight-numbers-number">2</span>), <span class="org-keyword">lambda</span> x,r : r*(x**<span class="org-highlight-numbers-number">2</span>)*(<span class="org-highlight-numbers-number">1</span>/x - <span class="org-highlight-numbers-number">1</span>)]
+        <span class="org-keyword">try</span> :
+            <span class="org-keyword">self</span>.mapping_func = functions_list[mapping_func]
+        <span class="org-keyword">except</span> :
+            <span class="org-type">ValueError</span>(<span class="org-string">'Not a function'</span>)
+
+    <span class="org-keyword">def</span> <span class="org-function-name">logistic_mapping</span>(<span class="org-keyword">self</span>) :
+        <span class="org-variable-name">values_list</span> = [<span class="org-keyword">self</span>.x_init]
+        <span class="org-variable-name">n</span> = <span class="org-highlight-numbers-number">0</span>
+
+        <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-highlight-numbers-number">1</span>, <span class="org-keyword">self</span>.iterations+<span class="org-highlight-numbers-number">1</span>) : <span class="org-comment-delimiter"># </span><span class="org-comment">Python interprets this as an interval [1 .. x]</span>
+            <span class="org-variable-name">n</span> = <span class="org-keyword">self</span>.mapping_func(values_list[i-<span class="org-highlight-numbers-number">1</span>], <span class="org-keyword">self</span>.r_value)
+            values_list.append(n)
+
+        <span class="org-keyword">return</span> values_list
+
+<span class="org-variable-name">conditions</span> = [<span class="org-highlight-numbers-number">0</span>]*<span class="org-highlight-numbers-number">3</span>
+
+<span class="org-variable-name">i</span> = <span class="org-highlight-numbers-number">0</span>
+<span class="org-keyword">while</span> ( i &lt;= <span class="org-highlight-numbers-number">2</span> ) :
+    <span class="org-variable-name">conditions</span>[i] = InitialConditions(x_init=<span class="org-highlight-numbers-number">0.8</span>,
+                                      r_value=<span class="org-highlight-numbers-number">3.9</span>,
+                                      iterations=<span class="org-highlight-numbers-number">100</span>,
+                                      mapping_func=i)
+    <span class="org-variable-name">i</span> += <span class="org-highlight-numbers-number">1</span>
+</pre>
+</div>
+
+<p>
+Finally, we can put it all together in a plot, which is going to show the differences that arise in these implementations.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">plot</span>() :
+    <span class="org-variable-name">N</span> = np.arange(<span class="org-highlight-numbers-number">101</span>)
+
+    <span class="org-variable-name">fig</span>, <span class="org-variable-name">ax</span> = plt.subplots(<span class="org-highlight-numbers-number">1</span>, figsize=(<span class="org-highlight-numbers-number">15</span>,<span class="org-highlight-numbers-number">6</span>))
+
+    plt.rcParams.update({
+        <span class="org-string">"text.usetex"</span> : <span class="org-constant">True</span>,
+        <span class="org-string">"font.family"</span> : <span class="org-string">'serif'</span>,
+        <span class="org-string">"font.serif"</span> :  [<span class="org-string">"Times"</span>],
+        <span class="org-string">"font.size"</span> : <span class="org-highlight-numbers-number">15</span>
+    })
+
+    <span class="org-variable-name">option</span> = [[<span class="org-string">'b-'</span>, r<span class="org-string">'$r x (1 - x)$'</span>],
+              [<span class="org-string">'g-'</span>, r<span class="org-string">'$r (x - x^2)$'</span>],
+              [<span class="org-string">'k-'</span>, r<span class="org-string">'$r x^2 \left(\frac{1}{x} - 1\right)$'</span>]]
+    <span class="org-variable-name">i</span> = <span class="org-highlight-numbers-number">0</span>
+    <span class="org-keyword">while</span> ( i &lt;= <span class="org-highlight-numbers-number">2</span> ) :
+        ax.grid(b=<span class="org-constant">True</span>, which=<span class="org-string">'major'</span>, color=<span class="org-string">'#666666'</span>, linestyle=<span class="org-string">'-'</span>, alpha=<span class="org-highlight-numbers-number">0.3</span>)
+        ax.plot(N, conditions[i].logistic_mapping(), option[i][<span class="org-highlight-numbers-number">0</span>], label=option[i][<span class="org-highlight-numbers-number">1</span>])
+        plt.legend()
+        <span class="org-variable-name">i</span> += <span class="org-highlight-numbers-number">1</span>
+
+    plt.show()
+
+plot()
+</pre>
+</div>
+
+
+<div id="org72894fe" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/zbX9zT.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+
+<p>
+Notice how the graphs for them differ for values of N greater than 50, this is once again given by the fact that different opperations carried out by the machine are bound to different errors. The behaviour pointed out by this graph is just a consequence thereof.
+</p>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-04-12 Mon 19:06</p>
+<p class="date">Created: 2021-10-10 Sun 08:31</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>
