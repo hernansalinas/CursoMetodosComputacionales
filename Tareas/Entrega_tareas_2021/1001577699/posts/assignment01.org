@@ -14,7 +14,7 @@ import matplotlib.pylab as plt
 
 * Plotting an electrostatic field
 
-The electrostatic field due to some point source charge $q$ is given by Coulomb's law,
+The electrostatic field due to some point source charge $q$ is given by Coulomb's law:
 \[
 \mathbf{E} = \frac{1}{4\pi \epsilon_0} \frac{q}{r^2} \hat{\mathbf{r}},
 \]

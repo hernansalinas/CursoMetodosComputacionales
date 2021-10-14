@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-10 Sun 08:30 -->
+<!-- 2021-10-13 Wed 21:37 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Review 2</title>
@@ -239,77 +239,253 @@
 <h2 id="org36c3bb4"><span class="section-number-2">1</span> A short review of concepts</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-Handy sed command:
+Handy sed command
 </p>
 <div class="org-src-container">
-<pre class="src src-sh" id="orgf201839"><span class="org-type">echo</span> <span class="org-string">"</span><span class="org-string"><span class="org-constant">$</span></span><span class="org-string"><span class="org-variable-name">data</span></span><span class="org-string">"</span> | sed s/<span class="org-string">\^</span>:<span class="org-string">\ \/</span>/g | <span class="org-type">grep</span> -v <span class="org-string">"^$"</span> | sed s/<span class="org-string">\'</span>//g
+<pre class="src src-sh" id="orgf201839"><span style="color: #bd93f9;">echo</span> <span style="color: #f1fa8c;">"</span><span style="color: #8be9fd;">$</span><span style="color: #f1fa8c;">data</span><span style="color: #f1fa8c;">"</span> | sed s/<span style="color: #f1fa8c;">\^</span>:<span style="color: #f1fa8c;">\ \/</span>/g | <span style="color: #bd93f9;">grep</span> -v <span style="color: #f1fa8c;">"^$"</span> | sed s/<span style="color: #f1fa8c;">\'</span>//g
 </pre>
 </div>
 <p>
 We then import all the desired libraries.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
-<span class="org-keyword">from</span> tabulate <span class="org-keyword">import</span> tabulate
+<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
+<span style="color: #ff79c6;">from</span> tabulate <span style="color: #ff79c6;">import</span> tabulate
 
-<span class="org-keyword">import</span> pandas <span class="org-keyword">as</span> pd
-<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
-<span class="org-keyword">from</span> scipy <span class="org-keyword">import</span> optimize
-<span class="org-keyword">import</span> matplotlib.pyplot <span class="org-keyword">as</span> plt
+<span style="color: #ff79c6;">import</span> pandas <span style="color: #ff79c6;">as</span> pd
+<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">from</span> scipy <span style="color: #ff79c6;">import</span> optimize
+<span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
 </pre>
 </div>
+
 <p>
 Read some random dataframe with rocket launcher data.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">path</span> = <span class="org-string">'https://raw.githubusercontent.com/restrepo/ComputationalMethods/master/data/rocket.json'</span>
-<span class="org-variable-name">df</span> = pd.DataFrame(pd.read_json(path))
-tabulate(df, headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
+<pre class="src src-ipython">path = <span style="color: #f1fa8c;">'https://raw.githubusercontent.com/restrepo/ComputationalMethods/master/data/rocket.json'</span>
+df = pd.DataFrame(pd.read_json(path))
+tabulate(df, headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
 </div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-right">M0</th>
+<th scope="col" class="org-right">g</th>
+<th scope="col" class="org-right">mdot</th>
+<th scope="col" class="org-right">u</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">2.8e+06</td>
+<td class="org-right">9.8</td>
+<td class="org-right">10000</td>
+<td class="org-right">2510</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">2.8e+06</td>
+<td class="org-right">9.8</td>
+<td class="org-right">11000</td>
+<td class="org-right">2510</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">2.8e+06</td>
+<td class="org-right">9.8</td>
+<td class="org-right">12000</td>
+<td class="org-right">2510</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-right">2.8e+06</td>
+<td class="org-right">9.8</td>
+<td class="org-right">13000</td>
+<td class="org-right">2510</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-right">2.8e+06</td>
+<td class="org-right">9.8</td>
+<td class="org-right">14000</td>
+<td class="org-right">2510</td>
+</tr>
+
+<tr>
+<td class="org-right">5</td>
+<td class="org-right">2.8e+06</td>
+<td class="org-right">9.8</td>
+<td class="org-right">15000</td>
+<td class="org-right">2510</td>
+</tr>
+</tbody>
+</table>
 <p>
 Proof that <code>mdot</code> is the only column that changes in value:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-builtin">list</span>(
-df.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> column :
-         column.name <span class="org-keyword">if</span> (column.to_numpy()[<span class="org-highlight-numbers-number">0</span>] != column.to_numpy()).<span class="org-builtin">any</span>() <span class="org-keyword">else</span> <span class="org-constant">None</span>).dropna())
+<pre class="src src-ipython"><span style="color: #ffb86c;">list</span>(
+df.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> column :
+         column.name <span style="color: #ff79c6;">if</span> (column.to_numpy()[<span style="color: #bd93f9; font-weight: bold;">0</span>] != column.to_numpy()).<span style="color: #ffb86c;">any</span>() <span style="color: #ff79c6;">else</span> <span style="color: #8be9fd;">None</span>).dropna())
 </pre>
 </div>
+
+<p>
+[mdot]
+</p>
 <p>
 Testing convergence of the Newton-Raphson method for finding roots in this specific case
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">f</span> = <span class="org-keyword">lambda</span> t : df.u[<span class="org-highlight-numbers-number">0</span>]*np.log( df.M0[<span class="org-highlight-numbers-number">0</span>]/(df.M0[<span class="org-highlight-numbers-number">0</span>] - df.mdot[<span class="org-highlight-numbers-number">0</span>]*t) ) - df.g[<span class="org-highlight-numbers-number">0</span>]*t - <span class="org-highlight-numbers-number">335</span>
-<span class="org-variable-name">t</span> = np.linspace(<span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">500</span>, <span class="org-highlight-numbers-number">1000</span>)
+<pre class="src src-ipython">f = <span style="color: #ff79c6;">lambda</span> t : df.u[<span style="color: #bd93f9; font-weight: bold;">0</span>]*np.log( df.M0[<span style="color: #bd93f9; font-weight: bold;">0</span>]/(df.M0[<span style="color: #bd93f9; font-weight: bold;">0</span>] - df.mdot[<span style="color: #bd93f9; font-weight: bold;">0</span>]*t) ) - df.g[<span style="color: #bd93f9; font-weight: bold;">0</span>]*t - <span style="color: #bd93f9; font-weight: bold;">335</span>
+t = np.linspace(<span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">500</span>, <span style="color: #bd93f9; font-weight: bold;">1000</span>)
 
-plt.plot(t, f(t), <span class="org-string">'k-'</span>)
+plt.plot(t, f(t), <span style="color: #f1fa8c;">'k-'</span>)
 plt.grid()
 plt.show()
 </pre>
+</div>
+
+
+<div id="orga101985" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/NsqtwY.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
 </div>
 <p>
 Notice that the root value is less than 150, setting such a value as our initial guess will thus suffice:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">df</span>[<span class="org-string">'t'</span>] = df.<span class="org-builtin">apply</span>(<span class="org-keyword">lambda</span> row : optimize.newton(<span class="org-keyword">lambda</span> t : row.u*np.log( row.M0/(row.M0 - row.mdot*t) ) - row.g*t - <span class="org-highlight-numbers-number">335</span>, x0 = <span class="org-highlight-numbers-number">150</span>),
-                                                   axis = <span class="org-string">'columns'</span>)
-tabulate(df, headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
+<pre class="src src-ipython">df[<span style="color: #f1fa8c;">'t'</span>] = df.<span style="color: #ffb86c;">apply</span>(<span style="color: #ff79c6;">lambda</span> row : optimize.newton(<span style="color: #ff79c6;">lambda</span> t : row.u*np.log( row.M0/(row.M0 - row.mdot*t) ) - row.g*t - <span style="color: #bd93f9; font-weight: bold;">335</span>, x0 = <span style="color: #bd93f9; font-weight: bold;">150</span>),
+                                                   axis = <span style="color: #f1fa8c;">'columns'</span>)
+tabulate(df, headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
 </div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-right">M0</th>
+<th scope="col" class="org-right">g</th>
+<th scope="col" class="org-right">mdot</th>
+<th scope="col" class="org-right">u</th>
+<th scope="col" class="org-right">t</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">2.8e+06</td>
+<td class="org-right">9.8</td>
+<td class="org-right">10000</td>
+<td class="org-right">2510</td>
+<td class="org-right">135.831</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">2.8e+06</td>
+<td class="org-right">9.8</td>
+<td class="org-right">11000</td>
+<td class="org-right">2510</td>
+<td class="org-right">109.018</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">2.8e+06</td>
+<td class="org-right">9.8</td>
+<td class="org-right">12000</td>
+<td class="org-right">2510</td>
+<td class="org-right">89.2026</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-right">2.8e+06</td>
+<td class="org-right">9.8</td>
+<td class="org-right">13000</td>
+<td class="org-right">2510</td>
+<td class="org-right">74.4557</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-right">2.8e+06</td>
+<td class="org-right">9.8</td>
+<td class="org-right">14000</td>
+<td class="org-right">2510</td>
+<td class="org-right">63.3249</td>
+</tr>
+
+<tr>
+<td class="org-right">5</td>
+<td class="org-right">2.8e+06</td>
+<td class="org-right">9.8</td>
+<td class="org-right">15000</td>
+<td class="org-right">2510</td>
+<td class="org-right">54.7709</td>
+</tr>
+</tbody>
+</table>
 <p>
 Graph of the function.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">x</span> = df[<span class="org-string">'t'</span>]
-<span class="org-variable-name">y</span> = df[<span class="org-string">'mdot'</span>]
+<pre class="src src-ipython">x = df[<span style="color: #f1fa8c;">'t'</span>]
+y = df[<span style="color: #f1fa8c;">'mdot'</span>]
 
-plt.plot(x, y, <span class="org-string">'ro'</span>)
-plt.xlabel(<span class="org-string">'$\dot{m}$ / kg/s'</span>)
-plt.ylabel(<span class="org-string">'$t$ / s'</span>)
+plt.plot(x, y, <span style="color: #f1fa8c;">'ro'</span>)
+plt.xlabel(<span style="color: #f1fa8c;">'$\dot{m}$ / kg/s'</span>)
+plt.ylabel(<span style="color: #f1fa8c;">'$t$ / s'</span>)
 plt.grid()
 plt.show()
 </pre>
+</div>
+
+
+<div id="org687fa63" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/93f2Xe.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
 </div>
 </div>
 </div>
@@ -317,49 +493,274 @@ plt.show()
 <h2 id="org5481c8c"><span class="section-number-2">2</span> Something</h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">path</span> = <span class="org-string">'https://raw.githubusercontent.com/justmarkham/DAT8/master/data/chipotle.tsv'</span>
-<span class="org-variable-name">chipo</span> = pd.read_csv(path, sep=<span class="org-string">'\t'</span>)
+<pre class="src src-ipython">path = <span style="color: #f1fa8c;">'https://raw.githubusercontent.com/justmarkham/DAT8/master/data/chipotle.tsv'</span>
+chipo = pd.read_csv(path, sep=<span style="color: #f1fa8c;">'\t'</span>)
 
-tabulate(chipo.head(), headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
-</pre>
-</div>
-
-<div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">chipo</span>[<span class="org-string">'item_price'</span>] = chipo[<span class="org-string">'item_price'</span>].replace(<span class="org-string">'\$'</span>, <span class="org-string">''</span>, regex=<span class="org-constant">True</span>).astype(<span class="org-builtin">float</span>)
-tabulate(chipo.head(), headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
-</pre>
-</div>
-<div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">greater_than_10</span> = chipo[ chipo.item_price &gt; <span class="org-highlight-numbers-number">10</span> ]
-<span class="org-builtin">len</span>( greater_than_10.index )
-</pre>
-</div>
-<div class="org-src-container">
-<pre class="src src-ipython">chipo[<span class="org-string">'item_name'</span>].sort_values()
+tabulate(chipo.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
 </div>
 
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-right">order<sub>id</sub></th>
+<th scope="col" class="org-right">quantity</th>
+<th scope="col" class="org-left">item<sub>name</sub></th>
+<th scope="col" class="org-left">choice<sub>description</sub></th>
+<th scope="col" class="org-left">item<sub>price</sub></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">Chips and Fresh Tomato Salsa</td>
+<td class="org-left">nan</td>
+<td class="org-left">$2.39</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">Izze</td>
+<td class="org-left">[Clementine]</td>
+<td class="org-left">$3.39</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">Nantucket Nectar</td>
+<td class="org-left">[Apple]</td>
+<td class="org-left">$3.39</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">Chips and Tomatillo-Green Chili Salsa</td>
+<td class="org-left">nan</td>
+<td class="org-left">$2.39</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-right">2</td>
+<td class="org-right">2</td>
+<td class="org-left">Chicken Bowl</td>
+<td class="org-left">[Tomatillo-Red Chili Salsa (Hot), [Black Beans, Rice, Cheese, Sour Cream]]</td>
+<td class="org-left">$16.98</td>
+</tr>
+</tbody>
+</table>
+
 <div class="org-src-container">
-<pre class="src src-ipython">tabulate(chipo[[<span class="org-string">'item_name'</span>,<span class="org-string">'item_price'</span>]].head(), headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
+<pre class="src src-ipython">chipo[<span style="color: #f1fa8c;">'item_price'</span>] = chipo[<span style="color: #f1fa8c;">'item_price'</span>].replace(<span style="color: #f1fa8c;">'\$'</span>, <span style="color: #f1fa8c;">''</span>, regex=<span style="color: #8be9fd;">True</span>).astype(<span style="color: #ffb86c;">float</span>)
+tabulate(chipo.head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
 </div>
 
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-right">order<sub>id</sub></th>
+<th scope="col" class="org-right">quantity</th>
+<th scope="col" class="org-left">item<sub>name</sub></th>
+<th scope="col" class="org-left">choice<sub>description</sub></th>
+<th scope="col" class="org-right">item<sub>price</sub></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">Chips and Fresh Tomato Salsa</td>
+<td class="org-left">nan</td>
+<td class="org-right">2.39</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">Izze</td>
+<td class="org-left">[Clementine]</td>
+<td class="org-right">3.39</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">Nantucket Nectar</td>
+<td class="org-left">[Apple]</td>
+<td class="org-right">3.39</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-left">Chips and Tomatillo-Green Chili Salsa</td>
+<td class="org-left">nan</td>
+<td class="org-right">2.39</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-right">2</td>
+<td class="org-right">2</td>
+<td class="org-left">Chicken Bowl</td>
+<td class="org-left">[Tomatillo-Red Chili Salsa (Hot), [Black Beans, Rice, Cheese, Sour Cream]]</td>
+<td class="org-right">16.98</td>
+</tr>
+</tbody>
+</table>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">max_price</span> = chipo[ chipo[<span class="org-string">'item_price'</span>] == chipo[<span class="org-string">'item_price'</span>].<span class="org-builtin">max</span>() ]
-max_price[<span class="org-string">'quantity'</span>].<span class="org-builtin">sum</span>()
+<pre class="src src-ipython">greater_than_10 = chipo[ chipo.item_price &gt; <span style="color: #bd93f9; font-weight: bold;">10</span> ]
+<span style="color: #ffb86c;">len</span>( greater_than_10.index )
 </pre>
 </div>
+
+<p>
+1130
+</p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">veggie</span> = chipo[ chipo[<span class="org-string">'item_name'</span>] == <span class="org-string">'Veggie Salad Bowl'</span> ]
-veggie[<span class="org-string">'quantity'</span>].<span class="org-builtin">sum</span>()
+<pre class="src src-ipython">chipo[<span style="color: #f1fa8c;">'item_name'</span>].sort_values()
 </pre>
 </div>
+
+<pre class="example" id="orgfb703de">
+  3389    6 Pack Soft Drink
+  341     6 Pack Soft Drink
+  1849    6 Pack Soft Drink
+  1860    6 Pack Soft Drink
+  2713    6 Pack Soft Drink
+  ...
+  2384    Veggie Soft Tacos
+  781     Veggie Soft Tacos
+  2851    Veggie Soft Tacos
+  1699    Veggie Soft Tacos
+  1395    Veggie Soft Tacos
+  Name: item_name, Length: 4622, dtype: object
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-ipython">tabulate(chipo[[<span style="color: #f1fa8c;">'item_name'</span>,<span style="color: #f1fa8c;">'item_price'</span>]].head(), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">&#xa0;</th>
+<th scope="col" class="org-left">item<sub>name</sub></th>
+<th scope="col" class="org-right">item<sub>price</sub></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">0</td>
+<td class="org-left">Chips and Fresh Tomato Salsa</td>
+<td class="org-right">2.39</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">Izze</td>
+<td class="org-right">3.39</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">Nantucket Nectar</td>
+<td class="org-right">3.39</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">Chips and Tomatillo-Green Chili Salsa</td>
+<td class="org-right">2.39</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-left">Chicken Bowl</td>
+<td class="org-right">16.98</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-ipython">max_price = chipo[ chipo[<span style="color: #f1fa8c;">'item_price'</span>] == chipo[<span style="color: #f1fa8c;">'item_price'</span>].<span style="color: #ffb86c;">max</span>() ]
+max_price[<span style="color: #f1fa8c;">'quantity'</span>].<span style="color: #ffb86c;">sum</span>()
+</pre>
+</div>
+
+<p>
+15
+</p>
+<div class="org-src-container">
+<pre class="src src-ipython">veggie = chipo[ chipo[<span style="color: #f1fa8c;">'item_name'</span>] == <span style="color: #f1fa8c;">'Veggie Salad Bowl'</span> ]
+veggie[<span style="color: #f1fa8c;">'quantity'</span>].<span style="color: #ffb86c;">sum</span>()
+</pre>
+</div>
+
+<p>
+18
+</p>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-10-10 Sun 08:30</p>
+<p class="date">Created: 2021-10-13 Wed 21:37</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

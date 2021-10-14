@@ -19,7 +19,7 @@ from scipy.optimize import fmin_powell
 * Simple pendulum problem
 
 We have a pendulum with a certain bob of mass $m$, and whose period is given, we
-wish to find the trajectory of the bob using Lagrangians.
+wish to find the trajectory of the bob using Lagrangians
 #+begin_src ipython :session asession :results raw drawer
 th_f = np.deg2rad(10)
 #+end_src

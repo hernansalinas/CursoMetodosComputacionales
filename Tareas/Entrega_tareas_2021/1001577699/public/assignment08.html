@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-10 Sun 08:30 -->
+<!-- 2021-10-13 Wed 20:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Assignment08</title>
@@ -261,18 +261,18 @@
 Usual imports and configs
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
+<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
 
-<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
-<span class="org-keyword">import</span> pandas <span class="org-keyword">as</span> pd
-<span class="org-keyword">import</span> numpy.linalg <span class="org-keyword">as</span> la
-<span class="org-keyword">import</span> matplotlib.pyplot <span class="org-keyword">as</span> plt
-<span class="org-keyword">import</span> matplotlib.gridspec <span class="org-keyword">as</span> gridspec
-<span class="org-keyword">from</span> tabulate <span class="org-keyword">import</span> tabulate
+<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">import</span> pandas <span style="color: #ff79c6;">as</span> pd
+<span style="color: #ff79c6;">import</span> numpy.linalg <span style="color: #ff79c6;">as</span> la
+<span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
+<span style="color: #ff79c6;">import</span> matplotlib.gridspec <span style="color: #ff79c6;">as</span> gridspec
+<span style="color: #ff79c6;">from</span> tabulate <span style="color: #ff79c6;">import</span> tabulate
 </pre>
 </div>
 <div class="org-src-container">
-<pre class="src src-sh" id="orgdd0c417"><span class="org-type">echo</span> <span class="org-string">"</span><span class="org-string"><span class="org-constant">$</span></span><span class="org-string"><span class="org-variable-name">data</span></span><span class="org-string">"</span> | sed s/<span class="org-string">\^</span>:<span class="org-string">\ \/</span>/g | <span class="org-type">grep</span> -v <span class="org-string">"^$"</span> | sed s/<span class="org-string">\'</span>//g
+<pre class="src src-sh" id="orgdd0c417"><span style="color: #bd93f9;">echo</span> <span style="color: #f1fa8c;">"</span><span style="color: #8be9fd;">$</span><span style="color: #f1fa8c;">data</span><span style="color: #f1fa8c;">"</span> | sed s/<span style="color: #f1fa8c;">\^</span>:<span style="color: #f1fa8c;">\ \/</span>/g | <span style="color: #bd93f9;">grep</span> -v <span style="color: #f1fa8c;">"^$"</span> | sed s/<span style="color: #f1fa8c;">\'</span>//g
 </pre>
 </div>
 
@@ -292,85 +292,85 @@ matrix, so that the process then reduces to multiplyng the resulting diagonal
 entries.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">determinant</span>(A):
-    <span class="org-comment-delimiter"># </span><span class="org-comment">Define the dimension and the matrix</span>
-    <span class="org-variable-name">dimension</span> = <span class="org-builtin">len</span>(A)
-    <span class="org-comment-delimiter"># </span><span class="org-comment">it turns out to be crucial that the elements of the array be floats</span>
-    <span class="org-variable-name">M</span> = A.copy().astype(<span class="org-builtin">float</span>)
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">determinant</span>(A):
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Define the dimension and the matrix</span>
+    dimension = <span style="color: #ffb86c;">len</span>(A)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">it turns out to be crucial that the elements of the array be floats</span>
+    M = A.copy().astype(<span style="color: #ffb86c;">float</span>)
 
-    <span class="org-comment-delimiter"># </span><span class="org-comment">Fast row-wise operations</span>
-    <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(dimension-<span class="org-highlight-numbers-number">1</span>,-<span class="org-highlight-numbers-number">1</span>,-<span class="org-highlight-numbers-number">1</span>):
-        <span class="org-keyword">if</span> M[i,i] != <span class="org-highlight-numbers-number">0.0</span>:
-            <span class="org-comment-delimiter"># </span><span class="org-comment">Select the diagonal element</span>
-            <span class="org-comment-delimiter"># </span><span class="org-comment">diag_arg stands for diagonal argument</span>
-            <span class="org-variable-name">diag_arg</span> = M[i,i]
-        <span class="org-keyword">else</span>:
-            <span class="org-comment-delimiter"># </span><span class="org-comment">Almost zero, good enough. Used to circumvent division by 0</span>
-            <span class="org-variable-name">diag_arg</span> = <span class="org-highlight-numbers-number">1</span>.0e-<span class="org-highlight-numbers-number">18</span>
-            <span class="org-variable-name">M</span>[i,i] = diag_arg
-        <span class="org-keyword">for</span> j <span class="org-keyword">in</span> <span class="org-builtin">range</span>(i):
-            <span class="org-variable-name">scalar</span> = -M[j,i]/diag_arg
-            <span class="org-comment-delimiter"># </span><span class="org-comment">M[j] += scalar*M[i]</span>
-            <span class="org-keyword">for</span> k <span class="org-keyword">in</span> <span class="org-builtin">range</span>(dimension):
-                <span class="org-variable-name">M</span>[j,k] += scalar*M[i,k]
-    <span class="org-comment-delimiter"># </span><span class="org-comment">Compute the determinant</span>
-    <span class="org-variable-name">det</span> = <span class="org-highlight-numbers-number">1.0</span>
-    <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(dimension):
-        <span class="org-variable-name">det</span> *= M[i,i]
-    <span class="org-keyword">return</span> det
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Fast row-wise operations</span>
+    <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(dimension-<span style="color: #bd93f9; font-weight: bold;">1</span>,-<span style="color: #bd93f9; font-weight: bold;">1</span>,-<span style="color: #bd93f9; font-weight: bold;">1</span>):
+        <span style="color: #ff79c6;">if</span> M[i,i] != <span style="color: #bd93f9; font-weight: bold;">0.0</span>:
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Select the diagonal element</span>
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">diag_arg stands for diagonal argument</span>
+            diag_arg = M[i,i]
+        <span style="color: #ff79c6;">else</span>:
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Almost zero, good enough. Used to circumvent division by 0</span>
+            diag_arg = <span style="color: #bd93f9; font-weight: bold;">1</span>.0e-<span style="color: #bd93f9; font-weight: bold;">18</span>
+            M[i,i] = diag_arg
+        <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(i):
+            scalar = -M[j,i]/diag_arg
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">M[j] += scalar*M[i]</span>
+            <span style="color: #ff79c6;">for</span> k <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(dimension):
+                M[j,k] += scalar*M[i,k]
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Compute the determinant</span>
+    det = <span style="color: #bd93f9; font-weight: bold;">1.0</span>
+    <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(dimension):
+        det *= M[i,i]
+    <span style="color: #ff79c6;">return</span> det
 
-<span class="org-keyword">def</span> <span class="org-function-name">LUdecomposition</span>(A):
-    <span class="org-comment-delimiter"># </span><span class="org-comment">Define the dimension and the matrix</span>
-    <span class="org-variable-name">dimension</span> = <span class="org-builtin">len</span>(A)
-    <span class="org-variable-name">M</span> = A.copy().astype(<span class="org-builtin">float</span>)
-    <span class="org-comment-delimiter"># </span><span class="org-comment">Initialise L as the identity operator</span>
-    <span class="org-variable-name">L</span> = np.eye(dimension, dtype=<span class="org-builtin">float</span>)
-    <span class="org-comment-delimiter"># </span><span class="org-comment">Initialise U as the original matrix</span>
-    <span class="org-variable-name">U</span> = A.copy().astype(<span class="org-builtin">float</span>)
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">LUdecomposition</span>(A):
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Define the dimension and the matrix</span>
+    dimension = <span style="color: #ffb86c;">len</span>(A)
+    M = A.copy().astype(<span style="color: #ffb86c;">float</span>)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Initialise L as the identity operator</span>
+    L = np.eye(dimension, dtype=<span style="color: #ffb86c;">float</span>)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Initialise U as the original matrix</span>
+    U = A.copy().astype(<span style="color: #ffb86c;">float</span>)
 
-    <span class="org-comment-delimiter"># </span><span class="org-comment">solve by inspection</span>
-    <span class="org-keyword">for</span> k <span class="org-keyword">in</span> <span class="org-builtin">range</span>(dimension):
-        <span class="org-keyword">if</span> U[k,k] != <span class="org-highlight-numbers-number">0.0</span>:
-            <span class="org-comment-delimiter"># </span><span class="org-comment">Select the diagonal element</span>
-            <span class="org-comment-delimiter"># </span><span class="org-comment">diag_arg stands for diagonal argument</span>
-            <span class="org-variable-name">diag_arg</span> = U[k,k]
-        <span class="org-keyword">else</span>:
-            <span class="org-comment-delimiter"># </span><span class="org-comment">Almost zero, good enough. Used to circumvent division by 0</span>
-            <span class="org-variable-name">diag_arg</span> = <span class="org-highlight-numbers-number">1</span>.0e-<span class="org-highlight-numbers-number">18</span>
-        <span class="org-keyword">for</span> j <span class="org-keyword">in</span> <span class="org-builtin">range</span>(k+<span class="org-highlight-numbers-number">1</span>, dimension):
-            <span class="org-variable-name">scalar</span> = U[j,k]/diag_arg
-            <span class="org-variable-name">L</span>[j,k] = scalar
-            <span class="org-variable-name">U</span>[j] -= scalar*U[k]
-    <span class="org-keyword">return</span> L, U
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">solve by inspection</span>
+    <span style="color: #ff79c6;">for</span> k <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(dimension):
+        <span style="color: #ff79c6;">if</span> U[k,k] != <span style="color: #bd93f9; font-weight: bold;">0.0</span>:
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Select the diagonal element</span>
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">diag_arg stands for diagonal argument</span>
+            diag_arg = U[k,k]
+        <span style="color: #ff79c6;">else</span>:
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Almost zero, good enough. Used to circumvent division by 0</span>
+            diag_arg = <span style="color: #bd93f9; font-weight: bold;">1</span>.0e-<span style="color: #bd93f9; font-weight: bold;">18</span>
+        <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(k+<span style="color: #bd93f9; font-weight: bold;">1</span>, dimension):
+            scalar = U[j,k]/diag_arg
+            L[j,k] = scalar
+            U[j] -= scalar*U[k]
+    <span style="color: #ff79c6;">return</span> L, U
 
-<span class="org-keyword">def</span> <span class="org-function-name">adjugate_matrix</span>(A):
-    <span class="org-doc">''' Warning: this is a quite inefficient method '''</span>
-    <span class="org-variable-name">dimension</span> = <span class="org-builtin">len</span>(A)
-    <span class="org-variable-name">M</span> = A.copy().astype(<span class="org-builtin">float</span>)
-    <span class="org-variable-name">C</span> = np.eye(dimension, dtype=<span class="org-builtin">float</span>)
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">adjugate_matrix</span>(A):
+    <span style="color: #8995ba;">''' Warning: this is a quite inefficient method '''</span>
+    dimension = <span style="color: #ffb86c;">len</span>(A)
+    M = A.copy().astype(<span style="color: #ffb86c;">float</span>)
+    C = np.eye(dimension, dtype=<span style="color: #ffb86c;">float</span>)
 
-    <span class="org-comment-delimiter"># </span><span class="org-comment">Compute the determinants of minor matrices</span>
-    <span class="org-keyword">for</span> j <span class="org-keyword">in</span> <span class="org-builtin">range</span>(dimension):
-        <span class="org-keyword">for</span> k <span class="org-keyword">in</span> <span class="org-builtin">range</span>(dimension):
-            <span class="org-comment-delimiter"># </span><span class="org-comment">remove the k-th row and the j-th column</span>
-            <span class="org-variable-name">minor</span> = np.delete(M, k, <span class="org-highlight-numbers-number">0</span>)
-            <span class="org-variable-name">minor</span> = np.delete(minor, j, <span class="org-highlight-numbers-number">1</span>)
-            <span class="org-comment-delimiter"># </span><span class="org-comment">compute the cofactor matrix</span>
-            <span class="org-variable-name">C</span>[j,k] = (-<span class="org-highlight-numbers-number">1</span>)**(j+k) * determinant(minor)
-    <span class="org-keyword">return</span> C
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Compute the determinants of minor matrices</span>
+    <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(dimension):
+        <span style="color: #ff79c6;">for</span> k <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(dimension):
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">remove the k-th row and the j-th column</span>
+            minor = np.delete(M, k, <span style="color: #bd93f9; font-weight: bold;">0</span>)
+            minor = np.delete(minor, j, <span style="color: #bd93f9; font-weight: bold;">1</span>)
+            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute the cofactor matrix</span>
+            C[j,k] = (-<span style="color: #bd93f9; font-weight: bold;">1</span>)**(j+k) * determinant(minor)
+    <span style="color: #ff79c6;">return</span> C
 </pre>
 </div>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">A</span> = np.array([[<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">3</span>,<span class="org-highlight-numbers-number">4</span>,<span class="org-highlight-numbers-number">1</span>],
-              [<span class="org-highlight-numbers-number">8</span>,<span class="org-highlight-numbers-number">5</span>,<span class="org-highlight-numbers-number">6</span>,<span class="org-highlight-numbers-number">7</span>,<span class="org-highlight-numbers-number">2</span>],
-              [<span class="org-highlight-numbers-number">9</span>,<span class="org-highlight-numbers-number">12</span>,<span class="org-highlight-numbers-number">10</span>,<span class="org-highlight-numbers-number">11</span>,<span class="org-highlight-numbers-number">3</span>],
-              [<span class="org-highlight-numbers-number">13</span>,<span class="org-highlight-numbers-number">14</span>,<span class="org-highlight-numbers-number">16</span>,<span class="org-highlight-numbers-number">15</span>,<span class="org-highlight-numbers-number">4</span>],
-              [<span class="org-highlight-numbers-number">10</span>,<span class="org-highlight-numbers-number">8</span>,<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">4</span>,<span class="org-highlight-numbers-number">2</span>]])
+<pre class="src src-ipython">A = np.array([[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>,<span style="color: #bd93f9; font-weight: bold;">4</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">8</span>,<span style="color: #bd93f9; font-weight: bold;">5</span>,<span style="color: #bd93f9; font-weight: bold;">6</span>,<span style="color: #bd93f9; font-weight: bold;">7</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">9</span>,<span style="color: #bd93f9; font-weight: bold;">12</span>,<span style="color: #bd93f9; font-weight: bold;">10</span>,<span style="color: #bd93f9; font-weight: bold;">11</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">13</span>,<span style="color: #bd93f9; font-weight: bold;">14</span>,<span style="color: #bd93f9; font-weight: bold;">16</span>,<span style="color: #bd93f9; font-weight: bold;">15</span>,<span style="color: #bd93f9; font-weight: bold;">4</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">10</span>,<span style="color: #bd93f9; font-weight: bold;">8</span>,<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">4</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>]])
 la.inv(A) * determinant(A)
 </pre>
 </div>
 
-<pre class="example" id="org3d3cebe">
+<pre class="example" id="org29dc1bf">
   array([[  60.,  -60.,  -30.,   30.,   15.],
   [  32.,   18.,  -46.,   16.,    3.],
   [ -10.,   60.,   80.,  -80.,  -15.],
@@ -383,7 +383,7 @@ la.inv(A) * determinant(A)
 </pre>
 </div>
 
-<pre class="example" id="org1a75e71">
+<pre class="example" id="orgbab64b6">
   array([[  60.,  -60.,  -30.,   30.,   15.],
   [  32.,   18.,  -46.,   16.,    3.],
   [ -10.,   60.,   80.,  -80.,  -15.],
@@ -398,29 +398,29 @@ left; each enry of the resulting matrix is the &ldquo;dot product&rdquo; of the
 corresponding rows and columns in the left and right matrices, respectively.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">class</span> <span class="org-type">matrix</span>:
-    <span class="org-keyword">def</span> <span class="org-function-name">__init__</span>(<span class="org-keyword">self</span>, M):
-        <span class="org-keyword">self</span>.M = np.array(M)
-    <span class="org-keyword">def</span> <span class="org-function-name">__mul__</span>(<span class="org-keyword">self</span>, other):
-        <span class="org-doc">''' Overload magic operator '''</span>
-        <span class="org-variable-name">rows</span> = np.shape(<span class="org-keyword">self</span>.M)[<span class="org-highlight-numbers-number">0</span>]
-        <span class="org-variable-name">cols</span> = np.shape(other.M)[<span class="org-highlight-numbers-number">1</span>]
-        <span class="org-variable-name">C</span> = np.zeros((rows, cols))
-        <span class="org-keyword">for</span> j <span class="org-keyword">in</span> <span class="org-builtin">range</span>(rows):
-            <span class="org-keyword">for</span> k <span class="org-keyword">in</span> <span class="org-builtin">range</span>(cols):
-                <span class="org-variable-name">C</span>[j,k] = <span class="org-builtin">sum</span>(<span class="org-keyword">self</span>.M[j]*other.M.T[k])
-        <span class="org-keyword">return</span> C
+<pre class="src src-ipython"><span style="color: #ff79c6;">class</span> <span style="color: #bd93f9;">matrix</span>:
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">__init__</span>(<span style="color: #ff79c6;">self</span>, M):
+        <span style="color: #ff79c6;">self</span>.M = np.array(M)
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">__mul__</span>(<span style="color: #ff79c6;">self</span>, other):
+        <span style="color: #8995ba;">''' Overload magic operator '''</span>
+        rows = np.shape(<span style="color: #ff79c6;">self</span>.M)[<span style="color: #bd93f9; font-weight: bold;">0</span>]
+        cols = np.shape(other.M)[<span style="color: #bd93f9; font-weight: bold;">1</span>]
+        C = np.zeros((rows, cols))
+        <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(rows):
+            <span style="color: #ff79c6;">for</span> k <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(cols):
+                C[j,k] = <span style="color: #ffb86c;">sum</span>(<span style="color: #ff79c6;">self</span>.M[j]*other.M.T[k])
+        <span style="color: #ff79c6;">return</span> C
 
-<span class="org-variable-name">A</span> = matrix([[<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">3</span>],
-            [<span class="org-highlight-numbers-number">4</span>,<span class="org-highlight-numbers-number">5</span>,<span class="org-highlight-numbers-number">6</span>]])
-<span class="org-variable-name">B</span> = matrix([[<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">3</span>],
-            [<span class="org-highlight-numbers-number">4</span>,<span class="org-highlight-numbers-number">5</span>,<span class="org-highlight-numbers-number">6</span>],
-            [<span class="org-highlight-numbers-number">7</span>,<span class="org-highlight-numbers-number">8</span>,<span class="org-highlight-numbers-number">9</span>]])
+A = matrix([[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>],
+            [<span style="color: #bd93f9; font-weight: bold;">4</span>,<span style="color: #bd93f9; font-weight: bold;">5</span>,<span style="color: #bd93f9; font-weight: bold;">6</span>]])
+B = matrix([[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>],
+            [<span style="color: #bd93f9; font-weight: bold;">4</span>,<span style="color: #bd93f9; font-weight: bold;">5</span>,<span style="color: #bd93f9; font-weight: bold;">6</span>],
+            [<span style="color: #bd93f9; font-weight: bold;">7</span>,<span style="color: #bd93f9; font-weight: bold;">8</span>,<span style="color: #bd93f9; font-weight: bold;">9</span>]])
 A*B
 </pre>
 </div>
 
-<pre class="example" id="org860d8b2">
+<pre class="example" id="org662f382">
   array([[30., 36., 42.],
   [66., 81., 96.]])
 </pre>
@@ -429,16 +429,16 @@ A*B
 To prove that this is correct, consider:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">A</span> = np.array([[<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">3</span>],
-            [<span class="org-highlight-numbers-number">4</span>,<span class="org-highlight-numbers-number">5</span>,<span class="org-highlight-numbers-number">6</span>]])
-<span class="org-variable-name">B</span> = np.array([[<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">3</span>],
-            [<span class="org-highlight-numbers-number">4</span>,<span class="org-highlight-numbers-number">5</span>,<span class="org-highlight-numbers-number">6</span>],
-            [<span class="org-highlight-numbers-number">7</span>,<span class="org-highlight-numbers-number">8</span>,<span class="org-highlight-numbers-number">9</span>]])
+<pre class="src src-ipython">A = np.array([[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>],
+            [<span style="color: #bd93f9; font-weight: bold;">4</span>,<span style="color: #bd93f9; font-weight: bold;">5</span>,<span style="color: #bd93f9; font-weight: bold;">6</span>]])
+B = np.array([[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>],
+            [<span style="color: #bd93f9; font-weight: bold;">4</span>,<span style="color: #bd93f9; font-weight: bold;">5</span>,<span style="color: #bd93f9; font-weight: bold;">6</span>],
+            [<span style="color: #bd93f9; font-weight: bold;">7</span>,<span style="color: #bd93f9; font-weight: bold;">8</span>,<span style="color: #bd93f9; font-weight: bold;">9</span>]])
 A @ B
 </pre>
 </div>
 
-<pre class="example" id="orgd56bb52">
+<pre class="example" id="org543f120">
   array([[30, 36, 42],
   [66, 81, 96]])
 </pre>
@@ -496,28 +496,28 @@ Diagonalisation process:
 We consider diagonalisable matrices that lie &ldquo;close&rdquo; to non-diagonalisable ones as non-diagonalisable
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">is_diagonalizable</span>(T):
-    <span class="org-comment-delimiter"># </span><span class="org-comment">solve for eigenvalues and eigenvectors of T</span>
-    <span class="org-variable-name">eigvals</span>, <span class="org-variable-name">eigvecs</span> = la.eig(T)
-    <span class="org-comment-delimiter"># </span><span class="org-comment">if the condition number of the eigenvectors matrix big, then  it is close to non-diagonalisable, numerically speaking</span>
-    <span class="org-variable-name">cond</span> = la.cond(eigvecs)
-    <span class="org-keyword">if</span> cond &gt;= 1e+<span class="org-highlight-numbers-number">10</span>:
-        <span class="org-keyword">return</span> <span class="org-constant">False</span>, <span class="org-constant">False</span>, <span class="org-constant">False</span>
-    <span class="org-keyword">else</span>:
-        <span class="org-variable-name">diag</span> = eigvals
-        <span class="org-keyword">return</span> <span class="org-constant">True</span>, diag, eigvecs
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">is_diagonalizable</span>(T):
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">solve for eigenvalues and eigenvectors of T</span>
+    eigvals, eigvecs = la.eig(T)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">if the condition number of the eigenvectors matrix big, then  it is close to non-diagonalisable, numerically speaking</span>
+    cond = la.cond(eigvecs)
+    <span style="color: #ff79c6;">if</span> cond &gt;= 1e+<span style="color: #bd93f9; font-weight: bold;">10</span>:
+        <span style="color: #ff79c6;">return</span> <span style="color: #8be9fd;">False</span>, <span style="color: #8be9fd;">False</span>, <span style="color: #8be9fd;">False</span>
+    <span style="color: #ff79c6;">else</span>:
+        diag = eigvals
+        <span style="color: #ff79c6;">return</span> <span style="color: #8be9fd;">True</span>, diag, eigvecs
 </pre>
 </div>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-comment-delimiter"># </span><span class="org-comment">This matrix is diagonalisable</span>
-<span class="org-variable-name">A</span> = np.array([[<span class="org-highlight-numbers-number">2</span>, -<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">1</span>],
-              [<span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">3</span>, -<span class="org-highlight-numbers-number">1</span>],
-              [<span class="org-highlight-numbers-number">2</span>, <span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">3</span>]])
-<span class="org-comment-delimiter"># </span><span class="org-comment">This one is not</span>
-<span class="org-variable-name">B</span> = np.array([[<span class="org-highlight-numbers-number">6</span>, <span class="org-highlight-numbers-number">3</span>, -<span class="org-highlight-numbers-number">8</span>],
-              [<span class="org-highlight-numbers-number">0</span>, -<span class="org-highlight-numbers-number">2</span>, <span class="org-highlight-numbers-number">0</span>],
-              [<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">0</span>, -<span class="org-highlight-numbers-number">3</span>]])
-is_diagonalizable(A)[<span class="org-highlight-numbers-number">0</span>], is_diagonalizable(B)[<span class="org-highlight-numbers-number">0</span>]
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">This matrix is diagonalisable</span>
+A = np.array([[<span style="color: #bd93f9; font-weight: bold;">2</span>, -<span style="color: #bd93f9; font-weight: bold;">1</span>, <span style="color: #bd93f9; font-weight: bold;">1</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">3</span>, -<span style="color: #bd93f9; font-weight: bold;">1</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">2</span>, <span style="color: #bd93f9; font-weight: bold;">1</span>, <span style="color: #bd93f9; font-weight: bold;">3</span>]])
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">This one is not</span>
+B = np.array([[<span style="color: #bd93f9; font-weight: bold;">6</span>, <span style="color: #bd93f9; font-weight: bold;">3</span>, -<span style="color: #bd93f9; font-weight: bold;">8</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">0</span>, -<span style="color: #bd93f9; font-weight: bold;">2</span>, <span style="color: #bd93f9; font-weight: bold;">0</span>],
+              [<span style="color: #bd93f9; font-weight: bold;">1</span>, <span style="color: #bd93f9; font-weight: bold;">0</span>, -<span style="color: #bd93f9; font-weight: bold;">3</span>]])
+is_diagonalizable(A)[<span style="color: #bd93f9; font-weight: bold;">0</span>], is_diagonalizable(B)[<span style="color: #bd93f9; font-weight: bold;">0</span>]
 </pre>
 </div>
 
@@ -528,28 +528,28 @@ is_diagonalizable(A)[<span class="org-highlight-numbers-number">0</span>], is_di
 Thus we can proceed to compute the
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">positions</span>(time_domain, init_state, A):
-    <span class="org-variable-name">is_diag</span>, <span class="org-variable-name">diag</span>, <span class="org-variable-name">basis_matrix</span> = is_diagonalizable(A)
-    <span class="org-keyword">if</span> is_diag:
-        <span class="org-variable-name">positions</span> = np.zeros((time_domain.shape[<span class="org-highlight-numbers-number">0</span>], <span class="org-highlight-numbers-number">3</span>))
-        <span class="org-variable-name">j</span> = <span class="org-highlight-numbers-number">0</span>
-        <span class="org-keyword">for</span> t <span class="org-keyword">in</span> time_domain:
-            <span class="org-variable-name">positions</span>[j] = ((basis_matrix @ np.diag(np.exp(t*diag)) @ la.inv(basis_matrix)) @ init_state).T
-            <span class="org-variable-name">j</span> += <span class="org-highlight-numbers-number">1</span>
-        <span class="org-keyword">return</span> positions
-    <span class="org-keyword">else</span>:
-        <span class="org-keyword">print</span>(<span class="org-string">'Matrix cannot be diagonalised'</span>)
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">positions</span>(time_domain, init_state, A):
+    is_diag, diag, basis_matrix = is_diagonalizable(A)
+    <span style="color: #ff79c6;">if</span> is_diag:
+        positions = np.zeros((time_domain.shape[<span style="color: #bd93f9; font-weight: bold;">0</span>], <span style="color: #bd93f9; font-weight: bold;">3</span>))
+        j = <span style="color: #bd93f9; font-weight: bold;">0</span>
+        <span style="color: #ff79c6;">for</span> t <span style="color: #ff79c6;">in</span> time_domain:
+            positions[j] = ((basis_matrix @ np.diag(np.exp(t*diag)) @ la.inv(basis_matrix)) @ init_state).T
+            j += <span style="color: #bd93f9; font-weight: bold;">1</span>
+        <span style="color: #ff79c6;">return</span> positions
+    <span style="color: #ff79c6;">else</span>:
+        <span style="color: #ff79c6;">print</span>(<span style="color: #f1fa8c;">'Matrix cannot be diagonalised'</span>)
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">initial state of the system</span>
-<span class="org-variable-name">init_state</span> = np.array([[<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>]]).T
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">initial state of the system</span>
+init_state = np.array([[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>]]).T
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">compute positions with the above routine</span>
-<span class="org-variable-name">t</span> = np.linspace(<span class="org-highlight-numbers-number">0</span>, <span class="org-highlight-numbers-number">2</span>, <span class="org-highlight-numbers-number">500</span>)
-<span class="org-variable-name">gamma</span> = positions(t, init_state, A)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">compute positions with the above routine</span>
+t = np.linspace(<span style="color: #bd93f9; font-weight: bold;">0</span>, <span style="color: #bd93f9; font-weight: bold;">2</span>, <span style="color: #bd93f9; font-weight: bold;">500</span>)
+gamma = positions(t, init_state, A)
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">tabulate the data points</span>
-<span class="org-variable-name">df</span> = pd.DataFrame(gamma, columns=[<span class="org-string">'x'</span>, <span class="org-string">'y'</span>, <span class="org-string">'z'</span>])
-tabulate(df.head(<span class="org-highlight-numbers-number">10</span>), headers=<span class="org-string">'keys'</span>, tablefmt=<span class="org-string">'orgtbl'</span>, showindex=<span class="org-string">'always'</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">tabulate the data points</span>
+df = pd.DataFrame(gamma, columns=[<span style="color: #f1fa8c;">'x'</span>, <span style="color: #f1fa8c;">'y'</span>, <span style="color: #f1fa8c;">'z'</span>])
+tabulate(df.head(<span style="color: #bd93f9; font-weight: bold;">10</span>), headers=<span style="color: #f1fa8c;">'keys'</span>, tablefmt=<span style="color: #f1fa8c;">'orgtbl'</span>, showindex=<span style="color: #f1fa8c;">'always'</span>)
 </pre>
 </div>
 
@@ -646,34 +646,34 @@ tabulate(df.head(<span class="org-highlight-numbers-number">10</span>), headers=
 </tbody>
 </table>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-comment-delimiter"># </span><span class="org-comment">Positions from dataframe</span>
-<span class="org-variable-name">x</span> = df.x
-<span class="org-variable-name">y</span> = df.y
-<span class="org-variable-name">z</span> = df.z
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">Positions from dataframe</span>
+x = df.x
+y = df.y
+z = df.z
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">Using gridspec to plot the data</span>
-<span class="org-variable-name">fig</span> = plt.figure(figsize=(<span class="org-highlight-numbers-number">10</span>,<span class="org-highlight-numbers-number">8</span>))
-<span class="org-variable-name">gs</span> = gridspec.GridSpec(nrows=<span class="org-highlight-numbers-number">2</span>, ncols=<span class="org-highlight-numbers-number">2</span>, height_ratios=[<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>])
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Using gridspec to plot the data</span>
+fig = plt.figure(figsize=(<span style="color: #bd93f9; font-weight: bold;">10</span>,<span style="color: #bd93f9; font-weight: bold;">8</span>))
+gs = gridspec.GridSpec(nrows=<span style="color: #bd93f9; font-weight: bold;">2</span>, ncols=<span style="color: #bd93f9; font-weight: bold;">2</span>, height_ratios=[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>])
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">Declare x graph</span>
-<span class="org-variable-name">ax0</span> = fig.add_subplot(gs[<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">0</span>])
-ax0.plot(t, x, <span class="org-string">'k-'</span>)
-ax0.set_xlabel(<span class="org-string">'t'</span>)
-ax0.set_ylabel(<span class="org-string">'x(t)'</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Declare x graph</span>
+ax0 = fig.add_subplot(gs[<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">0</span>])
+ax0.plot(t, x, <span style="color: #f1fa8c;">'k-'</span>)
+ax0.set_xlabel(<span style="color: #f1fa8c;">'t'</span>)
+ax0.set_ylabel(<span style="color: #f1fa8c;">'x(t)'</span>)
 ax0.grid()
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">Declare y graph</span>
-<span class="org-variable-name">ax1</span> = fig.add_subplot(gs[<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">1</span>])
-ax1.plot(t, y, <span class="org-string">'k-'</span>)
-ax1.set_xlabel(<span class="org-string">'t'</span>)
-ax1.set_ylabel(<span class="org-string">'y(t)'</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Declare y graph</span>
+ax1 = fig.add_subplot(gs[<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>])
+ax1.plot(t, y, <span style="color: #f1fa8c;">'k-'</span>)
+ax1.set_xlabel(<span style="color: #f1fa8c;">'t'</span>)
+ax1.set_ylabel(<span style="color: #f1fa8c;">'y(t)'</span>)
 ax1.grid()
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">Declare z graph</span>
-<span class="org-variable-name">ax2</span> = fig.add_subplot(gs[<span class="org-highlight-numbers-number">1</span>:,<span class="org-highlight-numbers-number">0</span>])
-ax2.plot(t, z, <span class="org-string">'k-'</span>)
-ax2.set_xlabel(<span class="org-string">'t'</span>)
-ax2.set_ylabel(<span class="org-string">'z(t)'</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Declare z graph</span>
+ax2 = fig.add_subplot(gs[<span style="color: #bd93f9; font-weight: bold;">1</span>:,<span style="color: #bd93f9; font-weight: bold;">0</span>])
+ax2.plot(t, z, <span style="color: #f1fa8c;">'k-'</span>)
+ax2.set_xlabel(<span style="color: #f1fa8c;">'t'</span>)
+ax2.set_ylabel(<span style="color: #f1fa8c;">'z(t)'</span>)
 ax2.grid()
 
 plt.tight_layout()
@@ -682,8 +682,8 @@ plt.show()
 </div>
 
 
-<div id="org3d2dd6a" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/auMLNI.svg" class="org-svg">
+<div id="orgf628832" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/tRXk5l.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -692,45 +692,45 @@ Sorry, your browser does not support SVG.</object>
 Compare these plots with the ones obtained from the expanded equations:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-comment-delimiter"># </span><span class="org-comment">Positions from dataframe</span>
-<span class="org-variable-name">_x</span> = <span class="org-highlight-numbers-number">0.5</span>*( init_state[<span class="org-highlight-numbers-number">0</span>]*np.exp(<span class="org-highlight-numbers-number">2</span>*t)*(<span class="org-highlight-numbers-number">1</span>+np.exp(<span class="org-highlight-numbers-number">2</span>*t)-<span class="org-highlight-numbers-number">2</span>*t)
-           + init_state[<span class="org-highlight-numbers-number">1</span>]*(-<span class="org-highlight-numbers-number">2</span>)*t*np.exp(<span class="org-highlight-numbers-number">2</span>*t)
-           + init_state[<span class="org-highlight-numbers-number">2</span>]*np.exp(<span class="org-highlight-numbers-number">2</span>*t)*(-<span class="org-highlight-numbers-number">1</span>+np.exp(<span class="org-highlight-numbers-number">2</span>*t)) )
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">Positions from dataframe</span>
+_x = <span style="color: #bd93f9; font-weight: bold;">0.5</span>*( init_state[<span style="color: #bd93f9; font-weight: bold;">0</span>]*np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)*(<span style="color: #bd93f9; font-weight: bold;">1</span>+np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)-<span style="color: #bd93f9; font-weight: bold;">2</span>*t)
+           + init_state[<span style="color: #bd93f9; font-weight: bold;">1</span>]*(-<span style="color: #bd93f9; font-weight: bold;">2</span>)*t*np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)
+           + init_state[<span style="color: #bd93f9; font-weight: bold;">2</span>]*np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)*(-<span style="color: #bd93f9; font-weight: bold;">1</span>+np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)) )
 
-<span class="org-variable-name">_y</span> = <span class="org-highlight-numbers-number">0.5</span>*( init_state[<span class="org-highlight-numbers-number">0</span>]*(-np.exp(<span class="org-highlight-numbers-number">2</span>*t))*(-<span class="org-highlight-numbers-number">1</span>+np.exp(<span class="org-highlight-numbers-number">2</span>*t)-<span class="org-highlight-numbers-number">2</span>*t)
-           + init_state[<span class="org-highlight-numbers-number">1</span>]*<span class="org-highlight-numbers-number">2</span>*(t+<span class="org-highlight-numbers-number">1</span>)*np.exp(<span class="org-highlight-numbers-number">2</span>*t)
-           + init_state[<span class="org-highlight-numbers-number">2</span>]*(-np.exp(<span class="org-highlight-numbers-number">2</span>*t))*(-<span class="org-highlight-numbers-number">1</span>+np.exp(<span class="org-highlight-numbers-number">2</span>*t)) )
+_y = <span style="color: #bd93f9; font-weight: bold;">0.5</span>*( init_state[<span style="color: #bd93f9; font-weight: bold;">0</span>]*(-np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t))*(-<span style="color: #bd93f9; font-weight: bold;">1</span>+np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)-<span style="color: #bd93f9; font-weight: bold;">2</span>*t)
+           + init_state[<span style="color: #bd93f9; font-weight: bold;">1</span>]*<span style="color: #bd93f9; font-weight: bold;">2</span>*(t+<span style="color: #bd93f9; font-weight: bold;">1</span>)*np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)
+           + init_state[<span style="color: #bd93f9; font-weight: bold;">2</span>]*(-np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t))*(-<span style="color: #bd93f9; font-weight: bold;">1</span>+np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)) )
 
-<span class="org-variable-name">_z</span> = <span class="org-highlight-numbers-number">0.5</span>*( init_state[<span class="org-highlight-numbers-number">0</span>]*np.exp(<span class="org-highlight-numbers-number">2</span>*t)*(-<span class="org-highlight-numbers-number">1</span>+np.exp(<span class="org-highlight-numbers-number">2</span>*t)+<span class="org-highlight-numbers-number">2</span>*t)
-           + init_state[<span class="org-highlight-numbers-number">1</span>]*<span class="org-highlight-numbers-number">2</span>*t*np.exp(<span class="org-highlight-numbers-number">2</span>*t)
-           + init_state[<span class="org-highlight-numbers-number">2</span>]*np.exp(<span class="org-highlight-numbers-number">2</span>*t)*(<span class="org-highlight-numbers-number">1</span>+np.exp(<span class="org-highlight-numbers-number">2</span>*t)) )
+_z = <span style="color: #bd93f9; font-weight: bold;">0.5</span>*( init_state[<span style="color: #bd93f9; font-weight: bold;">0</span>]*np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)*(-<span style="color: #bd93f9; font-weight: bold;">1</span>+np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)+<span style="color: #bd93f9; font-weight: bold;">2</span>*t)
+           + init_state[<span style="color: #bd93f9; font-weight: bold;">1</span>]*<span style="color: #bd93f9; font-weight: bold;">2</span>*t*np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)
+           + init_state[<span style="color: #bd93f9; font-weight: bold;">2</span>]*np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)*(<span style="color: #bd93f9; font-weight: bold;">1</span>+np.exp(<span style="color: #bd93f9; font-weight: bold;">2</span>*t)) )
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">Using gridspec to plot the data</span>
-<span class="org-variable-name">fig</span> = plt.figure(figsize=(<span class="org-highlight-numbers-number">10</span>,<span class="org-highlight-numbers-number">8</span>))
-<span class="org-variable-name">gs</span> = gridspec.GridSpec(nrows=<span class="org-highlight-numbers-number">2</span>, ncols=<span class="org-highlight-numbers-number">2</span>, height_ratios=[<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>])
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Using gridspec to plot the data</span>
+fig = plt.figure(figsize=(<span style="color: #bd93f9; font-weight: bold;">10</span>,<span style="color: #bd93f9; font-weight: bold;">8</span>))
+gs = gridspec.GridSpec(nrows=<span style="color: #bd93f9; font-weight: bold;">2</span>, ncols=<span style="color: #bd93f9; font-weight: bold;">2</span>, height_ratios=[<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>])
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">Declare x graph</span>
-<span class="org-variable-name">ax0</span> = fig.add_subplot(gs[<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">0</span>])
-ax0.plot(t, _x, <span class="org-string">'k-'</span>)
-ax0.plot(t, x, <span class="org-string">'b--'</span>)
-ax0.set_xlabel(<span class="org-string">'t'</span>)
-ax0.set_ylabel(<span class="org-string">'x(t)'</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Declare x graph</span>
+ax0 = fig.add_subplot(gs[<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">0</span>])
+ax0.plot(t, _x, <span style="color: #f1fa8c;">'k-'</span>)
+ax0.plot(t, x, <span style="color: #f1fa8c;">'b--'</span>)
+ax0.set_xlabel(<span style="color: #f1fa8c;">'t'</span>)
+ax0.set_ylabel(<span style="color: #f1fa8c;">'x(t)'</span>)
 ax0.grid()
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">Declare y graph</span>
-<span class="org-variable-name">ax1</span> = fig.add_subplot(gs[<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">1</span>])
-ax1.plot(t, _y, <span class="org-string">'k-'</span>)
-ax1.plot(t, y, <span class="org-string">'b--'</span>)
-ax1.set_xlabel(<span class="org-string">'t'</span>)
-ax1.set_ylabel(<span class="org-string">'y(t)'</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Declare y graph</span>
+ax1 = fig.add_subplot(gs[<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>])
+ax1.plot(t, _y, <span style="color: #f1fa8c;">'k-'</span>)
+ax1.plot(t, y, <span style="color: #f1fa8c;">'b--'</span>)
+ax1.set_xlabel(<span style="color: #f1fa8c;">'t'</span>)
+ax1.set_ylabel(<span style="color: #f1fa8c;">'y(t)'</span>)
 ax1.grid()
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">Declare z graph</span>
-<span class="org-variable-name">ax2</span> = fig.add_subplot(gs[<span class="org-highlight-numbers-number">1</span>:,<span class="org-highlight-numbers-number">0</span>])
-ax2.plot(t, _z, <span class="org-string">'k-'</span>)
-ax2.plot(t, z, <span class="org-string">'b--'</span>)
-ax2.set_xlabel(<span class="org-string">'t'</span>)
-ax2.set_ylabel(<span class="org-string">'z(t)'</span>)
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">Declare z graph</span>
+ax2 = fig.add_subplot(gs[<span style="color: #bd93f9; font-weight: bold;">1</span>:,<span style="color: #bd93f9; font-weight: bold;">0</span>])
+ax2.plot(t, _z, <span style="color: #f1fa8c;">'k-'</span>)
+ax2.plot(t, z, <span style="color: #f1fa8c;">'b--'</span>)
+ax2.set_xlabel(<span style="color: #f1fa8c;">'t'</span>)
+ax2.set_ylabel(<span style="color: #f1fa8c;">'z(t)'</span>)
 ax2.grid()
 
 plt.tight_layout()
@@ -739,8 +739,8 @@ plt.show()
 </div>
 
 
-<div id="org8d41416" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/ukCa7K.svg" class="org-svg">
+<div id="org811516e" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/7PytwI.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -768,34 +768,34 @@ encrypted message:
 Since the encription matrix is inverible, reversing the process is easy if we know it beforehand.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">decrypt</span>(crypt_msg, crypt_mat, abc, num):
-    <span class="org-variable-name">crypt_msg</span> = np.asarray(crypt_msg)
-    <span class="org-variable-name">crypt_msg</span> = np.reshape(crypt_msg, (<span class="org-highlight-numbers-number">4</span>, crypt_mat.shape[<span class="org-highlight-numbers-number">0</span>]))
-    <span class="org-variable-name">msg</span> = (crypt_msg @ la.inv(crypt_mat)).<span class="org-builtin">round</span>().astype(<span class="org-builtin">int</span>)
-    <span class="org-variable-name">string</span> = <span class="org-string">''</span>
-    <span class="org-keyword">for</span> row <span class="org-keyword">in</span> msg:
-        <span class="org-keyword">for</span> n <span class="org-keyword">in</span> row:
-            <span class="org-variable-name">char</span> = <span class="org-builtin">dict</span>(<span class="org-builtin">zip</span>(num, abc))[<span class="org-builtin">str</span>(n)]
-            <span class="org-variable-name">string</span> += char
-    <span class="org-keyword">return</span> string
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">decrypt</span>(crypt_msg, crypt_mat, abc, num):
+    crypt_msg = np.asarray(crypt_msg)
+    crypt_msg = np.reshape(crypt_msg, (<span style="color: #bd93f9; font-weight: bold;">4</span>, crypt_mat.shape[<span style="color: #bd93f9; font-weight: bold;">0</span>]))
+    msg = (crypt_msg @ la.inv(crypt_mat)).<span style="color: #ffb86c;">round</span>().astype(<span style="color: #ffb86c;">int</span>)
+    string = <span style="color: #f1fa8c;">''</span>
+    <span style="color: #ff79c6;">for</span> row <span style="color: #ff79c6;">in</span> msg:
+        <span style="color: #ff79c6;">for</span> n <span style="color: #ff79c6;">in</span> row:
+            char = <span style="color: #ffb86c;">dict</span>(<span style="color: #ffb86c;">zip</span>(num, abc))[<span style="color: #ffb86c;">str</span>(n)]
+            string += char
+    <span style="color: #ff79c6;">return</span> string
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">abc</span>=[<span class="org-string">'a'</span>,<span class="org-string">'b'</span>,<span class="org-string">'c'</span>,<span class="org-string">'d'</span>,<span class="org-string">'e'</span>,<span class="org-string">'f'</span>,<span class="org-string">'g'</span>,<span class="org-string">'h'</span>,<span class="org-string">'i'</span>,<span class="org-string">'j'</span>, \
-     <span class="org-string">'k'</span>,<span class="org-string">'l'</span>,<span class="org-string">'m'</span>,<span class="org-string">'n'</span>,<span class="org-string">'o'</span>,<span class="org-string">'p'</span>,<span class="org-string">'q'</span>,<span class="org-string">'r'</span>,<span class="org-string">'s'</span>,<span class="org-string">'t'</span>, \
-     <span class="org-string">'u'</span>,<span class="org-string">'v'</span>,<span class="org-string">'w'</span>,<span class="org-string">'x'</span>,<span class="org-string">'y'</span>,<span class="org-string">'z'</span>,<span class="org-string">' '</span>]
+<pre class="src src-ipython">abc=[<span style="color: #f1fa8c;">'a'</span>,<span style="color: #f1fa8c;">'b'</span>,<span style="color: #f1fa8c;">'c'</span>,<span style="color: #f1fa8c;">'d'</span>,<span style="color: #f1fa8c;">'e'</span>,<span style="color: #f1fa8c;">'f'</span>,<span style="color: #f1fa8c;">'g'</span>,<span style="color: #f1fa8c;">'h'</span>,<span style="color: #f1fa8c;">'i'</span>,<span style="color: #f1fa8c;">'j'</span>, \
+     <span style="color: #f1fa8c;">'k'</span>,<span style="color: #f1fa8c;">'l'</span>,<span style="color: #f1fa8c;">'m'</span>,<span style="color: #f1fa8c;">'n'</span>,<span style="color: #f1fa8c;">'o'</span>,<span style="color: #f1fa8c;">'p'</span>,<span style="color: #f1fa8c;">'q'</span>,<span style="color: #f1fa8c;">'r'</span>,<span style="color: #f1fa8c;">'s'</span>,<span style="color: #f1fa8c;">'t'</span>, \
+     <span style="color: #f1fa8c;">'u'</span>,<span style="color: #f1fa8c;">'v'</span>,<span style="color: #f1fa8c;">'w'</span>,<span style="color: #f1fa8c;">'x'</span>,<span style="color: #f1fa8c;">'y'</span>,<span style="color: #f1fa8c;">'z'</span>,<span style="color: #f1fa8c;">' '</span>]
 
-<span class="org-variable-name">num</span>=[<span class="org-string">'1'</span>,<span class="org-string">'2'</span>,<span class="org-string">'3'</span>,<span class="org-string">'4'</span>,<span class="org-string">'5'</span>,<span class="org-string">'6'</span>,<span class="org-string">'7'</span>,<span class="org-string">'8'</span>,<span class="org-string">'9'</span>,<span class="org-string">'10'</span>, \
-     <span class="org-string">'11'</span>,<span class="org-string">'12'</span>,<span class="org-string">'13'</span>,<span class="org-string">'14'</span>,<span class="org-string">'15'</span>,<span class="org-string">'16'</span>,<span class="org-string">'17'</span>,<span class="org-string">'18'</span>, \
-     <span class="org-string">'19'</span>,<span class="org-string">'20'</span>,<span class="org-string">'21'</span>,<span class="org-string">'22'</span>,<span class="org-string">'23'</span>,<span class="org-string">'24'</span>,<span class="org-string">'25'</span>,<span class="org-string">'26'</span>,<span class="org-string">'27'</span>]
+num=[<span style="color: #f1fa8c;">'1'</span>,<span style="color: #f1fa8c;">'2'</span>,<span style="color: #f1fa8c;">'3'</span>,<span style="color: #f1fa8c;">'4'</span>,<span style="color: #f1fa8c;">'5'</span>,<span style="color: #f1fa8c;">'6'</span>,<span style="color: #f1fa8c;">'7'</span>,<span style="color: #f1fa8c;">'8'</span>,<span style="color: #f1fa8c;">'9'</span>,<span style="color: #f1fa8c;">'10'</span>, \
+     <span style="color: #f1fa8c;">'11'</span>,<span style="color: #f1fa8c;">'12'</span>,<span style="color: #f1fa8c;">'13'</span>,<span style="color: #f1fa8c;">'14'</span>,<span style="color: #f1fa8c;">'15'</span>,<span style="color: #f1fa8c;">'16'</span>,<span style="color: #f1fa8c;">'17'</span>,<span style="color: #f1fa8c;">'18'</span>, \
+     <span style="color: #f1fa8c;">'19'</span>,<span style="color: #f1fa8c;">'20'</span>,<span style="color: #f1fa8c;">'21'</span>,<span style="color: #f1fa8c;">'22'</span>,<span style="color: #f1fa8c;">'23'</span>,<span style="color: #f1fa8c;">'24'</span>,<span style="color: #f1fa8c;">'25'</span>,<span style="color: #f1fa8c;">'26'</span>,<span style="color: #f1fa8c;">'27'</span>]
 
-<span class="org-variable-name">crypt_mat</span> = np.array([[ <span class="org-highlight-numbers-number">1</span>,  <span class="org-highlight-numbers-number">2</span>, -<span class="org-highlight-numbers-number">3</span>,  <span class="org-highlight-numbers-number">4</span>,  <span class="org-highlight-numbers-number">5</span>],
-                      [-<span class="org-highlight-numbers-number">2</span>, -<span class="org-highlight-numbers-number">5</span>,  <span class="org-highlight-numbers-number">8</span>, -<span class="org-highlight-numbers-number">8</span>, -<span class="org-highlight-numbers-number">9</span>],
-                      [ <span class="org-highlight-numbers-number">1</span>,  <span class="org-highlight-numbers-number">2</span>, -<span class="org-highlight-numbers-number">2</span>,  <span class="org-highlight-numbers-number">7</span>,  <span class="org-highlight-numbers-number">9</span>],
-                      [ <span class="org-highlight-numbers-number">1</span>,  <span class="org-highlight-numbers-number">1</span>,  <span class="org-highlight-numbers-number">0</span>,  <span class="org-highlight-numbers-number">6</span>, <span class="org-highlight-numbers-number">12</span>],
-                      [ <span class="org-highlight-numbers-number">2</span>,  <span class="org-highlight-numbers-number">4</span>, -<span class="org-highlight-numbers-number">6</span>,  <span class="org-highlight-numbers-number">8</span>, <span class="org-highlight-numbers-number">11</span>]])
-<span class="org-variable-name">crypt_msg</span> = [<span class="org-highlight-numbers-number">47</span>,<span class="org-highlight-numbers-number">49</span>,-<span class="org-highlight-numbers-number">19</span>,<span class="org-highlight-numbers-number">257</span>,<span class="org-highlight-numbers-number">487</span>,<span class="org-highlight-numbers-number">10</span>,-<span class="org-highlight-numbers-number">9</span>,<span class="org-highlight-numbers-number">63</span>,<span class="org-highlight-numbers-number">137</span>,<span class="org-highlight-numbers-number">236</span>, <span class="org-highlight-numbers-number">79</span>,<span class="org-highlight-numbers-number">142</span>,-<span class="org-highlight-numbers-number">184</span>,<span class="org-highlight-numbers-number">372</span>,<span class="org-highlight-numbers-number">536</span>,<span class="org-highlight-numbers-number">59</span>,<span class="org-highlight-numbers-number">70</span>,-<span class="org-highlight-numbers-number">40</span>,<span class="org-highlight-numbers-number">332</span>,<span class="org-highlight-numbers-number">588</span>]
+crypt_mat = np.array([[ <span style="color: #bd93f9; font-weight: bold;">1</span>,  <span style="color: #bd93f9; font-weight: bold;">2</span>, -<span style="color: #bd93f9; font-weight: bold;">3</span>,  <span style="color: #bd93f9; font-weight: bold;">4</span>,  <span style="color: #bd93f9; font-weight: bold;">5</span>],
+                      [-<span style="color: #bd93f9; font-weight: bold;">2</span>, -<span style="color: #bd93f9; font-weight: bold;">5</span>,  <span style="color: #bd93f9; font-weight: bold;">8</span>, -<span style="color: #bd93f9; font-weight: bold;">8</span>, -<span style="color: #bd93f9; font-weight: bold;">9</span>],
+                      [ <span style="color: #bd93f9; font-weight: bold;">1</span>,  <span style="color: #bd93f9; font-weight: bold;">2</span>, -<span style="color: #bd93f9; font-weight: bold;">2</span>,  <span style="color: #bd93f9; font-weight: bold;">7</span>,  <span style="color: #bd93f9; font-weight: bold;">9</span>],
+                      [ <span style="color: #bd93f9; font-weight: bold;">1</span>,  <span style="color: #bd93f9; font-weight: bold;">1</span>,  <span style="color: #bd93f9; font-weight: bold;">0</span>,  <span style="color: #bd93f9; font-weight: bold;">6</span>, <span style="color: #bd93f9; font-weight: bold;">12</span>],
+                      [ <span style="color: #bd93f9; font-weight: bold;">2</span>,  <span style="color: #bd93f9; font-weight: bold;">4</span>, -<span style="color: #bd93f9; font-weight: bold;">6</span>,  <span style="color: #bd93f9; font-weight: bold;">8</span>, <span style="color: #bd93f9; font-weight: bold;">11</span>]])
+crypt_msg = [<span style="color: #bd93f9; font-weight: bold;">47</span>,<span style="color: #bd93f9; font-weight: bold;">49</span>,-<span style="color: #bd93f9; font-weight: bold;">19</span>,<span style="color: #bd93f9; font-weight: bold;">257</span>,<span style="color: #bd93f9; font-weight: bold;">487</span>,<span style="color: #bd93f9; font-weight: bold;">10</span>,-<span style="color: #bd93f9; font-weight: bold;">9</span>,<span style="color: #bd93f9; font-weight: bold;">63</span>,<span style="color: #bd93f9; font-weight: bold;">137</span>,<span style="color: #bd93f9; font-weight: bold;">236</span>, <span style="color: #bd93f9; font-weight: bold;">79</span>,<span style="color: #bd93f9; font-weight: bold;">142</span>,-<span style="color: #bd93f9; font-weight: bold;">184</span>,<span style="color: #bd93f9; font-weight: bold;">372</span>,<span style="color: #bd93f9; font-weight: bold;">536</span>,<span style="color: #bd93f9; font-weight: bold;">59</span>,<span style="color: #bd93f9; font-weight: bold;">70</span>,-<span style="color: #bd93f9; font-weight: bold;">40</span>,<span style="color: #bd93f9; font-weight: bold;">332</span>,<span style="color: #bd93f9; font-weight: bold;">588</span>]
 </pre>
 </div>
 
@@ -812,7 +812,7 @@ Since the encription matrix is inverible, reversing the process is easy if we kn
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-10-10 Sun 08:30</p>
+<p class="date">Created: 2021-10-13 Wed 20:51</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

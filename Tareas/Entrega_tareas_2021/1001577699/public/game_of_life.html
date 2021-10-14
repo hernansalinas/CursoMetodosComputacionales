@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-10 Sun 08:27 -->
+<!-- 2021-10-13 Wed 21:35 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>John Conway's game of life.</title>
@@ -242,30 +242,30 @@ Conway&rsquo;s game of life is a cellular automation program.
 </p>
 
 <p>
-Usual <code>python</code> imports:
+Usual <code>python</code> imports
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
+<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
 
-<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
-<span class="org-keyword">import</span> matplotlib.pyplot <span class="org-keyword">as</span> plt
-<span class="org-keyword">from</span> IPython <span class="org-keyword">import</span> display
-<span class="org-keyword">from</span> matplotlib <span class="org-keyword">import</span> animation, rc
+<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
+<span style="color: #ff79c6;">from</span> IPython <span style="color: #ff79c6;">import</span> display
+<span style="color: #ff79c6;">from</span> matplotlib <span style="color: #ff79c6;">import</span> animation, rc
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-comment-delimiter"># </span><span class="org-comment">Returns a random initial state for the array</span>
-<span class="org-keyword">def</span> <span class="org-function-name">init_state</span>(n) :
-    <span class="org-comment-delimiter"># </span><span class="org-comment">We use n + 2 grids so as to add padding</span>
-    <span class="org-variable-name">state</span> = np.zeros((n + <span class="org-highlight-numbers-number">2</span>, n + <span class="org-highlight-numbers-number">2</span>))
-    <span class="org-comment-delimiter"># </span><span class="org-comment">since we do not want to modify the first and last columns and rows,</span>
-    <span class="org-comment-delimiter"># </span><span class="org-comment">we constrain the double loop below</span>
-    <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-highlight-numbers-number">1</span> ,n + <span class="org-highlight-numbers-number">1</span>) :
-        <span class="org-keyword">for</span> j <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-highlight-numbers-number">1</span>, n + <span class="org-highlight-numbers-number">1</span>) :
-            <span class="org-variable-name">random</span> = np.random.randint(<span class="org-highlight-numbers-number">0</span>,<span class="org-highlight-numbers-number">2</span>)
-            <span class="org-variable-name">state</span>[i,j] = random
-    <span class="org-keyword">return</span> state
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">Returns a random initial state for the array</span>
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">init_state</span>(n) :
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">We use n + 2 grids so as to add padding</span>
+    state = np.zeros((n + <span style="color: #bd93f9; font-weight: bold;">2</span>, n + <span style="color: #bd93f9; font-weight: bold;">2</span>))
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">since we do not want to modify the first and last columns and rows,</span>
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">we constrain the double loop below</span>
+    <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span> ,n + <span style="color: #bd93f9; font-weight: bold;">1</span>) :
+        <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n + <span style="color: #bd93f9; font-weight: bold;">1</span>) :
+            random = np.random.randint(<span style="color: #bd93f9; font-weight: bold;">0</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>)
+            state[i,j] = random
+    <span style="color: #ff79c6;">return</span> state
 </pre>
 </div>
 
@@ -273,33 +273,33 @@ Usual <code>python</code> imports:
 Now we must determine the number of neighbouring cells to pin down what must happen in the next time step.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-comment-delimiter"># </span><span class="org-comment">Returns the number of alive neighbours each cell has</span>
-<span class="org-keyword">def</span> <span class="org-function-name">alive_neigh</span>(state, n) :
-    <span class="org-comment-delimiter"># </span><span class="org-comment">initialise neigh_state as an array of zeros</span>
-    <span class="org-variable-name">neigh_state</span> = np.zeros((n + <span class="org-highlight-numbers-number">2</span>, n + <span class="org-highlight-numbers-number">2</span>))
-    <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-highlight-numbers-number">1</span>, n+<span class="org-highlight-numbers-number">1</span>) :
-        <span class="org-keyword">for</span> j <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-highlight-numbers-number">1</span>, n+<span class="org-highlight-numbers-number">1</span>) :
-            <span class="org-comment-delimiter"># </span><span class="org-bold"><span class="org-warning">TODO</span></span><span class="org-comment"> turn this into another loop</span>
-            <span class="org-variable-name">num_alive_neigh</span> = state[i-<span class="org-highlight-numbers-number">1</span>,j-<span class="org-highlight-numbers-number">1</span>] + state[i-<span class="org-highlight-numbers-number">1</span>,j] + state[i-<span class="org-highlight-numbers-number">1</span>,j+<span class="org-highlight-numbers-number">1</span>] + state[i,j-<span class="org-highlight-numbers-number">1</span>] + state[i,j+<span class="org-highlight-numbers-number">1</span>] + state[i+<span class="org-highlight-numbers-number">1</span>,j-<span class="org-highlight-numbers-number">1</span>] + state[i+<span class="org-highlight-numbers-number">1</span>,j] + state[i+<span class="org-highlight-numbers-number">1</span>,j+<span class="org-highlight-numbers-number">1</span>]
-            <span class="org-variable-name">neigh_state</span>[i, j] = num_alive_neigh
-    <span class="org-keyword">return</span> neigh_state
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">Returns the number of alive neighbours each cell has</span>
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">alive_neigh</span>(state, n) :
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">initialise neigh_state as an array of zeros</span>
+    neigh_state = np.zeros((n + <span style="color: #bd93f9; font-weight: bold;">2</span>, n + <span style="color: #bd93f9; font-weight: bold;">2</span>))
+    <span style="color: #ff79c6;">for</span> i <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n+<span style="color: #bd93f9; font-weight: bold;">1</span>) :
+        <span style="color: #ff79c6;">for</span> j <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(<span style="color: #bd93f9; font-weight: bold;">1</span>, n+<span style="color: #bd93f9; font-weight: bold;">1</span>) :
+            <span style="color: #6272a4;"># </span><span style="color: #f1fa8c; font-weight: bold;">TODO</span><span style="color: #6272a4;"> turn this into another loop</span>
+            num_alive_neigh = state[i-<span style="color: #bd93f9; font-weight: bold;">1</span>,j-<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i-<span style="color: #bd93f9; font-weight: bold;">1</span>,j] + state[i-<span style="color: #bd93f9; font-weight: bold;">1</span>,j+<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i,j-<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i,j+<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i+<span style="color: #bd93f9; font-weight: bold;">1</span>,j-<span style="color: #bd93f9; font-weight: bold;">1</span>] + state[i+<span style="color: #bd93f9; font-weight: bold;">1</span>,j] + state[i+<span style="color: #bd93f9; font-weight: bold;">1</span>,j+<span style="color: #bd93f9; font-weight: bold;">1</span>]
+            neigh_state[i, j] = num_alive_neigh
+    <span style="color: #ff79c6;">return</span> neigh_state
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">evolution</span>(state, n) :
-    <span class="org-comment-delimiter"># </span><span class="org-comment">evaluate conditions to be alive</span>
-    <span class="org-variable-name">neighbours</span> = alive_neigh(state, n)
-    <span class="org-comment-delimiter"># </span><span class="org-comment">if there are 2 or 3 alive neighbours, the cell is alive provided it was alive before</span>
-    <span class="org-variable-name">neigh_2_3</span> = np.logical_or( neighbours == <span class="org-highlight-numbers-number">3</span>, neighbours == <span class="org-highlight-numbers-number">2</span>)
-    <span class="org-variable-name">if_alive</span> = np.logical_and( state == <span class="org-highlight-numbers-number">1</span>, neigh_2_3 )
-    <span class="org-comment-delimiter"># </span><span class="org-comment">if there are exactly 3 alive neighbours, a previously dead cell is born</span>
-    <span class="org-variable-name">if_dead</span> = np.logical_and( state == <span class="org-highlight-numbers-number">0</span>, neighbours == <span class="org-highlight-numbers-number">3</span> )
-    <span class="org-comment-delimiter"># </span><span class="org-comment">merge conditions</span>
-    <span class="org-variable-name">evolution</span> = np.logical_or( if_alive, if_dead )
-    <span class="org-comment-delimiter"># </span><span class="org-comment">convert float into int</span>
-    <span class="org-variable-name">evolution</span> = evolution.astype(<span class="org-builtin">int</span>)
-    <span class="org-keyword">return</span> evolution
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">evolution</span>(state, n) :
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">evaluate conditions to be alive</span>
+    neighbours = alive_neigh(state, n)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">if there are 2 or 3 alive neighbours, the cell is alive provided it was alive before</span>
+    neigh_2_3 = np.logical_or( neighbours == <span style="color: #bd93f9; font-weight: bold;">3</span>, neighbours == <span style="color: #bd93f9; font-weight: bold;">2</span>)
+    if_alive = np.logical_and( state == <span style="color: #bd93f9; font-weight: bold;">1</span>, neigh_2_3 )
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">if there are exactly 3 alive neighbours, a previously dead cell is born</span>
+    if_dead = np.logical_and( state == <span style="color: #bd93f9; font-weight: bold;">0</span>, neighbours == <span style="color: #bd93f9; font-weight: bold;">3</span> )
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">merge conditions</span>
+    evolution = np.logical_or( if_alive, if_dead )
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">convert float into int</span>
+    evolution = evolution.astype(<span style="color: #ffb86c;">int</span>)
+    <span style="color: #ff79c6;">return</span> evolution
 </pre>
 </div>
 
@@ -307,49 +307,57 @@ Now we must determine the number of neighbouring cells to pin down what must hap
 Game of life routine
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">gameOfLife</span>(tmax, N, init=<span class="org-constant">None</span>) :
-    <span class="org-comment-delimiter"># </span><span class="org-comment">initial state of the array</span>
-    <span class="org-variable-name">states</span> = <span class="org-builtin">list</span>()
-    <span class="org-keyword">if</span> init <span class="org-keyword">is</span> <span class="org-constant">None</span> :
-        <span class="org-comment-delimiter"># </span><span class="org-comment">whenever init is not given, create a random one</span>
-        <span class="org-variable-name">state</span> = init_state(N)
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">gameOfLife</span>(tmax, N, init=<span style="color: #8be9fd;">None</span>) :
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">initial state of the array</span>
+    states = <span style="color: #ffb86c;">list</span>()
+    <span style="color: #ff79c6;">if</span> init <span style="color: #ff79c6;">is</span> <span style="color: #8be9fd;">None</span> :
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">whenever init is not given, create a random one</span>
+        state = init_state(N)
         states.append(state)
-    <span class="org-keyword">else</span> :
-        <span class="org-comment-delimiter"># </span><span class="org-comment">use the init state if given</span>
+    <span style="color: #ff79c6;">else</span> :
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">use the init state if given</span>
         states.append(init)
-    <span class="org-comment-delimiter"># </span><span class="org-comment">populate the list with remaining states</span>
-    <span class="org-keyword">for</span> t <span class="org-keyword">in</span> <span class="org-builtin">range</span>(tmax) :
-        <span class="org-variable-name">nth_state</span> = evolution(states[-<span class="org-highlight-numbers-number">1</span>], N)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">populate the list with remaining states</span>
+    <span style="color: #ff79c6;">for</span> t <span style="color: #ff79c6;">in</span> <span style="color: #ffb86c;">range</span>(tmax) :
+        nth_state = evolution(states[-<span style="color: #bd93f9; font-weight: bold;">1</span>], N)
         states.append(nth_state)
-    <span class="org-keyword">return</span> states
+    <span style="color: #ff79c6;">return</span> states
 
-<span class="org-variable-name">time_steps</span> = gameOfLife(<span class="org-highlight-numbers-number">10</span>, <span class="org-highlight-numbers-number">10</span>)
+time_steps = gameOfLife(<span style="color: #bd93f9; font-weight: bold;">10</span>, <span style="color: #bd93f9; font-weight: bold;">10</span>)
 </pre>
 </div>
-<div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">update</span>(i) :
-      ax.clear()
-      ax.imshow(time_steps[i], cmap=<span class="org-string">"gray"</span>)
-      ax.axis(<span class="org-string">"off"</span>)
-      <span class="org-keyword">return</span> ax
 
-<span class="org-comment-delimiter"># </span><span class="org-comment">plots</span>
-<span class="org-variable-name">fig</span> = plt.figure(figsize = (<span class="org-highlight-numbers-number">5</span>,<span class="org-highlight-numbers-number">5</span>))
-<span class="org-variable-name">ax</span> = plt.subplot(<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">1</span>)
-<span class="org-variable-name">anim</span> = animation.FuncAnimation(fig, update, frames = <span class="org-builtin">len</span>(time_steps), interval = <span class="org-highlight-numbers-number">400</span>)
+<div class="org-src-container">
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">update</span>(i) :
+      ax.clear()
+      ax.imshow(time_steps[i], cmap=<span style="color: #f1fa8c;">"gray"</span>)
+      ax.axis(<span style="color: #f1fa8c;">"off"</span>)
+      <span style="color: #ff79c6;">return</span> ax
+
+<span style="color: #6272a4;"># </span><span style="color: #6272a4;">plots</span>
+fig = plt.figure(figsize = (<span style="color: #bd93f9; font-weight: bold;">5</span>,<span style="color: #bd93f9; font-weight: bold;">5</span>))
+ax = plt.subplot(<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">1</span>)
+anim = animation.FuncAnimation(fig, update, frames = <span style="color: #ffb86c;">len</span>(time_steps), interval = <span style="color: #bd93f9; font-weight: bold;">400</span>)
 plt.close()
 </pre>
 </div>
+
 <div class="org-src-container">
-<pre class="src src-ipython">anim.save(<span class="org-string">'/home/juan/Desktop/anim2.gif'</span>, writer=<span class="org-string">'imagemagick'</span>, fps=<span class="org-highlight-numbers-number">1</span>)
+<pre class="src src-ipython">anim.save(<span style="color: #f1fa8c;">'./media/anim2.gif'</span>, writer=<span style="color: #f1fa8c;">'imagemagick'</span>, fps=<span style="color: #bd93f9; font-weight: bold;">1</span>)
 </pre>
+</div>
+
+
+<div id="org7551fcb" class="figure">
+<p><img src="./media/anim2.gif" alt="anim2.gif" />
+</p>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-10-10 Sun 08:27</p>
+<p class="date">Created: 2021-10-13 Wed 21:35</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

@@ -15,7 +15,7 @@ import matplotlib.pylab as plt
 :end:
 
 * Finding solutions to an equation
-To begin with, we regard an equation which can be easily solved numerically:
+To begin with, we regard an equation which can be easily solved numerically
 \[
 e^x - 2 = \cos(e^x - 2).
 \]

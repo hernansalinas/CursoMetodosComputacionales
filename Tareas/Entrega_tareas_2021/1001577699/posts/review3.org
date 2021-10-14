@@ -23,7 +23,7 @@ echo "$data" | sed s/\^:\ \//g | grep -v "^$" | sed s/\'//g
 
 #+RESULTS: test_org_post_clean
 
-A particle of mass 0.2 kg moves for 0.4 s according to the physical trajectory described by the data over in the following dataframe:
+A particle of mass 0.2 kg moves for 0.4 s according to the physical trajectory described by the data over in the following dataframe
 #+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 path = 'https://raw.githubusercontent.com/restrepo/ComputationalMethods/master/data/mvto.csv'
 df = pd.read_csv(path)

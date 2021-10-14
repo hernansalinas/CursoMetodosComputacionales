@@ -4,8 +4,8 @@
 * Introduction
 Conway's game of life is a cellular automation program.
 
-Usual ~python~ imports:
-#+begin_src ipython :session asession :exports code :results raw drawer
+Usual ~python~ imports
+#+begin_src ipython :session asession :exports code :results raw drawer :exports both
 %config InlineBackend.figure_format = 'svg'
 
 import numpy as np
@@ -19,7 +19,7 @@ from matplotlib import animation, rc
 # Out[1]:
 :end:
 
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :exports code :results raw drawer :exports both
 # Returns a random initial state for the array
 def init_state(n) :
     # We use n + 2 grids so as to add padding
@@ -39,7 +39,7 @@ def init_state(n) :
 :end:
 
 Now we must determine the number of neighbouring cells to pin down what must happen in the next time step.
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :exports code :results raw drawer :exports both
 # Returns the number of alive neighbours each cell has
 def alive_neigh(state, n) :
     # initialise neigh_state as an array of zeros
@@ -57,7 +57,7 @@ def alive_neigh(state, n) :
 # Out[4]:
 :end:
 
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :exports code :results raw drawer :exports both
 def evolution(state, n) :
     # evaluate conditions to be alive
     neighbours = alive_neigh(state, n)
@@ -79,7 +79,7 @@ def evolution(state, n) :
 :end:
 
 Game of life routine
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :exports code :results raw drawer :exports both
 def gameOfLife(tmax, N, init=None) :
     # initial state of the array
     states = list()
@@ -103,7 +103,7 @@ time_steps = gameOfLife(10, 10)
 :results:
 # Out[10]:
 :end:
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :exports code :results raw drawer :exports both
 def update(i) :
       ax.clear()
       ax.imshow(time_steps[i], cmap="gray")
@@ -121,11 +121,12 @@ plt.close()
 :results:
 # Out[8]:
 :end:
-#+begin_src ipython :session asession :exports code :results raw drawer
-anim.save('/home/juan/Desktop/anim2.gif', writer='imagemagick', fps=1)
+#+begin_src ipython :session asession :exports code :results raw drawer :exports both
+anim.save('./media/anim2.gif', writer='imagemagick', fps=1)
 #+end_src
 
 #+RESULTS:
 :results:
 # Out[9]:
 :end:
+file:./media/anim2.gif

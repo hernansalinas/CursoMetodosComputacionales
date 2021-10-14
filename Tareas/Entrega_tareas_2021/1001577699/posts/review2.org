@@ -2,7 +2,7 @@
 #+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
 
 * A short review of concepts
-Handy sed command:
+Handy sed command
 #+NAME: test_org_post_clean
 #+begin_src sh :results verbatim :var data="" :results output
 echo "$data" | sed s/\^:\ \//g | grep -v "^$" | sed s/\'//g
@@ -10,7 +10,7 @@ echo "$data" | sed s/\^:\ \//g | grep -v "^$" | sed s/\'//g
 
 #+RESULTS: test_org_post_clean
 We then import all the desired libraries.
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :exports both :results raw drawer
 %config InlineBackend.figure_format = 'svg'
 from tabulate import tabulate
 
@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 # Out[2]:
 :end:
 Read some random dataframe with rocket launcher data.
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 path = 'https://raw.githubusercontent.com/restrepo/ComputationalMethods/master/data/rocket.json'
 df = pd.DataFrame(pd.read_json(path))
 tabulate(df, headers='keys', tablefmt='orgtbl', showindex='always')
@@ -44,7 +44,7 @@ tabulate(df, headers='keys', tablefmt='orgtbl', showindex='always')
 |  5 | 2.8e+06 | 9.8 |  15000 | 2510 |
 :end:
 Proof that ~mdot~ is the only column that changes in value:
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 list(
 df.apply(lambda column :
          column.name if (column.to_numpy()[0] != column.to_numpy()).any() else None).dropna())
@@ -56,7 +56,7 @@ df.apply(lambda column :
 [mdot]
 :end:
 Testing convergence of the Newton-Raphson method for finding roots in this specific case
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :exports both :results raw drawer
 f = lambda t : df.u[0]*np.log( df.M0[0]/(df.M0[0] - df.mdot[0]*t) ) - df.g[0]*t - 335
 t = np.linspace(0, 500, 1000)
 
@@ -71,7 +71,7 @@ plt.show()
 [[file:./obipy-resources/GI7vMU.svg]]
 :end:
 Notice that the root value is less than 150, setting such a value as our initial guess will thus suffice:
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 df['t'] = df.apply(lambda row : optimize.newton(lambda t : row.u*np.log( row.M0/(row.M0 - row.mdot*t) ) - row.g*t - 335, x0 = 150),
                                                    axis = 'columns')
 tabulate(df, headers='keys', tablefmt='orgtbl', showindex='always')
@@ -90,7 +90,7 @@ tabulate(df, headers='keys', tablefmt='orgtbl', showindex='always')
 |  5 | 2.8e+06 | 9.8 |  15000 | 2510 |  54.7709 |
 :end:
 Graph of the function.
-#+begin_src ipython :session asession :exports code :results raw drawer
+#+begin_src ipython :session asession :exports both :results raw drawer
 x = df['t']
 y = df['mdot']
 
@@ -107,7 +107,7 @@ plt.show()
 [[file:./obipy-resources/u4altL.svg]]
 :end:
 * Something
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 path = 'https://raw.githubusercontent.com/justmarkham/DAT8/master/data/chipotle.tsv'
 chipo = pd.read_csv(path, sep='\t')
 
@@ -126,7 +126,7 @@ tabulate(chipo.head(), headers='keys', tablefmt='orgtbl', showindex='always')
 |  4 |          2 |          2 | Chicken Bowl                          | [Tomatillo-Red Chili Salsa (Hot), [Black Beans, Rice, Cheese, Sour Cream]] | $16.98       |
 :end:
 
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 chipo['item_price'] = chipo['item_price'].replace('\$', '', regex=True).astype(float)
 tabulate(chipo.head(), headers='keys', tablefmt='orgtbl', showindex='always')
 #+end_src
@@ -142,7 +142,7 @@ tabulate(chipo.head(), headers='keys', tablefmt='orgtbl', showindex='always')
 |  3 |          1 |          1 | Chips and Tomatillo-Green Chili Salsa | nan                                                                        |         2.39 |
 |  4 |          2 |          2 | Chicken Bowl                          | [Tomatillo-Red Chili Salsa (Hot), [Black Beans, Rice, Cheese, Sour Cream]] |        16.98 |
 :end:
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 greater_than_10 = chipo[ chipo.item_price > 10 ]
 len( greater_than_10.index )
 #+end_src
@@ -152,7 +152,7 @@ len( greater_than_10.index )
 # Out[60]:
 1130
 :end:
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 chipo['item_name'].sort_values()
 #+end_src
 
@@ -175,7 +175,7 @@ chipo['item_name'].sort_values()
 #+END_EXAMPLE
 :end:
 
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 tabulate(chipo[['item_name','item_price']].head(), headers='keys', tablefmt='orgtbl', showindex='always')
 #+end_src
 
@@ -191,7 +191,7 @@ tabulate(chipo[['item_name','item_price']].head(), headers='keys', tablefmt='org
 |  4 | Chicken Bowl                          |        16.98 |
 :end:
 
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 max_price = chipo[ chipo['item_price'] == chipo['item_price'].max() ]
 max_price['quantity'].sum()
 #+end_src
@@ -201,7 +201,7 @@ max_price['quantity'].sum()
 # Out[23]:
 15
 :end:
-#+begin_src ipython :session asession :exports code :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
+#+begin_src ipython :session asession :exports both :results raw drawer :display text/org :post test_org_post_clean(data=*this*)
 veggie = chipo[ chipo['item_name'] == 'Veggie Salad Bowl' ]
 veggie['quantity'].sum()
 #+end_src

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-10 Sun 08:28 -->
+<!-- 2021-10-13 Wed 21:40 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Application of the Principle of Least Action</title>
@@ -258,13 +258,13 @@
 </div>
 </div>
 <div class="org-src-container">
-<pre class="src src-ipython">%config <span class="org-variable-name">InlineBackend.figure_format</span> = <span class="org-string">'svg'</span>
+<pre class="src src-ipython">%config InlineBackend.figure_format = <span style="color: #f1fa8c;">'svg'</span>
 
-<span class="org-keyword">import</span> numpy <span class="org-keyword">as</span> np
-<span class="org-keyword">import</span> pandas <span class="org-keyword">as</span> pd
-<span class="org-keyword">import</span> matplotlib.pyplot <span class="org-keyword">as</span> plt
-<span class="org-keyword">import</span> scipy.integrate <span class="org-keyword">as</span> integrate
-<span class="org-keyword">from</span> scipy.optimize <span class="org-keyword">import</span> fmin_powell
+<span style="color: #ff79c6;">import</span> numpy <span style="color: #ff79c6;">as</span> np
+<span style="color: #ff79c6;">import</span> pandas <span style="color: #ff79c6;">as</span> pd
+<span style="color: #ff79c6;">import</span> matplotlib.pyplot <span style="color: #ff79c6;">as</span> plt
+<span style="color: #ff79c6;">import</span> scipy.integrate <span style="color: #ff79c6;">as</span> integrate
+<span style="color: #ff79c6;">from</span> scipy.optimize <span style="color: #ff79c6;">import</span> fmin_powell
 </pre>
 </div>
 
@@ -273,10 +273,10 @@
 <div class="outline-text-2" id="text-1">
 <p>
 We have a pendulum with a certain bob of mass \(m\), and whose period is given, we
-wish to find the trajectory of the bob using Lagrangians.
+wish to find the trajectory of the bob using Lagrangians
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-variable-name">th_f</span> = np.deg2rad(<span class="org-highlight-numbers-number">10</span>)
+<pre class="src src-ipython">th_f = np.deg2rad(<span style="color: #bd93f9; font-weight: bold;">10</span>)
 </pre>
 </div>
 
@@ -287,28 +287,28 @@ action function takes an $n$-tuple and returns a single number, thus we need to
 minimize a funtion from \(\mathbb{R}^n\) to \(\mathbb{R}\).
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">action</span>(thetas, theta_0=<span class="org-highlight-numbers-number">0</span>, theta_f=th_f, t_f=<span class="org-highlight-numbers-number">0.5026</span>, m=<span class="org-highlight-numbers-number">0.2</span>, l=<span class="org-highlight-numbers-number">1</span>, g=<span class="org-highlight-numbers-number">9.8</span>):
-    <span class="org-doc">''' The lagrangian defines a function from Rn to R,</span>
-<span class="org-doc">    which takes possible discrete n-paths as inputs</span>
-<span class="org-doc">    and returns their action.</span>
-<span class="org-doc">    '''</span>
-    <span class="org-variable-name">thetas</span> = np.asarray(thetas)
-    <span class="org-comment-delimiter"># </span><span class="org-comment">fix the boundary</span>
-    thetas[<span class="org-highlight-numbers-number">0</span>], <span class="org-variable-name">thetas</span>[-<span class="org-highlight-numbers-number">1</span>] = theta_0, theta_f
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">action</span>(thetas, theta_0=<span style="color: #bd93f9; font-weight: bold;">0</span>, theta_f=th_f, t_f=<span style="color: #bd93f9; font-weight: bold;">0.5026</span>, m=<span style="color: #bd93f9; font-weight: bold;">0.2</span>, l=<span style="color: #bd93f9; font-weight: bold;">1</span>, g=<span style="color: #bd93f9; font-weight: bold;">9.8</span>):
+    <span style="color: #8995ba;">''' The lagrangian defines a function from Rn to R,</span>
+<span style="color: #8995ba;">    which takes possible discrete n-paths as inputs</span>
+<span style="color: #8995ba;">    and returns their action.</span>
+<span style="color: #8995ba;">    '''</span>
+    thetas = np.asarray(thetas)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">fix the boundary</span>
+    thetas[<span style="color: #bd93f9; font-weight: bold;">0</span>], thetas[-<span style="color: #bd93f9; font-weight: bold;">1</span>] = theta_0, theta_f
 
-    <span class="org-variable-name">time_domain</span> = np.linspace(<span class="org-highlight-numbers-number">0</span>, t_f, thetas.shape[<span class="org-highlight-numbers-number">0</span>])
+    time_domain = np.linspace(<span style="color: #bd93f9; font-weight: bold;">0</span>, t_f, thetas.shape[<span style="color: #bd93f9; font-weight: bold;">0</span>])
 
-    <span class="org-comment-delimiter"># </span><span class="org-comment">get an approximation to the angular speed given</span>
-    <span class="org-comment-delimiter"># </span><span class="org-comment">the array of angles</span>
-    <span class="org-variable-name">dt</span> = np.diff(time_domain)
-    <span class="org-variable-name">angular_speed</span> = np.diff(thetas)/dt
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">get an approximation to the angular speed given</span>
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">the array of angles</span>
+    dt = np.diff(time_domain)
+    angular_speed = np.diff(thetas)/dt
 
-    <span class="org-comment-delimiter"># </span><span class="org-comment">get the lagrangian</span>
-    <span class="org-variable-name">kinetic</span> = <span class="org-highlight-numbers-number">0.5</span>*m*(l*angular_speed)**<span class="org-highlight-numbers-number">2</span>
-    <span class="org-variable-name">potential</span> = m*g*l*(<span class="org-highlight-numbers-number">1</span> - np.cos(thetas[<span class="org-highlight-numbers-number">1</span>:]))
-    <span class="org-keyword">return</span> np.dot(kinetic - potential, dt)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">get the lagrangian</span>
+    kinetic = <span style="color: #bd93f9; font-weight: bold;">0.5</span>*m*(l*angular_speed)**<span style="color: #bd93f9; font-weight: bold;">2</span>
+    potential = m*g*l*(<span style="color: #bd93f9; font-weight: bold;">1</span> - np.cos(thetas[<span style="color: #bd93f9; font-weight: bold;">1</span>:]))
+    <span style="color: #ff79c6;">return</span> np.dot(kinetic - potential, dt)
 
-action([<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">3</span>,<span class="org-highlight-numbers-number">4</span>])
+action([<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>,<span style="color: #bd93f9; font-weight: bold;">4</span>])
 </pre>
 </div>
 
@@ -320,17 +320,17 @@ action([<span class="org-highlight-numbers-number">1</span>,<span class="org-hig
 The object&rsquo;s path is the $n$-tuple that minimises the action function.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">path</span>(N, theta_0=<span class="org-highlight-numbers-number">0</span>, theta_f=th_f):
-    <span class="org-variable-name">thetas</span> = fmin_powell( action, x0=np.zeros(<span class="org-builtin">int</span>(N)) )
-    <span class="org-comment-delimiter"># </span><span class="org-comment">fix the boundary</span>
-    thetas[<span class="org-highlight-numbers-number">0</span>], <span class="org-variable-name">thetas</span>[-<span class="org-highlight-numbers-number">1</span>] = theta_0, theta_f
-    <span class="org-keyword">return</span> thetas
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">path</span>(N, theta_0=<span style="color: #bd93f9; font-weight: bold;">0</span>, theta_f=th_f):
+    thetas = fmin_powell( action, x0=np.zeros(<span style="color: #ffb86c;">int</span>(N)) )
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">fix the boundary</span>
+    thetas[<span style="color: #bd93f9; font-weight: bold;">0</span>], thetas[-<span style="color: #bd93f9; font-weight: bold;">1</span>] = theta_0, theta_f
+    <span style="color: #ff79c6;">return</span> thetas
 
-path(<span class="org-highlight-numbers-number">50</span>)
+path(<span style="color: #bd93f9; font-weight: bold;">50</span>)
 </pre>
 </div>
 
-<pre class="example" id="org9927338">
+<pre class="example" id="org7e064e1">
   array([0.        , 0.00559656, 0.01118722, 0.01676634, 0.02232795,
   0.02786655, 0.03337642, 0.03885188, 0.04428761, 0.0496777 ,
   0.05501686, 0.06029933, 0.06551943, 0.07067203, 0.07575125,
@@ -350,46 +350,46 @@ small oscillations:
 \[ T = 2\pi\sqrt{\frac{L}{g}} \]
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">graph</span>(t_f=<span class="org-highlight-numbers-number">0.5026</span>, m=<span class="org-highlight-numbers-number">0.2</span>, l=<span class="org-highlight-numbers-number">1</span>, theta_f=th_f, N=<span class="org-highlight-numbers-number">50</span>, g=<span class="org-highlight-numbers-number">9.8</span>):
-    <span class="org-variable-name">T</span> = <span class="org-keyword">lambda</span> l : <span class="org-highlight-numbers-number">2</span>*np.pi*np.sqrt(l/g)
-    <span class="org-variable-name">time_domain</span> = np.linspace(<span class="org-highlight-numbers-number">0</span>, t_f, N)
-    <span class="org-variable-name">ang_speed</span> = <span class="org-highlight-numbers-number">2</span>*np.pi/T(l)
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">graph</span>(t_f=<span style="color: #bd93f9; font-weight: bold;">0.5026</span>, m=<span style="color: #bd93f9; font-weight: bold;">0.2</span>, l=<span style="color: #bd93f9; font-weight: bold;">1</span>, theta_f=th_f, N=<span style="color: #bd93f9; font-weight: bold;">50</span>, g=<span style="color: #bd93f9; font-weight: bold;">9.8</span>):
+    T = <span style="color: #ff79c6;">lambda</span> l : <span style="color: #bd93f9; font-weight: bold;">2</span>*np.pi*np.sqrt(l/g)
+    time_domain = np.linspace(<span style="color: #bd93f9; font-weight: bold;">0</span>, t_f, N)
+    ang_speed = <span style="color: #bd93f9; font-weight: bold;">2</span>*np.pi/T(l)
 
-    <span class="org-variable-name">minimise_path</span> = path(N)
-    <span class="org-variable-name">expected_path</span> = theta_f*np.sin(ang_speed*time_domain)
-    <span class="org-keyword">return</span> time_domain, minimise_path, expected_path
+    minimise_path = path(N)
+    expected_path = theta_f*np.sin(ang_speed*time_domain)
+    <span style="color: #ff79c6;">return</span> time_domain, minimise_path, expected_path
 
-<span class="org-keyword">def</span> <span class="org-function-name">plot</span>(graph):
-    <span class="org-variable-name">_t</span>, <span class="org-variable-name">path</span>, <span class="org-variable-name">expected_path</span> = graph()
-    plt.plot(_t, path, <span class="org-string">'b.'</span>)
-    plt.plot(_t, expected_path, <span class="org-string">'g-'</span>)
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">plot</span>(graph):
+    _t, path, expected_path = graph()
+    plt.plot(_t, path, <span style="color: #f1fa8c;">'b.'</span>)
+    plt.plot(_t, expected_path, <span style="color: #f1fa8c;">'g-'</span>)
     plt.grid()
     plt.show()
 
-<span class="org-type">@plot</span>
-<span class="org-keyword">def</span> <span class="org-function-name">_graph</span>():
-    <span class="org-keyword">return</span> graph()
+<span style="color: #bd93f9;">@plot</span>
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">_graph</span>():
+    <span style="color: #ff79c6;">return</span> graph()
 _graph
 </pre>
 </div>
 
 
-<div id="org08e4e43" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/rG3IFY.svg" class="org-svg">
+<div id="orgaf0038d" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/QwUF3y.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">energy</span>(m=<span class="org-highlight-numbers-number">0.2</span>, l=<span class="org-highlight-numbers-number">1</span>, g=<span class="org-highlight-numbers-number">9.8</span>):
-    <span class="org-variable-name">_t</span>, <span class="org-variable-name">path</span>, <span class="org-variable-name">expected_path</span> = graph()
-    <span class="org-variable-name">angular_speed</span> = np.diff(path)/np.diff(_t)
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">energy</span>(m=<span style="color: #bd93f9; font-weight: bold;">0.2</span>, l=<span style="color: #bd93f9; font-weight: bold;">1</span>, g=<span style="color: #bd93f9; font-weight: bold;">9.8</span>):
+    _t, path, expected_path = graph()
+    angular_speed = np.diff(path)/np.diff(_t)
 
-    <span class="org-variable-name">kinetic</span> = <span class="org-highlight-numbers-number">0.5</span>*m*(l*angular_speed)**<span class="org-highlight-numbers-number">2</span>
-    <span class="org-variable-name">potential</span> = m*g*l*(<span class="org-highlight-numbers-number">1</span> - np.cos(path[<span class="org-highlight-numbers-number">1</span>:]))
+    kinetic = <span style="color: #bd93f9; font-weight: bold;">0.5</span>*m*(l*angular_speed)**<span style="color: #bd93f9; font-weight: bold;">2</span>
+    potential = m*g*l*(<span style="color: #bd93f9; font-weight: bold;">1</span> - np.cos(path[<span style="color: #bd93f9; font-weight: bold;">1</span>:]))
 
-    plt.plot(_t[<span class="org-highlight-numbers-number">1</span>:], kinetic + potential, <span class="org-string">'r.'</span>)
-    plt.plot(_t[<span class="org-highlight-numbers-number">1</span>:], kinetic, <span class="org-string">'b.'</span>)
-    plt.plot(_t[<span class="org-highlight-numbers-number">1</span>:], potential, <span class="org-string">'g.'</span>)
+    plt.plot(_t[<span style="color: #bd93f9; font-weight: bold;">1</span>:], kinetic + potential, <span style="color: #f1fa8c;">'r.'</span>)
+    plt.plot(_t[<span style="color: #bd93f9; font-weight: bold;">1</span>:], kinetic, <span style="color: #f1fa8c;">'b.'</span>)
+    plt.plot(_t[<span style="color: #bd93f9; font-weight: bold;">1</span>:], potential, <span style="color: #f1fa8c;">'g.'</span>)
     plt.grid()
     plt.show()
 
@@ -398,8 +398,8 @@ energy()
 </div>
 
 
-<div id="org8021386" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/ivGijj.svg" class="org-svg">
+<div id="org90b39d9" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/JDntnE.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -421,29 +421,29 @@ We know the time it takes for the spring to complete an oscillation.
 As before, we must define the action, which is the integral of the lagrangian, as a function of possible $n$-paths consisting of an array of possible positions.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">_action</span>(x, x_0=<span class="org-highlight-numbers-number">0.707106</span>, x_f=<span class="org-highlight-numbers-number">0.707106</span>, t_0=np.pi/<span class="org-highlight-numbers-number">8</span>, t_f=<span class="org-highlight-numbers-number">3</span>*np.pi/<span class="org-highlight-numbers-number">8</span>, m=<span class="org-highlight-numbers-number">0.2</span>, k=<span class="org-highlight-numbers-number">0.8</span>):
-    <span class="org-doc">''' The lagrangian defines a function from Rn to R,</span>
-<span class="org-doc">    which takes possible discrete n-paths as inputs</span>
-<span class="org-doc">    and returns their action.</span>
-<span class="org-doc">    '''</span>
-    <span class="org-variable-name">x</span> = np.asarray(x)
-    <span class="org-comment-delimiter"># </span><span class="org-comment">fix the boundary</span>
-    x[<span class="org-highlight-numbers-number">0</span>], <span class="org-variable-name">x</span>[-<span class="org-highlight-numbers-number">1</span>] = x_0, x_f
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">_action</span>(x, x_0=<span style="color: #bd93f9; font-weight: bold;">0.707106</span>, x_f=<span style="color: #bd93f9; font-weight: bold;">0.707106</span>, t_0=np.pi/<span style="color: #bd93f9; font-weight: bold;">8</span>, t_f=<span style="color: #bd93f9; font-weight: bold;">3</span>*np.pi/<span style="color: #bd93f9; font-weight: bold;">8</span>, m=<span style="color: #bd93f9; font-weight: bold;">0.2</span>, k=<span style="color: #bd93f9; font-weight: bold;">0.8</span>):
+    <span style="color: #8995ba;">''' The lagrangian defines a function from Rn to R,</span>
+<span style="color: #8995ba;">    which takes possible discrete n-paths as inputs</span>
+<span style="color: #8995ba;">    and returns their action.</span>
+<span style="color: #8995ba;">    '''</span>
+    x = np.asarray(x)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">fix the boundary</span>
+    x[<span style="color: #bd93f9; font-weight: bold;">0</span>], x[-<span style="color: #bd93f9; font-weight: bold;">1</span>] = x_0, x_f
 
-    <span class="org-variable-name">time_domain</span> = np.linspace(t_0, t_f, x.shape[<span class="org-highlight-numbers-number">0</span>])
+    time_domain = np.linspace(t_0, t_f, x.shape[<span style="color: #bd93f9; font-weight: bold;">0</span>])
 
-    <span class="org-comment-delimiter"># </span><span class="org-comment">get an approximation to the speed given</span>
-    <span class="org-comment-delimiter"># </span><span class="org-comment">the array of positions</span>
-    <span class="org-variable-name">dt</span> = np.diff(time_domain)
-    <span class="org-variable-name">speed</span> = np.diff(x)/dt
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">get an approximation to the speed given</span>
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">the array of positions</span>
+    dt = np.diff(time_domain)
+    speed = np.diff(x)/dt
 
-    <span class="org-comment-delimiter"># </span><span class="org-comment">get the lagrangian</span>
-    <span class="org-variable-name">kinetic</span> = <span class="org-highlight-numbers-number">0.5</span>*m*speed**<span class="org-highlight-numbers-number">2</span>
-    <span class="org-variable-name">potential</span> = <span class="org-highlight-numbers-number">0.5</span>*k*x[<span class="org-highlight-numbers-number">1</span>:]**<span class="org-highlight-numbers-number">2</span>
-    <span class="org-comment-delimiter"># </span><span class="org-comment">return the action</span>
-    <span class="org-keyword">return</span> np.dot(kinetic - potential, dt)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">get the lagrangian</span>
+    kinetic = <span style="color: #bd93f9; font-weight: bold;">0.5</span>*m*speed**<span style="color: #bd93f9; font-weight: bold;">2</span>
+    potential = <span style="color: #bd93f9; font-weight: bold;">0.5</span>*k*x[<span style="color: #bd93f9; font-weight: bold;">1</span>:]**<span style="color: #bd93f9; font-weight: bold;">2</span>
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">return the action</span>
+    <span style="color: #ff79c6;">return</span> np.dot(kinetic - potential, dt)
 
-_action([<span class="org-highlight-numbers-number">1</span>,<span class="org-highlight-numbers-number">2</span>,<span class="org-highlight-numbers-number">3</span>,<span class="org-highlight-numbers-number">4</span>])
+_action([<span style="color: #bd93f9; font-weight: bold;">1</span>,<span style="color: #bd93f9; font-weight: bold;">2</span>,<span style="color: #bd93f9; font-weight: bold;">3</span>,<span style="color: #bd93f9; font-weight: bold;">4</span>])
 </pre>
 </div>
 
@@ -451,17 +451,17 @@ _action([<span class="org-highlight-numbers-number">1</span>,<span class="org-hi
 3.986249271332106
 </pre>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">_path</span>(N, x_0=<span class="org-highlight-numbers-number">0.707106</span>, x_f=<span class="org-highlight-numbers-number">0.707106</span>):
-    <span class="org-variable-name">x</span> = fmin_powell( _action, x0=np.zeros(<span class="org-builtin">int</span>(N)) )
-    <span class="org-comment-delimiter"># </span><span class="org-comment">fix the boundary</span>
-    x[<span class="org-highlight-numbers-number">0</span>], <span class="org-variable-name">x</span>[-<span class="org-highlight-numbers-number">1</span>] = x_0, x_f
-    <span class="org-keyword">return</span> x
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">_path</span>(N, x_0=<span style="color: #bd93f9; font-weight: bold;">0.707106</span>, x_f=<span style="color: #bd93f9; font-weight: bold;">0.707106</span>):
+    x = fmin_powell( _action, x0=np.zeros(<span style="color: #ffb86c;">int</span>(N)) )
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">fix the boundary</span>
+    x[<span style="color: #bd93f9; font-weight: bold;">0</span>], x[-<span style="color: #bd93f9; font-weight: bold;">1</span>] = x_0, x_f
+    <span style="color: #ff79c6;">return</span> x
 
-_path(<span class="org-highlight-numbers-number">51</span>)
+_path(<span style="color: #bd93f9; font-weight: bold;">51</span>)
 </pre>
 </div>
 
-<pre class="example" id="org64b2434">
+<pre class="example" id="orgb9baffe">
   array([0.707106  , 0.72896324, 0.74992768, 0.77043328, 0.79009548,
   0.80897771, 0.82703792, 0.84429362, 0.86070009, 0.87626238,
   0.89095823, 0.90477491, 0.91770246, 0.92972336, 0.94083031,
@@ -476,47 +476,47 @@ _path(<span class="org-highlight-numbers-number">51</span>)
 </pre>
 
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">graph</span>(t_0=np.pi/<span class="org-highlight-numbers-number">8</span>, t_f=<span class="org-highlight-numbers-number">3</span>*np.pi/<span class="org-highlight-numbers-number">8</span>, m=<span class="org-highlight-numbers-number">0.2</span>, k=<span class="org-highlight-numbers-number">0.8</span>, x_0=<span class="org-highlight-numbers-number">0.707106</span>, x_f=<span class="org-highlight-numbers-number">0.707106</span>, N=<span class="org-highlight-numbers-number">50</span>, g=<span class="org-highlight-numbers-number">9.8</span>):
-    <span class="org-variable-name">time_domain</span> = np.linspace(t_0, t_f, N)
-    <span class="org-variable-name">ang_speed</span> = np.sqrt(k/m)
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">graph</span>(t_0=np.pi/<span style="color: #bd93f9; font-weight: bold;">8</span>, t_f=<span style="color: #bd93f9; font-weight: bold;">3</span>*np.pi/<span style="color: #bd93f9; font-weight: bold;">8</span>, m=<span style="color: #bd93f9; font-weight: bold;">0.2</span>, k=<span style="color: #bd93f9; font-weight: bold;">0.8</span>, x_0=<span style="color: #bd93f9; font-weight: bold;">0.707106</span>, x_f=<span style="color: #bd93f9; font-weight: bold;">0.707106</span>, N=<span style="color: #bd93f9; font-weight: bold;">50</span>, g=<span style="color: #bd93f9; font-weight: bold;">9.8</span>):
+    time_domain = np.linspace(t_0, t_f, N)
+    ang_speed = np.sqrt(k/m)
 
-    <span class="org-variable-name">minimised_path</span> = _path(N)
-    <span class="org-variable-name">expected_path</span> = np.sin(ang_speed*time_domain)
-    <span class="org-keyword">return</span> time_domain, minimised_path, expected_path
+    minimised_path = _path(N)
+    expected_path = np.sin(ang_speed*time_domain)
+    <span style="color: #ff79c6;">return</span> time_domain, minimised_path, expected_path
 
-<span class="org-keyword">def</span> <span class="org-function-name">plot</span>(graph):
-    <span class="org-variable-name">_t</span>, <span class="org-variable-name">path</span>, <span class="org-variable-name">expected_path</span> = graph()
-    plt.plot(_t, path, <span class="org-string">'b.'</span>)
-    plt.plot(_t, expected_path, <span class="org-string">'g-'</span>)
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">plot</span>(graph):
+    _t, path, expected_path = graph()
+    plt.plot(_t, path, <span style="color: #f1fa8c;">'b.'</span>)
+    plt.plot(_t, expected_path, <span style="color: #f1fa8c;">'g-'</span>)
     plt.grid()
     plt.show()
 
-<span class="org-type">@plot</span>
-<span class="org-keyword">def</span> <span class="org-function-name">_graph</span>():
-    <span class="org-keyword">return</span> graph()
+<span style="color: #bd93f9;">@plot</span>
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">_graph</span>():
+    <span style="color: #ff79c6;">return</span> graph()
 
 _graph
 </pre>
 </div>
 
 
-<div id="orgc6ab02d" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/dY7Vu6.svg" class="org-svg">
+<div id="org9a25b9e" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/fCJfwm.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">energy</span>(m=<span class="org-highlight-numbers-number">0.2</span>, k=<span class="org-highlight-numbers-number">0.8</span>):
-    <span class="org-variable-name">_t</span>, <span class="org-variable-name">path</span>, <span class="org-variable-name">expected_path</span> = graph()
-    <span class="org-variable-name">speed</span> = np.diff(path)/np.diff(_t)
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">energy</span>(m=<span style="color: #bd93f9; font-weight: bold;">0.2</span>, k=<span style="color: #bd93f9; font-weight: bold;">0.8</span>):
+    _t, path, expected_path = graph()
+    speed = np.diff(path)/np.diff(_t)
 
-    <span class="org-variable-name">kinetic</span> = <span class="org-highlight-numbers-number">0.5</span>*m*speed**<span class="org-highlight-numbers-number">2</span>
-    <span class="org-variable-name">potential</span> = <span class="org-highlight-numbers-number">0.5</span>*k*path[<span class="org-highlight-numbers-number">1</span>:]**<span class="org-highlight-numbers-number">2</span>
+    kinetic = <span style="color: #bd93f9; font-weight: bold;">0.5</span>*m*speed**<span style="color: #bd93f9; font-weight: bold;">2</span>
+    potential = <span style="color: #bd93f9; font-weight: bold;">0.5</span>*k*path[<span style="color: #bd93f9; font-weight: bold;">1</span>:]**<span style="color: #bd93f9; font-weight: bold;">2</span>
 
-    plt.plot(_t[<span class="org-highlight-numbers-number">1</span>:], kinetic + potential, <span class="org-string">'r.'</span>)
-    plt.plot(_t[<span class="org-highlight-numbers-number">1</span>:], kinetic, <span class="org-string">'b.'</span>)
-    plt.plot(_t[<span class="org-highlight-numbers-number">1</span>:], potential, <span class="org-string">'g.'</span>)
+    plt.plot(_t[<span style="color: #bd93f9; font-weight: bold;">1</span>:], kinetic + potential, <span style="color: #f1fa8c;">'r.'</span>)
+    plt.plot(_t[<span style="color: #bd93f9; font-weight: bold;">1</span>:], kinetic, <span style="color: #f1fa8c;">'b.'</span>)
+    plt.plot(_t[<span style="color: #bd93f9; font-weight: bold;">1</span>:], potential, <span style="color: #f1fa8c;">'g.'</span>)
     plt.grid()
     plt.show()
 
@@ -525,24 +525,24 @@ energy()
 </div>
 
 
-<div id="org8428dcf" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/mVDH4Y.svg" class="org-svg">
+<div id="orgf6a9dec" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/t6MFv8.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">position_derivatives</span>(m=<span class="org-highlight-numbers-number">0.2</span>, k=<span class="org-highlight-numbers-number">0.8</span>):
-    <span class="org-variable-name">_t</span>, <span class="org-variable-name">path</span>, <span class="org-variable-name">expected_path</span> = graph()
-    <span class="org-variable-name">dt</span> = np.diff(_t)
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">position_derivatives</span>(m=<span style="color: #bd93f9; font-weight: bold;">0.2</span>, k=<span style="color: #bd93f9; font-weight: bold;">0.8</span>):
+    _t, path, expected_path = graph()
+    dt = np.diff(_t)
 
-    <span class="org-comment-delimiter"># </span><span class="org-comment">get the numerical derivatives</span>
-    <span class="org-variable-name">speed</span> = np.diff(path)/dt
-    <span class="org-variable-name">accel</span> = np.diff(speed)/dt[<span class="org-highlight-numbers-number">1</span>:]
-    <span class="org-variable-name">angular_speed</span> = np.sqrt(k/m)
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">get the numerical derivatives</span>
+    speed = np.diff(path)/dt
+    accel = np.diff(speed)/dt[<span style="color: #bd93f9; font-weight: bold;">1</span>:]
+    angular_speed = np.sqrt(k/m)
 
-    plt.plot(_t, path, <span class="org-string">'k'</span>)
-    plt.plot(_t[<span class="org-highlight-numbers-number">1</span>:], speed/angular_speed, <span class="org-string">'b.'</span>)
-    plt.plot(_t[<span class="org-highlight-numbers-number">2</span>:], -accel/angular_speed**<span class="org-highlight-numbers-number">2</span>, <span class="org-string">'g.'</span>)
+    plt.plot(_t, path, <span style="color: #f1fa8c;">'k'</span>)
+    plt.plot(_t[<span style="color: #bd93f9; font-weight: bold;">1</span>:], speed/angular_speed, <span style="color: #f1fa8c;">'b.'</span>)
+    plt.plot(_t[<span style="color: #bd93f9; font-weight: bold;">2</span>:], -accel/angular_speed**<span style="color: #bd93f9; font-weight: bold;">2</span>, <span style="color: #f1fa8c;">'g.'</span>)
     plt.grid()
     plt.show()
 
@@ -551,8 +551,8 @@ position_derivatives()
 </div>
 
 
-<div id="orgffec931" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/rFQH28.svg" class="org-svg">
+<div id="org56129dc" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/TVKIVY.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -566,81 +566,81 @@ Sorry, your browser does not support SVG.</object>
 We can define a class for this whole process:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">class</span> <span class="org-type">Lagrangian</span>:
-    <span class="org-doc">''' Minimises the action of a specified system and returns the</span>
-<span class="org-doc">    corresponding path</span>
-<span class="org-doc">    '''</span>
-    <span class="org-keyword">def</span> <span class="org-function-name">__init__</span>(<span class="org-keyword">self</span>, kinetic, potential, path_ini, path_end, time_ini, time_end, theoretical_path=<span class="org-constant">None</span>):
-        <span class="org-comment-delimiter"># </span><span class="org-comment">define functions describing the system</span>
-        <span class="org-keyword">self</span>.kinetic = kinetic
-        <span class="org-keyword">self</span>.potential = potential
-        <span class="org-keyword">self</span>.theoretical_path = theoretical_path
+<pre class="src src-ipython"><span style="color: #ff79c6;">class</span> <span style="color: #bd93f9;">Lagrangian</span>:
+    <span style="color: #8995ba;">''' Minimises the action of a specified system and returns the</span>
+<span style="color: #8995ba;">    corresponding path</span>
+<span style="color: #8995ba;">    '''</span>
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">__init__</span>(<span style="color: #ff79c6;">self</span>, kinetic, potential, path_ini, path_end, time_ini, time_end, theoretical_path=<span style="color: #8be9fd;">None</span>):
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">define functions describing the system</span>
+        <span style="color: #ff79c6;">self</span>.kinetic = kinetic
+        <span style="color: #ff79c6;">self</span>.potential = potential
+        <span style="color: #ff79c6;">self</span>.theoretical_path = theoretical_path
 
-        <span class="org-comment-delimiter"># </span><span class="org-comment">define the constraints on the system</span>
-        <span class="org-keyword">self</span>.path_ini = path_ini
-        <span class="org-keyword">self</span>.path_end = path_end
-        <span class="org-keyword">self</span>.time_ini = time_ini
-        <span class="org-keyword">self</span>.time_end = time_end
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">define the constraints on the system</span>
+        <span style="color: #ff79c6;">self</span>.path_ini = path_ini
+        <span style="color: #ff79c6;">self</span>.path_end = path_end
+        <span style="color: #ff79c6;">self</span>.time_ini = time_ini
+        <span style="color: #ff79c6;">self</span>.time_end = time_end
 
-    <span class="org-keyword">def</span> <span class="org-function-name">action</span>(<span class="org-keyword">self</span>, path, *args):
-        <span class="org-doc">''' The Lagrangian defines a function from Rn to R,</span>
-<span class="org-doc">        which takes possible discrete n-paths as inputs</span>
-<span class="org-doc">        and returns their action</span>
-<span class="org-doc">        '''</span>
-        <span class="org-comment-delimiter"># </span><span class="org-comment">read the n-array input</span>
-        <span class="org-variable-name">path</span> = np.asarray(path)
-        <span class="org-comment-delimiter"># </span><span class="org-comment">fix the boundary</span>
-        path[<span class="org-highlight-numbers-number">0</span>], <span class="org-variable-name">path</span>[-<span class="org-highlight-numbers-number">1</span>] = <span class="org-keyword">self</span>.path_ini, <span class="org-keyword">self</span>.path_end
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">action</span>(<span style="color: #ff79c6;">self</span>, path, *args):
+        <span style="color: #8995ba;">''' The Lagrangian defines a function from Rn to R,</span>
+<span style="color: #8995ba;">        which takes possible discrete n-paths as inputs</span>
+<span style="color: #8995ba;">        and returns their action</span>
+<span style="color: #8995ba;">        '''</span>
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">read the n-array input</span>
+        path = np.asarray(path)
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">fix the boundary</span>
+        path[<span style="color: #bd93f9; font-weight: bold;">0</span>], path[-<span style="color: #bd93f9; font-weight: bold;">1</span>] = <span style="color: #ff79c6;">self</span>.path_ini, <span style="color: #ff79c6;">self</span>.path_end
 
-        <span class="org-comment-delimiter"># </span><span class="org-comment">define a sensible time domain corresponding to the</span>
-        <span class="org-comment-delimiter"># </span><span class="org-comment">path, which we assume to be evenly spaced</span>
-        <span class="org-variable-name">time_domain</span> = np.linspace(<span class="org-keyword">self</span>.time_ini, <span class="org-keyword">self</span>.time_end, path.shape[<span class="org-highlight-numbers-number">0</span>])
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">define a sensible time domain corresponding to the</span>
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">path, which we assume to be evenly spaced</span>
+        time_domain = np.linspace(<span style="color: #ff79c6;">self</span>.time_ini, <span style="color: #ff79c6;">self</span>.time_end, path.shape[<span style="color: #bd93f9; font-weight: bold;">0</span>])
 
-        <span class="org-comment-delimiter"># </span><span class="org-comment">get an approximation to the speed (time derivative</span>
-        <span class="org-comment-delimiter"># </span><span class="org-comment">of path), given the n-path</span>
-        <span class="org-variable-name">dt</span> = np.diff(time_domain)
-        <span class="org-variable-name">speed</span> = np.diff(path)/dt
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">get an approximation to the speed (time derivative</span>
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">of path), given the n-path</span>
+        dt = np.diff(time_domain)
+        speed = np.diff(path)/dt
 
-        <span class="org-comment-delimiter"># </span><span class="org-comment">get the lagrangian</span>
-        <span class="org-variable-name">kinetic</span> = <span class="org-keyword">self</span>.kinetic(speed, *args)
-        <span class="org-variable-name">potential</span> = <span class="org-keyword">self</span>.potential(path[<span class="org-highlight-numbers-number">1</span>:], *args)
-        <span class="org-keyword">return</span> np.dot(kinetic - potential, dt)
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">get the lagrangian</span>
+        kinetic = <span style="color: #ff79c6;">self</span>.kinetic(speed, *args)
+        potential = <span style="color: #ff79c6;">self</span>.potential(path[<span style="color: #bd93f9; font-weight: bold;">1</span>:], *args)
+        <span style="color: #ff79c6;">return</span> np.dot(kinetic - potential, dt)
 
-    <span class="org-keyword">def</span> <span class="org-function-name">path</span>(<span class="org-keyword">self</span>, N, args=()):
-        <span class="org-doc">''' Returns the N-path minimising the action '''</span>
-        <span class="org-comment-delimiter"># </span><span class="org-comment">minimize the action</span>
-        <span class="org-variable-name">path</span> = fmin_powell( <span class="org-keyword">self</span>.action, x0=np.zeros(<span class="org-builtin">int</span>(N)), args=args )
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">path</span>(<span style="color: #ff79c6;">self</span>, N, args=()):
+        <span style="color: #8995ba;">''' Returns the N-path minimising the action '''</span>
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">minimize the action</span>
+        path = fmin_powell( <span style="color: #ff79c6;">self</span>.action, x0=np.zeros(<span style="color: #ffb86c;">int</span>(N)), args=args )
 
-        <span class="org-comment-delimiter"># </span><span class="org-comment">fix the boundary</span>
-        path[<span class="org-highlight-numbers-number">0</span>], <span class="org-variable-name">path</span>[-<span class="org-highlight-numbers-number">1</span>] = <span class="org-keyword">self</span>.path_ini, <span class="org-keyword">self</span>.path_end
-        <span class="org-keyword">return</span> path
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">fix the boundary</span>
+        path[<span style="color: #bd93f9; font-weight: bold;">0</span>], path[-<span style="color: #bd93f9; font-weight: bold;">1</span>] = <span style="color: #ff79c6;">self</span>.path_ini, <span style="color: #ff79c6;">self</span>.path_end
+        <span style="color: #ff79c6;">return</span> path
 
-    <span class="org-keyword">def</span> <span class="org-function-name">graph</span>(<span class="org-keyword">self</span>, N, energy_args=(), expected_args=()):
-        <span class="org-doc">''' Returns the graph of the minimised path and, if given,</span>
-<span class="org-doc">        the expected path</span>
-<span class="org-doc">        '''</span>
-        <span class="org-variable-name">time_domain</span> = np.linspace(<span class="org-keyword">self</span>.time_ini, <span class="org-keyword">self</span>.time_end, N)
-        <span class="org-variable-name">minimised_path</span> = <span class="org-keyword">self</span>.path(N, args=energy_args)
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">graph</span>(<span style="color: #ff79c6;">self</span>, N, energy_args=(), expected_args=()):
+        <span style="color: #8995ba;">''' Returns the graph of the minimised path and, if given,</span>
+<span style="color: #8995ba;">        the expected path</span>
+<span style="color: #8995ba;">        '''</span>
+        time_domain = np.linspace(<span style="color: #ff79c6;">self</span>.time_ini, <span style="color: #ff79c6;">self</span>.time_end, N)
+        minimised_path = <span style="color: #ff79c6;">self</span>.path(N, args=energy_args)
 
-        <span class="org-comment-delimiter"># </span><span class="org-comment">evaluate the expected path if given</span>
-        <span class="org-keyword">if</span> <span class="org-keyword">self</span>.theoretical_path <span class="org-keyword">is</span> <span class="org-keyword">not</span> <span class="org-constant">None</span>:
-            <span class="org-variable-name">expected_path</span> = <span class="org-keyword">self</span>.theoretical_path(time_domain, *expected_args)
-            <span class="org-keyword">return</span> time_domain, minimised_path, expected_path
-        <span class="org-keyword">else</span>:
-            <span class="org-keyword">return</span> time_domain, minimised_path
+        <span style="color: #6272a4;"># </span><span style="color: #6272a4;">evaluate the expected path if given</span>
+        <span style="color: #ff79c6;">if</span> <span style="color: #ff79c6;">self</span>.theoretical_path <span style="color: #ff79c6;">is</span> <span style="color: #ff79c6;">not</span> <span style="color: #8be9fd;">None</span>:
+            expected_path = <span style="color: #ff79c6;">self</span>.theoretical_path(time_domain, *expected_args)
+            <span style="color: #ff79c6;">return</span> time_domain, minimised_path, expected_path
+        <span style="color: #ff79c6;">else</span>:
+            <span style="color: #ff79c6;">return</span> time_domain, minimised_path
 
-    <span class="org-keyword">def</span> <span class="org-function-name">plot</span>(<span class="org-keyword">self</span>, N, energy_args=(), expected_args=()):
-        <span class="org-doc">''' Call this object to yield the plot, i.e., write:</span>
-<span class="org-doc">            L = Lagrangian(..)</span>
-<span class="org-doc">            L.plot</span>
-<span class="org-doc">        '''</span>
-        <span class="org-keyword">try</span>:
-            <span class="org-variable-name">_t</span>, <span class="org-variable-name">path</span>, <span class="org-variable-name">expected_path</span> = <span class="org-keyword">self</span>.graph(N, energy_args=energy_args, expected_args=expected_args)
-            plt.plot(_t, expected_path, <span class="org-string">'g-'</span>, label=<span class="org-string">'Expected'</span>)
-        <span class="org-keyword">except</span>:
-            <span class="org-variable-name">_t</span>, <span class="org-variable-name">path</span> = <span class="org-keyword">self</span>.graph(N, energy_args, expected_args)
+    <span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">plot</span>(<span style="color: #ff79c6;">self</span>, N, energy_args=(), expected_args=()):
+        <span style="color: #8995ba;">''' Call this object to yield the plot, i.e., write:</span>
+<span style="color: #8995ba;">            L = Lagrangian(..)</span>
+<span style="color: #8995ba;">            L.plot</span>
+<span style="color: #8995ba;">        '''</span>
+        <span style="color: #ff79c6;">try</span>:
+            _t, path, expected_path = <span style="color: #ff79c6;">self</span>.graph(N, energy_args=energy_args, expected_args=expected_args)
+            plt.plot(_t, expected_path, <span style="color: #f1fa8c;">'g-'</span>, label=<span style="color: #f1fa8c;">'Expected'</span>)
+        <span style="color: #ff79c6;">except</span>:
+            _t, path = <span style="color: #ff79c6;">self</span>.graph(N, energy_args, expected_args)
 
-        plt.plot(_t, path, <span class="org-string">'b.'</span>, label=<span class="org-string">'Minimised'</span>)
+        plt.plot(_t, path, <span style="color: #f1fa8c;">'b.'</span>, label=<span style="color: #f1fa8c;">'Minimised'</span>)
         plt.grid()
         plt.legend()
         plt.show()
@@ -652,32 +652,32 @@ We can make use of this newly defined class by defining the functions that
 characterise the system&rsquo;s behaviour, and processing them accordingly.
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-comment-delimiter"># </span><span class="org-comment">The pendulum problem</span>
-<span class="org-keyword">def</span> <span class="org-function-name">kinetic</span>(speed, m=<span class="org-highlight-numbers-number">1</span>, g=<span class="org-highlight-numbers-number">9.8</span>, L=<span class="org-highlight-numbers-number">1</span>):
-    <span class="org-keyword">return</span> <span class="org-highlight-numbers-number">0.5</span>*m*(L*speed)**<span class="org-highlight-numbers-number">2</span>
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">The pendulum problem</span>
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">kinetic</span>(speed, m=<span style="color: #bd93f9; font-weight: bold;">1</span>, g=<span style="color: #bd93f9; font-weight: bold;">9.8</span>, L=<span style="color: #bd93f9; font-weight: bold;">1</span>):
+    <span style="color: #ff79c6;">return</span> <span style="color: #bd93f9; font-weight: bold;">0.5</span>*m*(L*speed)**<span style="color: #bd93f9; font-weight: bold;">2</span>
 
-<span class="org-keyword">def</span> <span class="org-function-name">potential</span>(thetas, m=<span class="org-highlight-numbers-number">1</span>, g=<span class="org-highlight-numbers-number">9.8</span>, L=<span class="org-highlight-numbers-number">1</span>):
-    <span class="org-keyword">return</span> m*g*L*(<span class="org-highlight-numbers-number">1</span> - np.cos(thetas))
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">potential</span>(thetas, m=<span style="color: #bd93f9; font-weight: bold;">1</span>, g=<span style="color: #bd93f9; font-weight: bold;">9.8</span>, L=<span style="color: #bd93f9; font-weight: bold;">1</span>):
+    <span style="color: #ff79c6;">return</span> m*g*L*(<span style="color: #bd93f9; font-weight: bold;">1</span> - np.cos(thetas))
 
-<span class="org-keyword">def</span> <span class="org-function-name">theoretical</span>(t, theta_end=np.deg2rad(<span class="org-highlight-numbers-number">10</span>), g=<span class="org-highlight-numbers-number">9.8</span>, L=<span class="org-highlight-numbers-number">1</span>):
-    <span class="org-variable-name">T</span> = <span class="org-highlight-numbers-number">2</span>*np.pi*np.sqrt(L/g)
-    <span class="org-variable-name">ang_speed</span> = <span class="org-highlight-numbers-number">2</span>*np.pi/T
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">theoretical</span>(t, theta_end=np.deg2rad(<span style="color: #bd93f9; font-weight: bold;">10</span>), g=<span style="color: #bd93f9; font-weight: bold;">9.8</span>, L=<span style="color: #bd93f9; font-weight: bold;">1</span>):
+    T = <span style="color: #bd93f9; font-weight: bold;">2</span>*np.pi*np.sqrt(L/g)
+    ang_speed = <span style="color: #bd93f9; font-weight: bold;">2</span>*np.pi/T
 
-    <span class="org-keyword">return</span> theta_end*np.sin(ang_speed*t)
+    <span style="color: #ff79c6;">return</span> theta_end*np.sin(ang_speed*t)
 
-<span class="org-variable-name">system</span> = Lagrangian(kinetic, potential,
-                    path_ini=<span class="org-highlight-numbers-number">0</span>, path_end=np.deg2rad(<span class="org-highlight-numbers-number">10</span>),
-                    time_ini=<span class="org-highlight-numbers-number">0</span>, time_end=<span class="org-highlight-numbers-number">0.5026</span>,
+system = Lagrangian(kinetic, potential,
+                    path_ini=<span style="color: #bd93f9; font-weight: bold;">0</span>, path_end=np.deg2rad(<span style="color: #bd93f9; font-weight: bold;">10</span>),
+                    time_ini=<span style="color: #bd93f9; font-weight: bold;">0</span>, time_end=<span style="color: #bd93f9; font-weight: bold;">0.5026</span>,
                     theoretical_path=theoretical)
 
-system.plot(<span class="org-highlight-numbers-number">50</span>, energy_args=(<span class="org-highlight-numbers-number">1</span>, <span class="org-highlight-numbers-number">9.8</span>, <span class="org-highlight-numbers-number">1</span>),
-            expected_args=(np.deg2rad(<span class="org-highlight-numbers-number">10</span>), <span class="org-highlight-numbers-number">9.8</span>, <span class="org-highlight-numbers-number">1</span>))
+system.plot(<span style="color: #bd93f9; font-weight: bold;">50</span>, energy_args=(<span style="color: #bd93f9; font-weight: bold;">1</span>, <span style="color: #bd93f9; font-weight: bold;">9.8</span>, <span style="color: #bd93f9; font-weight: bold;">1</span>),
+            expected_args=(np.deg2rad(<span style="color: #bd93f9; font-weight: bold;">10</span>), <span style="color: #bd93f9; font-weight: bold;">9.8</span>, <span style="color: #bd93f9; font-weight: bold;">1</span>))
 </pre>
 </div>
 
 
-<div id="orga2a0ffb" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/WSY0LI.svg" class="org-svg">
+<div id="orgc7eedc0" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/xwcC4j.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -686,18 +686,18 @@ Sorry, your browser does not support SVG.</object>
 As before, we can build up the energy plot, so as to prove that it is conserved:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-keyword">def</span> <span class="org-function-name">energy</span>(m=<span class="org-highlight-numbers-number">0.2</span>, L=<span class="org-highlight-numbers-number">1</span>, g=<span class="org-highlight-numbers-number">9.8</span>) :
-    <span class="org-comment-delimiter"># </span><span class="org-comment">get the graph of both the expected function</span>
-    <span class="org-comment-delimiter"># </span><span class="org-comment">and the minimised one</span>
-    <span class="org-variable-name">_t</span>, <span class="org-variable-name">path</span>, <span class="org-variable-name">expected_path</span> = system.graph(<span class="org-highlight-numbers-number">50</span>)
-    <span class="org-variable-name">angular_speed</span> = np.diff(path)/np.diff(_t)
+<pre class="src src-ipython"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">energy</span>(m=<span style="color: #bd93f9; font-weight: bold;">0.2</span>, L=<span style="color: #bd93f9; font-weight: bold;">1</span>, g=<span style="color: #bd93f9; font-weight: bold;">9.8</span>) :
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">get the graph of both the expected function</span>
+    <span style="color: #6272a4;"># </span><span style="color: #6272a4;">and the minimised one</span>
+    _t, path, expected_path = system.graph(<span style="color: #bd93f9; font-weight: bold;">50</span>)
+    angular_speed = np.diff(path)/np.diff(_t)
 
-    <span class="org-variable-name">kinetic</span> = <span class="org-highlight-numbers-number">0.5</span>*m*(L*angular_speed)**<span class="org-highlight-numbers-number">2</span>
-    <span class="org-variable-name">potential</span> = m*g*L*(<span class="org-highlight-numbers-number">1</span> - np.cos(path[<span class="org-highlight-numbers-number">1</span>:]))
+    kinetic = <span style="color: #bd93f9; font-weight: bold;">0.5</span>*m*(L*angular_speed)**<span style="color: #bd93f9; font-weight: bold;">2</span>
+    potential = m*g*L*(<span style="color: #bd93f9; font-weight: bold;">1</span> - np.cos(path[<span style="color: #bd93f9; font-weight: bold;">1</span>:]))
 
-    plt.plot(_t[<span class="org-highlight-numbers-number">1</span>:], kinetic + potential, <span class="org-string">'r.'</span>, label=<span class="org-string">'Mechanical energy'</span>)
-    plt.plot(_t[<span class="org-highlight-numbers-number">1</span>:], kinetic, <span class="org-string">'b.'</span>, label=<span class="org-string">'Kinetic energy'</span>)
-    plt.plot(_t[<span class="org-highlight-numbers-number">1</span>:], potential, <span class="org-string">'g.'</span>, label=<span class="org-string">'Potential energy'</span>)
+    plt.plot(_t[<span style="color: #bd93f9; font-weight: bold;">1</span>:], kinetic + potential, <span style="color: #f1fa8c;">'r.'</span>, label=<span style="color: #f1fa8c;">'Mechanical energy'</span>)
+    plt.plot(_t[<span style="color: #bd93f9; font-weight: bold;">1</span>:], kinetic, <span style="color: #f1fa8c;">'b.'</span>, label=<span style="color: #f1fa8c;">'Kinetic energy'</span>)
+    plt.plot(_t[<span style="color: #bd93f9; font-weight: bold;">1</span>:], potential, <span style="color: #f1fa8c;">'g.'</span>, label=<span style="color: #f1fa8c;">'Potential energy'</span>)
     plt.grid()
     plt.legend()
     plt.show()
@@ -707,8 +707,8 @@ energy()
 </div>
 
 
-<div id="orgc55afcc" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/2rj70p.svg" class="org-svg">
+<div id="orgafaf09b" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/GxE0Gd.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -716,30 +716,30 @@ Sorry, your browser does not support SVG.</object>
 Similarly:
 </p>
 <div class="org-src-container">
-<pre class="src src-ipython"><span class="org-comment-delimiter"># </span><span class="org-comment">The spring problem</span>
-<span class="org-keyword">def</span> <span class="org-function-name">kinetic</span>(speed, m=<span class="org-highlight-numbers-number">0.2</span>, k=<span class="org-highlight-numbers-number">0.8</span>):
-    <span class="org-keyword">return</span> <span class="org-highlight-numbers-number">0.5</span>*m*speed**<span class="org-highlight-numbers-number">2</span>
+<pre class="src src-ipython"><span style="color: #6272a4;"># </span><span style="color: #6272a4;">The spring problem</span>
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">kinetic</span>(speed, m=<span style="color: #bd93f9; font-weight: bold;">0.2</span>, k=<span style="color: #bd93f9; font-weight: bold;">0.8</span>):
+    <span style="color: #ff79c6;">return</span> <span style="color: #bd93f9; font-weight: bold;">0.5</span>*m*speed**<span style="color: #bd93f9; font-weight: bold;">2</span>
 
-<span class="org-keyword">def</span> <span class="org-function-name">potential</span>(position, m=<span class="org-highlight-numbers-number">0.2</span>, k=<span class="org-highlight-numbers-number">0.8</span>):
-    <span class="org-keyword">return</span> <span class="org-highlight-numbers-number">0.5</span>*k*position**<span class="org-highlight-numbers-number">2</span>
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">potential</span>(position, m=<span style="color: #bd93f9; font-weight: bold;">0.2</span>, k=<span style="color: #bd93f9; font-weight: bold;">0.8</span>):
+    <span style="color: #ff79c6;">return</span> <span style="color: #bd93f9; font-weight: bold;">0.5</span>*k*position**<span style="color: #bd93f9; font-weight: bold;">2</span>
 
-<span class="org-keyword">def</span> <span class="org-function-name">theoretical</span>(t, m=<span class="org-highlight-numbers-number">0.2</span>, k=<span class="org-highlight-numbers-number">0.8</span>):
-    <span class="org-variable-name">ang_speed</span> = np.sqrt(k/m)
-    <span class="org-keyword">return</span> np.sin(ang_speed*t)
+<span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">theoretical</span>(t, m=<span style="color: #bd93f9; font-weight: bold;">0.2</span>, k=<span style="color: #bd93f9; font-weight: bold;">0.8</span>):
+    ang_speed = np.sqrt(k/m)
+    <span style="color: #ff79c6;">return</span> np.sin(ang_speed*t)
 
-<span class="org-variable-name">system</span> = Lagrangian(kinetic, potential,
-                    path_ini=<span class="org-highlight-numbers-number">0.707106</span>, path_end=<span class="org-highlight-numbers-number">0.707106</span>,
-                    time_ini=np.pi/<span class="org-highlight-numbers-number">8</span>, time_end=<span class="org-highlight-numbers-number">3</span>*np.pi/<span class="org-highlight-numbers-number">8</span>,
+system = Lagrangian(kinetic, potential,
+                    path_ini=<span style="color: #bd93f9; font-weight: bold;">0.707106</span>, path_end=<span style="color: #bd93f9; font-weight: bold;">0.707106</span>,
+                    time_ini=np.pi/<span style="color: #bd93f9; font-weight: bold;">8</span>, time_end=<span style="color: #bd93f9; font-weight: bold;">3</span>*np.pi/<span style="color: #bd93f9; font-weight: bold;">8</span>,
                     theoretical_path=theoretical)
 
-system.plot(<span class="org-highlight-numbers-number">50</span>, energy_args=(<span class="org-highlight-numbers-number">0.2</span>, <span class="org-highlight-numbers-number">0.8</span>),
-            expected_args=(<span class="org-highlight-numbers-number">0.2</span>, <span class="org-highlight-numbers-number">0.8</span>))
+system.plot(<span style="color: #bd93f9; font-weight: bold;">50</span>, energy_args=(<span style="color: #bd93f9; font-weight: bold;">0.2</span>, <span style="color: #bd93f9; font-weight: bold;">0.8</span>),
+            expected_args=(<span style="color: #bd93f9; font-weight: bold;">0.2</span>, <span style="color: #bd93f9; font-weight: bold;">0.8</span>))
 </pre>
 </div>
 
 
-<div id="orga878d3c" class="figure">
-<p><object type="image/svg+xml" data="./obipy-resources/mbIYnr.svg" class="org-svg">
+<div id="orgfc3fef3" class="figure">
+<p><object type="image/svg+xml" data="./obipy-resources/KKU86n.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
@@ -748,7 +748,7 @@ Sorry, your browser does not support SVG.</object>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Juan David Salcedo Hernández</p>
-<p class="date">Created: 2021-10-10 Sun 08:28</p>
+<p class="date">Created: 2021-10-13 Wed 21:40</p>
 <p class="creator"><a href="https://www.gnu.org/software/emacs/">Emacs</a> 27.1 (<a href="https://orgmode.org">Org</a> mode 9.5)</p>
 </div>
 </body>

@@ -24,7 +24,7 @@ import seaborn as sns
 :end:
 
 * First activity
-Firstly, we import the dataset and read it with Pandas.
+Firstly, we import the dataset and read it with Pandas
 #+RESULTS:
 :results:
 # Out[1]:

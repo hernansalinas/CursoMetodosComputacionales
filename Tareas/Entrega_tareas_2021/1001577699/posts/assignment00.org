@@ -5,9 +5,9 @@
 
 In order to compute the factorial of an arbitrary positive integer n, we need not resort to an explicit algebraic expression for such a function, but rather establish a recursive routine by using a list of numbers.
 
-The function receives a value $n$ and builds up a list beginning with the number 1 (that is, $a_1$) with the recursion:
+The function receives a value $n$ and builds up a list beginning with the number 1 (that is, $a_1$) with the recursion
 \[
-a_n =n\cdot a_{n-1},
+a_n =n\cdot a_{n-1};
 \]
 this means that the first few iterations yield
 \begin{gather*}
