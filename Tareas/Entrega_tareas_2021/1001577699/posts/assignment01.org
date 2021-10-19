@@ -1,6 +1,5 @@
 #+TITLE: Assignment01
-#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
-#+HTML_HEAD: <style>pre.src{background:#343131;color:white;} </style>
+#+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup
 
 In order to run this code, the following packages will be necessesary:
 #+begin_src ipython :session asession :exports code :results raw drawer
@@ -15,9 +14,9 @@ import matplotlib.pylab as plt
 
 * Plotting an electrostatic field
 
-The electrostatic field due to some point source charge $q$ is given by Coulomb's law,
+The electrostatic field due to some point source charge $q$ is given by Coulomb's law:
 \[
-\mathbf{E} = \frac{1}{4\pi \epsilon_0} \frac{q}{r^2} \hat{\mathbf{r}}
+\mathbf{E} = \frac{1}{4\pi \epsilon_0} \frac{q}{r^2} \hat{\mathbf{r}},
 \]
 where $r$ denotes the distance from the point charge to the field point, vectorially, if the field point is located at $\mathbf{l}$, and the source at $\mathbf{l}'$, then $\mathbf{r} = \mathbf{l} - \mathbf{l}'$. Notice that the above equation for the field yields a two-component equation in a two dimensional space. In such a case we have
 \[

@@ -1,7 +1,6 @@
-
 ;;; publish.el --- Generate Static HTML -*- lexical-binding: t -*-
 ;;
-;; Author: Lincoln Clarete <lincoln@clarete.li>
+;; Author: Juan David Saledo <jdavid.salcedo@udea.edu.co>
 ;;
 ;; Copyright (C) 2021 Juan David Salcedo
 ;;
@@ -12,11 +11,11 @@
 ;;
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; along with this program. If not, see <http://www.gnu.org/licenses/>.
 ;;
 ;;; Commentary:
 ;;
@@ -25,7 +24,11 @@
 ;;; Code:
 
 (require 'ox-html)
-;;(require 'htmlize)
+
+(setq m/org-publish-org-sitemap (title list)
+  "Sitemap generation function."
+  (concat "#+TITLE: Contents\n\n#+SETUPFILE: ~/Desktop/Metodos_Computacionales_taller/Tareas/Entrega_tareas_2021/1001577699/org-html-themes/org/theme-readtheorg-local.setup"
+          (org-list-to-subtree list)))
 
 ;; Output HTML with syntax highlightng using css classes instead of
 ;; directly formatting the output.
@@ -40,8 +43,9 @@
          :publishing-function org-html-publish-to-html
          :auto-sitemap t
          :sitemap-title "Contents"
-         :sitemap-filename "index.org"
+         :sitemap-filename "sitemap.org"
          :sitemap-style list
+         :link-home "./index.html"
          :author "Juan David Salcedo Hernández"
          :email "jdavid.salcedo@udea.edu.co"
          :with-creator t)
