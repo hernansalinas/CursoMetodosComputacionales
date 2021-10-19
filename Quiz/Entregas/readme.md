@@ -1,1 +1,1 @@
-Quiz Taller Métodos Computacionales
+Directorio con el quiz del taller: Metodos computacionales
