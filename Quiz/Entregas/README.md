@@ -1,1 +1,0 @@
-Quiz Taller Métodos Computacionales
