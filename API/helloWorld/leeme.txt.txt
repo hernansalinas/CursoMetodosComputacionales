@@ -2,3 +2,7 @@
 1. conda create -n myenv python=3.9
 2. python install requerimientos.txt
 
+
+Para trabajar con dash y ploty revisar este sitio web
+https://dash.plotly.com/tutorial
+
