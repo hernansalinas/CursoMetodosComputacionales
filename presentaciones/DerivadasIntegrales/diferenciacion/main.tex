@@ -1,0 +1,88 @@
+\documentclass{beamer} 
+\usepackage{amsmath} 
+\usepackage{tikz}
+\usetikzlibrary{mindmap}
+\title{Diferenciación} 
+\author{} 
+\date{\today}
+
+\begin{document}
+
+% Primer slide: título \begin{frame} \titlepage \end{frame}
+
+% Segundo slide: primera ecuación y explicación 
+
+
+\begin{document}
+
+\begin{frame}{Calculo de derivadas}
+
+\begin{tikzpicture}[mindmap, grow cyclic, every node/.style=concept, concept color=orange!40,
+    level 1/.append style={level distance=3.0cm,sibling angle=135},
+    level 1/.append style={level distance=3.0cm,sibling angle=45}]
+\begin{center}
+\begin{small}
+
+\node[concept,minimum size=1cm]{Derivadas}
+    child [concept color=blue!30] {node {Numérica} 
+    }
+    child [concept color=green!40]{node {Analítica}
+    };
+\end{small}
+\end{center}
+
+
+\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}\frametitle{Teorema} \begin{theorem} Para una función $f(x)$ tal que $f(x)\in C^{n+1}[a,b]$, se cumple siempre la siguiente expresión
+
+$$f(x) = P(x) + \frac{f^{(n+1)}(\xi(x))}{(n+1)!}(x-x_0)(x-x_1)\cdots(x-x_n)$$
+
+donde ${x_i}_i$ es un conjunto de puntos donde se mapea la función, $\xi(x)$ es alguna función de $x$ tal que $\xi\in[a,b]$, y $P(x)$ es el polinomio interpolante de Lagrange asociado.
+
+A medida que $n$ se hace mayor, la aproximación debe ser mejor ya que el término de error se vuelve despreciable. \end{theorem} \end{frame}
+
+\begin{frame}\frametitle{Ecuación general} Tomando la expresión anterior y diferenciando, obtenemos $$f(x) = \sum_{k=0}^n f(x_k)L_{n,k}(x) + \frac{(x-x_0)(x-x_1)\cdots(x-x_n)}{(n+1)!}f^{(n+1)}(\xi(x))$$ donde $L_{n,k}$ es la $k$-ésima función base de Lagrange para $n$ puntos, $L’_{n,k}$ es su primera derivada. Nota que la última expresión se evalúa en $x_j$ en lugar de un valor general de $x$, la causa de esto es que esta expresión no es válida para otro valor que no esté dentro del conjunto ${x_i}_i$, sin embargo esto no es un inconveniente cuando se manejan aplicaciones reales. Esta fórmula constituye la aproximación de (n+1) puntos y comprende una generalización de casi todos los esquemas existentes para diferenciar numéricamente. \end{frame}
+
+
+\begin{frame} \frametitle{Ecuación para 3 puntos} Por ejemplo, la forma que toma este polinomio derivado para 3 puntos $(x_i,y_i)$ es la siguiente 
+
+\begin{equation}
+f’(x_j) = f(x_0)\left[ \frac{2x_j-x_1-x_2}{(x_0-x_1)(x_0-x_2)}\right] + f(x_1)\left[ \frac{2x_j-x_0-x_2}{(x_1-x_0)(x_1-x_2)}\right] \end{equation}
+$
+\hspace{2cm} + f(x_2)\left[ \frac{2x_j-x_0-x_1}{(x_2-x_0)(x_2-x_1)}\right] 
+ + \frac{1}{6} f^{(3)}(\epsilon_j) \prod_{k=0,k\neq j}^{n}(x_j-x_k)$
+
+\end{frame}
+
+ \begin{frame} \frametitle{Fórmulas de extremo} Se basan en evaluar la derivada en el primero de un conjunto de puntos, es decir, si queremos evaluar $f’(x)$ en $x_i$, entonces necesitamos $(x_i$, $x_{i+1}=x_i+h$, $x_{i+2}=x_i+2h$, $\cdots)$. Por simplicidad, se suele asumir que el conjunto ${x_i}_i$ está equiespaciado tal que $x_k = x_0+k\cdot h$.
+
+\end{frame}
+
+\begin{frame}
+
+\begin{itemize}
+
+\item Fórmula de extremo de tres puntos
+
+$$f’(x_i) = \frac{1}{2h}[-3f(x_i)+4f(x_i+h)-f(x_i+2h)] + \frac{h^2}{3}f{(3)}(\xi)$$
+
+con $\xi\in[x_i,x_i+2h]$
+
+
+\item Fórmula de extremo de cinco puntos
+
+$$f’(x_i) = \frac{1}{12h}[-25f(x_i)+48f(x_i+h)-36f(x_i+2h)$$
+
+$\hspace{2cm}+16f(x_i+3h)-3f(x_i+4h)]  + \frac{h^4}{5}f{(5)}(\xi) $
+
+con $\xi\in[x_i,x_i+4h]$ 
+
+Son especialmente útiles cerca del final de un conjunto de puntos, donde no existen más puntos.
+
+\end{itemize}
+\end{frame}
+
+\end{document}
