@@ -1,0 +1,1 @@
+Estamos preparados para todo.
