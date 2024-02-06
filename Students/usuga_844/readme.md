@@ -1,1 +1,0 @@
-repositorio curso Metodos computacionales

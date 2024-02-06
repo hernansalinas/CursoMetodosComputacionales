@@ -1,1 +1,0 @@
-Repertorio métodos computacionales 
