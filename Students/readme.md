@@ -1,3 +1,2 @@
-Guia Para subir los archivos al github
+Directorios de entrega de tareas
 
-1. Crear un directorio con su apellido y los ultimos digitos de la cedula.
