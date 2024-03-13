@@ -1,4 +1,10 @@
+
 def doble_factorial(n):
+    '''
+    Esta función calcula en doble factorial de un entero n.
+    '''
+    if n<0:
+        return 'Ingrese un número no negativo.'
     if n%2==0:
         feven=1
         for i in range(0,n/2+1):
@@ -11,5 +17,5 @@ def doble_factorial(n):
                 fodd*=2*j-1
             return fodd
         
-n=int(input('Ingrese un número entero: '))
-print(doble_factorial(n))
+n=int(input('Ingrese un entero n: '))
+print(f'{n}!!={doble_factorial(n)}')
