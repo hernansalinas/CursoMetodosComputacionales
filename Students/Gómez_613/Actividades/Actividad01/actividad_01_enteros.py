@@ -1,3 +1,4 @@
+
 a=int(input('Ingrese un entero: '))
 b=int(input('Ingrese otro entero: '))
 
