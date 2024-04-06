@@ -6,6 +6,8 @@ def doble_factorial(n):
         s=s*n
     return s
 
-n=10
+n=4
 result = doble_factorial(n)
 print(f"el doble factorial de {n} es {result}")
+
+

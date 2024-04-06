@@ -11,3 +11,5 @@ plt.plot(X_, Y_, "o-", label="cambio de presiòn")
 plt.xlabel("profundidad_(m)", fontsize=20)
 plt.ylabel("Presiòn_(pa)", fontsize=20)
 plt.title("Cambio en la presiòn", fontsize=16)
+
+

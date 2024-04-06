@@ -13,4 +13,8 @@ def serie_de_lucas(n):
         b=c
         count=count+1
     return c
-    
+
+
+serie_de_lucas(5)
+
+

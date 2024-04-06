@@ -1,4 +1,4 @@
-!usr/bin/env python
+# !usr/bin/env python
 
 
 import json
@@ -46,3 +46,5 @@ if __name__ == "__main__":
     ruta_archivo = 'datos.json'
     datos = cargar_datos_desde_json(ruta_archivo)
     graficar_movimiento_parabolico(datos)
+
+
