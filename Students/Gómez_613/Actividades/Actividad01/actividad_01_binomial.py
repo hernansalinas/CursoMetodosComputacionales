@@ -1,4 +1,8 @@
+
 def binomial(n,k):
+    '''
+    Esta función retorna el coeficiente binomial de n y k.
+    '''
     def fact(a):
         if a==0:
             return 1
@@ -9,6 +13,6 @@ def binomial(n,k):
             return fa
     return fact(n)/(fact(k)*fact(n-k))
 
-n=int(input('Ingrese un n: '))
-k=int(input('Ingrese un k: '))
-print(binomial(n,k))
+n=int(input('Ingrese un entero: '))
+k=int(input('Ingrese otro entero: '))
+print(f'El coeficiente binomial de {n} y {k} es: {binomial(n,k)}')
