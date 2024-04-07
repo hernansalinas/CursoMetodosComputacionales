@@ -1,4 +1,4 @@
-#dado un tetha y una velocidad inicial
+# dado un tetha y una velocidad inicial
 
 import matplotlib.pylab as plt
 import numpy as np
@@ -39,6 +39,6 @@ def cesta(vo, theta, d):
         return True
     else:
         return False
-    
+
 
 cesta(28.5, 3.14/6, 4)
