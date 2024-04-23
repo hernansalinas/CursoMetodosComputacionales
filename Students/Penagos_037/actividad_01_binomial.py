@@ -1,4 +1,4 @@
-# Ejercicio 4
+#!usr/bin/env python
 def factorial(n):
     r=1
     for i in range(1,n+1):

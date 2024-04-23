@@ -1,4 +1,4 @@
-# Ejercicio 1
+#!usr/bin/env python
 a=float(input("Por favor, ingrese el número a\n"))
 b=float(input("Por favor, ingrese el número b\n"))
 
