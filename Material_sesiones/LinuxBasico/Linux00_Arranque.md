@@ -14,17 +14,17 @@ GRUB e initrd: el gestor de arranque carga el núcleo o kernel de Linux y la ima
 Kernel de Linux: el núcleo del sistema operativo realiza las funciones básicas del sistema, como la gestión de la memoria, los procesos, los dispositivos y las interrupciones. El kernel monta el sistema de archivos raíz y ejecuta el primer proceso en espacio de usuario, llamado init.
 
 
-	El kernel de Linux se ejecuta después de que el gestor de arranque le pasa el control. Aquí te presento una lista enumerada de los 	pasos que sigue el kernel al ejecutarse:
+El kernel de Linux se ejecuta después de que el gestor de arranque le pasa el control:
 
-	- Descompresión: el kernel se descomprime en la memoria usando una rutina especial llamada head.S, que también configura el modo 	protegido y la paginación de memoria.
+- Descompresión: el kernel se descomprime en la memoria usando una rutina especial llamada head.S, que también configura el modo 	protegido y la paginación de memoria.
 	
-      - Inicio: el kernel llama a la función start_kernel(), que realiza la mayor parte de la inicialización del sistema, como la 	configuración de los registros, las interrupciones, el reloj, la memoria, los dispositivos y los controladores.
+- Inicio: el kernel llama a la función start_kernel(), que realiza la mayor parte de la inicialización del sistema, como la 	configuración de los registros, las interrupciones, el reloj, la memoria, los dispositivos y los controladores.
 	
-      - Planificación: el kernel inicia el planificador, que es el encargado de asignar los recursos de la CPU a los procesos que se 	ejecutan en el sistema.
+- Planificación: el kernel inicia el planificador, que es el encargado de asignar los recursos de la CPU a los procesos que se 	ejecutan en el sistema.
 	
-	- Inactividad: el kernel crea el proceso inactivo o idle, que se ejecuta cuando no hay ningún otro proceso que requiera la CPU. El 	proceso inactivo puede entrar en un estado de bajo consumo de energía o ejecutar tareas de mantenimiento del sistema.
+- Inactividad: el kernel crea el proceso inactivo o idle, que se ejecuta cuando no hay ningún otro proceso que requiera la CPU. El 	proceso inactivo puede entrar en un estado de bajo consumo de energía o ejecutar tareas de mantenimiento del sistema.
 	
-	- Init: el kernel crea el primer proceso en espacio de usuario, llamado init, que tiene el identificador 1 y es el padre de todos 	los 	demás procesos. El init se encarga de ejecutar los scripts o servicios necesarios para configurar e iniciar el resto de los 	componentes del sistema, como la red, el sonido, la interfaz gráfica, etc.
+- Init: el kernel crea el primer proceso en espacio de usuario, llamado init, que tiene el identificador 1 y es el padre de todos 	los 	demás procesos. El init se encarga de ejecutar los scripts o servicios necesarios para configurar e iniciar el resto de los 	componentes del sistema, como la red, el sonido, la interfaz gráfica, etc.
 
 
 Init: el proceso padre de todos los demás procesos en Linux. Se encarga de ejecutar los scripts o servicios necesarios para configurar e iniciar el resto de los componentes del sistema, como la red, el sonido, la interfaz gráfica, etc. El init más usado en Linux es systemd.
