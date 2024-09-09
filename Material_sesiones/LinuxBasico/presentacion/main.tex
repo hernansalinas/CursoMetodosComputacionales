@@ -1,0 +1,246 @@
+\documentclass{beamer}
+
+\title{Introducción a los Comandos Básicos de Linux en Bash}
+\author{Tu Nombre}
+\date{\today}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+\frametitle{Objetivos}
+\begin{itemize}
+    \item Aprender los comandos básicos para la navegación en Linux.
+    \item Manipular archivos y directorios desde la consola.
+    \item Obtener información y gestionar el sistema: memoria, disco duro, procesador, y puertos.
+    \item Gestionar permisos de archivos y directorios.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Navegación en el Sistema de Archivos}
+\begin{itemize}
+    \item \textbf{pwd}: Muestra la ruta del directorio actual.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `pwd`
+        \item \textbf{Ejemplo}: Muestra `/home/usuario` si estás en ese directorio.
+    \end{itemize}
+    \item \textbf{ls}: Lista los archivos y directorios en el directorio actual.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `ls [opciones] [directorio]`
+        \item \textbf{Ejemplo}: `ls -l` muestra una lista detallada de archivos.
+    \end{itemize}
+    \item \textbf{cd}: Cambia de directorio.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `cd [directorio]`
+        \item \textbf{Ejemplo}: `cd /etc` te lleva al directorio `/etc`.
+    \end{itemize}
+    \item \textbf{tree}: Muestra la estructura de directorios y archivos de manera jerárquica.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `tree [directorio]`
+        \item \textbf{Ejemplo}: `tree /home` muestra la estructura de directorios en `/home`.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Manipulación de Archivos y Directorios}
+\begin{itemize}
+    \item \textbf{cp}: Copia archivos o directorios.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `cp [opciones] origen destino`
+        \item \textbf{Ejemplo}: `cp archivo.txt /backup/` copia `archivo.txt` a `/backup/`.
+    \end{itemize}
+    \item \textbf{mv}: Mueve o renombra archivos o directorios.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `mv [opciones] origen destino`
+        \item \textbf{Ejemplo}: `mv archivo.txt documento.txt` renombra `archivo.txt` a `documento.txt`.
+    \end{itemize}
+    \item \textbf{rm}: Elimina archivos o directorios.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `rm [opciones] archivo`
+        \item \textbf{Ejemplo}: `rm -r /directorio` elimina el directorio `/directorio` y su contenido.
+    \end{itemize}
+    \item \textbf{mkdir}: Crea un nuevo directorio.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `mkdir [opciones] nombre_directorio`
+        \item \textbf{Ejemplo}: `mkdir proyectos` crea un directorio llamado `proyectos`.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Ver Información del Sistema}
+\begin{itemize}
+    \item \textbf{uname -a}: Muestra información del sistema operativo.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `uname -a`
+        \item \textbf{Ejemplo}: Muestra información como el kernel, el nombre del host, etc.
+    \end{itemize}
+    \item \textbf{top}: Muestra los procesos en ejecución y su uso de recursos.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `top`
+        \item \textbf{Ejemplo}: Muestra en tiempo real el uso de CPU, memoria y los procesos activos.
+    \end{itemize}
+    \item \textbf{htop}: Una versión mejorada de `top` con una interfaz más amigable.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `htop`
+        \item \textbf{Ejemplo}: Proporciona una vista interactiva de los procesos y su uso de recursos.
+    \end{itemize}
+    \item \textbf{df -h}: Muestra el uso del espacio en disco de manera legible.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `df -h`
+        \item \textbf{Ejemplo}: Muestra el uso del disco en formato legible (e.g., 10G).
+    \end{itemize}
+    
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Ver Información del Sistema}
+\begin{itemize}
+    \item \textbf{du -sh *}: Muestra el tamaño de archivos y directorios en el directorio actual.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `du -sh [archivo/directorio]`
+        \item \textbf{Ejemplo}: `du -sh *` muestra el tamaño de cada archivo y directorio en el directorio actual.
+    \end{itemize}
+    
+    \item \textbf{free -h}: Muestra la memoria libre y usada en el sistema.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `free -h`
+        \item \textbf{Ejemplo}: Muestra la memoria usada y disponible en formato legible.
+    \end{itemize}
+    \item \textbf{vmstat}: Muestra estadísticas del sistema, incluyendo memoria, procesos, y CPU.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `vmstat [opciones]`
+        \item \textbf{Ejemplo}: `vmstat 5` muestra estadísticas del sistema cada 5 segundos.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Búsqueda de Texto en Archivos}
+\begin{itemize}
+    \item \textbf{grep}: Busca patrones en archivos.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `grep [opciones] patrón [archivo]`
+        \item \textbf{Ejemplo}: `grep "error" /var/log/syslog` busca la palabra "error" en el archivo `syslog`.
+    \end{itemize}
+    \item \textbf{find}: Busca archivos y directorios en un sistema de archivos.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `find [ruta] [opciones] [expresión]`
+        \item \textbf{Ejemplo}: `find /home -name "*.txt"` busca todos los archivos `.txt` en el directorio `/home`.
+    \end{itemize}
+    \item \textbf{locate}: Encuentra archivos rápidamente utilizando una base de datos indexada.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `locate [nombre_archivo]`
+        \item \textbf{Ejemplo}: `locate archivo.txt` busca `archivo.txt` en todo el sistema de archivos.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Procesamiento de Texto}
+\begin{itemize}
+    \item \textbf{awk}: Herramienta poderosa para la manipulación y procesamiento de texto.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `awk '{acción}' archivo`
+        \item \textbf{Ejemplo}: `awk '{print $1, $3}' archivo.txt` imprime la primera y tercera columna del archivo `archivo.txt`.
+    \end{itemize}
+    \item \textbf{sed}: Editor de texto en línea para buscar y reemplazar.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `sed 's/patrón/reemplazo/' archivo`
+        \item \textbf{Ejemplo}: `sed 's/error/warning/' archivo.txt` reemplaza "error" por "warning" en `archivo.txt`.
+    \end{itemize}
+    \item \textbf{cut}: Corta secciones de cada línea de archivos.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `cut [opciones] [archivo]`
+        \item \textbf{Ejemplo}: `cut -d',' -f1,3 archivo.csv` extrae la primera y tercera columna de un archivo CSV separado por comas.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Combinación de Comandos}
+\begin{itemize}
+    \item \textbf{xargs}: Construye y ejecuta comandos desde la salida estándar.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `comando | xargs [otro_comando]`
+        \item \textbf{Ejemplo}: `find . -name "*.log" | xargs rm` encuentra y elimina todos los archivos `.log`.
+    \end{itemize}
+    \item \textbf{sort}: Ordena las líneas de texto en archivos.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `sort [opciones] archivo`
+        \item \textbf{Ejemplo}: `sort -n archivo.txt` ordena las líneas numéricamente en `archivo.txt`.
+    \end{itemize}
+    \item \textbf{uniq}: Reporta o elimina líneas duplicadas en un archivo ordenado.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `uniq [opciones] [archivo]`
+        \item \textbf{Ejemplo}: `sort archivo.txt | uniq` elimina las líneas duplicadas de un archivo.
+    \end{itemize}
+    \item \textbf{wc}: Cuenta las líneas, palabras y caracteres en un archivo.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `wc [opciones] [archivo]`
+        \item \textbf{Ejemplo}: `wc -l archivo.txt` cuenta las líneas en `archivo.txt`.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Gestión de Permisos, comandos más avanzados}
+\begin{itemize}
+    \item \textbf{chmod}: Cambia los permisos de archivos o directorios.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `chmod [opciones] permisos archivo`
+        \item \textbf{Ejemplo}: `chmod 755 script.sh` otorga permisos de lectura, escritura y ejecución al propietario, y permisos de lectura y ejecución al grupo y otros usuarios.
+    \end{itemize}
+    \item \textbf{chown}: Cambia el propietario de archivos o directorios.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `chown [opciones] usuario:grupo archivo`
+        \item \textbf{Ejemplo}: `chown root:root /etc/archivo.conf` cambia el propietario y el grupo del archivo a `root`.
+    \end{itemize}
+    \item \textbf{umask}: Establece la máscara de creación de archivos.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: `umask [opciones]`
+        \item \textbf{Ejemplo}: `umask 022` establece los permisos predeterminados para nuevos archivos como `755` y para directorios como `755`.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Gestión de Permisos}
+\begin{itemize}
+
+
+    
+    \item \textbf{getfacl/setfacl}: Obtiene y establece listas de control de acceso (ACL) para archivos y directorios.
+    \begin{itemize}
+        \item \textbf{Sintaxis}: 
+        \begin{itemize}
+            \item `getfacl archivo`: Obtiene la ACL de un archivo.
+            \item `setfacl -m usuario:permisos archivo`: Establece una ACL en un archivo.
+        \end{itemize}
+        \item \textbf{Ejemplo}: 
+        \begin{itemize}
+            \item `getfacl archivo.txt` muestra la ACL del archivo `archivo.txt`.
+            \item `setfacl -m u:usuario:rwx archivo.txt` otorga permisos de lectura, escritura y ejecución al usuario `usuario` en `archivo.txt`.
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Conclusión}
+\begin{itemize}
+    \item Los comandos de Linux son poderosos y permiten un control completo sobre el sistema.
+    \item Practicar estos comandos es esencial para cualquier usuario o administrador de sistemas.
+    \item Explorar más comandos y combinaciones es la clave para mejorar tus habilidades en la consola.
+\end{itemize}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,12 @@
+| Nombre de la distribución | Características |
+| ------------------------- | --------------- |
+| Ubuntu | Basada en Debian, es una de las distribuciones más usadas y amigables para los usuarios. Tiene varias ediciones oficiales para diferentes entornos de escritorio y propósitos. |
+| Debian | Una de las distribuciones más antiguas y estables, que sirve de base para muchas otras. Tiene un gran repositorio de software y una comunidad activa. |
+| CentOS | Basada en el código fuente de Red Hat Enterprise Linux (RHEL), es una distribución orientada a servidores y empresas. Ofrece compatibilidad y seguridad a largo plazo. |
+| Fedora | Patrocinada por Red Hat, es una distribución que incorpora las últimas novedades y tecnologías del software libre. Tiene varias ediciones para diferentes casos de uso. |
+| OpenSUSE | Desarrollada por la comunidad y patrocinada por SUSE, es una distribución versátil que se adapta tanto a escritorios como a servidores. Tiene dos versiones: Leap, que ofrece estabilidad y soporte a largo plazo, y Tumbleweed, que ofrece actualizaciones continuas. |
+| Gentoo | Una distribución que se compila desde el código fuente según las preferencias del usuario. Ofrece un alto grado de personalización y optimización, pero requiere más tiempo y conocimientos técnicos. |
+| Arch Linux | Una distribución minimalista y ligera que sigue el principio de "sencillez". El usuario tiene el control total sobre el sistema y lo configura según sus necesidades. Tiene un gestor de paquetes propio llamado Pacman y un repositorio comunitario llamado AUR. |
+| Manjaro | Basada en Arch Linux, es una distribución más accesible y amigable para los usuarios principiantes o intermedios. Tiene varias ediciones con diferentes entornos de escritorio y ofrece un sistema de actualizaciones más estable. |
+| Linux Mint | Basada en Ubuntu, es una distribución que se enfoca en la facilidad de uso y la compatibilidad con el hardware. Tiene varias ediciones con diferentes entornos de escritorio y ofrece un sistema de actualizaciones más conservador. |
+| Elementary OS | Basada en Ubuntu, es una distribución que se destaca por su diseño elegante y su entorno de escritorio propio llamado Pantheon. Está inspirada en la interfaz de macOS y ofrece una experiencia fluida y coherente. |
