@@ -1,4 +1,7 @@
 # Actividad 02: Librerias y modelamiento básico
+
+### Profesor: Juan Marcos Marín Ramírez
+#### Métodos Computacionales 2024-2
 ---
 1. Una persona conduce una moto con rapidez constante $v_m$, mientras que un policia lo hace con aceleración constante $a_p$ (iniciando desde el reposo). Suponga que ambos movimientos inician en $t=0$, haga una gráfica para el movimiento de la moto y del policia, donde el usuario ingrese la velocidad (moto) y aceleración (policia). Además determine el instante $t$ en el cual se encuentran ambos. Ambos movimientos iniciarán en $x_i = 0$
 
