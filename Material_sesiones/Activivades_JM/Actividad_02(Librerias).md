@@ -12,7 +12,26 @@ $$x_f = x_i + v_m\cdot t$$
 $$x_f = x_i + v_o\cdot t + \frac{1}{2}a_p\cdot t^2$$
 ---
 
-2.  El siguiente código exporta tablas html de sitios web
+2. El potencial Lennard-Jones es un modelo simple que aproxima la interacción entre un par de moléculas neutras. Este está definido como:
+
+$$
+V(r) = 4\epsilon \left[ \left( \frac{\sigma}{r} \right)^{12} - \left( \frac{\sigma}{r} \right)^{6} \right]
+$$
+
+Donde:
+- $ V(r) $ es el potencial en función de la distancia interatómica $ r $.
+- $ \epsilon $ es la profundidad del pozo de potencial, es decir, la energía mínima que describe la interacción entre dos partículas.
+- $ \sigma $ es la distancia a la cual el potencial es cero, también conocido como el parámetro de distancia.
+- $ r $ es la distancia entre las dos partículas.
+
+a. Escriba una función para encontrar modelar el potencial LJ.
+
+
+b. Usando $\sigma = \epsilon = 1$ demuestre que la distancia de equilibrio $r_m$ es aproximadamente $r_m = 2^{2/16}\sigma$. Trunque la serie en $r_c = 2.5\sigma$.
+
+
+---
+3.  El siguiente código exporta tablas html de sitios web
 
 ```python
 import pandas as pd
