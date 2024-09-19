@@ -21,7 +21,7 @@ V(r) = 4\epsilon \left[ \left( \frac{\sigma}{r} \right)^{12} - \left( \frac{\sig
 $$
 
 Donde:
-- $V(r)$ es el potencial en función de la distancia interatómica $ r $.
+- $V(r)$ es el potencial en función de la distancia interatómica $r$.
 - $\epsilon$ es la profundidad del pozo de potencial, es decir, la energía mínima que describe la interacción entre dos partículas.
 - $\sigma$ es la distancia a la cual el potencial es cero, también conocido como el parámetro de distancia.
 - $r$ es la distancia entre las dos partículas.
@@ -29,10 +29,10 @@ Donde:
 a. Escriba una función para encontrar modelar el potencial LJ.
 
 
-b. Usando $\sigma = \epsilon = 1$ demuestre que la distancia de equilibrio $r_m$ es aproximadamente $r_m = 2^{2/16}\sigma$. Para esto realice un gráfico del potencial, especificando los ejes. Trunque la serie en $r_c = 2.5\sigma$. 
+b. Usando $\sigma = \epsilon = 1$ demuestre que la distancia de equilibrio $r_m$ es aproximadamente $r_m = 2^{1/16}\sigma$. Para esto realice un gráfico del potencial, especificando los ejes. Trunque la serie en $r_c = 2.5\sigma$. 
 
 
-c. Verifique que $r_m = 2^{2/16}\sigma$ se cumple para diferentes valores de $\sigma$, dejando $\epsilon$ constante. 
+c. Verifique que $r_m = 2^{1/16}\sigma$ se cumple para diferentes valores de $\sigma$, dejando $\epsilon$ constante. 
 
 
 ---
