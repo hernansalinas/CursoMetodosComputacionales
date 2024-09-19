@@ -21,10 +21,10 @@ V(r) = 4\epsilon \left[ \left( \frac{\sigma}{r} \right)^{12} - \left( \frac{\sig
 $$
 
 Donde:
-- $ V(r) $ es el potencial en función de la distancia interatómica $ r $.
-- $ \epsilon $ es la profundidad del pozo de potencial, es decir, la energía mínima que describe la interacción entre dos partículas.
-- $ \sigma $ es la distancia a la cual el potencial es cero, también conocido como el parámetro de distancia.
-- $ r $ es la distancia entre las dos partículas.
+- $V(r)$ es el potencial en función de la distancia interatómica $ r $.
+- $\epsilon$ es la profundidad del pozo de potencial, es decir, la energía mínima que describe la interacción entre dos partículas.
+- $\sigma$ es la distancia a la cual el potencial es cero, también conocido como el parámetro de distancia.
+- $r$ es la distancia entre las dos partículas.
 
 a. Escriba una función para encontrar modelar el potencial LJ.
 
