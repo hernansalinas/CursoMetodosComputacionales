@@ -5,7 +5,7 @@
 ---
 1. Una persona conduce una moto con rapidez constante $v_m$, mientras que un policia lo hace con aceleración constante $a_p$ (iniciando desde el reposo). Suponga que ambos movimientos inician en $t=0$, haga una gráfica para el movimiento de la moto y del policia, donde el usuario ingrese la velocidad (moto) y aceleración (policia). Además determine el instante $t$ en el cual se encuentran ambos. Ambos movimientos iniciarán en $x_i = 0$
 
-**Pruebe: para v_m = 15m/s y a_p = 3 m/s^2, el tiempo deberia ser 10 s**
+**Pruebe**: para $v_m$ = 15m/s y $a_p$ = 3 m/s², el tiempo deberia ser 10 s
 
 
 $$x_f = x_i + v_m\cdot t$$
