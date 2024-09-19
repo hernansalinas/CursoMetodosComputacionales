@@ -9,7 +9,9 @@
 
 
 $$x_f = x_i + v_m\cdot t$$
+
 $$x_f = x_i + v_o\cdot t + \frac{1}{2}a_p\cdot t^2$$
+
 ---
 
 2. El potencial Lennard-Jones es un modelo simple que aproxima la interacción entre un par de moléculas neutras. Este está definido como:
