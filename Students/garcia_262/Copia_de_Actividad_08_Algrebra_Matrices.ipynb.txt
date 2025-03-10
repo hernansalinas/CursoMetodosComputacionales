@@ -1,0 +1,872 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "z7RCty67y3ME"
+      },
+      "outputs": [],
+      "source": [
+        "import numpy as np\n",
+        "import matplotlib.pyplot as plt\n",
+        "import scipy.linalg as la"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Actividad 08: Algebra Lineal y Matrices\n",
+        "\n",
+        "---\n",
+        "### Profesor: Juan Marcos Marín\n",
+        "### Nombre: ______\n",
+        "*Métodos computacionales 2024-II*\n",
+        "\n",
+        "---"
+      ],
+      "metadata": {
+        "id": "GGQpGoujzAnQ"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#1\n",
+        "\n",
+        "Escriba una función que calcule el producto escalar y vectorial para dos vectores, compare sus resultados con `np.dot` y `np.cross`."
+      ],
+      "metadata": {
+        "id": "szDD-eJhzKbw"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "v1 = np.array([1, 2, 3])\n",
+        "v2 = np.array([4, 5, 6])\n",
+        "def producto_escalar(v1, v2):\n",
+        "  v3 = []\n",
+        "  for i in range(len(v1)):\n",
+        "    v3.append(v1[i] * v2[i])\n",
+        "  return sum(v3)\n",
+        "def producto_vectorial(v1, v2):\n",
+        "  v3 = []\n",
+        "  if len(v1) == 2 or len(v2) == 2:\n",
+        "    v3.append(v1[0] * v2[1] - v1[1] * v2[0])\n",
+        "    return v3\n",
+        "  v3.append(v1[1] * v2[2] - v1[2] * v2[1])\n",
+        "  v3.append(v1[2] * v2[0] - v1[0] * v2[2])\n",
+        "  v3.append(v1[0] * v2[1] - v1[1] * v2[0])\n",
+        "  return v3\n",
+        "print(producto_escalar(v1, v2), np.dot(v1, v2))\n",
+        "print(producto_vectorial(v1, v2), np.cross(v1, v2))"
+      ],
+      "metadata": {
+        "id": "KlxyKMOIzBDZ",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "c694e98b-f3ad-43a0-97c1-43761c49d595"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "32 32\n",
+            "[-3, 6, -3] [-3  6 -3]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#2\n",
+        "\n",
+        "Crear una función llamada `mulmat()` donde a partir de dos matrices $A$ y $B$ encuentre su multplicación. También realiza una función que calcule la transpuesta y otra el determinante de una matriz $3\\times 3$. Compare sus resultado con `@`, `np.dot`, `transpose` y `la.det`."
+      ],
+      "metadata": {
+        "id": "Qch9PhTQ0Klk"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def mulmat(A, B):\n",
+        "  if len(A[0]) == len(B):\n",
+        "    C = [[0 for i in range(len(B[0]))] for j in range(len(A))]\n",
+        "    for i in range(len(A)):\n",
+        "      for j in range(len(B[0])):\n",
+        "        for k in range(len(B)):\n",
+        "          C[i][j] += A[i][k] * B[k][j]\n",
+        "    return np.array(C)\n",
+        "A = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])\n",
+        "B = np.array([[9, 8, 7], [6, 5, 4], [3, 2, 1]])\n",
+        "print(mulmat(A, B))\n",
+        "print(A @ B)\n",
+        "print(np.dot(A, B))"
+      ],
+      "metadata": {
+        "id": "0xjXQbwn0VL5",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "7f3a6c69-1db4-4cbd-a8e6-c167cd668b6d"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[ 30  24  18]\n",
+            " [ 84  69  54]\n",
+            " [138 114  90]]\n",
+            "[[ 30  24  18]\n",
+            " [ 84  69  54]\n",
+            " [138 114  90]]\n",
+            "[[ 30  24  18]\n",
+            " [ 84  69  54]\n",
+            " [138 114  90]]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def transpose(A):\n",
+        "  C = [[0 for i in range(len(A))] for j in range(len(A[0]))]\n",
+        "  for i in range(len(A)):\n",
+        "    for j in range(len(A[0])):\n",
+        "      C[j][i] = A[i][j]\n",
+        "  return np.array(C)\n",
+        "print(transpose(A))\n",
+        "print(A.T)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "a4-FyEjSaDMI",
+        "outputId": "5d2a446b-9440-4d2d-c9d7-251daeafd4ec"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[1 4 7]\n",
+            " [2 5 8]\n",
+            " [3 6 9]]\n",
+            "[[1 4 7]\n",
+            " [2 5 8]\n",
+            " [3 6 9]]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "A = np.array([[1, 2, 3], [4, 4, 6], [7, 1, 9]])\n",
+        "def determinante(A):\n",
+        "  det = A[0][0]*(A[1][1]*A[2][2] - A[2][1]*A[1][2]) -  A[0][1]*(A[1][0]*A[2][2] - A[1][2]*A[2][0]) + A[0][2]*(A[1][0]*A[2][1] - A[1][1] * A[2][0])\n",
+        "  return det\n",
+        "print(determinante(A))\n",
+        "print(np.linalg.det(A))\n",
+        "\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "YLgLCLeeaPB8",
+        "outputId": "68be0fda-8fcb-4144-ff84-87f4d65f6ea4"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "-30\n",
+            "-29.99999999999999\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(A[0][2])"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "O2qkSi1CbT8J",
+        "outputId": "c296cba6-1f7e-4e9c-c6c0-b8aa7bc095c5"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "3\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#3\n",
+        "Escriba tres matrices aleatorias $A$, $B$ y $C$ de $3\\times 3$, y demuestre las siguientes relaciones\n",
+        "\n",
+        "- $ \\mathbf{A}\\mathbf{B} \\neq \\mathbf{B}\\mathbf{A} $, en general.\n",
+        "- $ (\\mathbf{A}\\mathbf{B})\\mathbf{C} = \\mathbf{A}(\\mathbf{B}\\mathbf{C}) $.\n",
+        "- $ \\mathbf{A}(\\mathbf{B} + \\mathbf{C}) = \\mathbf{A}\\mathbf{B} + \\mathbf{A}\\mathbf{C} $.\n",
+        "- $ (\\mathbf{A} + \\mathbf{B})\\mathbf{C} = \\mathbf{A}\\mathbf{C} + \\mathbf{B}\\mathbf{C} $.\n",
+        "- $ (\\mathbf{A}\\mathbf{B})^\\top = \\mathbf{B}^\\top \\mathbf{A}^\\top $.\n",
+        "- $ \\det(\\mathbf{A}\\mathbf{B}) = \\det(\\mathbf{A}) \\det(\\mathbf{B}) $.\n",
+        "- $ (\\mathbf{A}^\\top)^\\top = \\mathbf{A} $.\n",
+        "- $ (c\\mathbf{A})^\\top = c\\mathbf{A}^\\top $.\n",
+        "- $ (\\mathbf{A} + \\mathbf{B})^\\top = \\mathbf{A}^\\top + \\mathbf{B}^\\top $.\n",
+        "\n"
+      ],
+      "metadata": {
+        "id": "U9hC1R-F0-iH"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "A = np.random.rand(3, 3)\n",
+        "B = np.random.rand(3, 3)\n",
+        "C = np.random.rand(3, 3)\n",
+        "if not np.array_equal(A @ B, B @ A):\n",
+        "  print(\"A @ B != B @ A\")\n",
+        "AB_C = np.dot(np.dot(A,B),C)\n",
+        "A_BC = np.dot(A, np.dot(B, C))\n",
+        "print(AB_C)\n",
+        "print(A_BC)\n",
+        "\n"
+      ],
+      "metadata": {
+        "id": "cQQ6cPGW1anK",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "9cadbc9f-58f0-4b58-8af3-e5b22b831c05"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "A @ B != B @ A\n",
+            "[[1.19182797 0.89926906 0.82626765]\n",
+            " [0.68066903 0.54962895 0.49450488]\n",
+            " [0.92746148 0.7015424  0.6369458 ]]\n",
+            "[[1.19182797 0.89926906 0.82626765]\n",
+            " [0.68066903 0.54962895 0.49450488]\n",
+            " [0.92746148 0.7015424  0.6369458 ]]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "A_B_C = np.dot(A,(B + C))\n",
+        "A_B_C2 = np.dot(A,B) + np.dot(A,C)\n",
+        "print(A_B_C)\n",
+        "print(A_BC) #Raro"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "P3oL8YL8ea3-",
+        "outputId": "d2f43999-c157-4811-87a8-672a595ac60f"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[2.14381604 1.75643081 1.44806531]\n",
+            " [1.18871745 0.84881616 0.81386767]\n",
+            " [1.26253321 1.15000485 0.99211634]]\n",
+            "[[1.19182797 0.89926906 0.82626765]\n",
+            " [0.68066903 0.54962895 0.49450488]\n",
+            " [0.92746148 0.7015424  0.6369458 ]]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "D = np.dot(A,B)\n",
+        "D_t = D.T\n",
+        "E = np.dot(B.T, A.T)\n",
+        "print(D_t)\n",
+        "print(E)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "V5uKAtkEe8OL",
+        "outputId": "34a83a41-ba48-48c2-a3e6-b67bb8767171"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[0.63125095 0.3946675  0.45031877]\n",
+            " [0.62811896 0.30936311 0.47167488]\n",
+            " [0.48502016 0.3194399  0.40082812]]\n",
+            "[[0.63125095 0.3946675  0.45031877]\n",
+            " [0.62811896 0.30936311 0.47167488]\n",
+            " [0.48502016 0.3194399  0.40082812]]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "D = np.dot(A,B)\n",
+        "D_det = np.linalg.det(D)\n",
+        "Det = np.linalg.det(A) * np.linalg.det(B)\n",
+        "print(D_det)\n",
+        "print(Det)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "gLakb-scfHQA",
+        "outputId": "a91c8250-4f1d-4725-ba10-fc646da00d1c"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "-0.003125779576804148\n",
+            "-0.003125779576804152\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "A_t_t = A.T.T\n",
+        "print(A_t_t)\n",
+        "print(A)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "nQBnAZS-fTa-",
+        "outputId": "48a11d24-f535-4162-dca9-ef47179fa5b8"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[0.32697635 0.65510813 0.83182268]\n",
+            " [0.25293007 0.46178123 0.30856526]\n",
+            " [0.41538859 0.3117733  0.44616907]]\n",
+            "[[0.32697635 0.65510813 0.83182268]\n",
+            " [0.25293007 0.46178123 0.30856526]\n",
+            " [0.41538859 0.3117733  0.44616907]]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "A_2 = (2 * A).T\n",
+        "A_2_t = 2 * A.T\n",
+        "print(A_2)\n",
+        "print(A_2_t)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "KunaeBUrfe-f",
+        "outputId": "4f31f735-62f9-4d7c-f9b2-bae413bc733c"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[0.6539527  0.50586013 0.83077719]\n",
+            " [1.31021626 0.92356246 0.62354661]\n",
+            " [1.66364537 0.61713051 0.89233813]]\n",
+            "[[0.6539527  0.50586013 0.83077719]\n",
+            " [1.31021626 0.92356246 0.62354661]\n",
+            " [1.66364537 0.61713051 0.89233813]]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "C = A + B\n",
+        "C_t = C.T\n",
+        "A_t = A.T\n",
+        "B_t = B.T\n",
+        "C_t2 = A_t + B_t\n",
+        "print(C_t)\n",
+        "print(C_t2)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "AVC60pfafz0e",
+        "outputId": "6f830ef8-8aa8-45c4-bdc9-c600722d93b6"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[0.86060261 0.66550807 0.63957649]\n",
+            " [1.21830173 0.47194844 0.83749513]\n",
+            " [1.4607513  0.5678826  0.57780106]]\n",
+            "[[0.86060261 0.66550807 0.63957649]\n",
+            " [1.21830173 0.47194844 0.83749513]\n",
+            " [1.4607513  0.5678826  0.57780106]]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#4\n",
+        "\n",
+        "El **Teorema de Laplace** es un método para calcular el determinante de una matriz cuadrada, particularmente útil para matrices de orden mayor a 2. Este teorema se basa en la expansión del determinante por los elementos de una fila o una columna cualquiera.\n",
+        "\n",
+        "\n",
+        "\n",
+        "$$\n",
+        "\\det(A) = \\sum_{j=1}^n (-1)^{1+j} a_{1j} M_{1j}\n",
+        "$$\n",
+        "\n",
+        "donde:\n",
+        "- $a_{1j}$ es el elemento de la primera fila y columna $j$.\n",
+        "- $M_{1j}$ es el menor asociado al elemento $a_{1j}$, es decir, el determinante de la submatriz de $3 \\times 3$ que se obtiene al eliminar la fila 1 y la columna $j$.\n",
+        "- $(-1)^{1+j}$ es el signo correspondiente al cofactor del elemento $a_{1j}$.\n",
+        "\n",
+        "Podemos realizar una función recursiva para el cálculo del determinante, sabiendo que el valor del determinante de una matriz de orden uno es el único elemento de esa matriz, y el de una matriz de orden superior a uno es la suma de cada uno de los elementos de una fila o columna por los Adjuntos a ese elemento, como en la función recursiva se emplea la misma función definida el cálculo lo haremos por Menor complementario, un ejemplo desarrollado por la primera fila sería:\n",
+        "\n",
+        "$$\n",
+        "   \\det (A_{j,j}) =\n",
+        "   \\left \\{\n",
+        "   \\begin{array}{llcl}\n",
+        "      si & j = 1 & \\to & a_{1,1} \\\\\n",
+        "                                 \\\\\n",
+        "      si & j > 1 & \\to & \\displaystyle \\sum_{k=1}^j \\; (-1)^{(1+k)} \\cdot a_{1,k} \\cdot \\det( \\alpha_{1,k})\n",
+        "   \\end{array}\n",
+        "   \\right .\n",
+        "$$\n",
+        "\n",
+        "Realice una función que encuentre el determinante de una matriz usando la recursividad aqui planteada, explique explicitamente su código"
+      ],
+      "metadata": {
+        "id": "ibYf2I9T2pIw"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import numpy as np\n",
+        "\n",
+        "def determinante_l(matriz):\n",
+        "    # Caso base: si la matriz es de tamaño 1x1, el determinante es el único elemento\n",
+        "    if len(matriz) == 1:\n",
+        "        return matriz[0][0]\n",
+        "\n",
+        "    det = 0\n",
+        "    # Expansión por la primera fila (puedes elegir cualquier fila o columna)\n",
+        "    for j in range(len(matriz[0])):\n",
+        "        # Crear el menor complementario al eliminar la primera fila y la columna j\n",
+        "        menor = [fila[:j] + fila[j+1:] for fila in matriz[1:]]  # Eliminar la primera fila y columna j\n",
+        "\n",
+        "        # Cálculo recursivo del determinante de la submatriz\n",
+        "        cofactor = (-1)**(1+j+1) * matriz[0][j] * determinante(menor)\n",
+        "\n",
+        "        # Sumar el resultado al determinante total\n",
+        "        det += cofactor\n",
+        "\n",
+        "    return det\n"
+      ],
+      "metadata": {
+        "id": "BJi2DSqcjHyG"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "A = np.random.rand(5, 5)\n",
+        "print(\"Matriz A:\")\n",
+        "print(A)\n",
+        "print(\"\\nDeterminante de A:\", determinante(A.tolist()))\n",
+        "print(\"\\nDeterminante de A:\", np.linalg.det(A))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "oUBl6M_sgoY1",
+        "outputId": "2623ee59-7f11-4975-89fe-60772161d552"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Matriz A:\n",
+            "[[0.39801465 0.85618412 0.32435101 0.0539835  0.69455441]\n",
+            " [0.69428807 0.2743584  0.61214001 0.55051612 0.34743089]\n",
+            " [0.73178682 0.76174335 0.37400784 0.44153488 0.45523239]\n",
+            " [0.97717185 0.73372278 0.085958   0.3808019  0.1722024 ]\n",
+            " [0.15514143 0.65466766 0.55168464 0.74235942 0.30734303]]\n",
+            "\n",
+            "Determinante de A: 0.12287639547976259\n",
+            "\n",
+            "Determinante de A: 0.008901331627833154\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#5\n",
+        "\n",
+        "El método de Jacobi reescribe el sistema $ Ax = b $ descomponiendo la matriz $ A $ como:\n",
+        "\n",
+        "$$\n",
+        "A = D + L + U,\n",
+        "$$\n",
+        "\n",
+        "donde:\n",
+        "- $ D $: Matriz diagonal de $ A $,\n",
+        "- $ L $: Matriz triangular inferior sin la diagonal,\n",
+        "- $ U $: Matriz triangular superior sin la diagonal.\n",
+        "\n",
+        "El sistema se reorganiza como:\n",
+        "\n",
+        "$$\n",
+        "x = D^{-1}(b - (L + U)x).\n",
+        "$$\n",
+        "\n",
+        "Esto se implementa iterativamente como:\n",
+        "\n",
+        "$$\n",
+        "x_i^{(k+1)} = \\frac{1}{a_{ii}} \\left(b_i - \\sum_{j \\neq i} a_{ij} x_j^{(k)}\\right),\n",
+        "$$\n",
+        "\n",
+        "donde $ a_{ii} $ son los elementos diagonales de $ A $.\n",
+        "\n",
+        "* Escriba una función explicita que realice de manera iterativa este método con una tol = 1e-7 y un máximo de 100 iteraciones. Defina una documentación clara que explique los métodos usados, lasa entradas y salidas.\n",
+        "\n",
+        "* Para una matriz aleatoria 5$\\times$ 5, encuentre la solución usando su función y determine el error con respecto a `solve` y el método de inversa de matriz."
+      ],
+      "metadata": {
+        "id": "9OcE-1QhSrI9"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import numpy as np\n",
+        "\n",
+        "def metodo_jacobi(A, b, tol=1e-7, max_iter=1000):\n",
+        "    \"\"\"\n",
+        "    Resuelve el sistema de ecuaciones Ax = b usando el método de Jacobi.\n",
+        "\n",
+        "    Parámetros:\n",
+        "    A : array_like, matriz de coeficientes del sistema (matriz cuadrada de tamaño n x n)\n",
+        "    b : array_like, vector de términos independientes (tamaño n)\n",
+        "    tol : float, tolerancia para la convergencia del método (por defecto 1e-7)\n",
+        "    max_iter : int, número máximo de iteraciones (por defecto 100)\n",
+        "\n",
+        "    Salidas:\n",
+        "    x : array_like, vector solución aproximada del sistema Ax = b\n",
+        "    num_iter : int, número de iteraciones realizadas\n",
+        "    \"\"\"\n",
+        "\n",
+        "    # Inicialización de variables\n",
+        "    n = len(b)\n",
+        "    x = np.zeros(n)  # Vector inicial de soluciones (todos ceros)\n",
+        "    x_old = np.zeros(n)  # Vector para comparar con la solución anterior\n",
+        "\n",
+        "    # Descomposición de A\n",
+        "    D = np.diag(np.diag(A))  # Matriz diagonal\n",
+        "    L = np.tril(A, -1)  # Matriz triangular inferior (sin la diagonal)\n",
+        "    U = np.triu(A, 1)  # Matriz triangular superior (sin la diagonal)\n",
+        "\n",
+        "    # Iteración de Jacobi\n",
+        "    for num_iter in range(max_iter):\n",
+        "        # Calcular el nuevo valor de x\n",
+        "        x_new = np.linalg.inv(D).dot(b - (L + U).dot(x))\n",
+        "\n",
+        "        # Verificar si la diferencia entre las iteraciones es suficientemente pequeña\n",
+        "        if np.linalg.norm(x_new - x) < tol:\n",
+        "            return x_new, num_iter + 1\n",
+        "\n",
+        "        # Actualizar x para la siguiente iteración\n",
+        "        x = x_new\n",
+        "\n",
+        "    # Si no convergió en el número máximo de iteraciones\n",
+        "    return x, num_iter + 1\n"
+      ],
+      "metadata": {
+        "id": "sTmnCDt1kzSq"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "\n",
+        "# Generar una matriz aleatoria 5x5\n",
+        "A = np.random.rand(5, 5)\n",
+        "b = np.random.rand(5)\n",
+        "C = np.array([[4, -1, 1], [-2, 6, 1], [1, 1, 5]])\n",
+        "d = np.array([7, 9, -6])\n",
+        "# Resolver el sistema usando el método de Jacobi\n",
+        "solucion_jacobi, iteraciones = metodo_jacobi(A, b)\n",
+        "\n",
+        "# Usar np.linalg.solve para comparar con el resultado exacto\n",
+        "solucion_exacta = np.linalg.solve(A, b)\n",
+        "\n",
+        "# Calcular el error de la solución de Jacobi\n",
+        "error_jacobi = np.linalg.norm(solucion_jacobi - solucion_exacta)\n",
+        "\n",
+        "solucion_jacobi1, iteraciones1 = metodo_jacobi(C, d)\n",
+        "solucion_exacta1 = np.linalg.solve(C, d)\n",
+        "error_jacobi1 = np.linalg.norm(solucion_jacobi1 - solucion_exacta1)\n",
+        "\n",
+        "# Mostrar los resultados\n",
+        "\n",
+        "\n",
+        "print(\"Solución obtenida con el método de Jacobi:\")\n",
+        "print(solucion_jacobi)\n",
+        "print(\"Número de iteraciones:\", iteraciones)\n",
+        "\n",
+        "print(\"\\nSolución exacta (con np.linalg.solve):\")\n",
+        "print(solucion_exacta)\n",
+        "\n",
+        "print(\"\\nError con respecto a la solución exacta:\")\n",
+        "print(error_jacobi)\n",
+        "\n",
+        "print(\"\\Solución obtenida con el método de Jacobi A1:\")\n",
+        "print(solucion_jacobi1)\n",
+        "print(\"Número de iteraciones A1:\", iteraciones1)\n",
+        "print(\"\\nSolución exacta (con np.linalg.solve) A1:\")\n",
+        "print(solucion_exacta1)\n",
+        "print(\"\\nError con respecto a la solución exacta A1:\")\n",
+        "print(error_jacobi1)\n",
+        "\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "SpTdv6bFM33f",
+        "outputId": "ba7b80ec-5738-41d1-dc8b-3e77fff56036"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Solución obtenida con el método de Jacobi:\n",
+            "[nan nan nan nan nan]\n",
+            "Número de iteraciones: 1000\n",
+            "\n",
+            "Solución exacta (con np.linalg.solve):\n",
+            "[-1.9265784   0.41735817 -0.01775949  0.54317209  1.98544924]\n",
+            "\n",
+            "Error con respecto a la solución exacta:\n",
+            "nan\n",
+            "\\Solución obtenida con el método de Jacobi A1:\n",
+            "[ 3.08247419  2.92783501 -2.40206182]\n",
+            "Número de iteraciones A1: 24\n",
+            "\n",
+            "Solución exacta (con np.linalg.solve) A1:\n",
+            "[ 3.08247423  2.92783505 -2.40206186]\n",
+            "\n",
+            "Error con respecto a la solución exacta A1:\n",
+            "6.267470001151087e-08\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#6\n",
+        "\n",
+        "Verifique que cualquier matriz hermitiana de 2 × 2 $ L $ puede escribirse como una suma de cuatro términos:\n",
+        "\n",
+        "$$ L = a\\sigma_x + b\\sigma_y + c\\sigma_z + dI $$\n",
+        "\n",
+        "donde $ a $, $ b $, $ c $ y $ d $ son números reales.\n",
+        "\n",
+        "Las cuatro matrices de Pauli son:\n",
+        "\n",
+        "$$ \\sigma_x = \\begin{pmatrix} 0 & 1 \\\\ 1 & 0 \\end{pmatrix}, \\quad \\sigma_y = \\begin{pmatrix} 0 & -i \\\\ i & 0 \\end{pmatrix}, \\quad \\sigma_z = \\begin{pmatrix} 1 & 0 \\\\ 0 & -1 \\end{pmatrix}, \\quad I = \\begin{pmatrix} 1 & 0 \\\\ 0 & 1 \\end{pmatrix} $$\n",
+        "\n",
+        "\n"
+      ],
+      "metadata": {
+        "id": "iggu2jNwVpnK"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import numpy as np\n",
+        "\n",
+        "# Definimos las matrices de Pauli y la identidad\n",
+        "sigma_x = np.array([[0, 1], [1, 0]])\n",
+        "sigma_y = np.array([[0, -1j], [1j, 0]])\n",
+        "sigma_z = np.array([[1, 0], [0, -1]])\n",
+        "I = np.array([[1, 0], [0, 1]])\n",
+        "\n",
+        "def descomponer_matriz_hermitiana(L):\n",
+        "    \"\"\"\n",
+        "    Descompone una matriz hermitiana L en la forma:\n",
+        "    L = a * sigma_x + b * sigma_y + c * sigma_z + d * I\n",
+        "    donde a, b, c, d son los coeficientes reales.\n",
+        "\n",
+        "    Parámetros:\n",
+        "    L : np.array\n",
+        "        Una matriz hermitiana 2x2.\n",
+        "\n",
+        "    Retorna:\n",
+        "    a, b, c, d : float\n",
+        "        Los coeficientes de la descomposición de L.\n",
+        "    \"\"\"\n",
+        "    # Comprobamos que L es hermitiana\n",
+        "    if not np.allclose(L, L.conj().T):\n",
+        "        raise ValueError(\"La matriz no es hermitiana.\")\n",
+        "\n",
+        "    # Calculamos los coeficientes a, b, c, d\n",
+        "    d = np.trace(L) / 2\n",
+        "    c = (L[0, 0] - L[1, 1]) / 2\n",
+        "    a = np.real(L[0, 1])\n",
+        "    b = -np.imag(L[0, 1])\n",
+        "\n",
+        "    return a, b, c, d\n",
+        "\n",
+        "# Ejemplo de matriz hermitiana aleatoria 2x2\n",
+        "L = np.array([[1, 2+3j], [2-3j, 4]])\n",
+        "\n",
+        "# Descomponemos la matriz L en términos de las matrices de Pauli\n",
+        "a, b, c, d = descomponer_matriz_hermitiana(L)\n",
+        "\n",
+        "# Mostramos los coeficientes\n",
+        "print(f\"Matriz L: \\n{L}\\n\")\n",
+        "print(f\"Coeficientes de la descomposición:\")\n",
+        "print(f\"a = {a}\")\n",
+        "print(f\"b = {b}\")\n",
+        "print(f\"c = {c}\")\n",
+        "print(f\"d = {d}\")\n",
+        "\n",
+        "# Reconstruimos L a partir de la descomposición\n",
+        "reconstruido = a * sigma_x + b * sigma_y + c * sigma_z + d * I\n",
+        "\n",
+        "print(\"\\nMatriz reconstruida a partir de la descomposición:\")\n",
+        "print(reconstruido)\n",
+        "\n",
+        "# Verificamos si la matriz reconstruida es igual a la original\n",
+        "print(\"\\n¿La matriz reconstruida es igual a la original?\")\n",
+        "print(np.allclose(L, reconstruido))\n"
+      ],
+      "metadata": {
+        "id": "8WN9_cOCV7cM",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "f8495b81-a4c4-4934-bac8-0aa09773a9d3"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Matriz L: \n",
+            "[[1.+0.j 2.+3.j]\n",
+            " [2.-3.j 4.+0.j]]\n",
+            "\n",
+            "Coeficientes de la descomposición:\n",
+            "a = 2.0\n",
+            "b = -3.0\n",
+            "c = (-1.5+0j)\n",
+            "d = (2.5+0j)\n",
+            "\n",
+            "Matriz reconstruida a partir de la descomposición:\n",
+            "[[1.+0.j 2.+3.j]\n",
+            " [2.-3.j 4.+0.j]]\n",
+            "\n",
+            "¿La matriz reconstruida es igual a la original?\n",
+            "True\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
